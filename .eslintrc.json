@@ -1,14 +1,11 @@
 {
-  "extends": [
-    "tui",
-    "prettier",
-    "next/core-web-vitals", // 기본
-    "plugin:import/recommended",
-    "plugin:import/errors",
-    "plugin:import/warnings",
-    "plugin:react/recommended",
-    "plugin:react/jsx-runtime"
-  ],
+  "env": {
+    "browser": true,
+    "node": true,
+    "es2021": true,
+    "jest": true
+  },
+  "parser": "@typescript-eslint/parser",
   "parserOptions": {
     "ecmaFeatures": {
       "jsx": true,
@@ -16,17 +13,26 @@
     },
     "babelOptions": {
       "presets": ["@babel/preset-react"]
-    }
+    },
+    "project": "./tsconfig.json",
+    "sourceType": "module"
   },
-  "parser": "@babel/eslint-parser",
-  "env": {
-    "browser": true,
-    "node": true,
-    "commonjs": true,
-    "es6": true
+  "extends": [
+    "tui",
+    "prettier",
+    "plugin:import/recommended",
+    "plugin:import/errors",
+    "plugin:import/warnings",
+    "plugin:react/recommended",
+    "plugin:react/jsx-runtime",
+    "plugin:@typescript-eslint/recommended",
+    "plugin:@next/next/recommended",
+    "plugin:tailwindcss/recommended"
+  ],
+  "globals": {
+    "_": true
   },
-  "globals": { "_": true },
-  "plugins": ["import", "html", "react"],
+  "plugins": ["import", "html", "react", "@typescript-eslint", "tailwindcss"],
   "rules": {
     "import/no-unresolved": 0,
     "no-console": "warn",
@@ -34,8 +40,8 @@
     "no-unused-expressions": [
       "error",
       {
-        "allowTernary": true, // a || b
-        "allowShortCircuit": true, // a ? b : 0
+        "allowTernary": true,
+        "allowShortCircuit": true,
         "allowTaggedTemplates": true
       }
     ],
@@ -49,7 +55,7 @@
         "newlines-between": "always",
         "pathGroups": [
           {
-            "pattern": "{react,react-**,react-dom/**}",
+            "pattern": "react/**",
             "group": "external",
             "position": "before"
           },
@@ -66,22 +72,31 @@
       }
     ],
     "react/react-in-jsx-scope": "off",
-    "react/jsx-filename-extension": [1, { "extensions": [".js", ".jsx"] }]
+    "react/jsx-filename-extension": [1, { "extensions": [".js", ".jsx", ".ts", ".tsx"] }],
+    "@typescript-eslint/no-unused-vars": ["warn"],
+    "@typescript-eslint/no-shadow": ["warn"],
+    "@typescript-eslint/explicit-module-boundary-types": "off",
+    "tailwindcss/classnames-order": "warn",
+    "tailwindcss/enforces-shorthand": "warn",
+    "tailwindcss/no-custom-classname": "warn"
   },
   "settings": {
     "react": {
       "version": "detect"
     },
-    "import/extensions": [".js", ".jsx"],
+    "import/extensions": [".js", ".jsx", ".ts", ".tsx"],
     "import/resolver": {
       "node": {
-        "extensions": [".js", ".jsx"]
+        "extensions": [".js", ".jsx", ".ts", ".tsx"]
       }
+    },
+    "tailwindcss": {
+      "callees": ["classnames", "clsx", "ctl"]
     }
   },
   "overrides": [
     {
-      "files": ["**/*.test.js", "**/*.test.jsx"],
+      "files": ["**/*.test.ts", "**/*.test.tsx"],
       "plugins": ["jest"],
       "extends": ["plugin:jest/recommended"],
       "rules": {
