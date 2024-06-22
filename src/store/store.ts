@@ -13,8 +13,7 @@ const persistedReducer = persistReducer(persistConfig, userReducer);
 
 export const store = configureStore({
   reducer: {
-    user: userReducer,
-    persistedReducer,
+    user: persistedReducer,
   },
   devTools: process.env.NODE_ENV !== 'production',
 });
