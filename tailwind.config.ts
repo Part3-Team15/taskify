@@ -24,12 +24,15 @@ const config: Config = {
       white: '#ffffff',
       violet: '#5534da',
       violet_f1: '#f1effd',
+      violet_hover: '#3925a8',
       red: '#D6173A',
+      red_hover: '#b51230',
       green: '#7ac555',
       purple: '#760dde',
       orange: '#ffa500',
       blue: '#76a5ea',
       pink: '#e876ea',
+      
     },
     extend: {
       backgroundImage: {
