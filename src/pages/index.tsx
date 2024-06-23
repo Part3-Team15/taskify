@@ -14,6 +14,7 @@ const Home: React.FC = () => (
             alert('버튼 클릭!');
           }}
           variant='primary'
+          type='submit'
         >
           로그인
         </Button>

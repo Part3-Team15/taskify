@@ -18,7 +18,7 @@ const buttonTypes = {
 };
 
 export default function Button(props: ButtonProps) {
-  const { children, disabled, variant = 'primary', leftSection, className, ...buttonProps } = props;
+  const { children, disabled, variant = 'primary', leftSection, className = '', ...buttonProps } = props;
 
   const buttonClassName = buttonTypes[disabled ? 'disabled' : variant];
 
