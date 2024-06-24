@@ -34,9 +34,7 @@ export default function Sidebar() {
             <Image src={plus} alt='add' />
           </a>
         </div>
-
         <div className='mb-2 border-b border-gray_d9' />
-
         <ul className='flex flex-col gap-2'>
           {dashboards.map((dashboard) => (
             <DashboardItem key={dashboard.id} dashboard={dashboard} nowDashboard={Number(id)} />
