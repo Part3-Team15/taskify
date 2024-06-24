@@ -11,6 +11,9 @@ const config: Config = {
       md: '780px',
       lg: '1280px',
     },
+    fontFamily: {
+      pretendard: ["Pretendard"],
+    },
     colors: {
       black: '#000000',
       black_17: '#171717',
@@ -32,7 +35,6 @@ const config: Config = {
       orange: '#ffa500',
       blue: '#76a5ea',
       pink: '#e876ea',
-      
     },
     extend: {
       backgroundImage: {
