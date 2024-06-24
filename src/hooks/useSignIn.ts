@@ -2,9 +2,10 @@ import { useMutation } from 'react-query';
 import { useDispatch } from 'react-redux';
 
 import { setUser, isLoading, setError } from '@/store/reducers/userSlice';
+import { User } from '@/types/User.interface';
 
 interface SignInResponse {
-  user: { nickname: string; id: number };
+  user: User;
   accessToken: string;
 }
 
