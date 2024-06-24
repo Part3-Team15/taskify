@@ -1,5 +1,6 @@
 import Image from 'next/image';
 import Link from 'next/link';
+import { useParams, useSearchParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 
@@ -13,6 +14,8 @@ import { Dashboard } from '@/types/Dashboard.interface';
 export default function Sidebar() {
   const [dashboardList, setDashboardList] = useState<Dashboard[]>([]);
   const accessToken = useSelector((state: RootState) => state.user.accessToken); // 전역 상태에 저장된 user 정보에서 accessToken을 가져옴
+
+  const dashboardId = Number(useParams().id) || 0;
 
   useEffect(() => {
     // API 호출
@@ -38,16 +41,15 @@ export default function Sidebar() {
   }, []);
 
   return (
-    <aside className='mr-4 flex h-screen w-72 flex-col gap-14 border-r border-gray_d9 px-4 py-6'>
-      <div>
-        <Link href='/'>
-          <Image src={logo} alt='logo' priority />
-        </Link>
-      </div>
+    <aside className='mr-4 flex h-screen w-72 flex-col gap-14 border-r border-gray_d9 px-4 py-8'>
+      <Link href='/' className='px-4'>
+        <Image src={logo} alt='logo' priority />
+      </Link>
 
       <div className='flex flex-col gap-2'>
         <div className='flex items-center justify-between'>
-          <p className='text-xs font-bold text-gray_78'>Dash boards</p>
+          <p className='text-xs font-bold text-gray_78'>Dashboards</p>
+          {/* 모달 연결 해야함 */}
           <a href='#' className='p-3'>
             <Image src={plus} alt='add' />
           </a>
@@ -57,7 +59,7 @@ export default function Sidebar() {
 
         <ul className='flex flex-col gap-2'>
           {dashboardList.map((dashboard) => (
-            <DashboardItem key={dashboard.id} dashboard={dashboard} />
+            <DashboardItem key={dashboard.id} dashboard={dashboard} nowDashboard={dashboardId} />
           ))}
         </ul>
       </div>
