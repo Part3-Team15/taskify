@@ -1,20 +1,20 @@
-import { UseFormRegister } from 'react-hook-form';
+import { UseFormRegister, FieldValues, Path } from 'react-hook-form';
 
-import { TInputs } from '@/containers/signup/SignUpForm';
+interface Props<T extends FieldValues> {
+  id: Path<T>;
+  label: string;
+  placeholder: string;
+  error?: string;
+  register: UseFormRegister<T>;
+}
 
-export default function TextInputWithLabelForAuth({
+export default function TextInputWithLabelForAuth<T extends FieldValues>({
   id,
   label,
   placeholder,
   error,
   register,
-}: {
-  id: 'nickname' | 'email';
-  label: string;
-  placeholder: string;
-  error?: string;
-  register: UseFormRegister<TInputs>;
-}) {
+}: Props<T>) {
   let type = 'text';
   let autoComplete = 'off';
 
@@ -32,7 +32,7 @@ export default function TextInputWithLabelForAuth({
         <input
           {...register(id)}
           className={`h-[50px] w-full rounded-xl border border-gray_d9 bg-white px-[10px] text-[16px] text-gray_9f ${
-            error && 'border-2 border-red'
+            error ? 'border-2 border-red' : ''
           }`}
           type={type}
           id={id}

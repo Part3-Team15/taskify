@@ -1,22 +1,22 @@
 import Image from 'next/image';
 import { useState } from 'react';
-import { UseFormRegister } from 'react-hook-form';
+import { UseFormRegister, FieldValues, Path } from 'react-hook-form';
 
-import { TInputs } from '@/containers/signup/SignUpForm';
+interface Props<T extends FieldValues> {
+  id: Path<T>; // Path<T>로 타입 지정
+  label: string;
+  placeholder: string;
+  error?: string;
+  register: UseFormRegister<T>;
+}
 
-export default function PwdInputWithLabelForAuth({
+export default function PwdInputWithLabelForAuth<T extends FieldValues>({
   id,
   label,
   placeholder,
   error,
   register,
-}: {
-  id: 'password' | 'passwordConfirmation';
-  label: string;
-  placeholder: string;
-  error?: string;
-  register: UseFormRegister<TInputs>;
-}) {
+}: Props<T>) {
   const [visible, setVisible] = useState(false);
   const type = visible ? 'text' : 'password';
 
@@ -29,7 +29,7 @@ export default function PwdInputWithLabelForAuth({
         <input
           {...register(id)}
           className={`h-[50px] w-full rounded-xl border border-gray_d9 bg-white px-[10px] text-[16px] text-gray_9f ${
-            error && 'border-2 border-red'
+            error ? 'border-2 border-red' : ''
           }`}
           type={type}
           id={id}
@@ -39,9 +39,7 @@ export default function PwdInputWithLabelForAuth({
         <button
           type='button'
           className='absolute right-[10px] top-[15px] size-[20px]'
-          onClick={() => {
-            setVisible(!visible);
-          }}
+          onClick={() => setVisible(!visible)}
         >
           <Image
             src={visible ? '/icons/visibility.svg' : '/icons/invisibility.svg'}

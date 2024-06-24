@@ -1,43 +1,44 @@
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
+import { useSelector } from 'react-redux';
 import * as yup from 'yup';
 
 import Button from '@/components/Button';
-import PwdInputWithLabelForAuth from '@/containers/signup/PwdInputWithLabelForAuth';
-import TextInputWithLabelForAuth from '@/containers/signup/TextInputWithLabelForAuth';
+import PwdInputWithLabelForAuth from '@/containers/signin&signup/PwdInputWithLabelForAuth';
+import TextInputWithLabelForAuth from '@/containers/signin&signup/TextInputWithLabelForAuth';
+import { useSignIn } from '@/hooks/useSignIn';
+import { RootState } from '@/store/store';
 
-export type TInputs = {
+export type TSignInInputs = {
   email: string;
-  nickname: string;
   password: string;
-  passwordConfirmation: string;
 };
 
 const schema = yup.object().shape({
   email: yup.string().email('유효한 이메일 주소를 입력해주세요.').required('이메일을 입력해주세요.'),
-  nickname: yup.string().required('닉네임을 입력해주세요.'),
   password: yup.string().required('비밀번호를 입력해주세요.').min(8, '비밀번호는 최소 8자 이상이어야 합니다.'),
-  passwordConfirmation: yup
-    .string()
-    .required('비밀번호 확인을 입력해주세요.')
-    .oneOf([yup.ref('password'), ''], '비밀번호가 일치하지 않습니다.'),
 });
 
-export default function SignUpForm() {
+// eslint-disable-next-line complexity
+export default function SignInForm() {
   const [checkTerms, setCheckTerms] = useState(false);
 
   const {
     register,
     handleSubmit,
     formState: { errors, isValid },
-  } = useForm<TInputs>({
+  } = useForm<TSignInInputs>({
     resolver: yupResolver(schema),
     mode: 'onChange',
   });
+  const mutation = useSignIn();
 
-  const onSubmit = (data: TInputs) => {
-    console.log(data);
+  // useSelector를 사용하여 Redux store의 상태를 조회
+  const { user, error } = useSelector((state: RootState) => state.user);
+
+  const onSubmit = (data: TSignInInputs) => {
+    mutation.mutate(data);
   };
 
   return (
@@ -49,25 +50,11 @@ export default function SignUpForm() {
         error={errors.email?.message}
         register={register}
       />
-      <TextInputWithLabelForAuth
-        id='nickname'
-        label='닉네임'
-        placeholder='닉네임을 입력해 주세요'
-        error={errors.nickname?.message}
-        register={register}
-      />
       <PwdInputWithLabelForAuth
         id='password'
         label='비밀번호'
         placeholder='비밀번호를 입력해 주세요'
         error={errors.password?.message}
-        register={register}
-      />
-      <PwdInputWithLabelForAuth
-        id='passwordConfirmation'
-        label='비밀번호 확인'
-        placeholder='비밀번호를 한번 더 입력해 주세요'
-        error={errors.passwordConfirmation?.message}
         register={register}
       />
       <div>
@@ -81,10 +68,19 @@ export default function SignUpForm() {
         <label className='text-black_33'>이용약관에 동의합니다.</label>
       </div>
       <div className='h-[50px] w-[520px]'>
-        <Button type='submit' disabled={!isValid || !checkTerms}>
-          가입하기
+        <Button type='submit' disabled={mutation.isLoading || !isValid || !checkTerms}>
+          {mutation.isLoading ? '잠시만 기다려주세요..' : '로그인'}
         </Button>
       </div>
+      {mutation.isError && (
+        <p>Error: {mutation.error instanceof Error ? mutation.error.message : '알 수 없는 오류가 발생했습니다.'}</p>
+      )}
+      {user && (
+        <p>
+          로그인 성공: {user.nickname} ({user.id})
+        </p>
+      )}
+      {error && <p>오류: {error}</p>}
     </form>
   );
 }
