@@ -20,7 +20,7 @@ export default function Sidebar() {
   if (isLoading) return <div>Loading...</div>;
 
   return (
-    <aside className='mr-4 flex h-screen w-72 flex-col gap-14 border-r border-gray_d9 px-4 py-8'>
+    <aside className='flex h-screen w-72 flex-col gap-14 border-r border-gray_d9 px-4 py-8'>
       <Link href='/' className='px-4'>
         <Image src={logo} alt='logo' priority />
       </Link>
