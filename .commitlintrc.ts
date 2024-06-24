@@ -19,5 +19,6 @@ module.exports = {
         '✅ test',
       ],
     ],
+    'scope-empty': [2, 'never'],
   },
 };
