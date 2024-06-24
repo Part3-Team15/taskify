@@ -1,5 +1,5 @@
 import { yupResolver } from '@hookform/resolvers/yup';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import * as yup from 'yup';
 
@@ -30,11 +30,22 @@ export default function SignUpForm() {
   const {
     register,
     handleSubmit,
+    watch,
+    trigger,
     formState: { errors, isValid },
   } = useForm<TSignUpInputs>({
     resolver: yupResolver(schema),
     mode: 'onChange',
   });
+
+  const password = watch('password');
+  const passwordConfirmation = watch('passwordConfirmation');
+
+  useEffect(() => {
+    if (password?.length > 0) {
+      trigger('passwordConfirmation');
+    }
+  }, [password, passwordConfirmation, trigger]);
 
   const onSubmit = (data: TSignUpInputs) => {
     console.log(data);

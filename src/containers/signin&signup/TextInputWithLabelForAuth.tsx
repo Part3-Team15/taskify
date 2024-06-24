@@ -31,7 +31,7 @@ export default function TextInputWithLabelForAuth<T extends FieldValues>({
       <div className='relative'>
         <input
           {...register(id)}
-          className={`h-[50px] w-full rounded-[8px] border border-gray_d9 bg-white px-[15px] text-[16px] text-gray_9f ${
+          className={`h-[50px] w-full rounded-[8px] border border-gray_d9 bg-white px-[15px] text-[16px] text-black_33 placeholder:text-gray_9f ${
             error ? 'border-2 border-red' : ''
           }`}
           type={type}
