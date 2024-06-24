@@ -4,10 +4,12 @@ import Link from 'next/link';
 import crown from '@/../public/icons/crown.svg';
 import { Dashboard } from '@/types/Dashboard.interface';
 
-export default function DashboardItem({
-  dashboard,
-  nowDashboard,
-}: { dashboard: Dashboard } & { nowDashboard?: number }) {
+interface DashboardItemProps {
+  dashboard: Dashboard;
+  nowDashboard?: number;
+}
+
+export default function DashboardItem({ dashboard, nowDashboard }: DashboardItemProps) {
   return (
     <li>
       <Link
