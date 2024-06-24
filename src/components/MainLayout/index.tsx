@@ -1,7 +1,7 @@
 import { useRouter } from 'next/router';
 
 // import Header from '../Header';
-// import Sidebar from '../Sidebar';
+import Sidebar from '../Sidebar';
 
 export default function MainLayout({ children }: { children: React.ReactNode }) {
   const router = useRouter();
@@ -14,10 +14,8 @@ export default function MainLayout({ children }: { children: React.ReactNode }) 
 
   return (
     <div className='flex max-h-dvh max-w-screen-lg'>
-      {/* <Sidebar /> */}
-      <aside className='flex h-screen w-72 flex-col gap-14 border-r border-gray_d9 px-4 py-8'>
-        <h1 className='text-xl font-bold'>Sidebar</h1>
-      </aside>
+      <Sidebar />
+
       <div className='flex grow flex-col'>
         {/* <Header /> */}
         <header className='flex items-center justify-between border-b border-gray_d9 px-6 pb-16 pt-3'>

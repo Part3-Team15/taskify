@@ -4,7 +4,8 @@ import { QueryClient, QueryClientProvider } from 'react-query';
 import { Provider } from 'react-redux';
 import { PersistGate } from 'redux-persist/integration/react';
 
-import AppLayout from '@/layouts/AppLoyout';
+import MainLayout from '@/components/MainLayout';
+import AppLayout from '@/layouts/AppLayout';
 import { store, persistor } from '@/store/store';
 
 const queryClient = new QueryClient();
@@ -14,9 +15,9 @@ export default function App({ Component, pageProps }: AppProps) {
     <Provider store={store}>
       <PersistGate loading={null} persistor={persistor}>
         <QueryClientProvider client={queryClient}>
-          <AppLayout>
+          <MainLayout>
             <Component {...pageProps} />
-          </AppLayout>
+          </MainLayout>
         </QueryClientProvider>
       </PersistGate>
     </Provider>
