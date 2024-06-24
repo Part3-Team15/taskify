@@ -59,15 +59,18 @@ export default function SignInForm() {
       />
       <div>
         <input
+          id='terms'
           type='checkbox'
           checked={checkTerms}
-          onClick={() => {
+          onChange={() => {
             setCheckTerms(!checkTerms);
           }}
         />{' '}
-        <label className='text-black_33'>이용약관에 동의합니다.</label>
+        <label htmlFor='terms' className='text-[16px] text-black_33'>
+          이용약관에 동의합니다.
+        </label>
       </div>
-      <div className='h-[50px] w-[520px]'>
+      <div className='h-[50px]'>
         <Button type='submit' disabled={mutation.isLoading || !isValid || !checkTerms}>
           {mutation.isLoading ? '잠시만 기다려주세요..' : '로그인'}
         </Button>

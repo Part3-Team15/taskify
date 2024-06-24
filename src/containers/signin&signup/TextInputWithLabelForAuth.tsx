@@ -25,13 +25,13 @@ export default function TextInputWithLabelForAuth<T extends FieldValues>({
 
   return (
     <div>
-      <label htmlFor={id} className='mb-[10px] block text-black_33'>
+      <label htmlFor={id} className='mb-[10px] block text-[16px] text-black_33'>
         {label}
       </label>
       <div className='relative'>
         <input
           {...register(id)}
-          className={`h-[50px] w-full rounded-xl border border-gray_d9 bg-white px-[10px] text-[16px] text-gray_9f ${
+          className={`h-[50px] w-full rounded-[8px] border border-gray_d9 bg-white px-[15px] text-[16px] text-gray_9f ${
             error ? 'border-2 border-red' : ''
           }`}
           type={type}
@@ -40,7 +40,7 @@ export default function TextInputWithLabelForAuth<T extends FieldValues>({
           autoComplete={autoComplete}
         />
       </div>
-      {error && <p className='mt-2 text-red'>{error}</p>}
+      {error && <p className='mt-[10px] text-[14px] text-red'>{error}</p>}
     </div>
   );
 }

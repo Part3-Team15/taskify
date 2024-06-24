@@ -72,15 +72,18 @@ export default function SignUpForm() {
       />
       <div>
         <input
+          id='terms'
           type='checkbox'
           checked={checkTerms}
-          onClick={() => {
+          onChange={() => {
             setCheckTerms(!checkTerms);
           }}
         />{' '}
-        <label className='text-black_33'>이용약관에 동의합니다.</label>
+        <label htmlFor='terms' className='text-[16px] text-black_33'>
+          이용약관에 동의합니다.
+        </label>
       </div>
-      <div className='h-[50px] w-[520px]'>
+      <div className='h-[50px]'>
         <Button type='submit' disabled={!isValid || !checkTerms}>
           가입하기
         </Button>
