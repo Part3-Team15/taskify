@@ -6,6 +6,7 @@ import * as yup from 'yup';
 import Button from '@/components/Button';
 import PwdInputWithLabel from '@/containers/signin&signup/PwdInputWithLabel';
 import TextInputWithLabel from '@/containers/signin&signup/TextInputWithLabel';
+import { postSignUp } from '@/services/postService';
 
 export type TSignUpInputs = {
   email: string;
@@ -48,7 +49,7 @@ export default function SignUpForm() {
   }, [password, passwordConfirmation, trigger]);
 
   const onSubmit = (data: TSignUpInputs) => {
-    console.log(data);
+    postSignUp(data);
   };
 
   return (
