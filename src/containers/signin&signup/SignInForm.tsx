@@ -21,8 +21,6 @@ const schema = yup.object().shape({
 });
 
 export default function SignInForm() {
-  const [checkTerms, setCheckTerms] = useState(false);
-
   const {
     register,
     handleSubmit,
@@ -56,21 +54,9 @@ export default function SignInForm() {
         error={errors.password?.message}
         register={register}
       />
-      <div>
-        <input
-          id='terms'
-          type='checkbox'
-          checked={checkTerms}
-          onChange={() => {
-            setCheckTerms(!checkTerms);
-          }}
-        />{' '}
-        <label htmlFor='terms' className='text-[16px] text-black-33'>
-          이용약관에 동의합니다.
-        </label>
-      </div>
+
       <div className='h-[50px]'>
-        <Button type='submit' disabled={mutation.isLoading || !isValid || !checkTerms}>
+        <Button type='submit' disabled={mutation.isLoading || !isValid}>
           {mutation.isLoading ? '잠시만 기다려주세요..' : '로그인'}
         </Button>
       </div>
