@@ -1,5 +1,6 @@
-import Image from 'next/image';
 import { useSelector } from 'react-redux';
+
+import { ProfileIcon } from '../ProfileIcon';
 
 import { RootState } from '@/store/store';
 
@@ -19,14 +20,7 @@ export default function UserProfile() {
 
   return (
     <div className='flex items-center gap-3'>
-      {/* TODO: 컬러 지정. 현재는 임의로 회색을 지정함 */}
-      <div className='relative flex size-[34px] items-center justify-center rounded-full border-2 border-solid border-white bg-gray_9f md:size-[38px]'>
-        {user.profileImageUrl ? (
-          <Image src={user.profileImageUrl} alt='내 프로필' fill />
-        ) : (
-          <p className='md:font-base font-sm font-semibold text-white'>{user.nickname.substring(0, 1)}</p>
-        )}
-      </div>
+      <ProfileIcon user={user} imgClassName='size-[34px] md:size-[38px]' fontClassName='md:font-base font-sm' />
       <p className='font-base hidden font-medium md:block'>{user.nickname}</p>
     </div>
   );

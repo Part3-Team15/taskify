@@ -1,11 +1,16 @@
 import Image from 'next/image';
 import Link from 'next/link';
 
+import { ProfileIcon } from '../ProfileIcon';
+
 import UserProfile from './UserProfile';
 
 import plusIcon from '@/../public/icons/plus-boxed.svg';
 import settingsIcon from '@/../public/icons/settings.svg';
+import useFetchData from '@/hooks/useFetchData';
+import { getMembersList } from '@/services/getService';
 import { Dashboard } from '@/types/Dashboard.interface';
+import { MembersResponse } from '@/types/Member.interface';
 
 export default function DashboardHeader({ id, title, createdByMe }: Dashboard) {
   return (
@@ -16,14 +21,21 @@ export default function DashboardHeader({ id, title, createdByMe }: Dashboard) {
       </div>
       <div className='flex gap-4 md:gap-8 lg:gap-10'>
         <Buttons id={id} />
-        {/* TODO: 구성원 목록 컴포넌트 */}
-        <UserProfile />
+        <div className='flex items-center gap-3 md:gap-6 lg:gap-8'>
+          <MemberProfiles id={id} />
+          <div className='h-[34px] w-0 border-l border-gray_d9' />
+          <UserProfile />
+        </div>
       </div>
     </header>
   );
 }
 
 interface ButtonsProps {
+  id: number;
+}
+
+interface MemberProfilesProps {
   id: number;
 }
 
@@ -52,5 +64,44 @@ function Buttons({ id }: ButtonsProps) {
         초대하기
       </button>
     </div>
+  );
+}
+
+function MemberProfiles({ id }: MemberProfilesProps) {
+  const { data, isLoading, error } = useFetchData<MembersResponse>(['members', id], () => getMembersList(id));
+  if (isLoading) {
+    return <p>로딩중...</p>;
+  }
+
+  if (error) {
+    return <p>{error.message}</p>;
+  }
+
+  if (!data?.members) {
+    // NOTE: 실제론 생성자 한명이라도 존재
+    return <p>멤버가 없습니다.</p>;
+  }
+
+  // TODO: 길이도 정확히 하려면 device 정보 있어야 함
+  // const width = 38 + 30 * (data.members.length - 1);
+  return (
+    // <ul className={`relative h-[38px] w-[${width}px]`}>
+    <ul className={`flex`}>
+      {data.members.map((user, i) => {
+        // const offset = i === 0 ? 0 : 30 + 38 * (i - 1);
+        const hidden = i >= 2 ? 'hidden' : '';
+        return (
+          // <li key={user.id} className={`absolute left-[${offset}[x] size-[34px] md:size-[38px]`}>
+          <li key={user.id}>
+            <ProfileIcon
+              user={user}
+              imgClassName={`size-[34px] md:size-[38px] lg:flex ${hidden}`}
+              fontClassName='md:font-base font-sm'
+            />
+          </li>
+        );
+      })}
+      {/* TODO: + 버튼 추가하려면 device 정보가 있어야 함 */}
+    </ul>
   );
 }
