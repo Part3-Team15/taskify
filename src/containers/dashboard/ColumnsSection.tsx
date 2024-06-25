@@ -26,17 +26,17 @@ export default function ColumnsSection({ id }: ColumnsSectionProps) {
   }
 
   return (
-    <section className='block bg-gray_fa lg:flex'>
-      <ul className='block bg-gray_fa lg:flex'>
+    <section className='block bg-gray-fa lg:flex'>
+      <ul className='block bg-gray-fa lg:flex'>
         {columns?.data && columns.data.map((column) => <Column key={column.id} column={column} />)}
       </ul>
 
       <div className='p-5'>
         <button
-          className='mb-[16px] flex h-[70px] w-full items-center justify-center gap-[12px] rounded-[6px] border border-gray_d9 bg-white py-[24px] lg:w-[354px]'
+          className='mb-[16px] flex h-[70px] w-full items-center justify-center gap-[12px] rounded-[6px] border border-gray-d9 bg-white py-[24px] lg:w-[354px]'
           onClick={() => window.alert('컬럼 추가 모달')}
         >
-          <div className='text-lg font-bold text-black_33'>새로운 컬럼 추가하기</div>
+          <div className='text-lg font-bold text-black-33'>새로운 컬럼 추가하기</div>
           <Image src='/icons/plus-filled.svg' width={22} height={22} alt='카드 추가 아이콘' />
         </button>
       </div>
