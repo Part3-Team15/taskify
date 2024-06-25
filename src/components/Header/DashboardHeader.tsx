@@ -48,7 +48,7 @@ function Buttons({ id }: ButtonsProps) {
   return (
     <div className='flex gap-1.5 text-[14px] text-gray-78 md:gap-3 lg:gap-4'>
       <Link
-        href={`/dashboard/${id}`}
+        href={`/dashboard/${id}/edit`}
         // REVIEW: 공용 스타일로 만들기를 희망함
         className='flex items-center justify-center gap-2 rounded-[8px] border border-gray-d9 bg-white px-3 py-1.5 transition-all hover:bg-gray-fa active:bg-gray-ee md:px-4 md:py-2 lg:py-2.5'
       >
