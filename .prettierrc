@@ -8,6 +8,5 @@
   "singleQuote": true,
   "htmlWhitespaceSensitivity": "css",
   "jsxSingleQuote": true,
-  "endOfLine": "lf",
-  "plugins": ["prettier-plugin-tailwindcss"]
+  "endOfLine": "lf"
 }
