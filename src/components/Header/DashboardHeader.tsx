@@ -5,8 +5,8 @@ import { ProfileIcon } from '../ProfileIcon';
 
 import UserProfile from './UserProfile';
 
+import settingsIcon from '@/../public/icons/gear.svg';
 import plusIcon from '@/../public/icons/plus-boxed.svg';
-import settingsIcon from '@/../public/icons/settings.svg';
 import useFetchData from '@/hooks/useFetchData';
 import { getMembersList } from '@/services/getService';
 import { Dashboard } from '@/types/Dashboard.interface';
