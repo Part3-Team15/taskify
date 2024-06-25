@@ -20,21 +20,21 @@ export default function Sidebar() {
   if (isLoading) return <div>Loading...</div>;
 
   return (
-    <aside className='flex h-screen w-72 flex-col gap-14 border-r border-gray_d9 px-3 py-5'>
+    <aside className='flex h-screen w-72 flex-col gap-14 border-r border-gray-d9 px-3 py-5'>
       <Link href='/' className='px-3'>
         <Image src={logo} alt='logo' priority />
       </Link>
 
       <div className='flex flex-col gap-2'>
         <div className='flex items-center justify-between'>
-          <p className='px-3 text-xs font-bold text-gray_78'>Dashboards</p>
+          <p className='px-3 text-xs font-bold text-gray-78'>Dashboards</p>
 
           {/* 모달 연결 해야함 */}
           <a href='#' className='p-3'>
             <Image src={plus} alt='add' />
           </a>
         </div>
-        <div className='mx-2 mb-2 border-b border-gray_d9' />
+        <div className='mx-2 mb-2 border-b border-gray-d9' />
         <ul className='flex flex-col gap-2'>
           {dashboards.map((dashboard) => (
             <DashboardItem key={dashboard.id} dashboard={dashboard} nowDashboard={Number(id)} />

@@ -11,7 +11,7 @@ interface DashboardItemProps {
 
 export default function DashboardItem({ dashboard, nowDashboard }: DashboardItemProps) {
   const isActive = nowDashboard === dashboard.id;
-  const itemClasses = `flex items-center gap-4 rounded-md px-3 py-3 ${isActive ? 'bg-violet_f1 text-black_33' : 'text-gray_78'} hover:bg-violet_f1`;
+  const itemClasses = `flex items-center gap-4 rounded-md px-3 py-3 ${isActive ? 'bg-violet-f1 text-black-33' : 'text-gray-78'} hover:bg-violet-f1`;
 
   return (
     <li>
