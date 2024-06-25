@@ -47,18 +47,18 @@ export default function DashboardList() {
 
   return (
     <section className='w-max'>
-      <ul className='text-black-33 grid gap-3 font-semibold md:min-h-[215px] md:grid-cols-2 lg:min-h-[140px] lg:grid-cols-3'>
-        <li className='border-gray-d9 h-16 w-64 rounded-lg border md:w-60 lg:w-80'>
-          <button className='hover:bg-violet-f1 flex size-full items-center justify-center gap-4'>
+      <ul className='grid gap-3 font-semibold text-black-33 md:min-h-[215px] md:grid-cols-2 lg:min-h-[140px] lg:grid-cols-3'>
+        <li className='h-16 w-64 rounded-lg border border-gray-d9 bg-white md:w-60 lg:w-80'>
+          <button className='flex size-full items-center justify-center gap-4 hover:bg-violet-f1'>
             새로운 대시보드
             <Image src={plus} alt='plus' />
           </button>
         </li>
         {dashboardResponse?.dashboards.map((dashboard) => (
-          <li className='border-gray-d9 h-16 w-64 rounded-lg border md:w-60 lg:w-80' key={dashboard.id}>
+          <li className='h-16 w-64 rounded-lg border border-gray-d9 bg-white md:w-60 lg:w-80' key={dashboard.id}>
             <Link
               href={`/dashboard/${dashboard.id}`}
-              className={'hover:bg-violet-f1 flex size-full items-center rounded-md px-5'}
+              className={'flex size-full items-center rounded-md px-5 hover:bg-violet-f1'}
             >
               <div className='flex size-full items-center'>
                 <div className='rounded-full p-1' style={{ backgroundColor: dashboard.color }} />
@@ -72,17 +72,17 @@ export default function DashboardList() {
       </ul>
 
       <div className='flex items-center justify-end pt-3'>
-        <span className='text-black-33 pr-4 text-sm'>
+        <span className='pr-4 text-sm text-black-33'>
           {dashboardResponse ? Math.ceil(dashboardResponse.totalCount / 5) : 1} 페이지 중 {currentChunk}
         </span>
         <button
-          className='border-gray-d9 flex size-10 items-center justify-center rounded-s-[4px] border'
+          className='flex size-10 items-center justify-center rounded-s-[4px] border border-gray-d9'
           onClick={handlePrev}
         >
           <Image src={arrowWhite} alt='arrow-left' className='rotate-180' />
         </button>
         <button
-          className='border-gray-d9 flex size-10 items-center justify-center rounded-e-[4px] border'
+          className='flex size-10 items-center justify-center rounded-e-[4px] border border-gray-d9'
           onClick={handleNext}
         >
           <Image src={arrowWhite} alt='arrow-right' />
