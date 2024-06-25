@@ -27,10 +27,10 @@ export default function ColumnsSection({ id }: ColumnsSectionProps) {
   }
 
   return (
-    <div className='block bg-gray_fa lg:flex'>
-      <div className='block bg-gray_fa lg:flex'>
+    <section className='block bg-gray_fa lg:flex'>
+      <ul className='block bg-gray_fa lg:flex'>
         {columns?.data && columns.data.map((column) => <Column key={column.id} column={column} />)}
-      </div>
+      </ul>
 
       <div className='p-5'>
         <button
@@ -41,6 +41,6 @@ export default function ColumnsSection({ id }: ColumnsSectionProps) {
           <Image src='/icons/plus-filled.svg' width={22} height={22} alt='카드 추가 아이콘' />
         </button>
       </div>
-    </div>
+    </section>
   );
 }
