@@ -1,9 +1,21 @@
-import SignInForm from '@/containers/signin/SignInForm';
+import Link from 'next/link';
 
-const SignInPage: React.FC = () => (
-  <div>
-    <SignInForm />
-  </div>
-);
+import SignInForm from '@/containers/signin&signup/SignInForm';
+import TopLogoSection from '@/containers/signin&signup/TopLogoSection';
 
-export default SignInPage;
+export default function SignInPage() {
+  return (
+    <div className='flex items-center justify-center'>
+      <div className='w-[350px] items-center justify-center md:w-[520px]'>
+        <TopLogoSection text='오늘도 만나서 반가워요!' />
+        <SignInForm />
+        <p className='mt-[20px] text-center text-black_33'>
+          회원이 아니신가요?{' '}
+          <Link href='/signup' className='text-violet underline'>
+            회원가입하기
+          </Link>
+        </p>
+      </div>
+    </div>
+  );
+}
