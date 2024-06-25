@@ -7,11 +7,10 @@ import { getColumnsList } from '@/services/getService';
 import { ColumnsResponse } from '@/types/Column.interface';
 
 interface ColumnsSectionProps {
-  id: string | string[] | undefined;
+  id: string; // id : 대시보드 id (동적 라우팅 매개변수)
 }
 
 export default function ColumnsSection({ id }: ColumnsSectionProps) {
-  // id : 대시보드 id
   const {
     data: columns,
     isLoading,
