@@ -17,7 +17,7 @@ export function ProfileIcon({ user, imgClassName, fontClassName }: ProfileIconPr
       {user.profileImageUrl ? (
         <Image src={user.profileImageUrl} alt='프로필 이미지' fill />
       ) : (
-        <p className={`${fontClassName} font-semibold text-white`}>{user.nickname.substring(0, 1)}</p>
+        <p className={`${fontClassName} font-montserrat font-semibold text-white`}>{user.nickname.substring(0, 1)}</p>
       )}
     </div>
   );

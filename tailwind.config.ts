@@ -14,7 +14,8 @@ const config: Config = {
       lg: '1280px',
     },
     fontFamily: {
-      pretendard: ["Pretendard"],
+      pretendard: ['Pretendard'],
+      montserrat: ['Montserrat'],
     },
     colors: {
       black: {
