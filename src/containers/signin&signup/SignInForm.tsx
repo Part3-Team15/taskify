@@ -65,7 +65,7 @@ export default function SignInForm() {
             setCheckTerms(!checkTerms);
           }}
         />{' '}
-        <label htmlFor='terms' className='text-[16px] text-black_33'>
+        <label htmlFor='terms' className='text-[16px] text-black-33'>
           이용약관에 동의합니다.
         </label>
       </div>

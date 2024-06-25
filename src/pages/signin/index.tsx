@@ -9,7 +9,7 @@ export default function SignInPage() {
       <div className='w-[350px] items-center justify-center md:w-[520px]'>
         <TopLogoSection text='오늘도 만나서 반가워요!' />
         <SignInForm />
-        <p className='mt-[20px] text-center text-black_33'>
+        <p className='mt-[20px] text-center text-black-33'>
           회원이 아니신가요?{' '}
           <Link href='/signup' className='text-violet underline'>
             회원가입하기
