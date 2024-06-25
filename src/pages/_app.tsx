@@ -4,8 +4,7 @@ import { QueryClient, QueryClientProvider } from 'react-query';
 import { Provider } from 'react-redux';
 import { PersistGate } from 'redux-persist/integration/react';
 
-import MainLayout from '@/components/MainLayout';
-import AppLayout from '@/layouts/AppLayout';
+import MainLayout from '@/layouts/MainLayout';
 import { store, persistor } from '@/store/store';
 
 const queryClient = new QueryClient();
