@@ -3,7 +3,7 @@ import Link from 'next/link';
 
 import { ProfileIcon } from '../ProfileIcon';
 
-import UserProfile from './UserProfile';
+import UserMenuDropdown from './UserMenuDropdown';
 
 import settingsIcon from '@/../public/icons/gear.svg';
 import plusIcon from '@/../public/icons/plus-boxed.svg';
@@ -24,7 +24,7 @@ export default function DashboardHeader({ id, title, createdByMe }: Dashboard) {
         <div className='flex items-center gap-3 md:gap-6 lg:gap-8'>
           <MemberProfiles id={id} />
           <div className='h-[34px] w-0 border-l border-gray-d9' />
-          <UserProfile />
+          <UserMenuDropdown />
         </div>
       </div>
     </header>
