@@ -26,7 +26,7 @@ const config: Config = {
         d9: '#d9d9d9',
         ee: '#eeeeee',
         fa: '#fafafa',
-      }, 
+      },
       white: '#ffffff',
       violet: {
         DEFAULT: '#5534da',
@@ -36,7 +36,7 @@ const config: Config = {
       red: {
         DEFAULT: '#D6173A',
         red_hover: '#b51230',
-      }, 
+      },
       green: {
         DEFAULT: '#7ac555',
       },
