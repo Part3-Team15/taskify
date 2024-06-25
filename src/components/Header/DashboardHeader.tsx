@@ -83,16 +83,16 @@ function MemberProfiles({ id }: MemberProfilesProps) {
   }
 
   // TODO: 길이도 정확히 하려면 device 정보 있어야 함
-  // const width = 38 + 30 * (data.members.length - 1);
+  const w = 38 + 30 * (data.members.length - 1);
+  const ulStyle = { width: w };
   return (
-    // <ul className={`relative h-[38px] w-[${width}px]`}>
-    <ul className={`flex`}>
+    <ul className='relative h-[38px]' style={ulStyle}>
       {data.members.map((user, i) => {
-        // const offset = i === 0 ? 0 : 30 + 38 * (i - 1);
+        const offset = 30 * i;
+        const liStyle = { left: offset };
         const hidden = i >= 2 ? 'hidden' : '';
         return (
-          // <li key={user.id} className={`absolute left-[${offset}[x] size-[34px] md:size-[38px]`}>
-          <li key={user.id}>
+          <li key={user.id} className='absolute size-[34px] md:size-[38px]' style={liStyle}>
             <ProfileIcon
               user={user}
               imgClassName={`size-[34px] md:size-[38px] lg:flex ${hidden}`}
