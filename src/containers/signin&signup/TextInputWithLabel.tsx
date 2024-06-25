@@ -25,13 +25,13 @@ export default function TextInputWithLabel<T extends FieldValues>({
 
   return (
     <div>
-      <label htmlFor={id} className='mb-[10px] block text-[16px] text-black_33'>
+      <label htmlFor={id} className='mb-[10px] block text-[16px] text-black-33'>
         {label}
       </label>
       <div className='relative'>
         <input
           {...register(id)}
-          className={`h-[50px] w-full rounded-[8px] border border-gray_d9 bg-white px-[15px] text-[16px] text-black_33 placeholder:text-gray_9f ${
+          className={`h-[50px] w-full rounded-[8px] border border-gray-d9 bg-white px-[15px] text-[16px] text-black-33 placeholder:text-gray-9f ${
             error ? 'border-2 border-red' : ''
           }`}
           type={type}
