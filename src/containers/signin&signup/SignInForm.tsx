@@ -1,5 +1,5 @@
 import { yupResolver } from '@hookform/resolvers/yup';
-import { useState } from 'react';
+import { useRouter } from 'next/router';
 import { useForm } from 'react-hook-form';
 import { useSelector } from 'react-redux';
 import * as yup from 'yup';
@@ -30,12 +30,17 @@ export default function SignInForm() {
     mode: 'onChange',
   });
   const mutation = useSignIn();
+  const router = useRouter();
 
   // useSelector를 사용하여 Redux store의 상태를 조회
   const { user, error } = useSelector((state: RootState) => state.user);
 
   const onSubmit = (data: TSignInInputs) => {
-    mutation.mutate(data);
+    mutation.mutate(data, {
+      onSuccess: () => {
+        router.push('/mydashboard'); // 로그인 성공 시 리다이렉트
+      },
+    });
   };
 
   return (
