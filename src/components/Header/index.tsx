@@ -19,6 +19,10 @@ export default function Header() {
   const router = useRouter();
   const { pathname } = router;
 
+  const { id } = router.query;
+  const { isLoading } = useFetchDashboards();
+  const { dashboards } = useSelector((state: RootState) => state.dashboards);
+
   // NOTE: 리다이렉션은 페이지에서 할 것이라 생각하고, 상태에 걸맞은 헤더 보여줌
   if (!user) {
     if (pathname === '/') {
@@ -32,10 +36,6 @@ export default function Header() {
 
   if (pathname.startsWith('/dashboard/')) {
     // NOTE: 대시보드 페이지
-    const { id } = router.query;
-    const { isLoading } = useFetchDashboards();
-    const { dashboards } = useSelector((state: RootState) => state.dashboards);
-
     if (isLoading) {
       return <DefaultHeader title='로딩중...' />;
     }
