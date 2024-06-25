@@ -1,61 +1,63 @@
 /* eslint-disable no-console */
 import Image from 'next/image';
 import Link from 'next/link';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 
 import arrow from '@/../public/icons/arrow-right.svg';
 import crown from '@/../public/icons/crown.svg';
 import plus from '@/../public/icons/plus-filled.svg';
+import useFetchData from '@/hooks/useFetchData';
 import { getDashboardsList } from '@/services/getService';
 import { DashboardsResponse } from '@/types/Dashboard.interface';
 
 export default function DashboardList() {
-  const [dashboardResponse, setDashboardResponse] = useState<DashboardsResponse>();
-  const [currentChunk, setCurrentChunk] = useState(1);
+  const [currentChunk, setCurrentChunk] = useState<number>(1);
 
-  useEffect(() => {
-    const getDashboardList = async () => {
-      try {
-        const response = await getDashboardsList('pagination', currentChunk, 5);
-        setDashboardResponse(response.data);
-        console.log(response.data);
-      } catch (error) {
-        console.error(error);
-      }
-    };
-    getDashboardList();
-  }, [currentChunk]);
+  const { data: dashboardResponse, error } = useFetchData<DashboardsResponse>(['dashboards', currentChunk], () =>
+    getDashboardsList('pagination', currentChunk, 5),
+  );
+
+  if (error) {
+    return (
+      <div>
+        <div>Error fetching data</div>
+        <div>{error.message}</div>
+      </div>
+    );
+  }
 
   const handleNext = () => {
     const nextChunk = currentChunk + 1;
 
     if (dashboardResponse && nextChunk <= Math.ceil(dashboardResponse.totalCount / 5)) {
-      setCurrentChunk(nextChunk);
+      setCurrentChunk((prev) => prev + 1);
     }
+    console.log('nextChunk', nextChunk);
   };
 
   const handlePrev = () => {
     const prevChunk = currentChunk - 1;
 
     if (prevChunk >= 1) {
-      setCurrentChunk(prevChunk);
+      setCurrentChunk((prev) => prev - 1);
     }
+    console.log('prevChunk', prevChunk);
   };
 
   return (
     <section className=''>
-      <ul className='grid min-h-[140px] grid-cols-3 gap-3 font-semibold text-black-33'>
-        <li className='h-16 max-w-80 rounded-lg border border-gray-d9'>
-          <button className='flex size-full items-center justify-center gap-4 hover:bg-violet-f1'>
+      <ul className='text-black-33 grid min-h-[140px] grid-cols-3 gap-3 font-semibold'>
+        <li className='border-gray-d9 h-16 max-w-80 rounded-lg border'>
+          <button className='hover:bg-violet-f1 flex size-full items-center justify-center gap-4'>
             새로운 대시보드
             <Image src={plus} alt='plus' />
           </button>
         </li>
         {dashboardResponse?.dashboards.map((dashboard) => (
-          <li className='h-16 max-w-80 rounded-lg border border-gray-d9' key={dashboard.id}>
+          <li className='border-gray-d9 h-16 max-w-80 rounded-lg border' key={dashboard.id}>
             <Link
               href={`/dashboard/${dashboard.id}`}
-              className={'flex size-full items-center rounded-md px-5 hover:bg-violet-f1'}
+              className={'hover:bg-violet-f1 flex size-full items-center rounded-md px-5'}
             >
               <div className='rounded-full p-1' style={{ backgroundColor: dashboard.color }} />
               <p className='pl-4 pr-1 text-lg font-medium'>{dashboard.title}</p>
@@ -66,17 +68,17 @@ export default function DashboardList() {
       </ul>
 
       <div className='flex items-center justify-end pt-3'>
-        <span className='pr-4 text-sm text-black-33'>
+        <span className='text-black-33 pr-4 text-sm'>
           {dashboardResponse ? Math.ceil(dashboardResponse.totalCount / 5) : 1} 페이지 중 {currentChunk}
         </span>
         <button
-          className='flex size-10 items-center justify-center rounded-s-[4px] border border-gray-d9'
+          className='border-gray-d9 flex size-10 items-center justify-center rounded-s-[4px] border'
           onClick={handlePrev}
         >
           <Image src={arrow} alt='arrow-left' className='rotate-180' />
         </button>
         <button
-          className='flex size-10 items-center justify-center rounded-e-[4px] border border-gray-d9'
+          className='border-gray-d9 flex size-10 items-center justify-center rounded-e-[4px] border'
           onClick={handleNext}
         >
           <Image src={arrow} alt='arrow-right' />
