@@ -47,15 +47,15 @@ export default function DashboardList() {
 
   return (
     <section className='w-max'>
-      <ul className='text-black-33 grid min-h-[140px] grid-cols-3 gap-3 font-semibold'>
-        <li className='border-gray-d9 h-16 w-80 rounded-lg border'>
+      <ul className='text-black-33 grid gap-3 font-semibold md:min-h-[215px] md:grid-cols-2 lg:min-h-[140px] lg:grid-cols-3'>
+        <li className='border-gray-d9 h-16 w-64 rounded-lg border md:w-60 lg:w-80'>
           <button className='hover:bg-violet-f1 flex size-full items-center justify-center gap-4'>
             새로운 대시보드
             <Image src={plus} alt='plus' />
           </button>
         </li>
         {dashboardResponse?.dashboards.map((dashboard) => (
-          <li className='border-gray-d9 h-16 w-80 rounded-lg border' key={dashboard.id}>
+          <li className='border-gray-d9 h-16 w-64 rounded-lg border md:w-60 lg:w-80' key={dashboard.id}>
             <Link
               href={`/dashboard/${dashboard.id}`}
               className={'hover:bg-violet-f1 flex size-full items-center rounded-md px-5'}
