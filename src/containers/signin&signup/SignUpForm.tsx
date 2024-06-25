@@ -4,8 +4,8 @@ import { useForm } from 'react-hook-form';
 import * as yup from 'yup';
 
 import Button from '@/components/Button';
-import PwdInputWithLabelForAuth from '@/containers/signin&signup/PwdInputWithLabelForAuth';
-import TextInputWithLabelForAuth from '@/containers/signin&signup/TextInputWithLabelForAuth';
+import PwdInputWithLabel from '@/containers/signin&signup/PwdInputWithLabel';
+import TextInputWithLabel from '@/containers/signin&signup/TextInputWithLabel';
 
 export type TSignUpInputs = {
   email: string;
@@ -53,28 +53,28 @@ export default function SignUpForm() {
 
   return (
     <form className='flex flex-col gap-[20px]' onSubmit={handleSubmit(onSubmit)}>
-      <TextInputWithLabelForAuth
+      <TextInputWithLabel
         id='email'
         label='이메일'
         placeholder='이메일을 입력해 주세요'
         error={errors.email?.message}
         register={register}
       />
-      <TextInputWithLabelForAuth
+      <TextInputWithLabel
         id='nickname'
         label='닉네임'
         placeholder='닉네임을 입력해 주세요'
         error={errors.nickname?.message}
         register={register}
       />
-      <PwdInputWithLabelForAuth
+      <PwdInputWithLabel
         id='password'
         label='비밀번호'
         placeholder='비밀번호를 입력해 주세요'
         error={errors.password?.message}
         register={register}
       />
-      <PwdInputWithLabelForAuth
+      <PwdInputWithLabel
         id='passwordConfirmation'
         label='비밀번호 확인'
         placeholder='비밀번호를 한번 더 입력해 주세요'

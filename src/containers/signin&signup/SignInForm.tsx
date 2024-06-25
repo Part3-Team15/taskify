@@ -5,8 +5,8 @@ import { useSelector } from 'react-redux';
 import * as yup from 'yup';
 
 import Button from '@/components/Button';
-import PwdInputWithLabelForAuth from '@/containers/signin&signup/PwdInputWithLabelForAuth';
-import TextInputWithLabelForAuth from '@/containers/signin&signup/TextInputWithLabelForAuth';
+import PwdInputWithLabel from '@/containers/signin&signup/PwdInputWithLabel';
+import TextInputWithLabel from '@/containers/signin&signup/TextInputWithLabel';
 import { useSignIn } from '@/hooks/useSignIn';
 import { RootState } from '@/store/store';
 
@@ -42,14 +42,14 @@ export default function SignInForm() {
 
   return (
     <form className='flex flex-col gap-[20px]' onSubmit={handleSubmit(onSubmit)}>
-      <TextInputWithLabelForAuth
+      <TextInputWithLabel
         id='email'
         label='이메일'
         placeholder='이메일을 입력해 주세요'
         error={errors.email?.message}
         register={register}
       />
-      <PwdInputWithLabelForAuth
+      <PwdInputWithLabel
         id='password'
         label='비밀번호'
         placeholder='비밀번호를 입력해 주세요'

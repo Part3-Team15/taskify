@@ -8,7 +8,7 @@ interface Props<T extends FieldValues> {
   register: UseFormRegister<T>;
 }
 
-export default function TextInputWithLabelForAuth<T extends FieldValues>({
+export default function TextInputWithLabel<T extends FieldValues>({
   id,
   label,
   placeholder,

@@ -10,7 +10,7 @@ interface Props<T extends FieldValues> {
   register: UseFormRegister<T>;
 }
 
-export default function PwdInputWithLabelForAuth<T extends FieldValues>({
+export default function PwdInputWithLabel<T extends FieldValues>({
   id,
   label,
   placeholder,
