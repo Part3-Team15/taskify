@@ -58,6 +58,24 @@ const Home: React.FC = () => {
           >
             현재 비번 틀림
           </button>
+          <button
+            className='btn-violet h-[40px] w-[125px]'
+            onClick={() => {
+              openModal({ type: 'columnDeleteConfirm' });
+            }}
+          >
+            컬럼 삭제
+          </button>
+        </div>
+        <div>
+          <button
+            className='btn-violet h-[40px] w-[125px]'
+            onClick={() => {
+              openModal({ type: 'newDashboard' });
+            }}
+          >
+            대시보드 생성
+          </button>
         </div>
       </div>
     </div>

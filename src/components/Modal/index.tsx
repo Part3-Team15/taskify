@@ -1,15 +1,33 @@
+import { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 
 import DefaultModal from './DefaultModal';
 import InviteMemberModal from './InviteMemberModal';
 import NewColumnModal from './NewColumnModal';
+import NewDashboardModal from './NewDashboardModal';
 import NotificationModal from './NotificationModal';
 
+import { notificationTextObj } from '@/constants';
 import { modalSelector, closeModal } from '@/store/reducers/modalSlice';
 
 export default function Modal() {
   const dispatch = useDispatch();
   const { type, props = null } = useSelector(modalSelector);
+
+  useEffect(() => {
+    if (type) {
+      // 모달이 열렸을 때 body의 overflow를 hidden으로 설정
+      document.body.style.overflow = 'hidden';
+    } else {
+      // 모달이 닫힐 때 body의 overflow를 auto로 설정
+      document.body.style.overflow = 'auto';
+    }
+
+    // cleanup 함수로 모달이 닫힐 때 overflow를 auto로 설정
+    return () => {
+      document.body.style.overflow = 'auto';
+    };
+  }, [type]);
 
   const handleCloseModal = () => {
     dispatch(closeModal());
@@ -21,27 +39,20 @@ export default function Modal() {
     }
   };
 
-  const notificationTextObj = {
-    pwdNotEqual: '비밀번호가 일치하지 않습니다.',
-    signupSuccess: '가입이 완료되었습니다!',
-    emailExists: '이미 사용 중인 이메일입니다.',
-    curPwdNotEqual: '현재 비밀번호가 틀렸습니다.',
-  };
-
   const renderModalContent = () => {
     switch (type) {
       case 'pwdNotEqual':
-        return <NotificationModal handleCloseModal={handleCloseModal} notificationText={notificationTextObj[type]} />;
       case 'signupSuccess':
-        return <NotificationModal handleCloseModal={handleCloseModal} notificationText={notificationTextObj[type]} />;
       case 'emailExists':
-        return <NotificationModal handleCloseModal={handleCloseModal} notificationText={notificationTextObj[type]} />;
       case 'curPwdNotEqual':
+      case 'columnDeleteConfirm':
         return <NotificationModal handleCloseModal={handleCloseModal} notificationText={notificationTextObj[type]} />;
       case 'newColumn':
         return <NewColumnModal handleCloseModal={handleCloseModal} />;
       case 'inviteMember':
         return <InviteMemberModal handleCloseModal={handleCloseModal} />;
+      case 'newDashboard':
+        return <NewDashboardModal handleCloseModal={handleCloseModal} />;
       default:
         return <DefaultModal handleCloseModal={handleCloseModal} />;
     }
@@ -51,7 +62,7 @@ export default function Modal() {
     <>
       {type && (
         <div
-          className='fixed left-0 top-0 flex h-screen w-screen items-center justify-center bg-black-17 bg-opacity-[0.3] backdrop-blur-[2px]'
+          className='fixed inset-0 flex items-center justify-center bg-black-17 bg-opacity-[0.3] backdrop-blur-[2px]'
           onClick={handleOutsideClick}
         >
           {renderModalContent()}

@@ -28,7 +28,7 @@ export default function InviteMemberModal({
       </div>
       <div className='flex justify-between md:justify-end md:gap-[15px]'>
         <ModalCancelButton onClick={handleCloseModal}>취소</ModalCancelButton>
-        <ModalActionButton>
+        <ModalActionButton disabled={email.length === 0}>
           {/* 초대하기 API 연결 필요 */}
           초대
         </ModalActionButton>

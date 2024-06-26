@@ -28,9 +28,9 @@ export default function NewColumnModal({
       </div>
       <div className='flex justify-between md:justify-end md:gap-[15px]'>
         <ModalCancelButton onClick={handleCloseModal}>취소</ModalCancelButton>
-        <ModalActionButton>
+        <ModalActionButton disabled={column.length === 0}>
           {/* 컬럼 생성 API 연결 필요 */}
-          초대
+          생성
         </ModalActionButton>
       </div>
     </div>
