@@ -2,10 +2,6 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { useState } from 'react';
 
-import arrowWhite from '@/../public/icons/arrow-white.svg';
-import arrowBlack from '@/../public/icons/arrow-black.svg';
-import crown from '@/../public/icons/crown.svg';
-import plus from '@/../public/icons/plus-filled.svg';
 import useFetchData from '@/hooks/useFetchData';
 import { getDashboardsList } from '@/services/getService';
 import { DashboardsResponse } from '@/types/Dashboard.interface';
@@ -54,7 +50,7 @@ export default function DashboardList() {
         <li className='h-16 w-64 rounded-lg border border-gray-d9 bg-white md:w-60 lg:w-80'>
           <button className='flex size-full items-center justify-center gap-4 hover:bg-violet-f1'>
             새로운 대시보드
-            <Image src={plus} alt='plus' />
+            <Image src={'/icons/plus-filled.svg'} alt='plus' width={22} height={22} />
           </button>
         </li>
         {dashboardResponse?.dashboards.map((dashboard) => (
@@ -66,9 +62,9 @@ export default function DashboardList() {
               <div className='flex size-full items-center'>
                 <div className='rounded-full p-1' style={{ backgroundColor: dashboard.color }} />
                 <p className='pl-4 pr-1 text-lg font-medium'>{dashboard.title}</p>
-                {dashboard.createdByMe && <Image src={crown} alt='my' />}
+                {dashboard.createdByMe && <Image src={'/icons/crown.svg'} alt='my' width={20} height={16} />}
               </div>
-              <Image src={arrowBlack} alt='arrow' />
+              <Image src={'/icons/arrow-black.svg'} alt='arrow' width={14} height={14} />
             </Link>
           </li>
         ))}
@@ -98,6 +94,12 @@ const NavButton = ({ direction, onClick, isDisable }: NavButtonProps) => (
     onClick={onClick}
     disabled={isDisable}
   >
-    <Image src={arrowWhite} alt={`arrow-${direction}`} className={`${direction === 'left' ? 'rotate-180' : ''}`} />
+    <Image
+      src={'/icons/arrow-white.svg'}
+      alt={`arrow-${direction}`}
+      className={`${direction === 'left' ? 'rotate-180' : ''}`}
+      width={8}
+      height={12}
+    />
   </button>
 );
