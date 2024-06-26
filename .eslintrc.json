@@ -32,7 +32,7 @@
   "globals": {
     "_": true
   },
-  "plugins": ["import", "html", "react", "@typescript-eslint", "tailwindcss"],
+  "plugins": ["import", "html", "react", "@typescript-eslint", "tailwindcss", "prettier"],
   "rules": {
     "import/no-unresolved": 0,
     "no-console": "warn",
@@ -50,14 +50,7 @@
     "import/order": [
       "error",
       {
-        "groups": [
-          "external",
-          "internal",
-          "builtin",
-          "parent",
-          "sibling",
-          "index"
-        ],
+        "groups": ["external", "internal", "builtin", "parent", "sibling", "index"],
         "pathGroupsExcludedImportTypes": ["react"],
         "newlines-between": "always",
         "pathGroups": [
@@ -79,10 +72,7 @@
       }
     ],
     "react/react-in-jsx-scope": "off",
-    "react/jsx-filename-extension": [
-      1,
-      { "extensions": [".js", ".jsx", ".ts", ".tsx"] }
-    ],
+    "react/jsx-filename-extension": [1, { "extensions": [".js", ".jsx", ".ts", ".tsx"] }],
     "@typescript-eslint/no-unused-vars": ["warn"],
     "@typescript-eslint/no-shadow": ["warn"],
     "@typescript-eslint/explicit-module-boundary-types": "off",
