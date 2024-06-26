@@ -15,7 +15,7 @@ export function ProfileIcon({ user, imgClassName, fontClassName }: ProfileIconPr
       {user.profileImageUrl ? (
         <Image src={user.profileImageUrl} alt='프로필 이미지' fill />
       ) : (
-        <p className={`absolute left-[11px] top-[6px] font-montserrat font-semibold text-white  ${fontClassName}`}>
+        <p className={`absolute left-[11px] top-[6px] font-montserrat font-semibold text-white ${fontClassName}`}>
           {user.nickname.substring(0, 1)}
         </p>
       )}

@@ -2,8 +2,8 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { useState } from 'react';
 
-import arrowWhite from '@/../public/icons/arrow-white.svg';
 import arrowBlack from '@/../public/icons/arrow-black.svg';
+import arrowWhite from '@/../public/icons/arrow-white.svg';
 import crown from '@/../public/icons/crown.svg';
 import plus from '@/../public/icons/plus-filled.svg';
 import useFetchData from '@/hooks/useFetchData';

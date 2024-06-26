@@ -1,4 +1,5 @@
 import { yupResolver } from '@hookform/resolvers/yup';
+import { useRouter } from 'next/router';
 import { useState, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import * as yup from 'yup';
@@ -6,6 +7,7 @@ import * as yup from 'yup';
 import Button from '@/components/Button';
 import PwdInputWithLabel from '@/containers/signin&signup/PwdInputWithLabel';
 import TextInputWithLabel from '@/containers/signin&signup/TextInputWithLabel';
+import { postSignUp } from '@/services/postService';
 
 export type TSignUpInputs = {
   email: string;
@@ -26,6 +28,7 @@ const schema = yup.object().shape({
 
 export default function SignUpForm() {
   const [checkTerms, setCheckTerms] = useState(false);
+  const router = useRouter();
 
   const {
     register,
@@ -47,8 +50,14 @@ export default function SignUpForm() {
     }
   }, [password, passwordConfirmation, trigger]);
 
-  const onSubmit = (data: TSignUpInputs) => {
-    console.log(data);
+  const onSubmit = async (data: TSignUpInputs) => {
+    try {
+      await postSignUp(data);
+      router.push('/signin'); // 회원가입이 성공되면 로그인 페이지로 리다이렉트
+    } catch (error) {
+      console.error('회원가입에 실패했습니다:', error);
+      // 에러 처리 로직 추가 가능
+    }
   };
 
   return (
