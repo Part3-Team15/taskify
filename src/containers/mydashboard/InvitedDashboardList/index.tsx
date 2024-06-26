@@ -7,7 +7,9 @@ export default function InvitedDashboardList() {
     <div className='h-full max-w-screen-lg overflow-hidden rounded-lg border-0 bg-white'>
       <p className='px-7 pb-5 pt-8 text-base font-bold text-black-33'>초대받은 대시보드</p>
       <div className='relative px-7'>
-        <Image src={'/icons/search.svg'} alt='search' width={24} height={24} className='absolute left-11 top-2' />
+        <div className='absolute left-11 top-2 h-[24px] w-[24px]'>
+          <Image src={'/icons/search.svg'} alt='search' fill />
+        </div>
         <input
           placeholder='검색'
           className='h-full w-full rounded-md border border-gray-d9 bg-white py-[8px] pl-12 pr-4'

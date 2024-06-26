@@ -87,12 +87,8 @@ const NavButton = ({ direction, onClick, isDisable }: NavButtonProps) => (
     onClick={onClick}
     disabled={isDisable}
   >
-    <Image
-      src={'/icons/arrow-white.svg'}
-      alt={`arrow-${direction}`}
-      className={`${direction === 'left' ? 'rotate-180' : ''}`}
-      width={8}
-      height={12}
-    />
+    <div className={`${direction === 'left' ? 'rotate-180' : ''} relative h-[12px] w-[8px]`}>
+      <Image src={'/icons/arrow-white.svg'} alt={`arrow-${direction}`} fill />
+    </div>
   </button>
 );
