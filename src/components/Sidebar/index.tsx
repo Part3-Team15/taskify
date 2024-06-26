@@ -5,8 +5,6 @@ import { useSelector } from 'react-redux';
 
 import DashboardItem from './DashboardItem';
 
-import logo from '@/../public/icons/logo.svg';
-import logo_sm from '@/../public/icons/logo-small.svg';
 import plus from '@/../public/icons/plus.svg';
 import { useFetchDashboards } from '@/hooks/useFetchDashboards';
 import { RootState } from '@/store/store';
@@ -25,8 +23,15 @@ export default function Sidebar() {
       ) : (
         <>
           <Link href='/' className='flex items-center justify-center md:block md:px-3'>
-            <Image src={logo} alt='logo' priority className='hidden md:block' />
-            <Image src={logo_sm} alt='logo' priority className='block md:hidden' />
+            <Image src={'/icons/logo.svg'} alt='logo' priority className='hidden md:block' width={110} height={33} />
+            <Image
+              src={'/icons/logo-small.svg'}
+              alt='logo'
+              priority
+              className='block md:hidden'
+              width={27}
+              height={27}
+            />
           </Link>
 
           <div className='flex flex-col gap-2'>
@@ -35,7 +40,7 @@ export default function Sidebar() {
 
               {/* 모달 연결 해야함 */}
               <a href='#' className='p-3'>
-                <Image src={plus} alt='add' />
+                <Image src={'/icons/plus.svg'} alt='add' width={15} height={15} />
               </a>
             </div>
             <div className='mx-2 mb-2 border-b border-gray-d9' />
