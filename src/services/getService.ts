@@ -1,15 +1,24 @@
 import instance from './axios';
 
 // 컬럼 목록 조회
-export async function getColumnsList(id: string) {
+export const getColumnsList = async (id: string) => {
   return await instance.get(`/columns?dashboardId=${id}`);
-}
+};
 
 // 대시보드 목록 조회
-export async function getDashboardsList(
+export const getDashboardsList = async (
   navigationMethod: 'infiniteScroll' | 'pagination' = 'infiniteScroll', // navigationMethod는 'infiniteScroll' 또는 'pagination'만 가능. 기본값은 'infiniteScroll'
   page: number = 1, // 기본값 1
   size: number = 10, // 기본값 10
-) {
+) => {
   return await instance.get(`/dashboards?navigationMethod=${navigationMethod}&page=${page}&size=${size}`);
-}
+};
+
+// 대시보드 멤버 목록 조회
+export const getMembersList = async (
+  dashboardId: number,
+  page: number = 1, // 기본값 1
+  size: number = 4, // 기본값 4
+) => {
+  return await instance.get(`/members?page=${page}&size=${size}&dashboardId=${dashboardId}`);
+};

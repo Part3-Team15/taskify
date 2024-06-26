@@ -13,6 +13,10 @@ const config: Config = {
       md: '780px',
       lg: '1280px',
     },
+    fontFamily: {
+      pretendard: ['Pretendard'],
+      montserrat: ['Montserrat'],
+    },
     colors: {
       black: {
         DEFAULT: '#000000',
@@ -26,17 +30,29 @@ const config: Config = {
         d9: '#d9d9d9',
         ee: '#eeeeee',
         fa: '#fafafa',
-      }, 
-      white: '#ffffff',
+      },
+      white: {
+        DEFAULT: '#ffffff',
+        hover: '#f7f7f7',
+        active: '#eeeeee',
+        disabled: '#ebebeb',
+      },
       violet: {
         DEFAULT: '#5534da',
         f1: '#f1effd',
         hover: '#3925a8',
+        active: '#261680',
+        disabled: '#9FA6B2',
+        light: {
+          hover: '#f4f2ff',
+          active: '#ebe8fc',
+          disabled: '#ebebeb',
+        }
       },
       red: {
         DEFAULT: '#D6173A',
-        red_hover: '#b51230',
-      }, 
+        hover: '#b51230',
+      },
       green: {
         DEFAULT: '#7ac555',
       },

@@ -1,5 +1,5 @@
-const MyDashboardPage: React.FC = () => {
-  return <div>MyDashboard</div>;
-};
+import MyDashboard from '@/containers/mydashboard';
 
-export default MyDashboardPage;
+export default function MyDashboardPage() {
+  return <MyDashboard />;
+}

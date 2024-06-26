@@ -1,10 +1,9 @@
 import { yupResolver } from '@hookform/resolvers/yup';
-import { useState } from 'react';
+import { useRouter } from 'next/router';
 import { useForm } from 'react-hook-form';
 import { useSelector } from 'react-redux';
 import * as yup from 'yup';
 
-import Button from '@/components/Button';
 import PwdInputWithLabel from '@/containers/signin&signup/PwdInputWithLabel';
 import TextInputWithLabel from '@/containers/signin&signup/TextInputWithLabel';
 import { useSignIn } from '@/hooks/useSignIn';
@@ -21,8 +20,6 @@ const schema = yup.object().shape({
 });
 
 export default function SignInForm() {
-  const [checkTerms, setCheckTerms] = useState(false);
-
   const {
     register,
     handleSubmit,
@@ -32,12 +29,17 @@ export default function SignInForm() {
     mode: 'onChange',
   });
   const mutation = useSignIn();
+  const router = useRouter();
 
   // useSelector를 사용하여 Redux store의 상태를 조회
   const { user, error } = useSelector((state: RootState) => state.user);
 
   const onSubmit = (data: TSignInInputs) => {
-    mutation.mutate(data);
+    mutation.mutate(data, {
+      onSuccess: () => {
+        router.push('/mydashboard'); // 로그인 성공 시 리다이렉트
+      },
+    });
   };
 
   return (
@@ -56,24 +58,10 @@ export default function SignInForm() {
         error={errors.password?.message}
         register={register}
       />
-      <div>
-        <input
-          id='terms'
-          type='checkbox'
-          checked={checkTerms}
-          onChange={() => {
-            setCheckTerms(!checkTerms);
-          }}
-        />{' '}
-        <label htmlFor='terms' className='text-[16px] text-black-33'>
-          이용약관에 동의합니다.
-        </label>
-      </div>
-      <div className='h-[50px]'>
-        <Button type='submit' disabled={mutation.isLoading || !isValid || !checkTerms}>
-          {mutation.isLoading ? '잠시만 기다려주세요..' : '로그인'}
-        </Button>
-      </div>
+
+      <button type='submit' disabled={mutation.isLoading || !isValid} className='btn-violet h-[50px] text-lg'>
+        {mutation.isLoading ? '잠시만 기다려주세요..' : '로그인'}
+      </button>
       {mutation.isError && (
         <p>Error: {mutation.error instanceof Error ? mutation.error.message : '알 수 없는 오류가 발생했습니다.'}</p>
       )}
