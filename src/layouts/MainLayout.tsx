@@ -9,24 +9,24 @@ export default function MainLayout({ children }: { children: React.ReactNode }) 
 
   if (currentPath === '/') {
     return (
-      <>
+      <div className='min-w-[360px]'>
         <Header />
         {children}
-      </>
+      </div>
     );
   }
 
   const isDisabled = currentPath === '/signin' || currentPath === '/signup' || currentPath === '/404';
 
-  if (isDisabled) return <>{children}</>;
+  if (isDisabled) return <div className='min-w-[360px]'>{children}</div>;
 
   return (
-    <div className='flex max-h-dvh max-w-screen-lg'>
+    <div className='flex min-w-[360px]'>
       <Sidebar />
 
       <div className='flex grow flex-col'>
         <Header />
-        <main className='flex flex-col overflow-y-scroll'>{children}</main>
+        <main className='flex flex-col overflow-y-scroll bg-gray-fa'>{children}</main>
       </div>
     </div>
   );
