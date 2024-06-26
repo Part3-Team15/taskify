@@ -33,7 +33,7 @@ export default function ColumnsSection({ id }: ColumnsSectionProps) {
 
       <div className='p-5'>
         <button
-          className='mb-[16px] flex h-[70px] w-full items-center justify-center gap-[12px] rounded-[6px] border border-gray-d9 bg-white py-[24px] lg:w-[354px]'
+          className='btn-violet-light mb-[16px] h-[70px] w-full gap-[12px] rounded-[6px] py-[24px] lg:w-[354px]'
           onClick={() => window.alert('컬럼 추가 모달')}
         >
           <div className='text-lg font-bold text-black-33'>새로운 컬럼 추가하기</div>
