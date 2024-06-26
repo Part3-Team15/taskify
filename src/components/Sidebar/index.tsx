@@ -6,6 +6,7 @@ import { useSelector } from 'react-redux';
 import DashboardItem from './DashboardItem';
 
 import logo from '@/../public/icons/logo.svg';
+import logo_sm from '@/../public/icons/logo-small.svg';
 import plus from '@/../public/icons/plus.svg';
 import { useFetchDashboards } from '@/hooks/useFetchDashboards';
 import { RootState } from '@/store/store';
@@ -18,18 +19,19 @@ export default function Sidebar() {
   const dashboards = useSelector((state: RootState) => state.dashboards.dashboards);
 
   return (
-    <aside className='flex h-screen min-w-72 flex-col gap-14 border-r border-gray-d9 px-3 py-5'>
+    <aside className='flex h-screen min-w-16 flex-col gap-14 border-r border-gray-d9 px-3 py-5 md:min-w-40 lg:min-w-72'>
       {isLoading ? (
         <div>Loading...</div>
       ) : (
         <>
-          <Link href='/' className='px-3'>
-            <Image src={logo} alt='logo' priority />
+          <Link href='/' className='flex items-center justify-center md:block md:px-3'>
+            <Image src={logo} alt='logo' priority className='hidden md:block' />
+            <Image src={logo_sm} alt='logo' priority className='block md:hidden' />
           </Link>
 
           <div className='flex flex-col gap-2'>
-            <div className='flex items-center justify-between'>
-              <p className='px-3 text-xs font-bold text-gray-78'>Dashboards</p>
+            <div className='flex items-center justify-center md:justify-between'>
+              <p className='hidden px-3 text-xs font-bold text-gray-78 md:block'>Dashboards</p>
 
               {/* 모달 연결 해야함 */}
               <a href='#' className='p-3'>
