@@ -17,6 +17,12 @@ export default function DashboardList() {
     getDashboardsList('pagination', currentChunk, 5),
   );
 
+  const totalPage = dashboardResponse
+    ? Math.ceil(dashboardResponse.totalCount / 5) === 0
+      ? 1
+      : Math.ceil(dashboardResponse.totalCount / 5)
+    : 1;
+
   if (error) {
     return (
       <div>
@@ -29,10 +35,9 @@ export default function DashboardList() {
   const handleNext = () => {
     const nextChunk = currentChunk + 1;
 
-    if (dashboardResponse && nextChunk <= Math.ceil(dashboardResponse.totalCount / 5)) {
+    if (nextChunk <= totalPage) {
       setCurrentChunk((prev) => prev + 1);
     }
-    console.log('nextChunk', nextChunk);
   };
 
   const handlePrev = () => {
@@ -41,7 +46,6 @@ export default function DashboardList() {
     if (prevChunk >= 1) {
       setCurrentChunk((prev) => prev - 1);
     }
-    console.log('prevChunk', prevChunk);
   };
 
   return (
@@ -72,11 +76,11 @@ export default function DashboardList() {
 
       <div className='rou flex items-center justify-end pt-3'>
         <span className='pr-4 text-sm text-black-33'>
-          {dashboardResponse ? Math.ceil(dashboardResponse.totalCount / 5) : 1} 페이지 중 {currentChunk}
+          {totalPage} 페이지 중 {currentChunk}
         </span>
 
-        <NavButton direction='left' onClick={handlePrev} />
-        <NavButton direction='right' onClick={handleNext} />
+        <NavButton direction='left' onClick={handlePrev} isDisable={currentChunk === 1} />
+        <NavButton direction='right' onClick={handleNext} isDisable={currentChunk === totalPage} />
       </div>
     </section>
   );
@@ -85,12 +89,14 @@ export default function DashboardList() {
 interface NavButtonProps {
   direction: 'left' | 'right';
   onClick: () => void;
+  isDisable?: boolean;
 }
 
-const NavButton = ({ direction, onClick }: NavButtonProps) => (
+const NavButton = ({ direction, onClick, isDisable }: NavButtonProps) => (
   <button
-    className={`${direction === 'left' ? 'rounded-s-[4px]' : 'rounded-e-[4px]'} flex size-10 items-center justify-center border border-gray-d9 hover:bg-gray-ee`}
+    className={`${direction === 'left' ? 'rounded-s-[4px]' : 'rounded-e-[4px]'} flex size-10 items-center justify-center border border-gray-d9 hover:bg-gray-ee disabled:hover:bg-white`}
     onClick={onClick}
+    disabled={isDisable}
   >
     <Image src={arrowWhite} alt={`arrow-${direction}`} className={`${direction === 'left' ? 'rotate-180' : ''}`} />
   </button>
