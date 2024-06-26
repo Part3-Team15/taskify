@@ -8,30 +8,30 @@ export default function InviteMemberModal({
 }: {
   handleCloseModal: MouseEventHandler<HTMLButtonElement>;
 }) {
-  const [projectName, setProjectName] = useState('');
+  const [email, setEmail] = useState('');
 
   return (
-    <div className='flex h-[276px] w-[540px] flex-col justify-between rounded-[8px] bg-white px-[28px] py-[32px]'>
-      <h1 className='text-[24px] font-bold text-black-33'>초대하기</h1>
+    <div className='flex h-[266px] w-[327px] flex-col justify-between rounded-[8px] bg-white px-[18px] py-[32px] md:h-[301px] md:w-[540px]'>
+      <h1 className='text-[20px] font-bold text-black-33 md:text-[24px]'>초대하기</h1>
       <div className='flex flex-col'>
-        <label className='mb-[10px] text-black-33'>이메일</label>
+        <label className='mb-[10px] text-[16px] text-black-33 md:text-[18px]'>이메일</label>
+        {/* 이미 초대한 멤버일 경우 Input 에러 표시 */}
         <input
-          className='h-[48px] rounded-[6px] border border-gray-d9 px-[15px]'
+          className='h-[42px] rounded-[6px] border border-gray-d9 px-[15px] text-[14px] md:h-[48px] md:text-[16px]'
           type='text'
           placeholder='초대할 멤버의 이메일을 입력해 주세요'
-          value={projectName}
+          value={email}
           onChange={(e) => {
-            setProjectName(e.target.value);
+            setEmail(e.target.value);
           }}
         />
       </div>
-      <div className='flex justify-end gap-[10px]'>
-        <div className='h-[48px] w-[120px]'>
-          <ModalCancelButton onClick={handleCloseModal}>취소</ModalCancelButton>
-        </div>
-        <div className='h-[48px] w-[120px]'>
-          <ModalActionButton>초대</ModalActionButton>
-        </div>
+      <div className='flex justify-between md:justify-end md:gap-[15px]'>
+        <ModalCancelButton onClick={handleCloseModal}>취소</ModalCancelButton>
+        <ModalActionButton>
+          {/* 초대하기 API 연결 필요 */}
+          초대
+        </ModalActionButton>
       </div>
     </div>
   );
