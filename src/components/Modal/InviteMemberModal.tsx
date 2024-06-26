@@ -1,6 +1,7 @@
 import { MouseEventHandler, useState } from 'react';
 
-import Button from '@/components/Button';
+import ModalActionButton from '@/components/Button/ModalActionButton';
+import ModalCancelButton from '@/components/Button/ModalCancelButton';
 
 export default function InviteMemberModal({
   handleCloseModal,
@@ -26,12 +27,10 @@ export default function InviteMemberModal({
       </div>
       <div className='flex justify-end gap-[10px]'>
         <div className='h-[48px] w-[120px]'>
-          <Button variant='secondary' onClick={handleCloseModal}>
-            취소
-          </Button>
+          <ModalCancelButton onClick={handleCloseModal}>취소</ModalCancelButton>
         </div>
         <div className='h-[48px] w-[120px]'>
-          <Button>초대</Button>
+          <ModalActionButton>초대</ModalActionButton>
         </div>
       </div>
     </div>

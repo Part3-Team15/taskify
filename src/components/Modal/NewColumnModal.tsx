@@ -1,7 +1,5 @@
 import { MouseEventHandler, useState } from 'react';
 
-import Button from '@/components/Button';
-
 export default function NewColumnModal({
   handleCloseModal,
 }: {
@@ -26,12 +24,10 @@ export default function NewColumnModal({
       </div>
       <div className='flex justify-end gap-[10px]'>
         <div className='h-[48px] w-[120px]'>
-          <Button variant='secondary' onClick={handleCloseModal}>
-            취소
-          </Button>
+          <button onClick={handleCloseModal}>취소</button>
         </div>
         <div className='h-[48px] w-[120px]'>
-          <Button>생성</Button>
+          <button>생성</button>
         </div>
       </div>
     </div>
