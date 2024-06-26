@@ -1,6 +1,9 @@
 import Image from 'next/image';
 import React from 'react';
 
+import useFetchData from '@/hooks/useFetchData';
+import { getCardsList } from '@/services/getService';
+import { CardsListResponse } from '@/types/Card.interface';
 import { Column as ColumnType } from '@/types/Column.interface';
 
 interface ColumnProps {
@@ -8,6 +11,20 @@ interface ColumnProps {
 }
 
 function Column({ column }: ColumnProps) {
+  const {
+    data: cardList,
+    isLoading,
+    error,
+  } = useFetchData<CardsListResponse>(['cardList'], () => getCardsList(column.id.toString()));
+
+  if (isLoading) {
+    return <div>Loading...</div>;
+  }
+
+  if (error) {
+    return <div>Error: {error.message}</div>;
+  }
+
   return (
     <div className='block lg:flex'>
       <div className='flex w-full flex-col bg-gray-fa p-5 lg:w-[354px]'>
@@ -17,7 +34,7 @@ function Column({ column }: ColumnProps) {
             <span className='mr-[8px] text-xs text-violet'>𒊹</span>
             <h2 className='mr-[12px] text-lg font-bold text-black-33'>{column.title}</h2>
             <span className='flex size-[20px] items-center justify-center rounded-[6px] bg-gray-ee text-xs text-gray-78'>
-              1 {/* 해당 칼럼의 카드 개수. API 연동 예정 */}
+              {cardList?.totalCount || 0} {/* API에서 가져온 카드 개수 */}
             </span>
           </div>
           <button
@@ -37,7 +54,7 @@ function Column({ column }: ColumnProps) {
         </button>
 
         <div>
-          {column.title} 컬럼의 카드 영역 {/* 해당 칼럼의 카드 목록. API 연동 예정 */}
+          {column.title} 컬럼의 카드 영역 {/* 해당 칼럼의 카드 목록 */}
         </div>
       </div>
 
