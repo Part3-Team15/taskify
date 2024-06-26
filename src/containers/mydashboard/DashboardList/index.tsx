@@ -2,10 +2,6 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { useState } from 'react';
 
-import arrowBlack from '@/../public/icons/arrow-black.svg';
-import arrowWhite from '@/../public/icons/arrow-white.svg';
-import crown from '@/../public/icons/crown.svg';
-import plus from '@/../public/icons/plus-filled.svg';
 import useFetchData from '@/hooks/useFetchData';
 import { getDashboardsList } from '@/services/getService';
 import { DashboardsResponse } from '@/types/Dashboard.interface';
@@ -16,6 +12,8 @@ export default function DashboardList() {
   const { data: dashboardResponse, error } = useFetchData<DashboardsResponse>(['dashboards', currentChunk], () =>
     getDashboardsList('pagination', currentChunk, 5),
   );
+
+  const totalPage = dashboardResponse ? Math.max(1, Math.ceil(dashboardResponse.totalCount / 5)) : 1;
 
   if (error) {
     return (
@@ -29,10 +27,9 @@ export default function DashboardList() {
   const handleNext = () => {
     const nextChunk = currentChunk + 1;
 
-    if (dashboardResponse && nextChunk <= Math.ceil(dashboardResponse.totalCount / 5)) {
+    if (nextChunk <= totalPage) {
       setCurrentChunk((prev) => prev + 1);
     }
-    console.log('nextChunk', nextChunk);
   };
 
   const handlePrev = () => {
@@ -41,7 +38,6 @@ export default function DashboardList() {
     if (prevChunk >= 1) {
       setCurrentChunk((prev) => prev - 1);
     }
-    console.log('prevChunk', prevChunk);
   };
 
   return (
@@ -50,7 +46,7 @@ export default function DashboardList() {
         <li className='h-16 w-64 rounded-lg border border-gray-d9 bg-white md:w-60 lg:w-80'>
           <button className='btn-violet-light size-full gap-4'>
             새로운 대시보드
-            <Image src={plus} alt='plus' />
+            <Image src={'/icons/plus-filled.svg'} alt='plus' width={22} height={22} />
           </button>
         </li>
         {dashboardResponse?.dashboards.map((dashboard) => (
@@ -59,9 +55,9 @@ export default function DashboardList() {
               <div className='flex size-full items-center'>
                 <div className='rounded-full p-1' style={{ backgroundColor: dashboard.color }} />
                 <p className='pl-4 pr-1 text-lg font-medium'>{dashboard.title}</p>
-                {dashboard.createdByMe && <Image src={crown} alt='my' />}
+                {dashboard.createdByMe && <Image src={'/icons/crown.svg'} alt='my' width={20} height={16} />}
               </div>
-              <Image src={arrowBlack} alt='arrow' />
+              <Image src={'/icons/arrow-black.svg'} alt='arrow' width={14} height={14} />
             </Link>
           </li>
         ))}
@@ -69,11 +65,11 @@ export default function DashboardList() {
 
       <div className='rou flex items-center justify-end pt-3'>
         <span className='pr-4 text-sm text-black-33'>
-          {dashboardResponse ? Math.ceil(dashboardResponse.totalCount / 5) : 1} 페이지 중 {currentChunk}
+          {totalPage} 페이지 중 {currentChunk}
         </span>
 
-        <NavButton direction='left' onClick={handlePrev} />
-        <NavButton direction='right' onClick={handleNext} />
+        <NavButton direction='left' onClick={handlePrev} isDisable={currentChunk === 1} />
+        <NavButton direction='right' onClick={handleNext} isDisable={currentChunk === totalPage} />
       </div>
     </section>
   );
@@ -82,13 +78,21 @@ export default function DashboardList() {
 interface NavButtonProps {
   direction: 'left' | 'right';
   onClick: () => void;
+  isDisable?: boolean;
 }
 
-const NavButton = ({ direction, onClick }: NavButtonProps) => (
+const NavButton = ({ direction, onClick, isDisable }: NavButtonProps) => (
   <button
     className={`btn-white rounded-none ${direction === 'left' ? 'rounded-s-[4px]' : 'rounded-e-[4px]'} size-10`}
     onClick={onClick}
+    disabled={isDisable}
   >
-    <Image src={arrowWhite} alt={`arrow-${direction}`} className={`${direction === 'left' ? 'rotate-180' : ''}`} />
+    <Image
+      src={'/icons/arrow-white.svg'}
+      alt={`arrow-${direction}`}
+      className={`${direction === 'left' ? 'rotate-180' : ''}`}
+      width={8}
+      height={12}
+    />
   </button>
 );
