@@ -9,7 +9,7 @@ import { modalSelector, closeModal } from '@/store/reducers/modalSlice';
 
 export default function Modal() {
   const dispatch = useDispatch();
-  const { type, props } = useSelector(modalSelector);
+  const { type, props = null } = useSelector(modalSelector);
 
   const handleCloseModal = () => {
     dispatch(closeModal());

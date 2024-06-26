@@ -2,7 +2,7 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 export interface ModalState {
   type: string | null;
-  props: string | null;
+  props?: string | null;
 }
 
 interface RootState {
@@ -21,7 +21,7 @@ export const modalSlice = createSlice({
   initialState,
   reducers: {
     openModal: (state, action: PayloadAction<{ type: string | null; props: string | null }>) => {
-      const { type, props } = action.payload;
+      const { type, props = null } = action.payload;
       state.type = type;
       state.props = props;
     },
