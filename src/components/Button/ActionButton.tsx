@@ -9,7 +9,7 @@ export default function ActionButton(props: ButtonProps) {
 
   return (
     <button
-      className={`btn-violet text-ts rounded-[4px] px-[29px] py-[7px] md:text-sm ${className}`}
+      className={`btn-violet w-[84px] rounded-[4px] py-[7px] text-xs md:text-sm ${className}`}
       disabled={disabled}
       {...buttonProps}
     >
