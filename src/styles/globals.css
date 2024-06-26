@@ -1,3 +1,23 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@layer components {
+  .btn-violet {
+    @apply align-center bg-violet hover:bg-violet-hover active:bg-violet-active rounded-[8px] text-white transition-all;
+  }
+
+  .btn-violet-light {
+    @apply align-center hover:bg-violet-light-hover active:bg-violet-light-active text-violet border-gray-d9 rounded-[8px] border bg-white transition-all;
+  }
+
+  .btn-white {
+    @apply align-center hover:bg-white-hover active:bg-white-active text-gray-78 border-gray-d9 rounded-[8px] border bg-white transition-all;
+  }
+}
+
+@layer utilities {
+  .align-center {
+    @apply flex items-center justify-center;
+  }
+}

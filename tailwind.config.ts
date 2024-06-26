@@ -27,15 +27,24 @@ const config: Config = {
         ee: '#eeeeee',
         fa: '#fafafa',
       },
-      white: '#ffffff',
+      white: {
+        DEFAULT: '#ffffff',
+        hover: '#f7f7f7',
+        active: '#eeeeee',
+      },
       violet: {
         DEFAULT: '#5534da',
         f1: '#f1effd',
         hover: '#3925a8',
+        active: '#261680',
+        light: {
+          hover: '#f4f2ff',
+          active: '#ebe8fc',
+        }
       },
       red: {
         DEFAULT: '#D6173A',
-        red_hover: '#b51230',
+        hover: '#b51230',
       },
       green: {
         DEFAULT: '#7ac555',
