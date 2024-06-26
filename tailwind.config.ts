@@ -29,6 +29,7 @@ const config: Config = {
         '9f': '#9fa6b2',
         d9: '#d9d9d9',
         ee: '#eeeeee',
+        f5: '#f5f5f5',
         fa: '#fafafa',
       },
       white: {

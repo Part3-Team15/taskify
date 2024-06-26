@@ -30,7 +30,7 @@
   }
 
   .input {
-    @apply flex h-[42px] w-full items-center rounded-md border border-gray-d9 bg-white px-4 text-sm outline-none invalid:border-2 invalid:border-red focus:border-2 focus:border-violet disabled:placeholder:text-gray-9f md:h-12 md:text-base;
+    @apply flex h-[42px] w-full items-center rounded-md border border-gray-d9 bg-white px-4 text-sm outline-none placeholder:text-gray-9f invalid:border-2 invalid:border-red focus:border-2 focus:border-violet disabled:text-gray-9f md:h-12 md:text-base;
   }
 }
 
