@@ -1,7 +1,7 @@
 import instance from './axios';
 
 // 컬럼 목록 조회
-export const getColumnsList = async (dashboardId: string) => {
+export const getColumnsList = async (dashboardId: number) => {
   return await instance.get(`/columns?dashboardId=${dashboardId}`);
 };
 
@@ -24,6 +24,6 @@ export const getMembersList = async (
 };
 
 // 카드 목록 조회
-export const getCardsList = async (columnId: string) => {
+export const getCardsList = async (columnId: number) => {
   return await instance.get(`/cards?columnId=${columnId}`);
 };

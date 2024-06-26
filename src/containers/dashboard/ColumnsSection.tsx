@@ -15,7 +15,7 @@ export default function ColumnsSection({ id }: ColumnsSectionProps) {
     data: columns,
     isLoading,
     error,
-  } = useFetchData<ColumnsResponse>(['columns', id], () => getColumnsList(id as string));
+  } = useFetchData<ColumnsResponse>(['columns', id], () => getColumnsList(Number(id)));
 
   if (isLoading) {
     return <div>Loading...</div>; // 스피너로 교체 예정

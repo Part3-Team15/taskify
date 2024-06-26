@@ -15,7 +15,7 @@ function Column({ column }: ColumnProps) {
     data: cardList,
     isLoading,
     error,
-  } = useFetchData<CardsListResponse>(['cardList'], () => getCardsList(column.id.toString()));
+  } = useFetchData<CardsListResponse>(['cardList'], () => getCardsList(column.id));
 
   if (isLoading) {
     return <div>Loading...</div>;
