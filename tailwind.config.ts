@@ -42,7 +42,7 @@ const config: Config = {
         f1: '#f1effd',
         hover: '#3925a8',
         active: '#261680',
-        disabled: '#828285',
+        disabled: '#9FA6B2',
         light: {
           hover: '#f4f2ff',
           active: '#ebe8fc',
