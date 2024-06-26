@@ -1,4 +1,10 @@
-export interface User {
+export interface SignUpForm {
+  email: string;
+  nickname: string;
+  password: string;
+}
+
+export interface SignUpResponse {
   id: number;
   email: string;
   nickname: string;
