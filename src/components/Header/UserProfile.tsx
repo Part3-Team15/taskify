@@ -16,8 +16,8 @@ export default function UserProfile() {
 
   return (
     <div className='flex items-center gap-3'>
-      <ProfileIcon user={user} imgClassName='size-[34px] md:size-[38px]' fontClassName='md:font-base font-sm' />
-      <p className='font-base hidden font-medium md:block'>{user.nickname}</p>
+      <ProfileIcon user={user} imgClassName='size-[34px] md:size-[38px]' fontClassName='md:text-base text-sm' />
+      <p className='hidden text-base font-medium md:block'>{user.nickname}</p>
     </div>
   );
 }
