@@ -94,7 +94,7 @@ interface NavButtonProps {
 
 const NavButton = ({ direction, onClick, isDisable }: NavButtonProps) => (
   <button
-    className={`${direction === 'left' ? 'rounded-s-[4px]' : 'rounded-e-[4px]'} flex size-10 items-center justify-center border border-gray-d9 hover:bg-gray-ee disabled:hover:bg-white`}
+    className={`${direction === 'left' ? 'rounded-s-[4px]' : 'rounded-e-[4px]'} flex size-10 items-center justify-center border border-gray-d9 bg-white hover:bg-gray-ee disabled:hover:bg-white`}
     onClick={onClick}
     disabled={isDisable}
   >
