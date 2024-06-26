@@ -13,3 +13,12 @@ export async function getDashboardsList(
 ) {
   return await instance.get(`/dashboards?navigationMethod=${navigationMethod}&page=${page}&size=${size}`);
 }
+
+// 대시보드 멤버 목록 조회
+export const getMembersList = async (
+  dashboardId: number,
+  page: number = 1, // 기본값 1
+  size: number = 4, // 기본값 4
+) => {
+  return await instance.get(`/members?page=${page}&size=${size}&dashboardId=${dashboardId}`);
+};

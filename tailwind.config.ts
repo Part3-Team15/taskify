@@ -13,6 +13,10 @@ const config: Config = {
       md: '780px',
       lg: '1280px',
     },
+    fontFamily: {
+      pretendard: ['Pretendard'],
+      montserrat: ['Montserrat'],
+    },
     colors: {
       black: {
         DEFAULT: '#000000',

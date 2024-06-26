@@ -1,15 +1,22 @@
 import { useRouter } from 'next/router';
 
+import Header from '@/components/Header';
 import Sidebar from '@/components/Sidebar';
-
-// import Header from '../Header';
 
 export default function MainLayout({ children }: { children: React.ReactNode }) {
   const router = useRouter();
   const currentPath = router.asPath;
 
-  const isDisabled =
-    currentPath === '/' || currentPath === '/signin' || currentPath === '/signup' || currentPath === '/404';
+  if (currentPath === '/') {
+    return (
+      <>
+        <Header />
+        {children}
+      </>
+    );
+  }
+
+  const isDisabled = currentPath === '/signin' || currentPath === '/signup' || currentPath === '/404';
 
   if (isDisabled) return <>{children}</>;
 
@@ -18,10 +25,7 @@ export default function MainLayout({ children }: { children: React.ReactNode }) 
       <Sidebar />
 
       <div className='flex grow flex-col'>
-        {/* <Header /> */}
-        <header className='flex items-center border-b border-gray-d9 px-6 pb-16 pt-3'>
-          <h1 className='text-xl font-bold'>Header</h1>
-        </header>
+        <Header />
         <main className='flex flex-col overflow-y-scroll'>{children}</main>
       </div>
     </div>

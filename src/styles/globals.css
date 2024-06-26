@@ -2,17 +2,23 @@
 @tailwind components;
 @tailwind utilities;
 
+@layer base {
+  body {
+    @apply font-pretendard font-normal;
+  }
+}
+
 @layer components {
   .btn-violet {
-    @apply align-center bg-violet hover:bg-violet-hover active:bg-violet-active rounded-[8px] text-white transition-all;
+    @apply align-center rounded-[8px] bg-violet text-white transition-all hover:bg-violet-hover active:bg-violet-active;
   }
 
   .btn-violet-light {
-    @apply align-center hover:bg-violet-light-hover active:bg-violet-light-active text-violet border-gray-d9 rounded-[8px] border bg-white transition-all;
+    @apply align-center rounded-[8px] border border-gray-d9 bg-white text-violet transition-all hover:bg-violet-light-hover active:bg-violet-light-active;
   }
 
   .btn-white {
-    @apply align-center hover:bg-white-hover active:bg-white-active text-gray-78 border-gray-d9 rounded-[8px] border bg-white transition-all;
+    @apply align-center rounded-[8px] border border-gray-d9 bg-white text-gray-78 transition-all hover:bg-white-hover active:bg-white-active;
   }
 }
 
