@@ -54,7 +54,7 @@ export default function NewDashboardModal({
         {(['green', 'purple', 'orange', 'blue', 'pink'] as DashboardColor[]).map((color) => (
           <button
             key={color}
-            className={`bg- flex size-[28px] items-center justify-center rounded-full${color} md:size-[30px]`}
+            className={`${'bg-' + color} flex size-[28px] items-center justify-center rounded-full bg-white md:size-[30px]`}
             onClick={() => handleColorSelect(color)}
           >
             {selectedColor === color && <Image src='/icons/check.svg' alt='체크' width={16} height={16} />}

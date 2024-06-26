@@ -1,4 +1,4 @@
-import { MouseEventHandler, useState } from 'react';
+import { MouseEventHandler, useState, ChangeEvent } from 'react';
 
 import ModalActionButton from '@/components/Button/ModalActionButton';
 import ModalCancelButton from '@/components/Button/ModalCancelButton';
@@ -9,6 +9,14 @@ export default function InviteMemberModal({
   handleCloseModal: MouseEventHandler<HTMLButtonElement>;
 }) {
   const [email, setEmail] = useState('');
+  const [isValid, setIsValid] = useState(true);
+  const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+
+  const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value;
+    setEmail(value);
+    setIsValid(emailRegex.test(value));
+  };
 
   return (
     <div className='flex h-[266px] w-[327px] flex-col justify-between rounded-[8px] bg-white px-[18px] py-[32px] md:h-[301px] md:w-[540px]'>
@@ -17,18 +25,17 @@ export default function InviteMemberModal({
         <label className='mb-[10px] text-[16px] text-black-33 md:text-[18px]'>이메일</label>
         {/* 이미 초대한 멤버일 경우 Input 에러 표시 */}
         <input
-          className='h-[42px] rounded-[6px] border border-gray-d9 px-[15px] text-[14px] md:h-[48px] md:text-[16px]'
+          className={`h-[42px] rounded-[6px] border border-gray-d9 px-[15px] text-[14px] md:h-[48px] md:text-[16px] ${!isValid ? 'border-2 border-red' : ''}`}
           type='text'
           placeholder='초대할 멤버의 이메일을 입력해 주세요'
           value={email}
-          onChange={(e) => {
-            setEmail(e.target.value);
-          }}
+          onChange={handleChange}
         />
+        {!isValid && <p className='mt-2 text-[14px] text-red'>{'유효한 이메일 주소를 입력해주세요.'}</p>}
       </div>
       <div className='flex justify-between md:justify-end md:gap-[15px]'>
         <ModalCancelButton onClick={handleCloseModal}>취소</ModalCancelButton>
-        <ModalActionButton disabled={email.length === 0}>
+        <ModalActionButton disabled={email.length === 0 || !isValid}>
           {/* 초대하기 API 연결 필요 */}
           초대
         </ModalActionButton>
