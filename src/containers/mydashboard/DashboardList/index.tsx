@@ -42,7 +42,7 @@ export default function DashboardList() {
 
   return (
     <section className='w-max'>
-      <ul className='grid gap-3 font-semibold text-black-33 md:min-h-[216px] md:grid-cols-2 lg:min-h-[140px] lg:grid-cols-3'>
+      <ul className='grid grid-rows-1 gap-3 font-semibold text-black-33 md:min-h-[216px] md:grid-cols-2 md:grid-rows-3 lg:min-h-[140px] lg:grid-cols-3 lg:grid-rows-2'>
         <li className='h-16 w-64 rounded-lg border border-gray-d9 bg-white md:w-60 lg:w-80'>
           <button className='btn-violet-light size-full gap-4'>
             새로운 대시보드
