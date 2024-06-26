@@ -17,7 +17,6 @@ export default function UserMenuDropdown() {
   };
 
   const handleLogoutClick = () => {
-    localStorage.removeItem('accessToken');
     dispatch(clearUser());
     router.push('/');
   };
