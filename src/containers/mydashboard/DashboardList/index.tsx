@@ -13,11 +13,7 @@ export default function DashboardList() {
     getDashboardsList('pagination', currentChunk, 5),
   );
 
-  const totalPage = dashboardResponse
-    ? Math.ceil(dashboardResponse.totalCount / 5) === 0
-      ? 1
-      : Math.ceil(dashboardResponse.totalCount / 5)
-    : 1;
+  const totalPage = dashboardResponse ? Math.max(1, Math.ceil(dashboardResponse.totalCount / 5)) : 1;
 
   if (error) {
     return (
