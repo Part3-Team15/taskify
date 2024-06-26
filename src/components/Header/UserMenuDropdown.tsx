@@ -22,7 +22,7 @@ export default function UserMenuDropdown() {
   };
 
   return (
-    <div className='relative'>
+    <div className='relative flex items-center'>
       <button type='button' onClick={handleDropdownClick}>
         <UserProfile />
       </button>
