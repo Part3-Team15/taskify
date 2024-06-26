@@ -3,16 +3,24 @@ import CancelButton from '@/components/Button/CancelButton';
 import Image from 'next/image';
 import useFetchData from '@/hooks/useFetchData';
 import { getInvitationsList } from '@/services/getService';
-
 import { Invitation, InvitationsResponse } from '@/types/Invitation.interface';
 import { putAcceptInvitation } from '@/services/putService';
+import { useState, useEffect } from 'react';
 
 export default function InvitedDashboardList() {
   const { data, error, isLoading } = useFetchData<InvitationsResponse>('invitations', () => getInvitationsList());
+  const [invitations, setInvitations] = useState<Invitation[]>([]);
+
+  useEffect(() => {
+    if (data) {
+      setInvitations(data.invitations);
+    }
+  }, [data]);
 
   const handleAcceptInvitation = async (invitationId: number, inviteAccepted: boolean) => {
     try {
       await putAcceptInvitation(invitationId, inviteAccepted);
+      setInvitations((prevInvitations) => prevInvitations.filter((invitation) => invitation.id !== invitationId));
     } catch (error) {
       console.error('Error updating invitation:', error);
     }
@@ -42,9 +50,9 @@ export default function InvitedDashboardList() {
   }
 
   return (
-    <div className='h-full min-h-80 max-w-screen-lg overflow-hidden rounded-lg border-0 bg-white'>
+    <section className='h-full min-h-80 overflow-hidden rounded-lg border-0 bg-white'>
       <p className='px-7 pb-5 pt-8 text-base font-bold text-black-33'>초대받은 대시보드</p>
-      {data && data.invitations.length > 0 ? (
+      {invitations && invitations.length > 0 ? (
         <>
           <div className='relative px-7'>
             <div className='absolute left-11 top-2 h-[24px] w-[24px]'>
@@ -64,7 +72,7 @@ export default function InvitedDashboardList() {
             </div>
 
             <ul className='h-full overflow-y-scroll'>
-              {data.invitations.map((invitation: Invitation) => (
+              {invitations.map((invitation: Invitation) => (
                 <li key={invitation.id} className='grid h-16 grid-cols-3 border-b border-gray-ee pl-7'>
                   <p className='flex items-center'>{invitation.dashboard.title}</p>
                   <p className='flex min-w-28 items-center'>{invitation.inviter.nickname}</p>
@@ -85,6 +93,6 @@ export default function InvitedDashboardList() {
           <p className='px-7 py-5 text-gray-78'>초대된 대시보드가 없습니다.</p>
         </div>
       )}
-    </div>
+    </section>
   );
 }
