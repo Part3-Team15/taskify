@@ -7,3 +7,23 @@
     @apply font-pretendard font-normal;
   }
 }
+
+@layer components {
+  .btn-violet {
+    @apply align-center disabled:bg-violet-disabled rounded-[8px] bg-violet text-white transition-all hover:bg-violet-hover active:bg-violet-active;
+  }
+
+  .btn-violet-light {
+    @apply align-center disabled:bg-violet-light-disabled rounded-[8px] border border-gray-d9 bg-white transition-all hover:bg-violet-light-hover active:bg-violet-light-active;
+  }
+
+  .btn-white {
+    @apply align-center disabled:bg-white-disabled rounded-[8px] border border-gray-d9 bg-white text-gray-78 transition-all hover:bg-white-hover active:bg-white-active;
+  }
+}
+
+@layer utilities {
+  .align-center {
+    @apply flex items-center justify-center;
+  }
+}

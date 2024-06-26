@@ -30,7 +30,7 @@ function Column({ column }: ColumnProps) {
 
         {/* Add Card Button */}
         <button
-          className='mb-[16px] flex h-[40px] items-center justify-center rounded-[6px] border border-gray-d9 bg-white'
+          className='btn-violet-light mb-[16px] h-[40px] rounded-[6px] border'
           onClick={() => window.alert('카드 추가 모달')}
         >
           <Image src='/icons/plus-filled.svg' width={22} height={22} alt='카드 추가 아이콘' />
