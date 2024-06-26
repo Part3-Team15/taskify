@@ -7,7 +7,7 @@ import NewColumnModal from './NewColumnModal';
 import NewDashboardModal from './NewDashboardModal';
 import NotificationModal from './NotificationModal';
 
-import { notificationTextObj } from '@/constants';
+import { NOTIFICATION_TEXT_OBJ } from '@/constants';
 import { modalSelector, closeModal } from '@/store/reducers/modalSlice';
 
 export default function Modal() {
@@ -46,7 +46,7 @@ export default function Modal() {
       case 'emailExists':
       case 'curPwdNotEqual':
       case 'columnDeleteConfirm':
-        return <NotificationModal handleCloseModal={handleCloseModal} notificationText={notificationTextObj[type]} />;
+        return <NotificationModal handleCloseModal={handleCloseModal} notificationText={NOTIFICATION_TEXT_OBJ[type]} />;
       case 'newColumn':
         return <NewColumnModal handleCloseModal={handleCloseModal} />;
       case 'inviteMember':

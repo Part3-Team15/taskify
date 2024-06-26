@@ -1,5 +1,5 @@
 // 알림 모달용 상수
-export const notificationTextObj = {
+export const NOTIFICATION_TEXT_OBJ = {
   pwdNotEqual: '비밀번호가 일치하지 않습니다.',
   signupSuccess: '가입이 완료되었습니다!',
   emailExists: '이미 사용 중인 이메일입니다.',
@@ -8,7 +8,7 @@ export const notificationTextObj = {
 };
 
 // 대쉬보드 컬러 상수
-export const dashboardColorsObj = {
+export const DASHBOARD_COLOR_OBJ = {
   green: '#7ac555',
   purple: '#76a5ea',
   orange: '#ffa500',

@@ -3,7 +3,7 @@ import { MouseEventHandler, useState } from 'react';
 
 import ModalActionButton from '@/components/Button/ModalActionButton';
 import ModalCancelButton from '@/components/Button/ModalCancelButton';
-import { dashboardColorsObj } from '@/constants';
+import { DASHBOARD_COLOR_OBJ } from '@/constants';
 
 type DashboardColor = 'green' | 'purple' | 'orange' | 'blue' | 'pink';
 
@@ -19,7 +19,7 @@ export default function NewDashboardModal({
 }) {
   const [value, setValue] = useState<DashboardState>({
     title: '',
-    color: dashboardColorsObj['green'],
+    color: DASHBOARD_COLOR_OBJ['green'],
   });
 
   const [selectedColor, setSelectedColor] = useState<DashboardColor>('green');
@@ -28,7 +28,7 @@ export default function NewDashboardModal({
     setSelectedColor(color);
     setValue((prevValue) => ({
       ...prevValue,
-      color: dashboardColorsObj[color],
+      color: DASHBOARD_COLOR_OBJ[color],
     }));
   };
 
