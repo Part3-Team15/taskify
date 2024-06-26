@@ -47,18 +47,14 @@ function Buttons({ id }: ButtonsProps) {
 
   return (
     <div className='flex gap-1.5 text-[14px] text-gray-78 md:gap-3 lg:gap-4'>
-      <Link
-        href={`/dashboard/${id}/edit`}
-        // REVIEW: 공용 스타일로 만들기를 희망함
-        className='flex items-center justify-center gap-2 rounded-[8px] border border-gray-d9 bg-white px-3 py-1.5 transition-all hover:bg-gray-fa active:bg-gray-ee md:px-4 md:py-2 lg:py-2.5'
-      >
+      <Link href={`/dashboard/${id}/edit`} className='btn-white gap-2 px-3 py-1.5 md:px-4 md:py-2 lg:py-2.5'>
         <Image src={settingsIcon} alt='대시보드 관리 아이콘' className='hidden md:inline' />
         관리
       </Link>
       <button
         type='button'
         onClick={handleInviteClick}
-        className='flex items-center justify-center gap-2 rounded-[8px] border border-gray-d9 bg-white px-3 py-1.5 transition-all hover:bg-gray-fa active:bg-gray-ee md:px-4 md:py-2 lg:py-2.5'
+        className='btn-white gap-2 rounded-[8px] px-3 py-1.5 md:px-4 md:py-2 lg:py-2.5'
       >
         <Image src={plusIcon} alt='초대 아이콘' className='hidden md:inline' />
         초대하기

@@ -4,7 +4,6 @@ import { useForm } from 'react-hook-form';
 import { useSelector } from 'react-redux';
 import * as yup from 'yup';
 
-import Button from '@/components/Button';
 import PwdInputWithLabel from '@/containers/signin&signup/PwdInputWithLabel';
 import TextInputWithLabel from '@/containers/signin&signup/TextInputWithLabel';
 import { useSignIn } from '@/hooks/useSignIn';
@@ -60,11 +59,9 @@ export default function SignInForm() {
         register={register}
       />
 
-      <div className='h-[50px]'>
-        <Button type='submit' disabled={mutation.isLoading || !isValid}>
-          {mutation.isLoading ? '잠시만 기다려주세요..' : '로그인'}
-        </Button>
-      </div>
+      <button type='submit' disabled={mutation.isLoading || !isValid} className='btn-violet h-[50px] text-lg'>
+        {mutation.isLoading ? '잠시만 기다려주세요..' : '로그인'}
+      </button>
       {mutation.isError && (
         <p>Error: {mutation.error instanceof Error ? mutation.error.message : '알 수 없는 오류가 발생했습니다.'}</p>
       )}

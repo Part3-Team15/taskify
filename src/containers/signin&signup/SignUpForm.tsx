@@ -4,7 +4,6 @@ import { useState, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import * as yup from 'yup';
 
-import Button from '@/components/Button';
 import PwdInputWithLabel from '@/containers/signin&signup/PwdInputWithLabel';
 import TextInputWithLabel from '@/containers/signin&signup/TextInputWithLabel';
 import { postSignUp } from '@/services/postService';
@@ -103,11 +102,9 @@ export default function SignUpForm() {
           이용약관에 동의합니다.
         </label>
       </div>
-      <div className='h-[50px]'>
-        <Button type='submit' disabled={!isValid || !checkTerms}>
-          가입하기
-        </Button>
-      </div>
+      <button type='submit' disabled={!isValid || !checkTerms} className='btn-violet h-[50px] text-lg'>
+        가입하기
+      </button>
     </form>
   );
 }
