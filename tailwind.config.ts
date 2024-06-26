@@ -35,15 +35,18 @@ const config: Config = {
         DEFAULT: '#ffffff',
         hover: '#f7f7f7',
         active: '#eeeeee',
+        disabled: '#ebebeb',
       },
       violet: {
         DEFAULT: '#5534da',
         f1: '#f1effd',
         hover: '#3925a8',
         active: '#261680',
+        disabled: '#828285',
         light: {
           hover: '#f4f2ff',
           active: '#ebe8fc',
+          disabled: '#ebebeb',
         }
       },
       red: {

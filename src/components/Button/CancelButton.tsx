@@ -9,7 +9,7 @@ export default function CancelButton(props: ButtonProps) {
 
   return (
     <button
-      className={`btn-violet-light w-[52px] rounded-[4px] py-[7px] text-xs md:w-[84px] md:text-sm ${className}`}
+      className={`btn-violet-light w-[52px] rounded-[4px] py-[7px] text-xs text-violet md:w-[84px] md:text-sm ${className}`}
       disabled={disabled}
       {...buttonProps}
     >

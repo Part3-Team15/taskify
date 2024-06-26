@@ -48,17 +48,14 @@ export default function DashboardList() {
     <section className='w-max'>
       <ul className='grid gap-3 font-semibold text-black-33 md:min-h-[216px] md:grid-cols-2 lg:min-h-[140px] lg:grid-cols-3'>
         <li className='h-16 w-64 rounded-lg border border-gray-d9 bg-white md:w-60 lg:w-80'>
-          <button className='flex size-full items-center justify-center gap-4 hover:bg-violet-f1'>
+          <button className='btn-violet-light size-full gap-4'>
             새로운 대시보드
             <Image src={plus} alt='plus' />
           </button>
         </li>
         {dashboardResponse?.dashboards.map((dashboard) => (
           <li className='h-16 w-64 rounded-lg border border-gray-d9 bg-white md:w-60 lg:w-80' key={dashboard.id}>
-            <Link
-              href={`/dashboard/${dashboard.id}`}
-              className={'flex size-full items-center rounded-md px-5 hover:bg-violet-f1'}
-            >
+            <Link href={`/dashboard/${dashboard.id}`} className={'btn-violet-light size-full rounded-md px-5'}>
               <div className='flex size-full items-center'>
                 <div className='rounded-full p-1' style={{ backgroundColor: dashboard.color }} />
                 <p className='pl-4 pr-1 text-lg font-medium'>{dashboard.title}</p>
@@ -89,7 +86,7 @@ interface NavButtonProps {
 
 const NavButton = ({ direction, onClick }: NavButtonProps) => (
   <button
-    className={`${direction === 'left' ? 'rounded-s-[4px]' : 'rounded-e-[4px]'} flex size-10 items-center justify-center border border-gray-d9 hover:bg-gray-ee`}
+    className={`btn-white rounded-none ${direction === 'left' ? 'rounded-s-[4px]' : 'rounded-e-[4px]'} size-10`}
     onClick={onClick}
   >
     <Image src={arrowWhite} alt={`arrow-${direction}`} className={`${direction === 'left' ? 'rotate-180' : ''}`} />
