@@ -41,6 +41,7 @@ const config: Config = {
       violet: {
         DEFAULT: '#5534da',
         f1: '#f1effd',
+        e8: '#e8e6f7',
         hover: '#3925a8',
         active: '#261680',
         disabled: '#9FA6B2',

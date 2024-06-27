@@ -27,14 +27,14 @@ export default function UserMenuDropdown() {
         <UserProfile />
       </button>
       {isOpen && (
-        <ul className='absolute top-12 border border-gray-d9 bg-white'>
-          <li>
+        <ul className='dd-container absolute right-0 top-11 w-28 bg-white'>
+          <li className='dd-menu'>
             <Link href='/mydashboard'>내 대시보드</Link>
           </li>
-          <li>
+          <li className='dd-menu'>
             <Link href='/mypage'>계정관리</Link>
           </li>
-          <li>
+          <li className='dd-menu'>
             <button type='button' onClick={handleLogoutClick}>
               로그아웃
             </button>
