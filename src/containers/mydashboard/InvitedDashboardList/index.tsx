@@ -1,9 +1,9 @@
 import { useQueryClient } from '@tanstack/react-query';
 import { debounce } from 'lodash';
 import Image from 'next/image';
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
 
-import InvitationItemList from './InvitationItem';
+import InvitationItemList from './InvitationItemList';
 import SearchBar from './InvitationSearch';
 
 import useFetchData from '@/hooks/useFetchData';
@@ -12,15 +12,68 @@ import { putAcceptInvitation } from '@/services/putService';
 import { Invitation, InvitationsResponse } from '@/types/Invitation.interface';
 
 export default function InvitedDashboardList() {
-  const { data, error, isLoading } = useFetchData<InvitationsResponse>(['invitations'], () => getInvitationsList());
   const [invitations, setInvitations] = useState<Invitation[]>([]);
+  const [isFetchingNextPage, setIsFetchingNextPage] = useState(false);
+  const [isSearching, setIsSearching] = useState(false);
+  const observerRef = useRef<HTMLDivElement | null>(null);
+  const [cursorId, setCursorId] = useState<number>(0);
+
   const queryClient = useQueryClient();
+
+  const { data, error, isLoading } = useFetchData<InvitationsResponse>(['invitations'], () => getInvitationsList());
 
   useEffect(() => {
     if (data) {
       setInvitations(data.invitations);
+      setCursorId(data.cursorId ? data.cursorId : 0);
     }
   }, [data]);
+
+  const handleMoreInvitations = async (currentCursorId: number, searchValue: string = '') => {
+    if (currentCursorId !== 0 || searchValue) {
+      try {
+        setIsFetchingNextPage(true);
+        const { data: nextData } = await getInvitationsList(10, currentCursorId, searchValue);
+
+        if (nextData.invitations.length > 0) {
+          setInvitations((prevInvitations) => [...prevInvitations, ...nextData.invitations]);
+        }
+        setCursorId(nextData.cursorId || 0);
+      } catch (err) {
+        console.error('데이터를 가져오는 중 오류가 발생했습니다:', err);
+      } finally {
+        setIsFetchingNextPage(false);
+      }
+    }
+  };
+
+  const handleObserver = useCallback(
+    async (entries: IntersectionObserverEntry[]) => {
+      const target = entries[0];
+      if (target.isIntersecting && !isFetchingNextPage && cursorId && !isSearching) {
+        handleMoreInvitations(cursorId);
+      }
+    },
+    [cursorId, isFetchingNextPage, isSearching],
+  );
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(handleObserver, {
+      threshold: 1.0,
+    });
+
+    const currentObserverRef = observerRef.current;
+
+    if (currentObserverRef) {
+      observer.observe(currentObserverRef);
+    }
+
+    return () => {
+      if (currentObserverRef) {
+        observer.unobserve(currentObserverRef);
+      }
+    };
+  }, [handleObserver]);
 
   const handleAcceptInvitation = async (invitationId: number, inviteAccepted: boolean) => {
     try {
@@ -28,34 +81,28 @@ export default function InvitedDashboardList() {
       setInvitations((prevInvitations) => prevInvitations.filter((invitation) => invitation.id !== invitationId));
       queryClient.invalidateQueries({ queryKey: ['dashboards'] });
     } catch (err) {
-      // eslint-disable-next-line no-console
-      console.error('Error updating invitation:', err);
+      console.error('초대 업데이트 중 오류 발생:', err);
     }
   };
 
-  const handleChangeSearch = useCallback(
-    debounce((e: React.ChangeEvent<HTMLInputElement>) => {
-      if (!data) return;
-      const searchValue = e.target.value;
+  const handleChangeSearch = debounce(async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const searchValue = e.target.value;
+    setIsSearching(!!searchValue);
 
-      if (searchValue) {
-        const filteredInvitations = data.invitations.filter((invitation) =>
-          invitation.dashboard.title.toLowerCase().includes(searchValue.toLowerCase()),
-        );
-        setInvitations(filteredInvitations);
-      } else {
-        setInvitations(data.invitations);
-      }
-    }, 300),
-    [data],
-  );
+    try {
+      const { data: searchData } = await getInvitationsList(10, 0, searchValue);
+      setInvitations(searchData.invitations);
+    } catch (err) {
+      console.error('데이터를 가져오는 중 오류가 발생했습니다:', err);
+    }
+  }, 300);
 
   if (isLoading) {
     return (
       <div className='h-full max-w-screen-lg overflow-hidden rounded-lg border-0 bg-white'>
         <p className='px-7 pb-5 pt-8 text-base font-bold text-black-33'>초대받은 대시보드</p>
         <div className='flex items-center justify-center'>
-          <p>Loading...</p>
+          <p>불러오는 중...</p>
         </div>
       </div>
     );
@@ -66,7 +113,7 @@ export default function InvitedDashboardList() {
       <div className='h-full max-w-screen-lg overflow-hidden rounded-lg border-0 bg-white'>
         <p className='px-7 pb-5 pt-8 text-base font-bold text-black-33'>초대받은 대시보드</p>
         <div className='flex items-center justify-center'>
-          <p>Error fetching data</p>
+          <p>데이터를 가져오는 중 오류가 발생했습니다.</p>
           <p>{error.message}</p>
         </div>
       </div>
@@ -76,10 +123,14 @@ export default function InvitedDashboardList() {
   return (
     <section className='h-full min-h-80 overflow-hidden rounded-lg border-0 bg-white'>
       <p className='px-7 pb-5 pt-8 text-base font-bold text-black-33'>초대받은 대시보드</p>
-      {data?.invitations && data.invitations.length > 0 ? (
+      {invitations.length > 0 || isSearching ? (
         <>
           <SearchBar handleChangeSearch={handleChangeSearch} />
-          <InvitationItemList invitations={invitations} handleAcceptInvitation={handleAcceptInvitation} />
+          <InvitationItemList
+            invitations={invitations}
+            handleAcceptInvitation={handleAcceptInvitation}
+            observerRef={observerRef}
+          />
         </>
       ) : (
         <div className='flex h-full flex-col items-center justify-center'>

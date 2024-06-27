@@ -7,9 +7,10 @@ import { Invitation } from '@/types/Invitation.interface';
 interface InvitationListProps {
   invitations: Invitation[];
   handleAcceptInvitation: (invitationId: number, inviteAccepted: boolean) => void;
+  observerRef: React.RefObject<HTMLDivElement>;
 }
 
-export default function InvitationItemList({ invitations, handleAcceptInvitation }: InvitationListProps) {
+export default function InvitationItemList({ invitations, handleAcceptInvitation, observerRef }: InvitationListProps) {
   return (
     <div className='h-[calc(100%-170px)] pt-6'>
       <div className='grid grid-cols-3 pb-6 pl-7'>
@@ -36,6 +37,8 @@ export default function InvitationItemList({ invitations, handleAcceptInvitation
             </div>
           </li>
         ))}
+
+        <div ref={observerRef} className='h-2' />
       </ul>
     </div>
   );
