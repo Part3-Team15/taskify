@@ -17,6 +17,10 @@ export default function EditProfileForm() {
   const [nickname, setNickname] = useState(user?.nickname ?? '');
   const [profileImageUrl, setProfileImageUrl] = useState(user?.profileImageUrl ?? null);
   const [profileImageFile, setProfileImageFile] = useState<File>();
+  const [isNicknameValid, setIsNicknameValid] = useState({
+    gtZero: true,
+    lteTen: true,
+  });
 
   if (!user) {
     router.replace('/signin');
@@ -36,6 +40,13 @@ export default function EditProfileForm() {
   const handleNicknameChange = (e: ChangeEvent<HTMLInputElement>) => {
     const newNickname = e.target.value;
     setNickname(newNickname);
+    if (newNickname.length === 0) {
+      setIsNicknameValid({ gtZero: false, lteTen: true });
+    } else if (newNickname.length >= 10) {
+      setIsNicknameValid({ gtZero: true, lteTen: false });
+    } else {
+      setIsNicknameValid({ gtZero: true, lteTen: true });
+    }
   };
 
   const handleImageChange = (image: File) => {
@@ -77,22 +88,32 @@ export default function EditProfileForm() {
             <p className='input text-gray-9f'>{user?.email}</p>
           </div>
 
-          <div className='flex flex-col gap-2.5'>
+          <div className='relative flex flex-col gap-2.5'>
             <label htmlFor='nickname' className='label'>
               닉네임
             </label>
             <input
-              className='input'
+              className={`input ${!(isNicknameValid.gtZero && isNicknameValid.lteTen) ? 'border-2 border-red hover:border-red' : ''}`}
               id='nickname'
               value={nickname}
               placeholder='닉네임을 입력해주세요'
               type='text'
               onChange={handleNicknameChange}
             />
+            {!isNicknameValid.gtZero && (
+              <p className='absolute top-20 text-sm text-red md:top-[88px]'>닉네임을 입력해주세요</p>
+            )}
+            {!isNicknameValid.lteTen && (
+              <p className='absolute top-20 text-sm text-red md:top-[88px]'>닉네임을 10자 이내로 입력해주세요</p>
+            )}
           </div>
         </div>
       </div>
-      <ActionButton type='submit' disabled={isLoading} className='ml-auto mt-4 md:mt-6'>
+      <ActionButton
+        type='submit'
+        disabled={isLoading || !(isNicknameValid.gtZero && isNicknameValid.lteTen)}
+        className='ml-auto mt-4 md:mt-6'
+      >
         {isLoading ? '저장중..' : '저장'}
       </ActionButton>
     </form>
