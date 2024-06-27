@@ -8,7 +8,7 @@ interface ProfileIconProps {
   fontClassName: string;
 }
 
-export function ProfileIcon({ user, imgClassName, fontClassName }: ProfileIconProps) {
+export default function ProfileIcon({ user, imgClassName, fontClassName }: ProfileIconProps) {
   return (
     // TODO: 컬러 지정. 현재는 임의로 회색을 지정함
     <div className={`align-center relative rounded-full border-2 border-solid border-white bg-gray-9f ${imgClassName}`}>

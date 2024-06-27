@@ -1,6 +1,6 @@
 import { useSelector } from 'react-redux';
 
-import { ProfileIcon } from '../ProfileIcon';
+import ProfileIcon from '../ProfileIcon';
 
 import { RootState } from '@/store/store';
 
