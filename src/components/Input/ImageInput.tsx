@@ -31,7 +31,7 @@ export default function ImageInput({ name, value, onChange, onDeleteClick }: Ima
   };
 
   return (
-    <div className='size-full rounded-md bg-gray-f5'>
+    <div className='size-full'>
       {tempImage ? (
         <label htmlFor={name} className='align-center relative size-full'>
           <Image
@@ -39,7 +39,7 @@ export default function ImageInput({ name, value, onChange, onDeleteClick }: Ima
             alt='이미지'
             fill
             style={{ objectFit: 'cover' }}
-            className='rounded-md hover:brightness-50'
+            className='rounded-md hover:brightness-75 active:brightness-50'
           />
           <button
             className='absolute right-1.5 top-1.5 size-6 cursor-pointer rounded-full opacity-40 hover:opacity-70'
@@ -51,7 +51,7 @@ export default function ImageInput({ name, value, onChange, onDeleteClick }: Ima
           <Image src='/icons/edit.svg' alt='이미지 수정' width={30} height={30} className='z-10' />
         </label>
       ) : (
-        <label htmlFor={name} className='align-center size-full'>
+        <label htmlFor={name} className='btn-gray size-full'>
           <div className='relative size-5 md:size-[30px]'>
             <Image src='/icons/plus-violet.svg' alt='이미지 추가' fill />
           </div>

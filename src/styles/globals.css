@@ -21,6 +21,10 @@
     @apply align-center disabled:bg-white-disabled rounded-[8px] border border-gray-d9 bg-white text-gray-78 transition-all hover:bg-white-hover active:bg-white-active;
   }
 
+  .btn-gray {
+    @apply align-center bg-gray-f5 rounded-md hover:bg-gray-ee active:bg-gray-d9;
+  }
+
   .section-title {
     @apply text-xl font-bold md:text-2xl;
   }
