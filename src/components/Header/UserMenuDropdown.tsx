@@ -16,8 +16,13 @@ export default function UserMenuDropdown() {
     setIsOpen((isOpen) => !isOpen);
   };
 
+  const handleMenuClick = () => {
+    setIsOpen(false);
+  };
+
   const handleLogoutClick = () => {
     dispatch(clearUser());
+    handleMenuClick();
     router.push('/');
   };
 
@@ -28,10 +33,10 @@ export default function UserMenuDropdown() {
       </button>
       {isOpen && (
         <ul className='dd-container absolute right-0 top-11 w-28 bg-white'>
-          <li className='dd-menu'>
+          <li className='dd-menu' onClick={handleMenuClick}>
             <Link href='/mydashboard'>내 대시보드</Link>
           </li>
-          <li className='dd-menu'>
+          <li className='dd-menu' onClick={handleMenuClick}>
             <Link href='/mypage'>계정관리</Link>
           </li>
           <li className='dd-menu'>
