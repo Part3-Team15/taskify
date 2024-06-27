@@ -7,7 +7,8 @@ interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
   error?: string;
 }
 
-export default function PwdInput({ id, placeholder, error }: InputProps) {
+export default function PwdInput(props: InputProps) {
+  const { id, placeholder, error, className = '', ...inputProps } = props;
   const [visible, setVisible] = useState(false);
   const type = visible ? 'text' : 'password';
 
@@ -20,6 +21,7 @@ export default function PwdInput({ id, placeholder, error }: InputProps) {
           id={id}
           placeholder={placeholder}
           autoComplete='new-password'
+          {...inputProps}
         />
         <button
           type='button'
