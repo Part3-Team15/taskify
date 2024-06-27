@@ -2,13 +2,14 @@ import { MouseEventHandler, useState, ChangeEvent } from 'react';
 
 import ModalActionButton from '@/components/Button/ModalActionButton';
 import ModalCancelButton from '@/components/Button/ModalCancelButton';
+import { InviteMemberModalProps } from '@/types/Modal.interface';
 
 export default function InviteMemberModal({
   handleCloseModal,
   props,
 }: {
   handleCloseModal: MouseEventHandler<HTMLButtonElement>;
-  props: { dashboardId: number } | null;
+  props: InviteMemberModalProps;
 }) {
   const [email, setEmail] = useState('');
   const [isValid, setIsValid] = useState(true);

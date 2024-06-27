@@ -1,27 +1,6 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
-interface ColumnModifyModalProps {
-  title: string;
-  id: number;
-}
-interface ColumnDeleteModalProps {
-  columnId: number;
-}
-
-interface NewColumnModalProps {
-  dashboardId: number;
-}
-
-interface InviteMemberModalProps {
-  dashboardId: number;
-}
-
-type ModalProps = ColumnModifyModalProps | ColumnDeleteModalProps | NewColumnModalProps | InviteMemberModalProps | null;
-
-export interface ModalState {
-  type: string | null;
-  props?: ModalProps | null;
-}
+import { ModalState, ModalProps } from '@/types/Modal.interface';
 
 interface RootState {
   modal: ModalState;

@@ -5,14 +5,15 @@ import { MouseEventHandler, useState } from 'react';
 import ModalActionButton from '@/components/Button/ModalActionButton';
 import ModalCancelButton from '@/components/Button/ModalCancelButton';
 import useModal from '@/hooks/useModal';
+import { ColumnModifyModalProps } from '@/types/Modal.interface';
 
-// ColumnModifyModalProps 인터페이스 정의
-interface ColumnModifyModalProps {
+export default function ColumnModifyModal({
+  handleCloseModal,
+  props,
+}: {
   handleCloseModal: MouseEventHandler<HTMLButtonElement>;
-  props: { columnId: number; columnTitle: string } | null;
-}
-
-export default function ColumnModifyModal({ handleCloseModal, props }: ColumnModifyModalProps) {
+  props: ColumnModifyModalProps;
+}) {
   const id = props?.columnId;
   const [title, setTitle] = useState(props?.columnTitle || '');
   const { openModal } = useModal();

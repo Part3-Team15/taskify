@@ -2,13 +2,14 @@ import { MouseEventHandler } from 'react';
 
 import ModalActionButton from '@/components/Button/ModalActionButton';
 import ModalCancelButton from '@/components/Button/ModalCancelButton';
+import { ColumnDeleteModalProps } from '@/types/Modal.interface';
 
 export default function ColumnDeleteModal({
   handleCloseModal,
   props,
 }: {
   handleCloseModal: MouseEventHandler<HTMLButtonElement>;
-  props: { columnId: number };
+  props: ColumnDeleteModalProps;
 }) {
   return (
     <div className='flex h-[220px] w-[327px] flex-col justify-between rounded-[8px] bg-white px-[18px] py-[32px] md:h-[250px] md:w-[540px]'>

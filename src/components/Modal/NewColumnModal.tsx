@@ -2,13 +2,14 @@ import { MouseEventHandler, useState } from 'react';
 
 import ModalActionButton from '@/components/Button/ModalActionButton';
 import ModalCancelButton from '@/components/Button/ModalCancelButton';
+import { NewColumnModalProps } from '@/types/Modal.interface';
 
 export default function NewColumnModal({
   handleCloseModal,
   props,
 }: {
   handleCloseModal: MouseEventHandler<HTMLButtonElement>;
-  props: { dashboardId: number } | null;
+  props: NewColumnModalProps;
 }) {
   const [column, setColumn] = useState('');
 

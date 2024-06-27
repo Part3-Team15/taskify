@@ -11,6 +11,12 @@ import NotificationModal from './NotificationModal';
 
 import { NOTIFICATION_TEXT_OBJ } from '@/constants';
 import { modalSelector, closeModal } from '@/store/reducers/modalSlice';
+import {
+  ColumnDeleteModalProps,
+  ColumnModifyModalProps,
+  InviteMemberModalProps,
+  NewColumnModalProps,
+} from '@/types/Modal.interface';
 
 export default function Modal() {
   const dispatch = useDispatch();
@@ -52,22 +58,19 @@ export default function Modal() {
         return <NewDashboardModal handleCloseModal={handleCloseModal} />;
       case 'columnDeleteConfirm':
         return props ? (
-          <ColumnDeleteModal handleCloseModal={handleCloseModal} props={props as { columnId: number }} />
+          <ColumnDeleteModal handleCloseModal={handleCloseModal} props={props as ColumnDeleteModalProps} />
         ) : null;
       case 'newColumn':
         return props ? (
-          <NewColumnModal handleCloseModal={handleCloseModal} props={props as { dashboardId: number }} />
+          <NewColumnModal handleCloseModal={handleCloseModal} props={props as NewColumnModalProps} />
         ) : null;
       case 'inviteMember':
         return props ? (
-          <InviteMemberModal handleCloseModal={handleCloseModal} props={props as { dashboardId: number }} />
+          <InviteMemberModal handleCloseModal={handleCloseModal} props={props as InviteMemberModalProps} />
         ) : null;
       case 'columnModify':
         return props ? (
-          <ColumnModifyModal
-            handleCloseModal={handleCloseModal}
-            props={props as { columnId: number; columnTitle: string }}
-          />
+          <ColumnModifyModal handleCloseModal={handleCloseModal} props={props as ColumnModifyModalProps} />
         ) : null;
       default:
         return <DefaultModal handleCloseModal={handleCloseModal} />;

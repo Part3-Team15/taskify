@@ -11,7 +11,7 @@ const Home: React.FC = () => {
           <button
             className='btn-violet h-[40px] w-[100px]'
             onClick={() => {
-              openModal({ type: 'inviteMember' });
+              openModal({ type: 'inviteMember', props: { columnId: 1 } });
             }}
           >
             초대하기
@@ -19,7 +19,7 @@ const Home: React.FC = () => {
           <button
             className='btn-violet h-[40px] w-[100px]'
             onClick={() => {
-              openModal({ type: 'newColumn' });
+              openModal({ type: 'newColumn', props: { columnId: 1 } });
             }}
           >
             컬럼생성
@@ -27,7 +27,7 @@ const Home: React.FC = () => {
           <button
             className='btn-violet h-[40px] w-[100px]'
             onClick={() => {
-              openModal({ type: 'columnModify' });
+              openModal({ type: 'columnModify', props: { columnId: 1, columnTitle: 'Done' } });
             }}
           >
             컬럼수정
@@ -69,7 +69,7 @@ const Home: React.FC = () => {
           <button
             className='btn-violet h-[40px] w-[125px]'
             onClick={() => {
-              openModal({ type: 'columnDeleteConfirm' });
+              openModal({ type: 'columnDeleteConfirm', props: { columnId: 1 } });
             }}
           >
             컬럼 삭제
