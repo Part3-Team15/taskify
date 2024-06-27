@@ -23,9 +23,11 @@ const INITIAL_INPUT_DATA = {
   newPasswordCheck: '',
 };
 
-const checkPasswordMatch = (id: string, value: string, inputData: PasswordChangeForm) =>
-  (id === 'newPassword' && inputData.newPasswordCheck && value !== inputData.newPasswordCheck) ||
-  (id === 'newPasswordCheck' && value !== inputData.newPassword);
+const checkValid = (inputData: PasswordChangeForm, inputError: InputError) =>
+  inputData.password &&
+  inputData.newPassword &&
+  inputData.newPasswordCheck &&
+  !(inputError.password || inputError.newPassword || inputError.newPasswordCheck);
 
 export default function PwdChangeForm() {
   const [inputData, setInputData] = useState<PasswordChangeForm>(INITIAL_INPUT_DATA);
@@ -37,24 +39,37 @@ export default function PwdChangeForm() {
       ...prevData,
       [id]: value,
     }));
+  };
+
+  const handleInputBlur = (e: ChangeEvent<HTMLInputElement>) => {
+    const { id, value } = e.target;
+    // NOTE: 비밀번호 8자 이상인지 확인합니다.
+    setInputError((prevError) => ({
+      ...prevError,
+      [id]: value.length < 8 ? '8자 이상 입력해주세요.' : '',
+    }));
 
     if (id === 'newPassword' || id === 'newPasswordCheck') {
-      // NOTE: 비밀번호 일치여부는 즉각적으로 알려주는 게 좋을 것 같아 값이 변할때마다 체크합니다.
-      const missMatched = checkPasswordMatch(id, value, inputData);
+      // NOTE: 새 비밀번호끼리 일치여부 확인합니다.
+      const missMatched =
+        (id === 'newPassword' && inputData.newPasswordCheck && value !== inputData.newPasswordCheck) ||
+        (id === 'newPasswordCheck' && value !== inputData.newPassword);
       setInputError((prevError) => ({
         ...prevError,
         newPasswordCheck: missMatched ? '비밀번호가 일치하지 않습니다.' : '',
       }));
     }
-  };
 
-  const handleInputBlur = (e: ChangeEvent<HTMLInputElement>) => {
-    const { id, value } = e.target;
-    // NOTE: 글자수 제한은 포커스 벗어날 때 체크합니다.
-    setInputError((prevError) => ({
-      ...prevError,
-      [id]: value.length < 8 ? '8자 이상 입력해주세요.' : '',
-    }));
+    if (id === 'newPassword' || id === 'password') {
+      // NOTE: 새 비밀번호가 현재 비밀번호와 같은지 확인합니다.
+      const matched =
+        (id === 'password' && inputData.newPassword && value === inputData.newPassword) ||
+        (id === 'newPassword' && inputData.password && value === inputData.password);
+      setInputError((prevError) => ({
+        ...prevError,
+        newPassword: matched ? '새 비밀번호가 기존 비밀번호와 같습니다.' : '',
+      }));
+    }
   };
 
   const handleSubmit: FormEventHandler<HTMLFormElement> = (e) => {
@@ -126,11 +141,7 @@ export default function PwdChangeForm() {
           />
         </div>
       </div>
-      <ActionButton
-        type='submit'
-        className='ml-auto mt-4 md:mt-6'
-        disabled={!!(inputError.password || inputError.newPassword || inputError.newPasswordCheck)}
-      >
+      <ActionButton type='submit' className='ml-auto mt-4 md:mt-6' disabled={!checkValid(inputData, inputError)}>
         변경
       </ActionButton>
     </form>
