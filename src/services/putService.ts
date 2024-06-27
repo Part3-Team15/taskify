@@ -1,5 +1,6 @@
 import instance from './axios';
 
+import { UpdateProfileForm } from '@/types/post/UpdateProfileForm.interface';
 import { User } from '@/types/User.interface';
 
 // 프로필 변경
