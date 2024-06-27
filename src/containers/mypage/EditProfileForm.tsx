@@ -11,7 +11,7 @@ import { RootState } from '@/store/store';
 
 export default function EditProfileForm() {
   const router = useRouter();
-  const { mutate, isLoading, isError, error } = useUpdateProfile();
+  const { mutate, isPending, isError, error } = useUpdateProfile();
 
   const { user } = useSelector((state: RootState) => state.user);
   const [nickname, setNickname] = useState(user?.nickname ?? '');
@@ -129,10 +129,10 @@ export default function EditProfileForm() {
       </div>
       <ActionButton
         type='submit'
-        disabled={isLoading || !(isNicknameValid.gtZero && isNicknameValid.lteTen)}
+        disabled={isPending || !(isNicknameValid.gtZero && isNicknameValid.lteTen)}
         className='ml-auto mt-4 md:mt-6'
       >
-        {isLoading ? '저장중..' : '저장'}
+        {isPending ? '저장중..' : '저장'}
       </ActionButton>
     </form>
   );
