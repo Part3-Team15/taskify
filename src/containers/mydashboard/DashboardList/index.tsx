@@ -63,7 +63,7 @@ export default function DashboardList() {
         ))}
       </ul>
 
-      <div className='rou flex items-center justify-end pt-3'>
+      <div className='flex items-center justify-end pt-3'>
         <span className='pr-4 text-sm text-black-33'>
           {totalPage} 페이지 중 {currentChunk}
         </span>
