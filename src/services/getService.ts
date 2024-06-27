@@ -25,12 +25,14 @@ export const getMembersList = async (
 
 // 내가 받은 초대 목록 조회
 export const getInvitationsList = async (size: number = 10, cursorId?: number, title?: string) => {
-  if (!cursorId && !title) {
-    return await instance.get(`/invitations?size=${size}`);
-  } else if (!cursorId) {
-    return await instance.get(`/invitations?size=${size}&title=${title}`);
-  } else if (!title) {
-    return await instance.get(`/invitations?size=${size}&cursorId=${cursorId}`);
+  const params = new URLSearchParams();
+  params.append('size', size.toString());
+
+  if (cursorId) {
+    params.append('cursorId', cursorId.toString());
   }
-  return await instance.get(`/invitations?size=${size}&cursorId=${cursorId}&title=${title}`);
+  if (title) {
+    params.append('title', title);
+  }
+  return await instance.get(`/invitations`, { params });
 };
