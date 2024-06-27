@@ -20,6 +20,22 @@
   .btn-white {
     @apply align-center disabled:bg-white-disabled rounded-[8px] border border-gray-d9 bg-white text-gray-78 transition-all hover:bg-white-hover active:bg-white-active;
   }
+
+  .btn-gray {
+    @apply align-center bg-gray-f5 rounded-md hover:bg-gray-ee active:bg-gray-d9;
+  }
+
+  .section-title {
+    @apply text-xl font-bold md:text-2xl;
+  }
+
+  .label {
+    @apply h-[19px] text-base font-medium md:h-[21px] md:text-lg;
+  }
+
+  .input {
+    @apply flex h-[42px] w-full items-center rounded-md border border-gray-d9 bg-white px-4 text-sm outline-none placeholder:text-gray-9f invalid:border-2 invalid:border-red focus:border-2 focus:border-violet disabled:text-gray-9f md:h-12 md:text-base;
+  }
 }
 
 @layer utilities {
