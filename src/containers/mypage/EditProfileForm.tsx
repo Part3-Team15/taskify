@@ -15,8 +15,7 @@ export default function EditProfileForm() {
 
   const { user } = useSelector((state: RootState) => state.user);
   const [nickname, setNickname] = useState(user?.nickname ?? '');
-  const [profileImageUrl, setProfileImageUrl] = useState(user?.profileImageUrl ?? null);
-  const [profileImageFile, setProfileImageFile] = useState<File>();
+  const [profileImageFile, setProfileImageFile] = useState<File | null>(null);
   const [isNicknameValid, setIsNicknameValid] = useState({
     gtZero: true,
     lteTen: true,
@@ -53,22 +52,36 @@ export default function EditProfileForm() {
     setProfileImageFile(image);
   };
 
+  const handleImageDelete = () => {
+    setProfileImageFile(null);
+  };
+
   const handleSubmit: FormEventHandler<HTMLFormElement> = (e) => {
     const formProfileData = async () => {
-      if (!profileImageFile) {
-        return { nickname, profileImageUrl };
+      const formData: UpdateProfileForm = {};
+
+      if (nickname !== user?.nickname) {
+        formData['nickname'] = nickname;
       }
 
-      const { profileImageUrl: newProfileImageUrl } = await postImage({ image: profileImageFile });
-      return {
-        nickname,
-        profileImageUrl: newProfileImageUrl,
-      };
+      if (!profileImageFile && user?.profileImageUrl) {
+        formData['profileImageUrl'] = null;
+      }
+
+      if (profileImageFile) {
+        const { profileImageUrl } = await postImage({ image: profileImageFile });
+        formData['profileImageUrl'] = profileImageUrl;
+      }
+
+      return formData;
     };
 
     const postData = async () => {
       const formData = await formProfileData();
-      mutate(formData);
+
+      if (Object.keys(formData).length !== 0) {
+        mutate(formData);
+      }
     };
 
     e.preventDefault();
@@ -79,7 +92,12 @@ export default function EditProfileForm() {
     <form onSubmit={handleSubmit}>
       <div className='flex flex-col gap-6 md:flex-row md:gap-4'>
         <div className='size-[100px] md:size-[180px]'>
-          <ImageInput name='user-profile' value={profileImageUrl} onChange={handleImageChange} />
+          <ImageInput
+            name='user-profile'
+            value={user?.profileImageUrl || null}
+            onChange={handleImageChange}
+            onDeleteClick={handleImageDelete}
+          />
         </div>
 
         <div className='flex flex-col gap-4 md:grow md:gap-5'>

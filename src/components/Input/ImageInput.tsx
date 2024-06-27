@@ -1,13 +1,14 @@
 import Image from 'next/image';
-import { ChangeEvent, useRef, useState } from 'react';
+import { ChangeEvent, MouseEventHandler, useRef, useState } from 'react';
 
 interface ImageInputProps {
   name: string;
   value: string | null;
   onChange: (f: File) => void;
+  onDeleteClick: () => void;
 }
 
-export default function ImageInput({ name, value, onChange }: ImageInputProps) {
+export default function ImageInput({ name, value, onChange, onDeleteClick }: ImageInputProps) {
   const inputRef = useRef<HTMLInputElement>(null);
   const [tempImage, setTempImage] = useState(value || '');
 
@@ -17,6 +18,16 @@ export default function ImageInput({ name, value, onChange }: ImageInputProps) {
     if (files === null || !files[0]) return;
     onChange(files[0]);
     setTempImage(URL.createObjectURL(files[0]));
+  };
+
+  const handleImageDelete: MouseEventHandler<HTMLButtonElement> = (e) => {
+    if (!inputRef.current) return;
+    e.preventDefault();
+
+    const inputNode = inputRef.current as HTMLInputElement;
+    inputNode.value = '';
+    onDeleteClick();
+    setTempImage('');
   };
 
   return (
@@ -30,6 +41,13 @@ export default function ImageInput({ name, value, onChange }: ImageInputProps) {
             style={{ objectFit: 'cover' }}
             className='rounded-md hover:brightness-50'
           />
+          <button
+            className='absolute right-1.5 top-1.5 size-6 cursor-pointer rounded-full opacity-40 hover:opacity-70'
+            type='button'
+            onClick={handleImageDelete}
+          >
+            <Image src='/icons/x.svg' alt='이미지 삭제' fill />
+          </button>
           <Image src='/icons/edit.svg' alt='이미지 수정' width={30} height={30} className='z-10' />
         </label>
       ) : (

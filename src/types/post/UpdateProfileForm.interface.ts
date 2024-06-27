@@ -1,4 +1,4 @@
 interface UpdateProfileForm {
-  nickname: string;
-  profileImageUrl: string | null;
+  nickname?: string;
+  profileImageUrl?: string | null;
 }
