@@ -48,17 +48,26 @@ export default function Modal() {
       case 'emailExists':
       case 'curPwdNotEqual':
         return <NotificationModal handleCloseModal={handleCloseModal} notificationText={NOTIFICATION_TEXT_OBJ[type]} />;
-      case 'columnDeleteConfirm':
-        return props ? <ColumnDeleteModal handleCloseModal={handleCloseModal} props={{ columnId: 10 }} /> : null;
-      case 'newColumn':
-        return props ? <NewColumnModal handleCloseModal={handleCloseModal} props={{ dashboardId: 50 }} /> : null;
-      case 'inviteMember':
-        return props ? <InviteMemberModal handleCloseModal={handleCloseModal} props={{ dashboardId: 5 }} /> : null;
       case 'newDashboard':
         return <NewDashboardModal handleCloseModal={handleCloseModal} />;
+      case 'columnDeleteConfirm':
+        return props ? (
+          <ColumnDeleteModal handleCloseModal={handleCloseModal} props={props as { columnId: number }} />
+        ) : null;
+      case 'newColumn':
+        return props ? (
+          <NewColumnModal handleCloseModal={handleCloseModal} props={props as { dashboardId: number }} />
+        ) : null;
+      case 'inviteMember':
+        return props ? (
+          <InviteMemberModal handleCloseModal={handleCloseModal} props={props as { dashboardId: number }} />
+        ) : null;
       case 'columnModify':
         return props ? (
-          <ColumnModifyModal handleCloseModal={handleCloseModal} props={{ columnId: 10, columnTitle: 'Done' }} />
+          <ColumnModifyModal
+            handleCloseModal={handleCloseModal}
+            props={props as { columnId: number; columnTitle: string }}
+          />
         ) : null;
       default:
         return <DefaultModal handleCloseModal={handleCloseModal} />;

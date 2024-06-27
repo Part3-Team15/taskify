@@ -8,7 +8,7 @@ export default function ColumnDeleteModal({
   props,
 }: {
   handleCloseModal: MouseEventHandler<HTMLButtonElement>;
-  props: { columnId: number } | null;
+  props: { columnId: number };
 }) {
   return (
     <div className='flex h-[220px] w-[327px] flex-col justify-between rounded-[8px] bg-white px-[18px] py-[32px] md:h-[250px] md:w-[540px]'>

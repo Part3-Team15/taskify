@@ -20,7 +20,7 @@ type ModalProps = ColumnModifyModalProps | ColumnDeleteModalProps | NewColumnMod
 
 export interface ModalState {
   type: string | null;
-  props?: ModalProps;
+  props?: ModalProps | null;
 }
 
 interface RootState {
