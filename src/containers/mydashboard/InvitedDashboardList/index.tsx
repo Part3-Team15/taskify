@@ -1,7 +1,7 @@
+import { useQueryClient } from '@tanstack/react-query';
 import { debounce } from 'lodash';
 import Image from 'next/image';
 import { useState, useEffect, useCallback } from 'react';
-import { useQueryClient } from 'react-query';
 
 import InvitationItemList from './InvitationItem';
 import SearchBar from './InvitationSearch';
@@ -12,7 +12,7 @@ import { putAcceptInvitation } from '@/services/putService';
 import { Invitation, InvitationsResponse } from '@/types/Invitation.interface';
 
 export default function InvitedDashboardList() {
-  const { data, error, isLoading } = useFetchData<InvitationsResponse>('invitations', () => getInvitationsList());
+  const { data, error, isLoading } = useFetchData<InvitationsResponse>(['invitations'], () => getInvitationsList());
   const [invitations, setInvitations] = useState<Invitation[]>([]);
   const queryClient = useQueryClient();
 
@@ -26,8 +26,9 @@ export default function InvitedDashboardList() {
     try {
       await putAcceptInvitation(invitationId, inviteAccepted);
       setInvitations((prevInvitations) => prevInvitations.filter((invitation) => invitation.id !== invitationId));
-      queryClient.invalidateQueries(['dashboards']); // 특정 쿼리 키 무효화하여 다시 가져옴
+      queryClient.invalidateQueries({ queryKey: ['dashboards'] });
     } catch (err) {
+      // eslint-disable-next-line no-console
       console.error('Error updating invitation:', err);
     }
   };
