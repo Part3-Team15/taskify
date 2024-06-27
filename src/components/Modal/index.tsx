@@ -1,6 +1,8 @@
 import { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 
+import ColumnDeleteModal from './ColumnDeleteModal';
+import ColumnModifyModal from './ColumnModifyModal';
 import DefaultModal from './DefaultModal';
 import InviteMemberModal from './InviteMemberModal';
 import NewColumnModal from './NewColumnModal';
@@ -45,14 +47,19 @@ export default function Modal() {
       case 'signupSuccess':
       case 'emailExists':
       case 'curPwdNotEqual':
-      case 'columnDeleteConfirm':
         return <NotificationModal handleCloseModal={handleCloseModal} notificationText={NOTIFICATION_TEXT_OBJ[type]} />;
+      case 'columnDeleteConfirm':
+        return props ? <ColumnDeleteModal handleCloseModal={handleCloseModal} props={{ columnId: 10 }} /> : null;
       case 'newColumn':
-        return <NewColumnModal handleCloseModal={handleCloseModal} />;
+        return props ? <NewColumnModal handleCloseModal={handleCloseModal} props={{ dashboardId: 50 }} /> : null;
       case 'inviteMember':
-        return <InviteMemberModal handleCloseModal={handleCloseModal} />;
+        return props ? <InviteMemberModal handleCloseModal={handleCloseModal} props={{ dashboardId: 5 }} /> : null;
       case 'newDashboard':
         return <NewDashboardModal handleCloseModal={handleCloseModal} />;
+      case 'columnModify':
+        return props ? (
+          <ColumnModifyModal handleCloseModal={handleCloseModal} props={{ columnId: 10, columnTitle: 'Done' }} />
+        ) : null;
       default:
         return <DefaultModal handleCloseModal={handleCloseModal} />;
     }

@@ -5,8 +5,10 @@ import ModalCancelButton from '@/components/Button/ModalCancelButton';
 
 export default function InviteMemberModal({
   handleCloseModal,
+  props,
 }: {
   handleCloseModal: MouseEventHandler<HTMLButtonElement>;
+  props: { dashboardId: number } | null;
 }) {
   const [email, setEmail] = useState('');
   const [isValid, setIsValid] = useState(true);
@@ -35,7 +37,12 @@ export default function InviteMemberModal({
       </div>
       <div className='flex justify-between md:justify-end md:gap-[15px]'>
         <ModalCancelButton onClick={handleCloseModal}>취소</ModalCancelButton>
-        <ModalActionButton disabled={email.length === 0 || !isValid}>
+        <ModalActionButton
+          disabled={email.length === 0 || !isValid}
+          onClick={() => {
+            alert(props);
+          }}
+        >
           {/* 초대하기 API 연결 필요 */}
           초대
         </ModalActionButton>

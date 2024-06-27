@@ -24,6 +24,14 @@ const Home: React.FC = () => {
           >
             컬럼생성
           </button>
+          <button
+            className='btn-violet h-[40px] w-[100px]'
+            onClick={() => {
+              openModal({ type: 'columnModify' });
+            }}
+          >
+            컬럼수정
+          </button>
         </div>
         <div className='flex flex-col gap-[10px]'>
           <button

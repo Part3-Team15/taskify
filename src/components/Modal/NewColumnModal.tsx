@@ -5,8 +5,10 @@ import ModalCancelButton from '@/components/Button/ModalCancelButton';
 
 export default function NewColumnModal({
   handleCloseModal,
+  props,
 }: {
   handleCloseModal: MouseEventHandler<HTMLButtonElement>;
+  props: { dashboardId: number } | null;
 }) {
   const [column, setColumn] = useState('');
 
@@ -28,7 +30,12 @@ export default function NewColumnModal({
       </div>
       <div className='flex justify-between md:justify-end md:gap-[15px]'>
         <ModalCancelButton onClick={handleCloseModal}>취소</ModalCancelButton>
-        <ModalActionButton disabled={column.length === 0}>
+        <ModalActionButton
+          disabled={column.length === 0}
+          onClick={() => {
+            alert(props);
+          }}
+        >
           {/* 컬럼 생성 API 연결 필요 */}
           생성
         </ModalActionButton>

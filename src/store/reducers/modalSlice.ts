@@ -1,13 +1,26 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
-interface ColumnModify {
+interface ColumnModifyModalProps {
   title: string;
   id: number;
 }
+interface ColumnDeleteModalProps {
+  columnId: number;
+}
+
+interface NewColumnModalProps {
+  dashboardId: number;
+}
+
+interface InviteMemberModalProps {
+  dashboardId: number;
+}
+
+type ModalProps = ColumnModifyModalProps | ColumnDeleteModalProps | NewColumnModalProps | InviteMemberModalProps | null;
 
 export interface ModalState {
   type: string | null;
-  props?: ColumnModify | null;
+  props?: ModalProps;
 }
 
 interface RootState {
@@ -25,7 +38,7 @@ export const modalSlice = createSlice({
   name: 'modal',
   initialState,
   reducers: {
-    openModal: (state, action: PayloadAction<{ type: string | null; props: ColumnModify | null }>) => {
+    openModal: (state, action: PayloadAction<{ type: string | null; props: ModalProps }>) => {
       const { type, props = null } = action.payload;
       state.type = type;
       state.props = props;
