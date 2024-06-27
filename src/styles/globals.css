@@ -30,7 +30,7 @@
   }
 
   .label {
-    @apply h-[19px] text-base font-medium md:text-lg;
+    @apply h-[19px] text-base font-medium md:h-[21px] md:text-lg;
   }
 
   .input {
