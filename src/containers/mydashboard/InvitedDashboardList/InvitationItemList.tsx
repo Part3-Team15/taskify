@@ -54,7 +54,7 @@ export default function InvitationItemList({ invitations, handleAcceptInvitation
           </li>
         ))}
 
-        <div ref={observerRef} className='md:h-3 lg:h-5' />
+        <div ref={observerRef} className='h-1' />
       </ul>
     </div>
   );

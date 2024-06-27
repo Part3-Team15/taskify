@@ -29,11 +29,11 @@ export default function InvitedDashboardList() {
     }
   }, [data]);
 
-  const handleMoreInvitations = async (currentCursorId: number, searchValue: string = '') => {
-    if (currentCursorId !== 0 || searchValue) {
+  const handleMoreInvitations = async (currentCursorId: number) => {
+    if (currentCursorId !== 0) {
       try {
         setIsFetchingNextPage(true);
-        const { data: nextData } = await getInvitationsList(10, currentCursorId, searchValue);
+        const { data: nextData } = await getInvitationsList(10, currentCursorId);
 
         if (nextData.invitations.length > 0) {
           setInvitations((prevInvitations) => [...prevInvitations, ...nextData.invitations]);
@@ -50,6 +50,7 @@ export default function InvitedDashboardList() {
   const handleObserver = useCallback(
     async (entries: IntersectionObserverEntry[]) => {
       const target = entries[0];
+
       if (target.isIntersecting && !isFetchingNextPage && cursorId && !isSearching) {
         handleMoreInvitations(cursorId);
       }
@@ -59,7 +60,7 @@ export default function InvitedDashboardList() {
 
   useEffect(() => {
     const observer = new IntersectionObserver(handleObserver, {
-      threshold: 1.0,
+      threshold: 0.8,
     });
 
     const currentObserverRef = observerRef.current;
@@ -73,7 +74,7 @@ export default function InvitedDashboardList() {
         observer.unobserve(currentObserverRef);
       }
     };
-  }, [handleObserver]);
+  }, [observerRef, handleObserver]);
 
   const handleAcceptInvitation = async (invitationId: number, inviteAccepted: boolean) => {
     try {
