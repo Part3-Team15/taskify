@@ -20,7 +20,7 @@ import {
 
 export default function Modal() {
   const dispatch = useDispatch();
-  const { type, props = null } = useSelector(modalSelector);
+  const { type, props } = useSelector(modalSelector);
 
   useEffect(() => {
     if (type) {
