@@ -1,14 +1,12 @@
 import { AxiosError } from 'axios';
 import { useRouter } from 'next/router';
 import { ChangeEvent, FormEventHandler, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 
 import ActionButton from '@/components/Button/ActionButton';
 import ImageInput from '@/components/Input/ImageInput';
 import { useUpdateProfile } from '@/hooks/useUpdateProfile';
 import { postImage } from '@/services/postService';
-import { putProfile } from '@/services/putService';
-import { setUser } from '@/store/reducers/userSlice';
 import { RootState } from '@/store/store';
 
 export default function EditProfileForm() {
