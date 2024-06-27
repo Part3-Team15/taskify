@@ -12,8 +12,8 @@ interface InvitationListProps {
 
 export default function InvitationItemList({ invitations, handleAcceptInvitation, observerRef }: InvitationListProps) {
   return (
-    <div className='h-[calc(100%-170px)] pt-6'>
-      <div className='grid grid-cols-3 pb-6 pl-7'>
+    <div className='h-[calc(100%-130px)] pt-6 md:h-[calc(100%-170px)]'>
+      <div className='hidden grid-cols-3 pb-6 pl-7 text-gray-9f md:grid md:pr-7'>
         <p>이름</p>
         <p>초대자</p>
         <p className='w-44'>수락 여부</p>
@@ -28,17 +28,33 @@ export default function InvitationItemList({ invitations, handleAcceptInvitation
       )}
       <ul className='h-full overflow-y-scroll'>
         {invitations.map((invitation: Invitation) => (
-          <li key={invitation.id} className='grid h-16 grid-cols-3 border-b border-gray-ee pl-7'>
-            <p className='flex items-center'>{invitation.dashboard.title}</p>
-            <p className='flex min-w-28 items-center'>{invitation.inviter.nickname}</p>
+          <li
+            key={invitation.id}
+            className='grid h-max grid-cols-1 gap-[10px] border-b border-gray-ee p-4 text-sm text-black-33 md:h-16 md:grid-cols-3 md:gap-0 md:px-7 md:py-0 md:text-base'
+          >
+            <div className='grid grid-cols-3 items-center md:flex'>
+              <p className='flex items-center md:hidden'>이름</p>
+              <p className='col-span-2 flex items-center'>{invitation.dashboard.title}</p>
+            </div>
+            <div className='grid grid-cols-3 items-center md:flex'>
+              <p className='flex items-center md:hidden'>초대자</p>
+              <p className='col-span-2 flex items-center md:min-w-28'>{invitation.inviter.nickname}</p>
+            </div>
             <div className='flex items-center gap-[10px]'>
-              <ActionButton onClick={() => handleAcceptInvitation(invitation.id, true)}>수락</ActionButton>
-              <CancelButton onClick={() => handleAcceptInvitation(invitation.id, false)}>거절</CancelButton>
+              <ActionButton onClick={() => handleAcceptInvitation(invitation.id, true)} className='w-20 grow lg:grow-0'>
+                수락
+              </ActionButton>
+              <CancelButton
+                onClick={() => handleAcceptInvitation(invitation.id, false)}
+                className='w-20 grow lg:grow-0'
+              >
+                거절
+              </CancelButton>
             </div>
           </li>
         ))}
 
-        <div ref={observerRef} className='h-2' />
+        <div ref={observerRef} className='md:h-3 lg:h-5' />
       </ul>
     </div>
   );
