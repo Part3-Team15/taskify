@@ -1,11 +1,22 @@
 import ProfileIcon from '@/components/ProfileIcon';
 import useFetchData from '@/hooks/useFetchData';
 import { getMembersList } from '@/services/getService';
-import { MembersResponse } from '@/types/Member.interface';
+import { Member, MembersResponse } from '@/types/Member.interface';
 
 interface MemberProfilesProps {
   id: number;
 }
+
+const genMemberProfiles = (members: Member[], distance: number) =>
+  members.map((user, i) => {
+    const offset = distance * i;
+    const liStyle = { left: offset };
+    return (
+      <li key={user.id} className='absolute size-[34px] md:size-[38px]' style={liStyle}>
+        <ProfileIcon user={user} imgClassName={`size-[34px] md:size-[38px]`} fontClassName='md:font-base font-sm' />
+      </li>
+    );
+  });
 
 export default function MemberProfiles({ id }: MemberProfilesProps) {
   const { data, isLoading, error } = useFetchData<MembersResponse>(['members', id], () => getMembersList(id));
@@ -22,26 +33,43 @@ export default function MemberProfiles({ id }: MemberProfilesProps) {
     return <p>멤버가 없습니다.</p>;
   }
 
-  // TODO: 길이도 정확히 하려면 device 정보 있어야 함
-  const w = 38 + 30 * (data.members.length - 1);
-  const ulStyle = { width: w };
+  /* TODO: 길이도 정확히 하려면 device 정보 있어야 함
+   * 임시방편으로 두 개 렌더링하고 hidden 처리
+   */
+  const numMembers = data.members.length;
+  const numPC = Math.min(numMembers, 4);
+  const numNonPC = Math.min(numMembers, 2);
+  const wPC = numMembers === 4 ? 38 + 30 * (numPC - 1) : 38 + 30 * numPC;
+  const wTablet = numMembers === 2 ? 38 + 30 * (numNonPC - 1) : 38 + 30 * numNonPC;
+  const wMobile = numMembers === 2 ? 34 + 24 * (numNonPC - 1) : 34 + 24 * numNonPC;
   return (
-    <ul className='relative h-[38px]' style={ulStyle}>
-      {data.members.map((user, i) => {
-        const offset = 30 * i;
-        const liStyle = { left: offset };
-        const hidden = i >= 2 ? 'hidden' : '';
-        return (
-          <li key={user.id} className='absolute size-[34px] md:size-[38px]' style={liStyle}>
-            <ProfileIcon
-              user={user}
-              imgClassName={`size-[34px] md:size-[38px] lg:flex ${hidden}`}
-              fontClassName='md:font-base font-sm'
-            />
-          </li>
-        );
-      })}
-      {/* TODO: + 버튼 추가하려면 device 정보가 있어야 함 */}
-    </ul>
+    <>
+      <ul className='relative hidden h-[34px] text-sm md:h-[38px] md:text-base lg:block' style={{ width: wPC }}>
+        {genMemberProfiles(data.members.slice(0, numPC), 30)}
+        {numMembers > numPC && MoreIcon(numMembers - numPC, 30 * 4)}
+      </ul>
+      <ul
+        className='relative hidden h-[34px] text-sm md:block md:h-[38px] md:text-base lg:hidden'
+        style={{ width: wTablet }}
+      >
+        {genMemberProfiles(data.members.slice(0, numNonPC), 30)}
+        {numMembers > numNonPC && MoreIcon(numMembers - numNonPC, 30 * 2)}
+      </ul>
+      <ul className='relative h-[34px] text-sm md:hidden md:h-[38px] md:text-base' style={{ width: wMobile }}>
+        {genMemberProfiles(data.members.slice(0, numNonPC), 24)}
+        {numMembers > numNonPC && MoreIcon(numMembers - numNonPC, 24 * 2)}
+      </ul>
+    </>
+  );
+}
+
+function MoreIcon(more: number, offset: number) {
+  return (
+    <div
+      style={{ left: offset }}
+      className='align-center absolute size-[34px] rounded-full border-2 border-solid border-white bg-gray-9f font-montserrat font-semibold text-white md:size-[38px]'
+    >
+      <p>{`+${more}`}</p>
+    </div>
   );
 }
