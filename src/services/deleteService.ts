@@ -7,5 +7,5 @@ export const deleteColumn = async (columnId: number) => {
 
 // 대시보드 삭제
 export const deleteDashboard = async (dashboardId: number) => {
-  return await instance.delete(`/columns/${dashboardId}`);
+  return await instance.delete(`/dashboards/${dashboardId}`);
 };

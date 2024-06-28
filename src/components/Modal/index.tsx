@@ -4,6 +4,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import ColumnDeleteModal from './ColumnDeleteModal';
 import ColumnModifyModal from './ColumnModifyModal';
 import DefaultModal from './DefaultModal';
+import DeleteDashboardModal from './DeleteDashboardModal';
 import InviteMemberModal from './InviteMemberModal';
 import NewColumnModal from './NewColumnModal';
 import NewDashboardModal from './NewDashboardModal';
@@ -14,6 +15,7 @@ import { modalSelector, closeModal } from '@/store/reducers/modalSlice';
 import {
   ColumnDeleteModalProps,
   ColumnModifyModalProps,
+  DeleteDashboardModalProps,
   InviteMemberModalProps,
   NewColumnModalProps,
 } from '@/types/Modal.interface';
@@ -64,6 +66,13 @@ export default function Modal() {
         return <NotificationModal handleCloseModal={handleCloseModal} notificationText={NOTIFICATION_TEXT_OBJ[type]} />;
       case 'newDashboard':
         return <NewDashboardModal handleCloseModal={handleCloseModal} />;
+      case 'deleteDashboard':
+        return (
+          <DeleteDashboardModal
+            handleCloseModal={handleCloseModal}
+            modalProps={modalProps as DeleteDashboardModalProps}
+          />
+        );
       case 'columnDeleteConfirm':
         return modalProps ? (
           <ColumnDeleteModal handleCloseModal={handleCloseModal} modalProps={modalProps as ColumnDeleteModalProps} />

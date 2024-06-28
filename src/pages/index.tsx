@@ -75,7 +75,7 @@ const Home: React.FC = () => {
             컬럼 삭제
           </button>
         </div>
-        <div>
+        <div className='flex flex-col gap-[10px]'>
           <button
             className='btn-violet h-[40px] w-[125px]'
             onClick={() => {
@@ -83,6 +83,15 @@ const Home: React.FC = () => {
             }}
           >
             대시보드 생성
+          </button>
+
+          <button
+            className='btn-violet h-[40px] w-[125px]'
+            onClick={() => {
+              openModal({ type: 'deleteDashboard', modalProps: { dashboardId: 9883 } });
+            }}
+          >
+            대시보드 삭제
           </button>
         </div>
       </div>

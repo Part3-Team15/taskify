@@ -14,6 +14,10 @@ export interface InviteMemberModalProps {
   dashboardId: number;
 }
 
+export interface DeleteDashboardModalProps {
+  dashboardId: number;
+}
+
 export type ModalProps =
   | ColumnModifyModalProps
   | ColumnDeleteModalProps
