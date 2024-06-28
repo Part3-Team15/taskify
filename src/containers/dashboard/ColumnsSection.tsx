@@ -28,7 +28,7 @@ export default function ColumnsSection({ id }: ColumnsSectionProps) {
   }
 
   return (
-    <section className='size-full'>
+    <section className='lg:w-[1600px]'>
       <div className='block overflow-x-auto lg:flex'>
         <ul className='block lg:flex'>
           {columns?.data && columns.data.map((column) => <Column key={column.id} column={column} />)}
@@ -37,7 +37,7 @@ export default function ColumnsSection({ id }: ColumnsSectionProps) {
 
         <div className='p-5'>
           <button
-            className='btn-violet-light mb-4 h-[70px] w-full rounded-[6px] py-[24px] lg:mb-0 lg:w-[354px]'
+            className='btn-violet-light mb-4 mt-8 h-[70px] w-full rounded-[6px] py-[24px] lg:mb-0 lg:w-[354px]'
             onClick={() => {
               openModal({ type: 'newColumn', modalProps: { dashboardId: Number(id) } });
             }}
