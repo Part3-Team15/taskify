@@ -66,8 +66,9 @@ export default function NewDashboardModal({
       <div className='flex gap-[10px]'>
         {(['green', 'purple', 'orange', 'blue', 'pink'] as DashboardColor[]).map((color) => (
           <button
-            key={color}
-            className={`${'bg-' + color} flex size-[28px] items-center justify-center rounded-full bg-white md:size-[30px]`}
+            key={`${color}-button`}
+            style={{ backgroundColor: DASHBOARD_COLOR_OBJ[color] }}
+            className={`flex size-[28px] items-center justify-center rounded-full bg-white md:size-[30px]`}
             onClick={() => handleColorSelect(color)}
           >
             {selectedColor === color && <Image src='/icons/check.svg' alt='체크' width={16} height={16} />}
