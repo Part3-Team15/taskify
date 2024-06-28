@@ -25,6 +25,10 @@
     @apply align-center bg-gray-f5 rounded-md hover:bg-gray-ee active:bg-gray-d9;
   }
 
+  .section {
+    @apply w-full max-w-[620px] rounded-lg bg-white px-5 md:px-7;
+  }
+
   .section-title {
     @apply text-xl font-bold md:text-2xl;
   }
