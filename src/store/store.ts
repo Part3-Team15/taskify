@@ -3,6 +3,7 @@ import { persistStore, persistReducer } from 'redux-persist';
 import storage from 'redux-persist/lib/storage';
 
 import dashboardsReducer from './reducers/dashboardsSlice';
+import modalReducer from './reducers/modalSlice';
 import userReducer from './reducers/userSlice';
 
 const persistConfig = {
@@ -14,6 +15,7 @@ export const store = configureStore({
   reducer: {
     user: persistedReducer,
     dashboards: dashboardsReducer,
+    modal: modalReducer,
   },
   devTools: process.env.NODE_ENV !== 'production',
 });

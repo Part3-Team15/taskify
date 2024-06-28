@@ -5,6 +5,7 @@ import type { AppProps } from 'next/app';
 import { Provider } from 'react-redux';
 import { PersistGate } from 'redux-persist/integration/react';
 
+import Modal from '@/components/Modal';
 import MainLayout from '@/layouts/MainLayout';
 import { store, persistor } from '@/store/store';
 
@@ -15,6 +16,7 @@ export default function App({ Component, pageProps }: AppProps) {
     <Provider store={store}>
       <PersistGate loading={null} persistor={persistor}>
         <QueryClientProvider client={queryClient}>
+          <Modal />
           <MainLayout>
             <Component {...pageProps} />
           </MainLayout>

@@ -14,11 +14,11 @@
   }
 
   .btn-violet-light {
-    @apply align-center disabled:bg-violet-light-disabled rounded-[8px] border border-gray-d9 bg-white transition-all hover:bg-violet-light-hover active:bg-violet-light-active;
+    @apply align-center disabled:bg-violet-light-disabled gray-border rounded-[8px] bg-white transition-all hover:bg-violet-light-hover active:bg-violet-light-active;
   }
 
   .btn-white {
-    @apply align-center disabled:bg-white-disabled rounded-[8px] border border-gray-d9 bg-white text-gray-78 transition-all hover:bg-white-hover active:bg-white-active;
+    @apply align-center disabled:bg-white-disabled gray-border rounded-[8px] bg-white text-gray-78 transition-all hover:bg-white-hover active:bg-white-active;
   }
 
   .btn-gray {
@@ -34,12 +34,24 @@
   }
 
   .input {
-    @apply flex h-[42px] w-full items-center rounded-md border border-gray-d9 bg-white px-4 text-sm outline-none placeholder:text-gray-9f invalid:border-2 invalid:border-red focus:border-2 focus:border-violet disabled:text-gray-9f md:h-12 md:text-base;
+    @apply gray-border flex h-[42px] w-full items-center rounded-md bg-white px-4 text-sm outline-none placeholder:text-gray-9f invalid:border-2 invalid:border-red focus:border-2 focus:border-violet disabled:text-gray-9f md:h-12 md:text-base;
+  }
+
+  .dd-container {
+    @apply gray-border align-center flex-col gap-1 rounded-md p-1.5;
+  }
+
+  .dd-menu {
+    @apply align-center active:bg-violet-e8 h-[30px] w-full rounded-sm text-xs hover:bg-violet-f1 md:h-8 md:text-sm;
   }
 }
 
 @layer utilities {
   .align-center {
     @apply flex items-center justify-center;
+  }
+
+  .gray-border {
+    @apply border border-gray-d9;
   }
 }
