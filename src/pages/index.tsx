@@ -11,7 +11,7 @@ const Home: React.FC = () => {
           <button
             className='btn-violet h-[40px] w-[100px]'
             onClick={() => {
-              openModal({ type: 'inviteMember', modalProps: { columnId: 1 } });
+              openModal({ type: 'inviteMember', modalProps: { dashboardId: 9875 } });
             }}
           >
             초대하기

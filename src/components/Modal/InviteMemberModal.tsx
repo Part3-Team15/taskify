@@ -2,6 +2,8 @@ import { MouseEventHandler, useState, ChangeEvent } from 'react';
 
 import ModalActionButton from '@/components/Button/ModalActionButton';
 import ModalCancelButton from '@/components/Button/ModalCancelButton';
+import useModal from '@/hooks/useModal';
+import { postMemberInvite } from '@/services/postService';
 import { InviteMemberModalProps } from '@/types/Modal.interface';
 
 export default function InviteMemberModal({
@@ -11,6 +13,7 @@ export default function InviteMemberModal({
   handleCloseModal: MouseEventHandler<HTMLButtonElement>;
   modalProps: InviteMemberModalProps;
 }) {
+  const { openModal } = useModal();
   const [email, setEmail] = useState('');
   const [isValid, setIsValid] = useState(true);
   const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
@@ -19,6 +22,15 @@ export default function InviteMemberModal({
     const value = e.target.value;
     setEmail(value);
     setIsValid(emailRegex.test(value));
+  };
+
+  const handleMemberInvite = async () => {
+    try {
+      await postMemberInvite(modalProps.dashboardId, { email });
+      openModal({ type: 'inviteMemberSuccess' });
+    } catch {
+      openModal({ type: 'inviteMemberFailed' });
+    }
   };
 
   return (
@@ -38,13 +50,7 @@ export default function InviteMemberModal({
       </div>
       <div className='flex justify-between md:justify-end md:gap-[15px]'>
         <ModalCancelButton onClick={handleCloseModal}>취소</ModalCancelButton>
-        <ModalActionButton
-          disabled={email.length === 0 || !isValid}
-          onClick={() => {
-            alert(modalProps);
-          }}
-        >
-          {/* 초대하기 API 연결 필요 */}
+        <ModalActionButton disabled={email.length === 0 || !isValid} onClick={handleMemberInvite}>
           초대
         </ModalActionButton>
       </div>

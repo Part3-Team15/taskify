@@ -9,6 +9,8 @@ export const NOTIFICATION_TEXT_OBJ = {
   newDashboardFailed: '대시보드 생성을 실패하였습니다.',
   newColumnSuccess: '새로운 컬럼이 생성되었습니다!',
   newColumnFailed: '컬럼 생성을 실패하였습니다.',
+  inviteMemberSuccess: '해당 멤버를 초대하였습니다!',
+  inviteMemberFailed: '멤버 초대를 실패하였습니다!',
 };
 
 // 대쉬보드 컬러 상수

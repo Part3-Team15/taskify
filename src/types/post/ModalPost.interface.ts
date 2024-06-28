@@ -7,3 +7,7 @@ export interface NewColumnFormData {
   title: string;
   dashboardId: number;
 }
+
+export interface MemberInviteFormData {
+  email: string;
+}
