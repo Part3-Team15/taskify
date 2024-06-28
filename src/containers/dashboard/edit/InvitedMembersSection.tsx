@@ -1,3 +1,4 @@
+import { useQueryClient } from '@tanstack/react-query';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
 import { useState } from 'react';
@@ -5,6 +6,7 @@ import { useState } from 'react';
 import InvitedMemberList from './InvitedMemberList';
 
 import Pagination from '@/components/Pagination';
+import { useDeleteInvitation } from '@/hooks/useDeleteInvitation';
 import useFetchData from '@/hooks/useFetchData';
 import { getDashboardInvitations } from '@/services/getService';
 import { DashboardInvitationsResponse } from '@/types/Invitation.interface';
@@ -13,6 +15,16 @@ export default function InvitedMembersSection() {
   const router = useRouter();
   const { id } = router.query;
   const [currentChunk, setCurrentChunk] = useState(1);
+
+  const handleSuccess = () => {
+    if (data?.invitations.length === 1 && currentChunk > 1) {
+      setCurrentChunk((prev) => prev - 1);
+    }
+    queryClient.invalidateQueries({ queryKey: ['invitations', id] });
+  };
+
+  const { mutate } = useDeleteInvitation(handleSuccess);
+  const queryClient = useQueryClient();
 
   const { data, error } = useFetchData<DashboardInvitationsResponse>(['invitations', id, currentChunk], () =>
     getDashboardInvitations(Number(id), currentChunk, 5),
@@ -33,6 +45,15 @@ export default function InvitedMembersSection() {
   const handleInviteClick = () => {
     // TODO: 모달 연결
     alert('초대 모달');
+  };
+
+  const handleCancelInvitation = (invitationId: number) => {
+    const handleDelete = async () => {
+      if (!id) return;
+      await mutate({ dashboardId: String(id), invitationId });
+    };
+
+    handleDelete();
   };
 
   return (
@@ -61,7 +82,7 @@ export default function InvitedMembersSection() {
       <main className='text-sm md:text-base'>
         <h3 className='mb-[29px] text-gray-9f md:mb-6'>이메일</h3>
         {data ? (
-          <InvitedMemberList invitations={data.invitations} />
+          <InvitedMemberList invitations={data.invitations} onCancelClick={handleCancelInvitation} />
         ) : error ? (
           <p>{`에러가 발생했습니다. \n${error.message}`}</p>
         ) : (
