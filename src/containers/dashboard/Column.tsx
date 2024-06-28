@@ -61,7 +61,7 @@ function Column({ column }: ColumnProps) {
         </button>
 
         {/* Card List Section */}
-        <div className='lg:h-[800px] lg:overflow-y-auto'>
+        <div className='lg:h-[700px] lg:overflow-y-auto'>
           {cardList && cardList.cards.map((card) => <Card key={card.id} card={card} />)}
         </div>
       </div>
