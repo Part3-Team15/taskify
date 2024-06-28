@@ -6,21 +6,21 @@ import { useState } from 'react';
 import DashboardItem from './DashboardItem';
 
 import useFetchData from '@/hooks/useFetchData';
+import useModal from '@/hooks/useModal';
 import { getDashboardsList } from '@/services/getService';
 import { DashboardsResponse } from '@/types/Dashboard.interface';
 
 export default function Sidebar() {
   const router = useRouter();
   const { id } = router.query;
-
   const [page, setPage] = useState<number>(1);
-
   const { data, isLoading } = useFetchData<DashboardsResponse>(['sideDashboards', page], () =>
     getDashboardsList('pagination', page, 10),
   );
-
   const totalPage = data ? Math.max(1, Math.ceil(data.totalCount / 10)) : 1;
   const activePath = router.pathname;
+
+  const { openModal } = useModal();
 
   const handleNext = () => {
     const nextChunk = page + 1;
@@ -58,9 +58,15 @@ export default function Sidebar() {
               <p className='hidden px-3 text-xs font-bold text-gray-78 md:block'>Dashboards</p>
 
               {/* 모달 연결 해야함 */}
-              <a href='#' className='p-3'>
+
+              <button
+                className='p-3'
+                onClick={() => {
+                  openModal({ type: 'newDashboard' });
+                }}
+              >
                 <Image src={'/icons/plus.svg'} alt='add' width={15} height={15} />
-              </a>
+              </button>
             </div>
 
             <div className='mx-2 mb-2 border-b border-gray-d9' />
