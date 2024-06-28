@@ -4,6 +4,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { putProfile } from '@/services/putService';
 import { setUser, isLoading, setError } from '@/store/reducers/userSlice';
 import { RootState } from '@/store/store';
+import { UpdateProfileForm } from '@/types/post/UpdateProfileForm.interface';
 import { User } from '@/types/User.interface';
 
 export const useUpdateProfile = () => {

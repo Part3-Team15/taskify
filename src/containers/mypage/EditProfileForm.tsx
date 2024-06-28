@@ -8,6 +8,7 @@ import ImageInput from '@/components/Input/ImageInput';
 import { useUpdateProfile } from '@/hooks/useUpdateProfile';
 import { postImage } from '@/services/postService';
 import { RootState } from '@/store/store';
+import { UpdateProfileForm } from '@/types/post/UpdateProfileForm.interface';
 
 export default function EditProfileForm() {
   const router = useRouter();

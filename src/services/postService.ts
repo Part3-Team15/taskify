@@ -3,6 +3,7 @@ import instance from './axios';
 import { NewDashboardFormData, NewColumnFormData, MemberInviteFormData } from '@/types/post/ModalPost.interface';
 import { SignInForm, SignInResponse } from '@/types/post/SignInForm.interface';
 import { SignUpForm } from '@/types/post/SignUpForm.interface';
+import { UploadImageForm, UploadImageResponse } from '@/types/post/UploadImageForm.interface';
 
 // 회원가입
 export const postSignUp = async (formData: SignUpForm) => {
