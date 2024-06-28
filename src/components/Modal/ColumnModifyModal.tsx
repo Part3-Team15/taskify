@@ -1,10 +1,9 @@
-/* eslint-disable react/prop-types */
-
 import { MouseEventHandler, useState } from 'react';
 
 import ModalActionButton from '@/components/Button/ModalActionButton';
 import ModalCancelButton from '@/components/Button/ModalCancelButton';
 import useModal from '@/hooks/useModal';
+import { putColumns } from '@/services/putService';
 import { ColumnModifyModalProps } from '@/types/Modal.interface';
 
 export default function ColumnModifyModal({
@@ -17,6 +16,15 @@ export default function ColumnModifyModal({
   const id = modalProps?.columnId;
   const [title, setTitle] = useState(modalProps?.columnTitle || '');
   const { openModal } = useModal();
+
+  const handleModifyButton = async () => {
+    try {
+      await putColumns(id, { title });
+      openModal({ type: 'columnModifySuccess' });
+    } catch {
+      openModal({ type: 'columnModifyFailed' });
+    }
+  };
 
   return (
     <div className='flex h-[274px] w-[327px] flex-col justify-between rounded-[8px] bg-white px-[18px] py-[32px] md:h-[276px] md:w-[540px]'>
@@ -39,7 +47,7 @@ export default function ColumnModifyModal({
           <button
             className='text-[14px] text-gray-9f underline hover:font-bold'
             onClick={() => {
-              openModal({ type: 'columnDeleteConfirm' });
+              openModal({ type: 'columnDeleteConfirm', modalProps: { columnId: id } });
             }}
           >
             삭제하기
@@ -47,13 +55,7 @@ export default function ColumnModifyModal({
         </div>
         <div className='flex justify-between md:justify-end md:gap-[15px]'>
           <ModalCancelButton onClick={handleCloseModal}>취소</ModalCancelButton>
-          <ModalActionButton
-            disabled={!(title?.length > 0)}
-            onClick={() => {
-              alert(id);
-            }}
-          >
-            {/* 컬럼 변경하기 API 연결 필요 */}
+          <ModalActionButton disabled={!(title?.length > 0)} onClick={handleModifyButton}>
             변경
           </ModalActionButton>
         </div>

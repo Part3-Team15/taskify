@@ -11,6 +11,8 @@ export const NOTIFICATION_TEXT_OBJ = {
   newColumnFailed: '컬럼 생성을 실패하였습니다.',
   inviteMemberSuccess: '해당 멤버를 초대하였습니다!',
   inviteMemberFailed: '멤버 초대를 실패하였습니다!',
+  columnModifySuccess: '컬럼이 변경되었습니다.',
+  columnModifyFailed: '컬럼이 변경되지 않았습니다.',
 };
 
 // 대쉬보드 컬러 상수

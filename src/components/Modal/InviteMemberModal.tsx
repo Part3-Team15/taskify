@@ -1,3 +1,4 @@
+import { AxiosError } from 'axios';
 import { MouseEventHandler, useState, ChangeEvent } from 'react';
 
 import ModalActionButton from '@/components/Button/ModalActionButton';
@@ -24,11 +25,16 @@ export default function InviteMemberModal({
     setIsValid(emailRegex.test(value));
   };
 
-  const handleMemberInvite = async () => {
+  const handleMemberInviteButton = async () => {
     try {
       await postMemberInvite(modalProps.dashboardId, { email });
       openModal({ type: 'inviteMemberSuccess' });
-    } catch {
+    } catch (error) {
+      if (error instanceof AxiosError) {
+        console.error(error.response?.data.message);
+      } else {
+        console.error(error);
+      }
       openModal({ type: 'inviteMemberFailed' });
     }
   };
@@ -50,7 +56,7 @@ export default function InviteMemberModal({
       </div>
       <div className='flex justify-between md:justify-end md:gap-[15px]'>
         <ModalCancelButton onClick={handleCloseModal}>취소</ModalCancelButton>
-        <ModalActionButton disabled={email.length === 0 || !isValid} onClick={handleMemberInvite}>
+        <ModalActionButton disabled={email.length === 0 || !isValid} onClick={handleMemberInviteButton}>
           초대
         </ModalActionButton>
       </div>

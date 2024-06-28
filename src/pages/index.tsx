@@ -27,7 +27,7 @@ const Home: React.FC = () => {
           <button
             className='btn-violet h-[40px] w-[100px]'
             onClick={() => {
-              openModal({ type: 'columnModify', modalProps: { columnId: 1, columnTitle: 'Done' } });
+              openModal({ type: 'columnModify', modalProps: { columnId: 33290, columnTitle: 'hi' } });
             }}
           >
             컬럼수정

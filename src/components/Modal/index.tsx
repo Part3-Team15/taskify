@@ -59,6 +59,8 @@ export default function Modal() {
       case 'newColumnFailed':
       case 'inviteMemberSuccess':
       case 'inviteMemberFailed':
+      case 'columnModifySuccess':
+      case 'columnModifyFailed':
         return <NotificationModal handleCloseModal={handleCloseModal} notificationText={NOTIFICATION_TEXT_OBJ[type]} />;
       case 'newDashboard':
         return <NewDashboardModal handleCloseModal={handleCloseModal} />;
