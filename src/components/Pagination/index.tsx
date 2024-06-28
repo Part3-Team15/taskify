@@ -1,17 +1,22 @@
 import NavButton from '../Button/NavButton';
 
-export default function Pagination() {
-  // TODO: 기능 구현
-  const handleLeftClick = () => {};
-  const handleRightClick = () => {};
+interface PaginationProps {
+  currentChunk: number;
+  totalPage: number;
+  onNextClick: () => void;
+  onPrevClick: () => void;
+}
 
+export default function Pagination({ currentChunk, totalPage, onNextClick, onPrevClick }: PaginationProps) {
   return (
     <div className='flex items-center justify-end'>
       {/* NOTE: 민재님꺼 pt-3 있었음 */}
-      <span className='pr-3 text-xs text-black-33 md:pr-4 md:text-sm'>1 페이지 중 1</span>
+      <span className='pr-3 text-xs text-black-33 md:pr-4 md:text-sm'>
+        {totalPage} 페이지 중 {currentChunk}
+      </span>
 
-      <NavButton direction='left' onClick={handleLeftClick} />
-      <NavButton direction='right' onClick={handleRightClick} />
+      <NavButton direction='left' onClick={() => onPrevClick()} isDisable={currentChunk === 1} />
+      <NavButton direction='right' onClick={() => onNextClick()} isDisable={currentChunk === totalPage} />
     </div>
   );
 }

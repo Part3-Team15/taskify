@@ -46,4 +46,8 @@
   .align-center {
     @apply flex items-center justify-center;
   }
+
+  .gray-border {
+    @apply border border-gray-d9;
+  }
 }
