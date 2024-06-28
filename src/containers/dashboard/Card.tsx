@@ -1,5 +1,6 @@
 import Image from 'next/image';
 
+import ProfileIcon from '@/components/ProfileIcon';
 import { Card as TCard } from '@/types/Card.interface';
 import formatDate from '@/utils/formatDate';
 import generateTagColor from '@/utils/generateTagColor';
@@ -56,11 +57,23 @@ export default function Card({ card }: CardProps) {
               <span className='pt-[2px] text-[12px] font-[500] text-gray-78'>{formatDate(card.createdAt)}</span>
             </div>
 
-            <div className='md:hidden lg:block'>{card.assignee.nickname}</div>
+            <div className='md:hidden lg:block'>
+              <ProfileIcon
+                user={card.assignee}
+                imgClassName={`size-[34px] md:size-[38px]`}
+                fontClassName='md:font-base font-sm'
+              />
+            </div>
           </div>
         </div>
       </section>
-      <section className='hidden md:block lg:hidden'>{card.assignee.nickname}</section>
+      <section className='hidden md:block lg:hidden'>
+        <ProfileIcon
+          user={card.assignee}
+          imgClassName={`size-[34px] md:size-[38px]`}
+          fontClassName='md:font-base font-sm'
+        />
+      </section>
     </div>
   );
 }

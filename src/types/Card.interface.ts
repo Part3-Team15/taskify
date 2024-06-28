@@ -1,8 +1,4 @@
-export interface Assignee {
-  profileImageUrl: string;
-  nickname: string;
-  id: number;
-}
+import { User } from './User.interface';
 
 export interface Card {
   id: number;
@@ -10,7 +6,7 @@ export interface Card {
   description: string;
   tags: string[];
   dueDate: string;
-  assignee: Assignee;
+  assignee: User;
   imageUrl: string;
   teamId: string;
   columnId: number;
