@@ -9,13 +9,13 @@ import { ColumnModifyModalProps } from '@/types/Modal.interface';
 
 export default function ColumnModifyModal({
   handleCloseModal,
-  props,
+  modalProps,
 }: {
   handleCloseModal: MouseEventHandler<HTMLButtonElement>;
-  props: ColumnModifyModalProps;
+  modalProps: ColumnModifyModalProps;
 }) {
-  const id = props?.columnId;
-  const [title, setTitle] = useState(props?.columnTitle || '');
+  const id = modalProps?.columnId;
+  const [title, setTitle] = useState(modalProps?.columnTitle || '');
   const { openModal } = useModal();
 
   return (

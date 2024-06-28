@@ -6,10 +6,10 @@ import { ColumnDeleteModalProps } from '@/types/Modal.interface';
 
 export default function ColumnDeleteModal({
   handleCloseModal,
-  props,
+  modalProps,
 }: {
   handleCloseModal: MouseEventHandler<HTMLButtonElement>;
-  props: ColumnDeleteModalProps;
+  modalProps: ColumnDeleteModalProps;
 }) {
   return (
     <div className='flex h-[220px] w-[327px] flex-col justify-between rounded-[8px] bg-white px-[18px] py-[32px] md:h-[250px] md:w-[540px]'>
@@ -23,7 +23,7 @@ export default function ColumnDeleteModal({
         <ModalActionButton
           className='bg-red hover:bg-red-hover'
           onClick={() => {
-            alert(props);
+            alert(modalProps);
           }}
         >
           {/* 컬럼 삭제 API 연결 필요 */}

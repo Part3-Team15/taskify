@@ -6,8 +6,8 @@ import { ModalState } from '@/types/Modal.interface';
 const useModal = () => {
   const dispatch = useDispatch();
 
-  const handleOpenModal = ({ type, props = null }: ModalState) => {
-    dispatch(openModal({ type, props }));
+  const handleOpenModal = ({ type, modalProps = null }: ModalState) => {
+    dispatch(openModal({ type, modalProps }));
   };
 
   const handleCloseModal = () => {

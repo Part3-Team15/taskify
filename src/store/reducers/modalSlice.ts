@@ -8,7 +8,7 @@ interface RootState {
 
 const initialState: ModalState = {
   type: null,
-  props: null,
+  modalProps: null,
 };
 
 export const modalSelector = (state: RootState) => state.modal;
@@ -17,10 +17,10 @@ export const modalSlice = createSlice({
   name: 'modal',
   initialState,
   reducers: {
-    openModal: (state, action: PayloadAction<{ type: string | null; props: ModalProps }>) => {
-      const { type, props = null } = action.payload;
+    openModal: (state, action: PayloadAction<{ type: string | null; modalProps: ModalProps }>) => {
+      const { type, modalProps = null } = action.payload;
       state.type = type;
-      state.props = props;
+      state.modalProps = modalProps;
     },
     closeModal: () => {
       return initialState;

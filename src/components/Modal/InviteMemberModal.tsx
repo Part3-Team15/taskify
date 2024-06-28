@@ -6,10 +6,10 @@ import { InviteMemberModalProps } from '@/types/Modal.interface';
 
 export default function InviteMemberModal({
   handleCloseModal,
-  props,
+  modalProps,
 }: {
   handleCloseModal: MouseEventHandler<HTMLButtonElement>;
-  props: InviteMemberModalProps;
+  modalProps: InviteMemberModalProps;
 }) {
   const [email, setEmail] = useState('');
   const [isValid, setIsValid] = useState(true);
@@ -41,7 +41,7 @@ export default function InviteMemberModal({
         <ModalActionButton
           disabled={email.length === 0 || !isValid}
           onClick={() => {
-            alert(props);
+            alert(modalProps);
           }}
         >
           {/* 초대하기 API 연결 필요 */}

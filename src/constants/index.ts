@@ -5,6 +5,10 @@ export const NOTIFICATION_TEXT_OBJ = {
   emailExists: '이미 사용 중인 이메일입니다.',
   curPwdNotEqual: '현재 비밀번호가 틀렸습니다.',
   columnDeleteConfirm: '컬럼의 모든 카드가 삭제됩니다.',
+  newDashboardSuccess: '새로운 대시보드가 생성되었습니다!',
+  newDashboardFailed: '대시보드 생성을 실패하였습니다.',
+  newColumnSuccess: '새로운 컬럼이 생성되었습니다!',
+  newColumnFailed: '컬럼 생성을 실패하였습니다.',
 };
 
 // 대쉬보드 컬러 상수

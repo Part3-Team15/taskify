@@ -2,16 +2,28 @@ import { MouseEventHandler, useState } from 'react';
 
 import ModalActionButton from '@/components/Button/ModalActionButton';
 import ModalCancelButton from '@/components/Button/ModalCancelButton';
-import { NewColumnModalProps } from '@/types/Modal.interface';
+import useModal from '@/hooks/useModal';
+import { postNewColumn } from '@/services/postService';
 
-export default function NewColumnModal({
-  handleCloseModal,
-  props,
-}: {
+interface NewColumnModalProps {
   handleCloseModal: MouseEventHandler<HTMLButtonElement>;
-  props: NewColumnModalProps;
-}) {
+  modalProps: { dashboardId: number };
+}
+
+export default function NewColumnModal({ handleCloseModal, modalProps }: NewColumnModalProps) {
+  const { openModal } = useModal();
+
   const [column, setColumn] = useState('');
+
+  const { dashboardId } = modalProps;
+  const handlePostNewColumn = async () => {
+    try {
+      await postNewColumn({ title: column, dashboardId: dashboardId });
+      openModal({ type: 'newColumnSuccess' });
+    } catch (error) {
+      openModal({ type: 'newColumnFailed' });
+    }
+  };
 
   return (
     <div className='flex h-[266px] w-[327px] flex-col justify-between rounded-[8px] bg-white px-[18px] py-[32px] md:h-[301px] md:w-[540px]'>
@@ -24,20 +36,12 @@ export default function NewColumnModal({
           type='text'
           placeholder='생성할 컬럼 이름을 입력해 주세요'
           value={column}
-          onChange={(e) => {
-            setColumn(e.target.value);
-          }}
+          onChange={(e) => setColumn(e.target.value)}
         />
       </div>
       <div className='flex justify-between md:justify-end md:gap-[15px]'>
         <ModalCancelButton onClick={handleCloseModal}>취소</ModalCancelButton>
-        <ModalActionButton
-          disabled={column.length === 0}
-          onClick={() => {
-            alert(props);
-          }}
-        >
-          {/* 컬럼 생성 API 연결 필요 */}
+        <ModalActionButton disabled={column.length === 0} onClick={handlePostNewColumn}>
           생성
         </ModalActionButton>
       </div>

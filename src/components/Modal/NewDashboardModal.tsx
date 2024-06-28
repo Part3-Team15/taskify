@@ -4,6 +4,8 @@ import { MouseEventHandler, useState } from 'react';
 import ModalActionButton from '@/components/Button/ModalActionButton';
 import ModalCancelButton from '@/components/Button/ModalCancelButton';
 import { DASHBOARD_COLOR_OBJ } from '@/constants';
+import useModal from '@/hooks/useModal';
+import { postNewDashboard } from '@/services/postService';
 
 type DashboardColor = 'green' | 'purple' | 'orange' | 'blue' | 'pink';
 
@@ -24,12 +26,23 @@ export default function NewDashboardModal({
 
   const [selectedColor, setSelectedColor] = useState<DashboardColor>('green');
 
+  const { openModal } = useModal();
+
   const handleColorSelect = (color: DashboardColor) => {
     setSelectedColor(color);
     setValue((prevValue) => ({
       ...prevValue,
       color: DASHBOARD_COLOR_OBJ[color],
     }));
+  };
+
+  const handlePostDashboard = async () => {
+    try {
+      await postNewDashboard(value);
+      openModal({ type: 'newDashboardSuccess' });
+    } catch {
+      openModal({ type: 'newDashboardFailed' });
+    }
   };
 
   return (
@@ -63,7 +76,9 @@ export default function NewDashboardModal({
       </div>
       <div className='flex justify-between md:justify-end md:gap-[15px]'>
         <ModalCancelButton onClick={handleCloseModal}>취소</ModalCancelButton>
-        <ModalActionButton disabled={value.title.length === 0}>생성</ModalActionButton>
+        <ModalActionButton disabled={value.title.length === 0} onClick={handlePostDashboard}>
+          생성
+        </ModalActionButton>
       </div>
     </div>
   );

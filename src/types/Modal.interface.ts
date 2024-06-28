@@ -23,5 +23,5 @@ export type ModalProps =
 
 export interface ModalState {
   type: string | null;
-  props?: ModalProps;
+  modalProps?: ModalProps;
 }

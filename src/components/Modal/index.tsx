@@ -20,7 +20,7 @@ import {
 
 export default function Modal() {
   const dispatch = useDispatch();
-  const { type, props } = useSelector(modalSelector);
+  const { type, modalProps } = useSelector(modalSelector);
 
   useEffect(() => {
     if (type) {
@@ -53,24 +53,28 @@ export default function Modal() {
       case 'signupSuccess':
       case 'emailExists':
       case 'curPwdNotEqual':
+      case 'newDashboardSuccess':
+      case 'newDashboardFailed':
+      case 'newColumnSuccess':
+      case 'newColumnFailed':
         return <NotificationModal handleCloseModal={handleCloseModal} notificationText={NOTIFICATION_TEXT_OBJ[type]} />;
       case 'newDashboard':
         return <NewDashboardModal handleCloseModal={handleCloseModal} />;
       case 'columnDeleteConfirm':
-        return props ? (
-          <ColumnDeleteModal handleCloseModal={handleCloseModal} props={props as ColumnDeleteModalProps} />
+        return modalProps ? (
+          <ColumnDeleteModal handleCloseModal={handleCloseModal} modalProps={modalProps as ColumnDeleteModalProps} />
         ) : null;
       case 'newColumn':
-        return props ? (
-          <NewColumnModal handleCloseModal={handleCloseModal} props={props as NewColumnModalProps} />
+        return modalProps ? (
+          <NewColumnModal handleCloseModal={handleCloseModal} modalProps={modalProps as NewColumnModalProps} />
         ) : null;
       case 'inviteMember':
-        return props ? (
-          <InviteMemberModal handleCloseModal={handleCloseModal} props={props as InviteMemberModalProps} />
+        return modalProps ? (
+          <InviteMemberModal handleCloseModal={handleCloseModal} modalProps={modalProps as InviteMemberModalProps} />
         ) : null;
       case 'columnModify':
-        return props ? (
-          <ColumnModifyModal handleCloseModal={handleCloseModal} props={props as ColumnModifyModalProps} />
+        return modalProps ? (
+          <ColumnModifyModal handleCloseModal={handleCloseModal} modalProps={modalProps as ColumnModifyModalProps} />
         ) : null;
       default:
         return <DefaultModal handleCloseModal={handleCloseModal} />;
