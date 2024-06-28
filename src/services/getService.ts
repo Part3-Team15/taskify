@@ -14,6 +14,11 @@ export const getDashboardsList = async (
   return await instance.get(`/dashboards?navigationMethod=${navigationMethod}&page=${page}&size=${size}`);
 };
 
+// 대시보드 상세 조회
+export const getDashboard = async (id: string) => {
+  return await instance.get(`/dashboards/${id}`);
+};
+
 // 대시보드 멤버 목록 조회
 export const getMembersList = async (
   dashboardId: number,
