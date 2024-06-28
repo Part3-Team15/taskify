@@ -17,12 +17,19 @@ export default function InviteMemberModal({
   const { openModal } = useModal();
   const [email, setEmail] = useState('');
   const [isValid, setIsValid] = useState(true);
+  const [errorMessage, setErrorMessage] = useState('');
   const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
     setEmail(value);
-    setIsValid(emailRegex.test(value));
+    if (emailRegex.test(value)) {
+      setIsValid(true);
+      setErrorMessage('');
+    } else {
+      setIsValid(false);
+      setErrorMessage('유효한 이메일 주소를 입력해주세요.');
+    }
   };
 
   const handleMemberInviteButton = async () => {
@@ -31,11 +38,10 @@ export default function InviteMemberModal({
       openModal({ type: 'inviteMemberSuccess' });
     } catch (error) {
       if (error instanceof AxiosError) {
-        console.error(error.response?.data.message);
+        setErrorMessage(error.response?.data.message || '초대 중 에러가 발생했습니다.');
       } else {
-        console.error(error);
+        setErrorMessage('초대 중 에러가 발생했습니다.');
       }
-      openModal({ type: 'inviteMemberFailed' });
     }
   };
 
@@ -44,7 +50,6 @@ export default function InviteMemberModal({
       <h1 className='text-[20px] font-bold text-black-33 md:text-[24px]'>초대하기</h1>
       <div className='flex flex-col'>
         <label className='mb-[10px] text-[16px] text-black-33 md:text-[18px]'>이메일</label>
-        {/* 이미 초대한 멤버일 경우 Input 에러 표시 */}
         <input
           className={`h-[42px] rounded-[6px] border border-gray-d9 px-[15px] text-[14px] md:h-[48px] md:text-[16px] ${!isValid ? 'border-2 border-red' : ''}`}
           type='text'
@@ -52,7 +57,7 @@ export default function InviteMemberModal({
           value={email}
           onChange={handleChange}
         />
-        {!isValid && <p className='mt-2 text-[14px] text-red'>{'유효한 이메일 주소를 입력해주세요.'}</p>}
+        {errorMessage && <p className='mt-2 text-[14px] text-red'>{errorMessage}</p>}
       </div>
       <div className='flex justify-between md:justify-end md:gap-[15px]'>
         <ModalCancelButton onClick={handleCloseModal}>취소</ModalCancelButton>
