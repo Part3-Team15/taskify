@@ -26,19 +26,19 @@ export default function ColumnsSection({ id }: ColumnsSectionProps) {
   }
 
   return (
-    <section className='block lg:flex'>
-      <ul className='block lg:flex'>
-        {columns?.data && columns.data.map((column) => <Column key={column.id} column={column} />)}
-      </ul>
+    <section className='size-full'>
+      <div className='block overflow-x-auto lg:flex'>
+        <ul className='block lg:flex'>
+          {columns?.data && columns.data.map((column) => <Column key={column.id} column={column} />)}
+          {columns?.data.length === 0 && <p>컬럼이 없습니다.</p>}
+        </ul>
 
-      <div className='p-5'>
-        <button
-          className='btn-violet-light mb-[16px] h-[70px] w-full gap-[12px] rounded-[6px] py-[24px] lg:w-[354px]'
-          onClick={() => window.alert('컬럼 추가 모달')}
-        >
-          <div className='text-lg font-bold text-black-33'>새로운 컬럼 추가하기</div>
-          <Image src='/icons/plus-filled.svg' width={22} height={22} alt='카드 추가 아이콘' />
-        </button>
+        <div className='p-5'>
+          <button className='btn-violet-light mb-4 h-[70px] w-full rounded-[6px] py-[24px] lg:mb-0 lg:w-[354px]'>
+            <div className='text-lg font-bold text-black-33'>새로운 컬럼 추가하기</div>
+            <Image src='/icons/plus-filled.svg' width={22} height={22} alt='카드 추가 아이콘' loading='lazy' />
+          </button>
+        </div>
       </div>
     </section>
   );
