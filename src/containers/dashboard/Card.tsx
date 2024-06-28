@@ -23,7 +23,7 @@ export default function Card({ card }: CardProps) {
       {/* Card Image */}
       {card.imageUrl && (
         <section className='relative h-[160px] w-full rounded-[6px] md:mr-[10px] md:h-[54px] md:w-[90px] lg:h-[160px] lg:w-full'>
-          <Image src='/ex.jpeg' alt='카드 이미지' layout='fill' objectFit='cover' className='rounded-[8px]' />
+          <Image src={card.imageUrl} alt='카드 이미지' layout='fill' objectFit='cover' className='rounded-[8px]' />
         </section>
       )}
 
