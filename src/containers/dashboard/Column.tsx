@@ -1,6 +1,8 @@
 import Image from 'next/image';
 import React from 'react';
 
+import Card from './Card';
+
 import useFetchData from '@/hooks/useFetchData';
 import { getCardsList } from '@/services/getService';
 import { CardsListResponse } from '@/types/Card.interface';
@@ -27,7 +29,7 @@ function Column({ column }: ColumnProps) {
 
   return (
     <div className='block lg:flex'>
-      <div className='flex w-full flex-col bg-gray-fa p-5 lg:w-[354px]'>
+      <div className='flex flex-col bg-gray-fa p-5 lg:min-w-[354px]'>
         {/* Column Header */}
         <div className='mb-[6px] flex cursor-default items-center justify-between'>
           <div className='flex items-center'>
@@ -53,8 +55,9 @@ function Column({ column }: ColumnProps) {
           <Image src='/icons/plus-filled.svg' width={22} height={22} alt='카드 추가 아이콘' />
         </button>
 
-        <div>
-          {column.title} 컬럼의 카드 영역 {/* 해당 칼럼의 카드 목록 */}
+        {/* Card List Section */}
+        <div className='lg:h-[800px] lg:overflow-y-auto'>
+          {cardList && cardList.cards.map((card) => <Card key={card.id} card={card} />)}
         </div>
       </div>
 
