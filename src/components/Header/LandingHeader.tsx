@@ -3,7 +3,7 @@ import Link from 'next/link';
 
 export default function LandingHeader() {
   return (
-    <header className='flex h-[70px] w-full items-center justify-between bg-black px-[24px]'>
+    <header className='flex h-[70px] w-full items-center justify-between bg-dark-500 px-[24px]'>
       <Link href='/'>
         <Image src='/icons/logo-white.svg' alt='로고' width={121} height={39} />
       </Link>
