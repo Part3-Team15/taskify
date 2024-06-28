@@ -26,8 +26,8 @@ export default function ColumnsSection({ id }: ColumnsSectionProps) {
   }
 
   return (
-    <section className='block bg-gray-fa lg:flex'>
-      <ul className='block bg-gray-fa lg:flex'>
+    <section className='block lg:flex'>
+      <ul className='block lg:flex'>
         {columns?.data && columns.data.map((column) => <Column key={column.id} column={column} />)}
       </ul>
 

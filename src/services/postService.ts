@@ -29,3 +29,13 @@ export const postNewColumn = async (formData: NewColumnFormData) => {
 export const postMemberInvite = async (dashboardId: number, formData: MemberInviteFormData) => {
   return await instance.post(`dashboards/${dashboardId}/invitations`, formData);
 };
+
+// 이미지 업로드
+export const postImage = async (formData: UploadImageForm) => {
+  const response = await instance.post<UploadImageResponse>(`/users/me/image`, formData, {
+    headers: {
+      'Content-Type': 'multipart/form-data',
+    },
+  });
+  return response.data;
+};
