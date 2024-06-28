@@ -22,3 +22,17 @@ export const getMembersList = async (
 ) => {
   return await instance.get(`/members?page=${page}&size=${size}&dashboardId=${dashboardId}`);
 };
+
+// 내가 받은 초대 목록 조회
+export const getInvitationsList = async (size: number = 10, cursorId?: number, title?: string) => {
+  const params = new URLSearchParams();
+  params.append('size', size.toString());
+
+  if (cursorId) {
+    params.append('cursorId', cursorId.toString());
+  }
+  if (title) {
+    params.append('title', title);
+  }
+  return await instance.get(`/invitations`, { params });
+};
