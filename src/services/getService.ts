@@ -27,3 +27,8 @@ export const getMembersList = async (
 export const getCardsList = async (columnId: number) => {
   return await instance.get(`/cards?columnId=${columnId}`);
 };
+
+// 상세 카드 조회
+export const getCard = async (cardId: number) => {
+  return await instance.get(`/cards/${cardId}`);
+};
