@@ -69,24 +69,6 @@ const config: Config = {
       pink: {
         DEFAULT: '#e876ea',
       },
-      profile: {
-        0: '#7CE34F',
-        1: '#46E079',
-        2: '#FF5D54',
-        3: '#D5EB2C',
-        4: '#52EBCA',
-        5: '#FFE648',
-        6: '#EA6D88',
-        7: '#F5B65B',
-        8: '#FF7C21',
-        9: '#86DEFF',
-        10: '#FC96DF',
-        11: '#BD7BC2',
-        12: '#4CA1F5',
-        13: '#8A42D6',
-        14: '#5959D1',
-        15: '#F0866E',
-      }
     },
     extend: {
       backgroundImage: {
