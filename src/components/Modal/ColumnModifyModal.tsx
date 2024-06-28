@@ -3,7 +3,7 @@ import { MouseEventHandler, useState } from 'react';
 import ModalActionButton from '@/components/Button/ModalActionButton';
 import ModalCancelButton from '@/components/Button/ModalCancelButton';
 import useModal from '@/hooks/useModal';
-import { putColumns } from '@/services/putService';
+import { putColumn } from '@/services/putService';
 import { ColumnModifyModalProps } from '@/types/Modal.interface';
 
 export default function ColumnModifyModal({
@@ -19,7 +19,7 @@ export default function ColumnModifyModal({
 
   const handleModifyButton = async () => {
     try {
-      await putColumns(id, { title });
+      await putColumn(id, { title });
       openModal({ type: 'columnModifySuccess' });
     } catch {
       openModal({ type: 'columnModifyFailed' });

@@ -14,6 +14,6 @@ export const putProfile = async (formData: UpdateProfileForm) => {
 };
 
 // 컬럼 수정
-export const putColumns = async (columnId: number, formData: { title: string }) => {
+export const putColumn = async (columnId: number, formData: { title: string }) => {
   return await instance.put(`/columns/${columnId}`, formData);
 };
