@@ -14,6 +14,11 @@ export const getDashboardsList = async (
   return await instance.get(`/dashboards?navigationMethod=${navigationMethod}&page=${page}&size=${size}`);
 };
 
+// 대시보드 상세 조회
+export const getDashboard = async (id: string) => {
+  return await instance.get(`/dashboards/${id}`);
+};
+
 // 대시보드 멤버 목록 조회
 export const getMembersList = async (
   dashboardId: number,
@@ -21,6 +26,20 @@ export const getMembersList = async (
   size: number = 4, // 기본값 4
 ) => {
   return await instance.get(`/members?page=${page}&size=${size}&dashboardId=${dashboardId}`);
+};
+
+// 내가 받은 초대 목록 조회
+export const getInvitationsList = async (size: number = 10, cursorId?: number, title?: string) => {
+  const params = new URLSearchParams();
+  params.append('size', size.toString());
+
+  if (cursorId) {
+    params.append('cursorId', cursorId.toString());
+  }
+  if (title) {
+    params.append('title', title);
+  }
+  return await instance.get(`/invitations`, { params });
 };
 
 // 카드 목록 조회

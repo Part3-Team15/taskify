@@ -29,6 +29,7 @@ const config: Config = {
         '9f': '#9fa6b2',
         d9: '#d9d9d9',
         ee: '#eeeeee',
+        f5: '#f5f5f5',
         fa: '#fafafa',
       },
       white: {
@@ -40,6 +41,7 @@ const config: Config = {
       violet: {
         DEFAULT: '#5534da',
         f1: '#f1effd',
+        e8: '#e8e6f7',
         hover: '#3925a8',
         active: '#261680',
         disabled: '#9FA6B2',

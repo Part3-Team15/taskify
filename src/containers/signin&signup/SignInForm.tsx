@@ -59,8 +59,8 @@ export default function SignInForm() {
         register={register}
       />
 
-      <button type='submit' disabled={mutation.isLoading || !isValid} className='btn-violet h-[50px] text-lg'>
-        {mutation.isLoading ? '잠시만 기다려주세요..' : '로그인'}
+      <button type='submit' disabled={mutation.isPending || !isValid} className='btn-violet h-[50px] text-lg'>
+        {mutation.isPending ? '잠시만 기다려주세요..' : '로그인'}
       </button>
       {mutation.isError && (
         <p>Error: {mutation.error instanceof Error ? mutation.error.message : '알 수 없는 오류가 발생했습니다.'}</p>
