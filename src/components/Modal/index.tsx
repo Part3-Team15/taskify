@@ -9,6 +9,7 @@ import InviteMemberModal from './InviteMemberModal';
 import NewColumnModal from './NewColumnModal';
 import NewDashboardModal from './NewDashboardModal';
 import NotificationModal from './NotificationModal';
+import SignUpSuccessModal from './signupSuccessModal';
 
 import { NOTIFICATION_TEXT_OBJ } from '@/constants';
 import { modalSelector, closeModal } from '@/store/reducers/modalSlice';
@@ -52,7 +53,6 @@ export default function Modal() {
   const renderModalContent = () => {
     switch (type) {
       case 'pwdNotEqual':
-      case 'signupSuccess':
       case 'emailExists':
       case 'curPwdNotEqual':
       case 'newDashboardSuccess':
@@ -89,6 +89,8 @@ export default function Modal() {
         return modalProps ? (
           <ColumnModifyModal handleCloseModal={handleCloseModal} modalProps={modalProps as ColumnModifyModalProps} />
         ) : null;
+      case 'signupSuccess':
+        return <SignUpSuccessModal />;
       default:
         return <DefaultModal handleCloseModal={handleCloseModal} />;
     }
@@ -98,7 +100,7 @@ export default function Modal() {
     <>
       {type && (
         <div
-          className='fixed inset-0 flex items-center justify-center bg-black-17 bg-opacity-[0.3] backdrop-blur-[2px]'
+          className='fixed inset-0 z-50 flex items-center justify-center bg-black-17 bg-opacity-[0.3] backdrop-blur-[2px]'
           onClick={handleOutsideClick}
         >
           {renderModalContent()}
