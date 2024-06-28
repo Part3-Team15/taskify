@@ -42,7 +42,7 @@ export default function DashboardList() {
 
   return (
     <section className='w-max'>
-      <ul className='grid gap-3 font-semibold text-black-33 md:min-h-[216px] md:grid-cols-2 lg:min-h-[140px] lg:grid-cols-3'>
+      <ul className='grid grid-rows-1 gap-3 font-semibold text-black-33 md:min-h-[216px] md:grid-cols-2 md:grid-rows-3 lg:min-h-[140px] lg:grid-cols-3 lg:grid-rows-2'>
         <li className='h-16 w-64 rounded-lg border border-gray-d9 bg-white md:w-60 lg:w-80'>
           <button className='btn-violet-light size-full gap-4'>
             새로운 대시보드
@@ -63,7 +63,7 @@ export default function DashboardList() {
         ))}
       </ul>
 
-      <div className='rou flex items-center justify-end pt-3'>
+      <div className='flex items-center justify-end pt-3'>
         <span className='pr-4 text-sm text-black-33'>
           {totalPage} 페이지 중 {currentChunk}
         </span>
@@ -87,12 +87,8 @@ const NavButton = ({ direction, onClick, isDisable }: NavButtonProps) => (
     onClick={onClick}
     disabled={isDisable}
   >
-    <Image
-      src={'/icons/arrow-white.svg'}
-      alt={`arrow-${direction}`}
-      className={`${direction === 'left' ? 'rotate-180' : ''}`}
-      width={8}
-      height={12}
-    />
+    <div className={`${direction === 'left' ? 'rotate-180' : ''} relative h-[12px] w-[8px]`}>
+      <Image src={'/icons/arrow-white.svg'} alt={`arrow-${direction}`} fill />
+    </div>
   </button>
 );

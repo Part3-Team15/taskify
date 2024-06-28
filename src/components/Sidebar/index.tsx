@@ -5,7 +5,6 @@ import { useSelector } from 'react-redux';
 
 import DashboardItem from './DashboardItem';
 
-import plus from '@/../public/icons/plus.svg';
 import { useFetchDashboards } from '@/hooks/useFetchDashboards';
 import { RootState } from '@/store/store';
 
@@ -23,15 +22,12 @@ export default function Sidebar() {
       ) : (
         <>
           <Link href='/' className='flex items-center justify-center md:block md:px-3'>
-            <Image src={'/icons/logo.svg'} alt='logo' priority className='hidden md:block' width={110} height={33} />
-            <Image
-              src={'/icons/logo-small.svg'}
-              alt='logo'
-              priority
-              className='block md:hidden'
-              width={27}
-              height={27}
-            />
+            <div className='relative hidden h-[33px] w-[110px] md:block'>
+              <Image src={'/icons/logo.svg'} alt='logo' priority className='' fill />
+            </div>
+            <div className='relative block h-[27px] w-[27px] md:hidden'>
+              <Image src={'/icons/logo-small.svg'} alt='logo' priority className='' fill />
+            </div>
           </Link>
 
           <div className='flex flex-col gap-2'>
