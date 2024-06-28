@@ -16,7 +16,7 @@ export const NOTIFICATION_TEXT_OBJ = {
 // 대쉬보드 컬러 상수
 export const DASHBOARD_COLOR_OBJ = {
   green: '#7ac555',
-  purple: '#76a5ea',
+  purple: '#760dde',
   orange: '#ffa500',
   blue: '#76a5ea',
   pink: '#e876ea',
