@@ -16,7 +16,7 @@ export default function DashboardItem({ dashboard, nowDashboard }: DashboardItem
     <li>
       <Link
         href={`/dashboard/${dashboard.id}`}
-        className={`${itemClasses} flex items-center justify-center rounded-md border border-gray-78/20 py-3 hover:bg-violet/20 md:justify-start md:px-3`}
+        className={`${itemClasses} flex items-center justify-center rounded-md py-3 hover:bg-violet/20 md:justify-start md:px-3`}
       >
         <div className='rounded-full p-1' style={{ backgroundColor: dashboard.color }} />
         <p className='hidden pl-4 pr-[6px] text-lg font-medium md:block'>{dashboard.title}</p>

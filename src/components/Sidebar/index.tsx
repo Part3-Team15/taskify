@@ -20,7 +20,6 @@ export default function Sidebar() {
   );
 
   const totalPage = data ? Math.max(1, Math.ceil(data.totalCount / 10)) : 1;
-
   const activePath = router.pathname;
 
   const handleNext = () => {
@@ -69,7 +68,7 @@ export default function Sidebar() {
             <div className='flex flex-col gap-2'>
               <Link
                 href='/mydashboard'
-                className={`${activePath === '/mydashboard' ? 'bg-violet-f1 text-black-33/80' : 'text-gray-78'} flex items-center justify-center rounded-md border border-gray-78/20 py-1 hover:bg-violet/20 md:justify-start md:px-3 md:py-2`}
+                className={`${activePath === '/mydashboard' ? 'bg-violet-f1 text-black-33/80' : 'text-gray-78'} flex items-center justify-center rounded-md py-1 hover:bg-violet/20 md:justify-start md:px-3 md:py-2`}
               >
                 <p className='hidden pl-4 pr-[6px] text-lg font-semibold md:block'>My Dashboard</p>
                 <p className='flex items-center justify-center text-lg font-medium md:hidden'>📋</p>
@@ -77,7 +76,7 @@ export default function Sidebar() {
 
               <Link
                 href='/mypage'
-                className={`${activePath === '/mypage' ? 'bg-violet-f1 text-black-33/80' : 'text-gray-78'} flex items-center justify-center rounded-md border border-gray-78/20 py-1 hover:bg-violet/20 md:justify-start md:px-3 md:py-2`}
+                className={`${activePath === '/mypage' ? 'bg-violet-f1 text-black-33/80' : 'text-gray-78'} flex items-center justify-center rounded-md py-1 hover:bg-violet/20 md:justify-start md:px-3 md:py-2`}
               >
                 <p className='hidden pl-4 pr-[6px] text-lg font-semibold md:block'>My Page</p>
                 <p className='flex items-center justify-center text-lg font-medium md:hidden'>😺</p>
