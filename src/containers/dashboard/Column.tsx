@@ -4,6 +4,7 @@ import React from 'react';
 import Card from './Card';
 
 import useFetchData from '@/hooks/useFetchData';
+import useModal from '@/hooks/useModal';
 import { getCardsList } from '@/services/getService';
 import { CardsListResponse } from '@/types/Card.interface';
 import { Column as ColumnType } from '@/types/Column.interface';
@@ -13,6 +14,7 @@ interface ColumnProps {
 }
 
 function Column({ column }: ColumnProps) {
+  const { openModal } = useModal();
   const {
     data: cardList,
     isLoading,
@@ -39,9 +41,12 @@ function Column({ column }: ColumnProps) {
               {cardList?.totalCount || 0} {/* API에서 가져온 카드 개수 */}
             </span>
           </div>
+          {/* Column Edit Button */}
           <button
             className='duration-400 transition ease-in-out hover:rotate-90'
-            onClick={() => window.alert('컬럼 수정 모달')}
+            onClick={() => {
+              openModal({ type: 'columnModify', modalProps: { columnId: column.id, columnTitle: column.title } });
+            }}
           >
             <Image src='/icons/gear.svg' width={24} height={24} alt='톱니바퀴 아이콘' />
           </button>
