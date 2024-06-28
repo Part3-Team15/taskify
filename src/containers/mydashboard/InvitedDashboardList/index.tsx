@@ -3,8 +3,8 @@ import { debounce } from 'lodash';
 import Image from 'next/image';
 import { useState, useEffect, useCallback, useRef } from 'react';
 
-import InvitationItemList from './InvitationItemList';
-import SearchBar from './InvitationSearch';
+import InvitationItemList from './ItemList';
+import SearchBar from './SearchBar';
 
 import useFetchData from '@/hooks/useFetchData';
 import { getInvitationsList } from '@/services/getService';
@@ -81,6 +81,7 @@ export default function InvitedDashboardList() {
       await putAcceptInvitation(invitationId, inviteAccepted);
       setInvitations((prevInvitations) => prevInvitations.filter((invitation) => invitation.id !== invitationId));
       queryClient.invalidateQueries({ queryKey: ['dashboards'] });
+      queryClient.invalidateQueries({ queryKey: ['sideDashboards'] });
     } catch (err) {
       console.error('초대 업데이트 중 오류 발생:', err);
     }
