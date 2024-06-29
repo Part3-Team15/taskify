@@ -18,11 +18,23 @@ export interface DeleteDashboardModalProps {
   dashboardId: number;
 }
 
+export interface TextModalProps {
+  text: string;
+}
+
+export interface EmailExistModalProps {
+  onResetField: () => void;
+  onSetFocus: () => void;
+}
+
 export type ModalProps =
   | ColumnModifyModalProps
   | ColumnDeleteModalProps
   | NewColumnModalProps
   | InviteMemberModalProps
+  | DeleteDashboardModalProps
+  | EmailExistModalProps
+  | TextModalProps
   | null;
 
 export interface ModalState {

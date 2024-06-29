@@ -36,6 +36,7 @@ export default function SignUpForm() {
     handleSubmit,
     formState: { errors, isValid },
     resetField,
+    setFocus,
   } = useForm<TSignUpInputs>({
     resolver: yupResolver(schema),
     mode: 'onChange',
@@ -47,10 +48,23 @@ export default function SignUpForm() {
       openModal({ type: 'signupSuccess' });
     } catch (error) {
       if (error instanceof AxiosError && error.response?.status === 409) {
-        openModal({ type: 'emailExists' });
-        resetField('email');
+        openModal({
+          type: 'emailExists',
+          modalProps: {
+            onResetField: () => {
+              resetField('email');
+            },
+            onSetFocus: () => {
+              setFocus('email');
+            },
+          },
+        });
+      } else if (error instanceof AxiosError) {
+        if (error.response?.data.message) {
+          openModal({ type: 'textModal', modalProps: { text: error.response.data.message } });
+        }
       } else {
-        console.error('회원가입에 실패했습니다:', error);
+        openModal({ type: 'textModal', modalProps: { text: '회원가입을 실패하였습니다.' } });
       }
     }
   };
