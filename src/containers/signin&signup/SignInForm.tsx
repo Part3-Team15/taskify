@@ -1,13 +1,15 @@
 import { yupResolver } from '@hookform/resolvers/yup';
+import { AxiosError } from 'axios';
 import { useRouter } from 'next/router';
 import { useForm } from 'react-hook-form';
-import { useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import * as yup from 'yup';
 
 import PwdInputWithLabel from '@/containers/signin&signup/PwdInputWithLabel';
 import TextInputWithLabel from '@/containers/signin&signup/TextInputWithLabel';
+import useModal from '@/hooks/useModal';
 import { useSignIn } from '@/hooks/useSignIn';
-import { RootState } from '@/store/store';
+import { setError } from '@/store/reducers/userSlice';
 
 export type TSignInInputs = {
   email: string;
@@ -20,6 +22,7 @@ const schema = yup.object().shape({
 });
 
 export default function SignInForm() {
+  const dispatch = useDispatch();
   const {
     register,
     handleSubmit,
@@ -31,13 +34,22 @@ export default function SignInForm() {
   const mutation = useSignIn();
   const router = useRouter();
 
-  // useSelector를 사용하여 Redux store의 상태를 조회
-  const { user, error } = useSelector((state: RootState) => state.user);
+  const { openModal } = useModal();
 
   const onSubmit = (data: TSignInInputs) => {
     mutation.mutate(data, {
       onSuccess: () => {
         router.push('/mydashboard'); // 로그인 성공 시 리다이렉트
+      },
+      onError: (error) => {
+        if (error instanceof AxiosError) {
+          dispatch(setError(error.response?.data.message));
+          openModal({ type: 'textModal', modalProps: { text: error.response?.data.message } });
+        } else {
+          const unknownError = '알 수 없는 오류가 발생했습니다.';
+          dispatch(setError(unknownError));
+          openModal({ type: 'textModal', modalProps: { text: unknownError } });
+        }
       },
     });
   };
@@ -62,15 +74,6 @@ export default function SignInForm() {
       <button type='submit' disabled={mutation.isPending || !isValid} className='btn-violet h-[50px] text-lg'>
         {mutation.isPending ? '잠시만 기다려주세요..' : '로그인'}
       </button>
-      {mutation.isError && (
-        <p>Error: {mutation.error instanceof Error ? mutation.error.message : '알 수 없는 오류가 발생했습니다.'}</p>
-      )}
-      {user && (
-        <p>
-          로그인 성공: {user.nickname} ({user.id})
-        </p>
-      )}
-      {error && <p>오류: {error}</p>}
     </form>
   );
 }

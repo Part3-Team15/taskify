@@ -10,7 +10,7 @@ import InviteMemberModal from './InviteMemberModal';
 import NewColumnModal from './NewColumnModal';
 import NewDashboardModal from './NewDashboardModal';
 import NotificationModal from './NotificationModal';
-import SignUpSuccessModal from './signupSuccessModal';
+import SignUpSuccessModal from './SignupSuccessModal';
 import TextModal from './TextModal';
 
 import { NOTIFICATION_TEXT_OBJ } from '@/constants';
