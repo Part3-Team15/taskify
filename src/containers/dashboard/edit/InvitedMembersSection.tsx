@@ -6,9 +6,11 @@ import { useState } from 'react';
 import InvitedMemberList from './InvitedMemberList';
 
 import Pagination from '@/components/Pagination';
-import { useDeleteInvitation } from '@/hooks/useDeleteInvitation';
+import useDeleteData from '@/hooks/useDeleteData';
 import useFetchData from '@/hooks/useFetchData';
+import { deleteInvitation } from '@/services/deleteService';
 import { getDashboardInvitations } from '@/services/getService';
+import { CancelInvitationInput } from '@/types/delete/CancelInvitation.interface';
 import { DashboardInvitationsResponse } from '@/types/Invitation.interface';
 
 export default function InvitedMembersSection() {
@@ -23,7 +25,7 @@ export default function InvitedMembersSection() {
     queryClient.invalidateQueries({ queryKey: ['invitations', id] });
   };
 
-  const { mutate } = useDeleteInvitation(handleSuccess);
+  const { mutate } = useDeleteData<CancelInvitationInput>({ mutationFn: deleteInvitation, handleSuccess });
   const queryClient = useQueryClient();
 
   const { data, error } = useFetchData<DashboardInvitationsResponse>(['invitations', id, currentChunk], () =>
