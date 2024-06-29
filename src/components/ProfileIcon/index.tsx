@@ -5,12 +5,13 @@ import getProfileColorStyle from '@/utils/getProfileColorStyle';
 
 interface ProfileIconProps {
   user: User;
+  userId: number;
   imgClassName: string;
   fontClassName: string;
 }
 
-export default function ProfileIcon({ user, imgClassName, fontClassName }: ProfileIconProps) {
-  const colorStyle = getProfileColorStyle(user.id);
+export default function ProfileIcon({ user, userId, imgClassName, fontClassName }: ProfileIconProps) {
+  const colorStyle = getProfileColorStyle(userId);
 
   return (
     <div
