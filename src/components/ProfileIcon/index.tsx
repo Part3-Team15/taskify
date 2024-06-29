@@ -1,6 +1,7 @@
 import Image from 'next/image';
 
 import { User } from '@/types/User.interface';
+import getProfileColorStyle from '@/utils/getProfileColorStyle';
 
 interface ProfileIconProps {
   user: User;
@@ -9,9 +10,13 @@ interface ProfileIconProps {
 }
 
 export default function ProfileIcon({ user, imgClassName, fontClassName }: ProfileIconProps) {
+  const colorStyle = getProfileColorStyle(user.id);
+
   return (
-    // TODO: 컬러 지정. 현재는 임의로 회색을 지정함
-    <div className={`align-center relative rounded-full border-2 border-solid border-white bg-gray-9f ${imgClassName}`}>
+    <div
+      className={`align-center relative rounded-full border-2 border-solid border-white ${imgClassName}`}
+      style={colorStyle}
+    >
       {user.profileImageUrl ? (
         <Image src={user.profileImageUrl} alt='프로필' fill style={{ objectFit: 'cover' }} className='rounded-full' />
       ) : (
