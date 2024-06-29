@@ -5,10 +5,13 @@ import ColumnDeleteModal from './ColumnDeleteModal';
 import ColumnModifyModal from './ColumnModifyModal';
 import DefaultModal from './DefaultModal';
 import DeleteDashboardModal from './DeleteDashboardModal';
+import EmailExistModal from './EmailExistModal';
 import InviteMemberModal from './InviteMemberModal';
 import NewColumnModal from './NewColumnModal';
 import NewDashboardModal from './NewDashboardModal';
 import NotificationModal from './NotificationModal';
+import SignUpSuccessModal from './signupSuccessModal';
+import TextModal from './TextModal';
 
 import { NOTIFICATION_TEXT_OBJ } from '@/constants';
 import { modalSelector, closeModal } from '@/store/reducers/modalSlice';
@@ -16,8 +19,10 @@ import {
   ColumnDeleteModalProps,
   ColumnModifyModalProps,
   DeleteDashboardModalProps,
+  EmailExistModalProps,
   InviteMemberModalProps,
   NewColumnModalProps,
+  TextModalProps,
 } from '@/types/Modal.interface';
 
 export default function Modal() {
@@ -48,12 +53,9 @@ export default function Modal() {
       handleCloseModal();
     }
   };
-
   const renderModalContent = () => {
     switch (type) {
       case 'pwdNotEqual':
-      case 'signupSuccess':
-      case 'emailExists':
       case 'curPwdNotEqual':
       case 'newDashboardSuccess':
       case 'newDashboardFailed':
@@ -64,6 +66,10 @@ export default function Modal() {
       case 'columnModifySuccess':
       case 'columnModifyFailed':
         return <NotificationModal handleCloseModal={handleCloseModal} notificationText={NOTIFICATION_TEXT_OBJ[type]} />;
+      case 'textModal':
+        return modalProps ? (
+          <TextModal handleCloseModal={handleCloseModal} modalProps={modalProps as TextModalProps} />
+        ) : null;
       case 'newDashboard':
         return <NewDashboardModal handleCloseModal={handleCloseModal} />;
       case 'deleteDashboard':
@@ -89,6 +95,10 @@ export default function Modal() {
         return modalProps ? (
           <ColumnModifyModal handleCloseModal={handleCloseModal} modalProps={modalProps as ColumnModifyModalProps} />
         ) : null;
+      case 'emailExists':
+        return modalProps ? <EmailExistModal modalProps={modalProps as EmailExistModalProps} /> : null;
+      case 'signupSuccess':
+        return <SignUpSuccessModal />;
       default:
         return <DefaultModal handleCloseModal={handleCloseModal} />;
     }
@@ -98,7 +108,7 @@ export default function Modal() {
     <>
       {type && (
         <div
-          className='fixed inset-0 flex items-center justify-center bg-black-17 bg-opacity-[0.3] backdrop-blur-[2px]'
+          className='fixed inset-0 z-50 flex items-center justify-center bg-black-17 bg-opacity-[0.3] backdrop-blur-[2px]'
           onClick={handleOutsideClick}
         >
           {renderModalContent()}

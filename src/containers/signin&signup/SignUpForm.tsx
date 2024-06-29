@@ -1,11 +1,12 @@
 import { yupResolver } from '@hookform/resolvers/yup';
-import { useRouter } from 'next/router';
-import { useState, useEffect } from 'react';
+import { AxiosError } from 'axios';
+import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import * as yup from 'yup';
 
 import PwdInputWithLabel from '@/containers/signin&signup/PwdInputWithLabel';
 import TextInputWithLabel from '@/containers/signin&signup/TextInputWithLabel';
+import useModal from '@/hooks/useModal';
 import { postSignUp } from '@/services/postService';
 
 export type TSignUpInputs = {
@@ -26,36 +27,45 @@ const schema = yup.object().shape({
 });
 
 export default function SignUpForm() {
+  const { openModal } = useModal();
+
   const [checkTerms, setCheckTerms] = useState(false);
-  const router = useRouter();
 
   const {
     register,
     handleSubmit,
-    watch,
-    trigger,
     formState: { errors, isValid },
+    resetField,
+    setFocus,
   } = useForm<TSignUpInputs>({
     resolver: yupResolver(schema),
     mode: 'onChange',
   });
 
-  const password = watch('password');
-  const passwordConfirmation = watch('passwordConfirmation');
-
-  useEffect(() => {
-    if (password?.length > 0) {
-      trigger('passwordConfirmation');
-    }
-  }, [password, passwordConfirmation, trigger]);
-
   const onSubmit = async (data: TSignUpInputs) => {
     try {
       await postSignUp(data);
-      router.push('/signin'); // 회원가입이 성공되면 로그인 페이지로 리다이렉트
+      openModal({ type: 'signupSuccess' });
     } catch (error) {
-      console.error('회원가입에 실패했습니다:', error);
-      // 에러 처리 로직 추가 가능
+      if (error instanceof AxiosError && error.response?.status === 409) {
+        openModal({
+          type: 'emailExists',
+          modalProps: {
+            onResetField: () => {
+              resetField('email');
+            },
+            onSetFocus: () => {
+              setFocus('email');
+            },
+          },
+        });
+      } else if (error instanceof AxiosError) {
+        if (error.response?.data.message) {
+          openModal({ type: 'textModal', modalProps: { text: error.response.data.message } });
+        }
+      } else {
+        openModal({ type: 'textModal', modalProps: { text: '회원가입을 실패하였습니다.' } });
+      }
     }
   };
 
