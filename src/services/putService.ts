@@ -19,7 +19,7 @@ export const putProfile = async (formData: UpdateProfileForm) => {
 export const putPassword = async (formData: UpdatePasswordForm) => {
   return await instance.put<User>(`/auth/password`, formData);
 };
-  
+
 // 컬럼 수정
 export const putColumn = async (columnId: number, formData: { title: string }) => {
   return await instance.put(`/columns/${columnId}`, formData);

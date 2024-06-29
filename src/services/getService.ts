@@ -1,8 +1,8 @@
 import instance from './axios';
 
 // 컬럼 목록 조회
-export const getColumnsList = async (id: string) => {
-  return await instance.get(`/columns?dashboardId=${id}`);
+export const getColumnsList = async (dashboardId: number) => {
+  return await instance.get(`/columns?dashboardId=${dashboardId}`);
 };
 
 // 대시보드 목록 조회
@@ -40,4 +40,14 @@ export const getInvitationsList = async (size: number = 10, cursorId?: number, t
     params.append('title', title);
   }
   return await instance.get(`/invitations`, { params });
+};
+
+// 카드 목록 조회
+export const getCardsList = async (columnId: number) => {
+  return await instance.get(`/cards?columnId=${columnId}`);
+};
+
+// 상세 카드 조회
+export const getCard = async (cardId: number) => {
+  return await instance.get(`/cards/${cardId}`);
 };
