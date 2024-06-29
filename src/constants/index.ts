@@ -44,3 +44,26 @@ export const DASHBOARD_COLOR_OBJ = {
   blue: '#76a5ea',
   pink: '#e876ea',
 };
+
+export const TAG_COLORS = [
+  {
+    name: 'pink',
+    text: '#d549b6',
+    background: '#f7dbf0',
+  },
+  {
+    name: 'blue',
+    text: '#4981d5',
+    background: '#dbe6f7',
+  },
+  {
+    name: 'orange',
+    text: '#d58d49',
+    background: '#f9eee3',
+  },
+  {
+    name: 'green',
+    text: '#86d549',
+    background: '#e7f7db',
+  },
+];
