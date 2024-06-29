@@ -60,6 +60,7 @@ export default function Card({ card }: CardProps) {
             <div className='md:hidden lg:block'>
               <ProfileIcon
                 user={card.assignee}
+                userId={card.assignee.id}
                 imgClassName={`size-[34px] md:size-[38px]`}
                 fontClassName='md:font-base font-sm'
               />
@@ -70,6 +71,7 @@ export default function Card({ card }: CardProps) {
       <section className='hidden md:block lg:hidden'>
         <ProfileIcon
           user={card.assignee}
+          userId={card.assignee.id}
           imgClassName={`size-[34px] md:size-[38px]`}
           fontClassName='md:font-base font-sm'
         />
