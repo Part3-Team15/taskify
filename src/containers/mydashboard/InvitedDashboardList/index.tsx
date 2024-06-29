@@ -20,7 +20,7 @@ export default function InvitedDashboardList() {
 
   const queryClient = useQueryClient();
 
-  const { data, error, isLoading } = useFetchData<InvitationsResponse>(['invitations'], () => getInvitationsList());
+  const { data, error } = useFetchData<InvitationsResponse>(['invitations'], () => getInvitationsList());
 
   useEffect(() => {
     if (data) {
@@ -98,17 +98,6 @@ export default function InvitedDashboardList() {
       console.error('데이터를 가져오는 중 오류가 발생했습니다:', err);
     }
   }, 300);
-
-  if (isLoading) {
-    return (
-      <div className='h-full max-w-screen-lg overflow-hidden rounded-lg border-0 bg-white'>
-        <p className='px-7 pb-5 pt-8 text-base font-bold text-black-33'>초대받은 대시보드</p>
-        <div className='flex items-center justify-center'>
-          <p>불러오는 중...</p>
-        </div>
-      </div>
-    );
-  }
 
   if (error) {
     return (
