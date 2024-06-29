@@ -3,6 +3,11 @@ export interface InvitationsResponse {
   cursorId: number;
 }
 
+export interface DashboardInvitationsResponse {
+  invitations: Invitation[];
+  totalCount: number;
+}
+
 export interface Invitation {
   id: number;
   inviter: {
