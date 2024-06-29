@@ -35,6 +35,7 @@ export default function SignUpForm() {
     register,
     handleSubmit,
     formState: { errors, isValid },
+    resetField,
   } = useForm<TSignUpInputs>({
     resolver: yupResolver(schema),
     mode: 'onChange',
@@ -47,6 +48,7 @@ export default function SignUpForm() {
     } catch (error) {
       if (error instanceof AxiosError && error.response?.status === 409) {
         openModal({ type: 'emailExists' });
+        resetField('email');
       } else {
         console.error('회원가입에 실패했습니다:', error);
       }
