@@ -13,7 +13,12 @@ const genMemberProfiles = (members: Member[], distance: number) =>
     const liStyle = { left: offset };
     return (
       <li key={user.id} className='absolute size-[34px] md:size-[38px]' style={liStyle}>
-        <ProfileIcon user={user} imgClassName={`size-[34px] md:size-[38px]`} fontClassName='md:font-base font-sm' />
+        <ProfileIcon
+          user={user}
+          userId={user.userId}
+          imgClassName={`size-[34px] md:size-[38px]`}
+          fontClassName='md:font-base font-sm'
+        />
       </li>
     );
   });

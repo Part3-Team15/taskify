@@ -37,25 +37,23 @@ export default function Card({ card }: CardProps) {
             </div>
 
             <div className='md:hidden lg:block'>
-              {card.assignee && (
-                <ProfileIcon
-                  user={card.assignee}
-                  imgClassName={`size-[34px] md:size-[38px]`}
-                  fontClassName='md:font-base font-sm'
-                />
-              )}
+              <ProfileIcon
+                user={card.assignee}
+                userId={card.assignee.id}
+                imgClassName={`size-[34px] md:size-[38px]`}
+                fontClassName='md:font-base font-sm'
+              />
             </div>
           </div>
         </div>
       </section>
       <section className='hidden md:block lg:hidden'>
-        {card.assignee && (
-          <ProfileIcon
-            user={card.assignee}
-            imgClassName={`size-[34px] md:size-[38px]`}
-            fontClassName='md:font-base font-sm'
-          />
-        )}
+        <ProfileIcon
+          user={card.assignee}
+          userId={card.assignee.id}
+          imgClassName={`size-[34px] md:size-[38px]`}
+          fontClassName='md:font-base font-sm'
+        />
       </section>
     </div>
   );
