@@ -14,7 +14,7 @@ interface ColumnsSectionProps {
 export default function ColumnsSection({ id }: ColumnsSectionProps) {
   const { openModal } = useModal();
   const {
-    data: columns,
+    data: columns, // 컬럼 목록 배열
     isLoading,
     error,
   } = useFetchData<ColumnsResponse>(['columns', id], () => getColumnsList(Number(id)));
@@ -34,10 +34,10 @@ export default function ColumnsSection({ id }: ColumnsSectionProps) {
           {columns?.data && columns.data.map((column) => <Column key={column.id} column={column} />)}
           {columns?.data.length === 0 && <p>컬럼이 없습니다.</p>}
         </ul>
-
         <div className='p-5'>
           <button
-            className='btn-violet-light mb-4 mt-8 h-[70px] w-full rounded-[6px] py-[24px] lg:mb-0 lg:w-[354px]'
+            className='btn-violet-light mb-4 h-[70px] w-full rounded-[6px] py-[24px] lg:mb-0 lg:w-[354px]'
+            // 새로운 컬럼 추가하기 모달
             onClick={() => {
               openModal({ type: 'newColumn', modalProps: { dashboardId: Number(id) } });
             }}
