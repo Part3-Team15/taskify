@@ -57,26 +57,18 @@ const config: Config = {
       },
       green: {
         DEFAULT: '#7ac555',
-        tagtext: '#86d549',
-        tagbg: '#e7f7db',
       },
       purple: {
         DEFAULT: '#760dde',
       },
       orange: {
         DEFAULT: '#ffa500',
-        tagtext: '#d58d49',
-        tagbg: '#f9eee3',
       },
       blue: {
         DEFAULT: '#76a5ea',
-        tagtext: '#4981d5',
-        tagbg: '#dbe6f7',
       },
       pink: {
         DEFAULT: '#e876ea',
-        tagtext: '#d549b6',
-        tagbg: '#f7dbf0',
       },
     },
     extend: {
