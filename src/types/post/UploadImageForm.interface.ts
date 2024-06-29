@@ -1,7 +1,7 @@
-interface UploadImageForm {
+export interface UploadImageForm {
   image: File;
 }
 
-interface UploadImageResponse {
+export interface UploadImageResponse {
   profileImageUrl: string;
 }

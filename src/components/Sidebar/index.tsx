@@ -25,7 +25,7 @@ export default function Sidebar() {
             <div className='relative hidden h-[33px] w-[110px] md:block'>
               <Image src={'/icons/logo.svg'} alt='logo' priority className='' fill />
             </div>
-            <div className='relative block h-[27px] w-[27px] md:hidden'>
+            <div className='relative block size-[27px] md:hidden'>
               <Image src={'/icons/logo-small.svg'} alt='logo' priority className='' fill />
             </div>
           </Link>
