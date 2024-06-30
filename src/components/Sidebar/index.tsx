@@ -2,6 +2,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useState } from 'react';
+import { useSelector } from 'react-redux';
 
 import NavButton from '../Button/NavButton';
 
@@ -10,9 +11,11 @@ import DashboardItem from './DashboardItem';
 import useFetchData from '@/hooks/useFetchData';
 import useModal from '@/hooks/useModal';
 import { getDashboardsList } from '@/services/getService';
+import { RootState } from '@/store/store';
 import { DashboardsResponse } from '@/types/Dashboard.interface';
 
 export default function Sidebar() {
+  const { user } = useSelector((state: RootState) => state.user);
   const router = useRouter();
   const { id } = router.query;
   const [page, setPage] = useState<number>(1);
@@ -42,7 +45,7 @@ export default function Sidebar() {
 
   return (
     <aside className='flex min-w-16 flex-col border-r border-gray-d9 px-3 py-5 md:min-w-40 lg:min-w-72'>
-      <Link href='/' className='flex items-center justify-center pb-14 md:block md:px-3'>
+      <Link href={user ? '/mydashboard' : '/'} className='flex items-center justify-center pb-14 md:block md:px-3'>
         <div className='relative hidden h-[33px] w-[110px] md:block'>
           <Image src={'/icons/logo.svg'} alt='logo' priority className='' fill />
         </div>
@@ -51,7 +54,7 @@ export default function Sidebar() {
         </div>
       </Link>
 
-      <div className='flex flex-col gap-2'>
+      <div className='flex grow flex-col gap-2'>
         <div className='flex items-center justify-center md:justify-between'>
           <p className='hidden px-3 text-xs font-bold text-gray-78 md:block'>Dashboards</p>
           <button
@@ -87,7 +90,7 @@ export default function Sidebar() {
         <div className='m-2 border-b border-gray-d9' />
 
         {isLoading ? (
-          <ul className='flex animate-pulse flex-col gap-2 overflow-y-auto scrollbar-hide md:max-h-[52dvh] md:min-h-[290px]'>
+          <ul className='flex h-min animate-pulse flex-col gap-2'>
             {[...Array(10)].map((_, i) => (
               <li
                 key={i}
@@ -96,7 +99,7 @@ export default function Sidebar() {
             ))}
           </ul>
         ) : (
-          <ul className='flex flex-col gap-2 overflow-y-auto scrollbar-hide md:max-h-[52dvh] md:min-h-[290px]'>
+          <ul className='flex h-min flex-col gap-2'>
             {data?.dashboards.map((dashboard) => (
               <DashboardItem key={dashboard.id} dashboard={dashboard} nowDashboard={Number(id)} />
             ))}

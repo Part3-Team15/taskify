@@ -101,7 +101,7 @@ export default function InvitedDashboardList() {
 
   if (error) {
     return (
-      <section className='max-h-[calc(100vh-610px)] min-h-80 grow overflow-hidden rounded-lg border-0 bg-white md:max-h-[calc(100vh-390px)]'>
+      <section className='max-h-[calc(100vh-610px)] min-h-[580px] grow overflow-hidden rounded-lg border-0 bg-white md:max-h-[calc(100vh-390px)]'>
         <p className='px-7 pb-5 pt-8 text-base font-bold text-black-33'>초대받은 대시보드</p>
         <div className='flex items-center justify-center'>
           <p>데이터를 가져오는 중 오류가 발생했습니다.</p>
@@ -112,7 +112,7 @@ export default function InvitedDashboardList() {
   }
 
   return (
-    <section className='max-h-[calc(100vh-610px)] min-h-80 grow overflow-hidden rounded-lg border-0 bg-white md:max-h-[calc(100vh-390px)]'>
+    <section className='max-h-[calc(100vh-610px)] min-h-[580px] grow overflow-hidden rounded-lg border-0 bg-white md:max-h-[calc(100vh-390px)]'>
       <p className='px-7 pb-5 pt-8 text-base font-bold text-black-33'>초대받은 대시보드</p>
       {isLoading ? (
         <div className='flex animate-pulse flex-col'>
