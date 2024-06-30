@@ -35,7 +35,7 @@ const generateTagColor = (tagList: Tag[]): Tag[] => {
   return tagList.map((tag) => {
     if (!tagColorMap[tag.name]) {
       // 태그 이름에 대한 색상이 매핑되지 않은 경우에만 새로 고유한 색상 할당
-      const colorIndex = generateTagIndex(tag.name, 4);
+      const colorIndex = generateTagIndex(tag.name);
       const uniqueColor = TAG_COLORS[colorIndex];
       tagColorMap[tag.name] = uniqueColor;
     }

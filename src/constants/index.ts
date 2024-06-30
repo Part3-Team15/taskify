@@ -59,11 +59,21 @@ export const TAG_COLORS = [
   {
     name: 'orange',
     text: '#d58d49',
-    background: '#f9eee3',
+    background: '#ffe8d0',
   },
   {
     name: 'green',
     text: '#86d549',
     background: '#e7f7db',
+  },
+  {
+    name: 'yellow',
+    text: '#ffb001',
+    background: '#fff5c3',
+  },
+  {
+    name: 'purple',
+    text: '#8e77f8',
+    background: '#d7daff',
   },
 ];
