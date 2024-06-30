@@ -23,15 +23,17 @@ const INITIAL_INPUT_DATA = {
   newPasswordCheck: '',
 };
 
-const checkValid = (inputData: PasswordChangeForm, inputError: InputError) =>
+const checkValid = (inputData: PasswordChangeForm, lt8Error: InputError, sameError: InputError) =>
   inputData.password &&
   inputData.newPassword &&
   inputData.newPasswordCheck &&
-  !(inputError.password || inputError.newPassword || inputError.newPasswordCheck);
+  !(lt8Error.password || lt8Error.newPassword) &&
+  !(sameError.newPassword || sameError.newPasswordCheck);
 
 export default function PwdChangeForm() {
   const [inputData, setInputData] = useState<PasswordChangeForm>(INITIAL_INPUT_DATA);
-  const [inputError, setInputError] = useState<InputError>({});
+  const [lt8Error, setLt8Error] = useState<InputError>({});
+  const [sameError, setSameError] = useState<InputError>({});
 
   const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
     const { id, value } = e.target;
@@ -44,7 +46,7 @@ export default function PwdChangeForm() {
   const handleInputBlur = (e: ChangeEvent<HTMLInputElement>) => {
     const { id, value } = e.target;
     // NOTE: 비밀번호 8자 이상인지 확인합니다.
-    setInputError((prevError) => ({
+    setLt8Error((prevError) => ({
       ...prevError,
       [id]: value.length < 8 ? '8자 이상 입력해주세요.' : '',
     }));
@@ -54,7 +56,7 @@ export default function PwdChangeForm() {
       const missMatched =
         (id === 'newPassword' && inputData.newPasswordCheck && value !== inputData.newPasswordCheck) ||
         (id === 'newPasswordCheck' && value !== inputData.newPassword);
-      setInputError((prevError) => ({
+      setSameError((prevError) => ({
         ...prevError,
         newPasswordCheck: missMatched ? '비밀번호가 일치하지 않습니다.' : '',
       }));
@@ -65,7 +67,7 @@ export default function PwdChangeForm() {
       const matched =
         (id === 'password' && inputData.newPassword && value === inputData.newPassword) ||
         (id === 'newPassword' && inputData.password && value === inputData.password);
-      setInputError((prevError) => ({
+      setSameError((prevError) => ({
         ...prevError,
         newPassword: matched ? '새 비밀번호가 기존 비밀번호와 같습니다.' : '',
       }));
@@ -107,7 +109,7 @@ export default function PwdChangeForm() {
             id='password'
             placeholder='현재 비밀번호 입력'
             value={inputData.password}
-            error={inputError.password}
+            error={lt8Error.password}
             onChange={handleInputChange}
             onBlur={handleInputBlur}
           />
@@ -121,7 +123,7 @@ export default function PwdChangeForm() {
             id='newPassword'
             placeholder='새 비밀번호 입력'
             value={inputData.newPassword}
-            error={inputError.newPassword}
+            error={lt8Error.newPassword || sameError.newPassword}
             onChange={handleInputChange}
             onBlur={handleInputBlur}
           />
@@ -135,13 +137,17 @@ export default function PwdChangeForm() {
             id='newPasswordCheck'
             placeholder='새 비밀번호 입력'
             value={inputData.newPasswordCheck}
-            error={inputError.newPasswordCheck}
+            error={sameError.newPasswordCheck}
             onChange={handleInputChange}
             onBlur={handleInputBlur}
           />
         </div>
       </div>
-      <ActionButton type='submit' className='ml-auto mt-4 md:mt-6' disabled={!checkValid(inputData, inputError)}>
+      <ActionButton
+        type='submit'
+        className='ml-auto mt-4 md:mt-6'
+        disabled={!checkValid(inputData, lt8Error, sameError)}
+      >
         변경
       </ActionButton>
     </form>
