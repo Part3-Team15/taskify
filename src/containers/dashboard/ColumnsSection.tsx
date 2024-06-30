@@ -29,7 +29,7 @@ export default function ColumnsSection({ id }: ColumnsSectionProps) {
 
   return (
     <section>
-      <div className='block h-[calc(100dvh-70px)] w-[calc(100dvw-270px)] overflow-x-auto lg:flex'>
+      <div className='block lg:flex lg:h-[calc(100dvh-70px)] lg:w-[calc(100dvw-270px)] lg:overflow-x-auto'>
         <ul className='block lg:flex'>
           {columns?.data && columns.data.map((column) => <Column key={column.id} column={column} />)}
           {columns?.data.length === 0 && <p>컬럼이 없습니다.</p>}

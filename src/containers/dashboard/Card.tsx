@@ -1,21 +1,13 @@
 import Image from 'next/image';
 
 import ProfileIcon from '@/components/ProfileIcon';
+import Tags from '@/components/Tags';
 import { Card as TCard } from '@/types/Card.interface';
 import formatDate from '@/utils/formatDate';
-import generateTagColor from '@/utils/generateTagColor';
 
 interface CardProps {
   card: TCard;
 }
-
-const tagClassMapping: { [key: string]: { text: string; bg: string } } = {
-  // 태그 컬러 - 정적 클래스 미리 생성
-  pink: { text: 'text-pink-tagtext', bg: 'bg-pink-tagbg' },
-  blue: { text: 'text-blue-tagtext', bg: 'bg-blue-tagbg' },
-  green: { text: 'text-green-tagtext', bg: 'bg-green-tagbg' },
-  orange: { text: 'text-orange-tagtext', bg: 'bg-orange-tagbg' },
-};
 
 export default function Card({ card }: CardProps) {
   return (
@@ -33,20 +25,7 @@ export default function Card({ card }: CardProps) {
 
         <div className='flex flex-col gap-[10px] md:flex-row lg:flex-col'>
           {/* Tags */}
-          <div className='flex flex-wrap gap-[6px]'>
-            {card.tags.map((tag, index) => {
-              const tagColor = generateTagColor();
-              const tagClass = tagClassMapping[tagColor];
-              return (
-                <span
-                  key={index}
-                  className={`${tagClass.text} ${tagClass.bg} align-center h-[24px] flex-row rounded-[4px] px-[6px] pb-[2px] pt-[4px] text-[12px]`}
-                >
-                  {tag}
-                </span>
-              );
-            })}
-          </div>
+          <Tags tags={card.tags} />
 
           {/* CreatedAt & Assignee */}
           <div className='flex justify-between'>
@@ -58,23 +37,27 @@ export default function Card({ card }: CardProps) {
             </div>
 
             <div className='md:hidden lg:block'>
-              <ProfileIcon
-                user={card.assignee}
-                userId={card.assignee.id}
-                imgClassName={`size-[34px] md:size-[38px]`}
-                fontClassName='md:font-base font-sm'
-              />
+              {card.assignee && (
+                <ProfileIcon
+                  user={card.assignee}
+                  userId={card.assignee.id}
+                  imgClassName={`size-[34px] md:size-[38px]`}
+                  fontClassName='md:font-base font-sm'
+                />
+              )}
             </div>
           </div>
         </div>
       </section>
       <section className='hidden md:block lg:hidden'>
-        <ProfileIcon
-          user={card.assignee}
-          userId={card.assignee.id}
-          imgClassName={`size-[34px] md:size-[38px]`}
-          fontClassName='md:font-base font-sm'
-        />
+        {card.assignee && (
+          <ProfileIcon
+            user={card.assignee}
+            userId={card.assignee.id}
+            imgClassName={`size-[34px] md:size-[38px]`}
+            fontClassName='md:font-base font-sm'
+          />
+        )}
       </section>
     </div>
   );
