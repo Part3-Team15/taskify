@@ -1,18 +1,10 @@
-import { MouseEventHandler } from 'react';
-
 import ModalActionButton from '@/components/Button/ModalActionButton';
 import ModalCancelButton from '@/components/Button/ModalCancelButton';
 import useModal from '@/hooks/useModal';
 import { deleteDashboard } from '@/services/deleteService';
 import { DeleteDashboardModalProps } from '@/types/Modal.interface';
 
-export default function DeleteDashboardModal({
-  handleCloseModal,
-  modalProps,
-}: {
-  handleCloseModal: MouseEventHandler<HTMLButtonElement>;
-  modalProps: DeleteDashboardModalProps;
-}) {
+export default function DeleteDashboardModal({ modalProps }: { modalProps: DeleteDashboardModalProps }) {
   const { closeModal } = useModal();
   const handleDeleteButton = async () => {
     try {
@@ -31,7 +23,7 @@ export default function DeleteDashboardModal({
         </h1>
       </div>
       <div className='flex justify-between md:justify-end md:gap-[15px]'>
-        <ModalCancelButton onClick={handleCloseModal}>취소</ModalCancelButton>
+        <ModalCancelButton onClick={closeModal}>취소</ModalCancelButton>
         <ModalActionButton className='bg-red hover:bg-red-hover' onClick={handleDeleteButton}>
           삭제
         </ModalActionButton>
