@@ -55,11 +55,9 @@ export default function DashboardList() {
         </li>
         {isLoading ? (
           <>
-            <li className='h-16 w-64 animate-pulse rounded-lg bg-gray-f5 md:w-60 lg:w-80' />
-            <li className='h-16 w-64 animate-pulse rounded-lg bg-gray-f5 md:w-60 lg:w-80' />
-            <li className='h-16 w-64 animate-pulse rounded-lg bg-gray-f5 md:w-60 lg:w-80' />
-            <li className='h-16 w-64 animate-pulse rounded-lg bg-gray-f5 md:w-60 lg:w-80' />
-            <li className='h-16 w-64 animate-pulse rounded-lg bg-gray-f5 md:w-60 lg:w-80' />
+            {[...Array(5)].map((_, i) => (
+              <li key={i} className='h-16 w-64 rounded-lg border border-gray-d9 bg-white md:w-60 lg:w-[300px]' />
+            ))}
           </>
         ) : (
           <>

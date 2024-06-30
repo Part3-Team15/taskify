@@ -86,37 +86,13 @@ export default function Sidebar() {
         <div className='m-2 border-b border-gray-d9' />
 
         {isLoading ? (
-          <ul className='flex h-[392px] animate-pulse flex-col gap-2'>
-            <li
-              className={`flex min-h-[32px] items-center justify-center rounded-md bg-gray-fa py-3 md:min-h-[52px] md:justify-start md:px-3`}
-            ></li>
-            <li
-              className={`flex min-h-[32px] items-center justify-center rounded-md bg-gray-fa py-3 md:min-h-[52px] md:justify-start md:px-3`}
-            ></li>
-            <li
-              className={`flex min-h-[32px] items-center justify-center rounded-md bg-gray-fa py-3 md:min-h-[52px] md:justify-start md:px-3`}
-            ></li>
-            <li
-              className={`flex min-h-[32px] items-center justify-center rounded-md bg-gray-fa py-3 md:min-h-[52px] md:justify-start md:px-3`}
-            ></li>
-            <li
-              className={`flex min-h-[32px] items-center justify-center rounded-md bg-gray-fa py-3 md:min-h-[52px] md:justify-start md:px-3`}
-            ></li>
-            <li
-              className={`flex min-h-[32px] items-center justify-center rounded-md bg-gray-fa py-3 md:min-h-[52px] md:justify-start md:px-3`}
-            ></li>
-            <li
-              className={`flex min-h-[32px] items-center justify-center rounded-md bg-gray-fa py-3 md:min-h-[52px] md:justify-start md:px-3`}
-            ></li>
-            <li
-              className={`flex min-h-[32px] items-center justify-center rounded-md bg-gray-fa py-3 md:min-h-[52px] md:justify-start md:px-3`}
-            ></li>
-            <li
-              className={`flex min-h-[32px] items-center justify-center rounded-md bg-gray-fa py-3 md:min-h-[52px] md:justify-start md:px-3`}
-            ></li>
-            <li
-              className={`flex min-h-[32px] items-center justify-center rounded-md bg-gray-fa py-3 md:min-h-[52px] md:justify-start md:px-3`}
-            ></li>
+          <ul className='flex animate-pulse flex-col gap-2'>
+            {[...Array(10)].map((_, i) => (
+              <li
+                key={i}
+                className='flex min-h-[32px] items-center justify-center rounded-md bg-gray-fa py-3 md:min-h-[52px] md:justify-start md:px-3'
+              ></li>
+            ))}
           </ul>
         ) : (
           <ul className='flex flex-col gap-2'>

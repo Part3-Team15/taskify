@@ -121,55 +121,25 @@ export default function InvitedDashboardList() {
           </div>
           <div className='h-[calc(100%-130px)] pt-6 md:h-[calc(100%-170px)]'>
             <div className='hidden h-[48px] grid-cols-9 pb-6 pl-7 md:grid md:pr-7'>
-              <div className='h-[24px] rounded-md bg-gray-fa'></div>
-              <div className='col-span-2 h-[24px]'></div>
-              <div className='h-[24px] rounded-md bg-gray-fa'></div>
-              <div className='col-span-2 h-[24px]'></div>
-              <div className='h-[24px] rounded-md bg-gray-fa'></div>
-              <div className='col-span-2 h-[24px]'></div>
+              {[...Array(3)].map((_, i) => (
+                <>
+                  <div key={i} className='h-[24px] rounded-md bg-gray-fa'></div>
+                  <div key={i} className='h-[24px]'></div>
+                </>
+              ))}
             </div>
 
             <div className='h-full overflow-y-hidden'>
-              <div className='hidden h-[48px] grid-cols-6 pb-6 pl-7 md:grid md:pr-7'>
-                <div className='h-[24px] rounded-md bg-gray-fa'></div>
-                <div className='h-[24px]'></div>
-                <div className='h-[24px] rounded-md bg-gray-fa'></div>
-                <div className='h-[24px]'></div>
-                <div className='h-[24px] rounded-md bg-gray-fa'></div>
-                <div className='h-[24px]'></div>
-              </div>
-              <div className='hidden h-[48px] grid-cols-6 pb-6 pl-7 md:grid md:pr-7'>
-                <div className='h-[24px] rounded-md bg-gray-fa'></div>
-                <div className='h-[24px]'></div>
-                <div className='h-[24px] rounded-md bg-gray-fa'></div>
-                <div className='h-[24px]'></div>
-                <div className='h-[24px] rounded-md bg-gray-fa'></div>
-                <div className='h-[24px]'></div>
-              </div>
-              <div className='hidden h-[48px] grid-cols-6 pb-6 pl-7 md:grid md:pr-7'>
-                <div className='h-[24px] rounded-md bg-gray-fa'></div>
-                <div className='h-[24px]'></div>
-                <div className='h-[24px] rounded-md bg-gray-fa'></div>
-                <div className='h-[24px]'></div>
-                <div className='h-[24px] rounded-md bg-gray-fa'></div>
-                <div className='h-[24px]'></div>
-              </div>
-              <div className='hidden h-[48px] grid-cols-6 pb-6 pl-7 md:grid md:pr-7'>
-                <div className='h-[24px] rounded-md bg-gray-fa'></div>
-                <div className='h-[24px]'></div>
-                <div className='h-[24px] rounded-md bg-gray-fa'></div>
-                <div className='h-[24px]'></div>
-                <div className='h-[24px] rounded-md bg-gray-fa'></div>
-                <div className='h-[24px]'></div>
-              </div>
-              <div className='hidden h-[48px] grid-cols-6 pb-6 pl-7 md:grid md:pr-7'>
-                <div className='h-[24px] rounded-md bg-gray-fa'></div>
-                <div className='h-[24px]'></div>
-                <div className='h-[24px] rounded-md bg-gray-fa'></div>
-                <div className='h-[24px]'></div>
-                <div className='h-[24px] rounded-md bg-gray-fa'></div>
-                <div className='h-[24px]'></div>
-              </div>
+              {[...Array(5)].map((_, i) => (
+                <div key={i} className='hidden h-[48px] grid-cols-6 pb-6 pl-7 md:grid md:pr-7'>
+                  {[...Array(3)].map((__, j) => (
+                    <>
+                      <div key={j} className='h-[24px] rounded-md bg-gray-fa'></div>
+                      <div key={j} className='h-[24px]'></div>
+                    </>
+                  ))}
+                </div>
+              ))}
 
               <div ref={observerRef} className='h-1' />
             </div>
