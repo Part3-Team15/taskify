@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 
 import { TAG_COLORS } from '@/constants';
+import generateTagIndex from '@/utils/generateTagIndex';
 
 interface Tag {
   id: number;
@@ -33,9 +34,10 @@ const convertToTagObjects = (tags: string[]): Tag[] => {
 const generateTagColor = (tagList: Tag[]): Tag[] => {
   return tagList.map((tag) => {
     if (!tagColorMap[tag.name]) {
-      // 태그 이름에 대한 색상이 매핑되지 않은 경우에만 새로운 색상 할당
-      const randomColor = TAG_COLORS[Math.floor(Math.random() * TAG_COLORS.length)];
-      tagColorMap[tag.name] = randomColor;
+      // 태그 이름에 대한 색상이 매핑되지 않은 경우에만 새로 고유한 색상 할당
+      const colorIndex = generateTagIndex(tag.name, 4);
+      const uniqueColor = TAG_COLORS[colorIndex];
+      tagColorMap[tag.name] = uniqueColor;
     }
     return {
       ...tag,
