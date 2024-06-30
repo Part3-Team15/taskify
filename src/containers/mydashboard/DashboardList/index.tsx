@@ -10,7 +10,11 @@ import { DashboardsResponse } from '@/types/Dashboard.interface';
 export default function DashboardList() {
   const [currentChunk, setCurrentChunk] = useState<number>(1);
 
-  const { data: dashboardResponse, error } = useFetchData<DashboardsResponse>(['dashboards', currentChunk], () =>
+  const {
+    data: dashboardResponse,
+    error,
+    isLoading,
+  } = useFetchData<DashboardsResponse>(['dashboards', currentChunk], () =>
     getDashboardsList('pagination', currentChunk, 5),
   );
 
@@ -45,18 +49,28 @@ export default function DashboardList() {
             <Image src={'/icons/plus-filled.svg'} alt='plus' width={22} height={22} />
           </button>
         </li>
-        {dashboardResponse?.dashboards.map((dashboard) => (
-          <li className='h-16 w-64 rounded-lg border border-gray-d9 bg-white md:w-60 lg:w-80' key={dashboard.id}>
-            <Link href={`/dashboard/${dashboard.id}`} className={'btn-violet-light size-full rounded-md px-5'}>
-              <div className='flex size-full items-center'>
-                <div className='rounded-full p-1' style={{ backgroundColor: dashboard.color }} />
-                <p className='pl-4 pr-1 text-lg font-medium'>{dashboard.title}</p>
-                {dashboard.createdByMe && <Image src={'/icons/crown.svg'} alt='my' width={20} height={16} />}
-              </div>
-              <Image src={'/icons/arrow-black.svg'} alt='arrow' width={14} height={14} />
-            </Link>
-          </li>
-        ))}
+        {isLoading ? (
+          <>
+            {[...Array(5)].map((_, i) => (
+              <li key={i} className='h-16 w-64 rounded-lg border border-gray-d9 bg-white md:w-60 lg:w-[300px]' />
+            ))}
+          </>
+        ) : (
+          <>
+            {dashboardResponse?.dashboards.map((dashboard) => (
+              <li className='h-16 w-64 rounded-lg border border-gray-d9 bg-white md:w-60 lg:w-80' key={dashboard.id}>
+                <Link href={`/dashboard/${dashboard.id}`} className={'btn-violet-light size-full rounded-md px-5'}>
+                  <div className='flex size-full items-center'>
+                    <div className='rounded-full p-1' style={{ backgroundColor: dashboard.color }} />
+                    <p className='pl-4 pr-1 text-lg font-medium'>{dashboard.title}</p>
+                    {dashboard.createdByMe && <Image src={'/icons/crown.svg'} alt='my' width={20} height={16} />}
+                  </div>
+                  <Image src={'/icons/arrow-black.svg'} alt='arrow' width={14} height={14} />
+                </Link>
+              </li>
+            ))}
+          </>
+        )}
       </ul>
 
       <Pagination currentChunk={currentChunk} totalPage={totalPage} onNextClick={handleNext} onPrevClick={handlePrev} />

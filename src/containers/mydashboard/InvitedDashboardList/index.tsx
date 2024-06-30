@@ -99,17 +99,6 @@ export default function InvitedDashboardList() {
     }
   }, 300);
 
-  if (isLoading) {
-    return (
-      <div className='h-full max-w-screen-lg overflow-hidden rounded-lg border-0 bg-white'>
-        <p className='px-7 pb-5 pt-8 text-base font-bold text-black-33'>초대받은 대시보드</p>
-        <div className='flex items-center justify-center'>
-          <p>불러오는 중...</p>
-        </div>
-      </div>
-    );
-  }
-
   if (error) {
     return (
       <div className='h-full max-w-screen-lg overflow-hidden rounded-lg border-0 bg-white'>
@@ -125,22 +114,57 @@ export default function InvitedDashboardList() {
   return (
     <section className='h-full min-h-80 overflow-hidden rounded-lg border-0 bg-white'>
       <p className='px-7 pb-5 pt-8 text-base font-bold text-black-33'>초대받은 대시보드</p>
-      {invitations.length > 0 || isSearching ? (
-        <>
-          <SearchBar handleChangeSearch={handleChangeSearch} />
-          <InvitationItemList
-            invitations={invitations}
-            handleAcceptInvitation={handleAcceptInvitation}
-            observerRef={observerRef}
-          />
-        </>
-      ) : (
-        <div className='flex h-full flex-col items-center justify-center'>
-          <div className='relative size-[60px] md:size-[100px]'>
-            <Image src={'/icons/invitations.svg'} alt='invitations' fill />
+      {isLoading ? (
+        <div className='flex animate-pulse flex-col'>
+          <div className='px-7'>
+            <div className='size-full h-[40px] rounded-md bg-gray-fa py-[8px] pl-12 pr-4' />
           </div>
-          <p className='px-7 py-5 text-gray-78'>초대된 대시보드가 없습니다.</p>
+          <div className='h-[calc(100%-130px)] pt-6 md:h-[calc(100%-170px)]'>
+            <div className='hidden h-[48px] grid-cols-9 pb-6 pl-7 md:grid md:pr-7'>
+              {[...Array(3)].map((_, i) => (
+                <>
+                  <div key={i} className='h-[24px] rounded-md bg-gray-fa'></div>
+                  <div key={i} className='h-[24px]'></div>
+                </>
+              ))}
+            </div>
+
+            <div className='h-full overflow-y-hidden'>
+              {[...Array(5)].map((_, i) => (
+                <div key={i} className='hidden h-[48px] grid-cols-6 pb-6 pl-7 md:grid md:pr-7'>
+                  {[...Array(3)].map((__, j) => (
+                    <>
+                      <div key={j} className='h-[24px] rounded-md bg-gray-fa'></div>
+                      <div key={j} className='h-[24px]'></div>
+                    </>
+                  ))}
+                </div>
+              ))}
+
+              <div ref={observerRef} className='h-1' />
+            </div>
+          </div>
         </div>
+      ) : (
+        <>
+          {invitations.length > 0 || isSearching ? (
+            <>
+              <SearchBar handleChangeSearch={handleChangeSearch} />
+              <InvitationItemList
+                invitations={invitations}
+                handleAcceptInvitation={handleAcceptInvitation}
+                observerRef={observerRef}
+              />
+            </>
+          ) : (
+            <div className='flex h-full flex-col items-center justify-center'>
+              <div className='relative size-[60px] md:size-[100px]'>
+                <Image src={'/icons/invitations.svg'} alt='invitations' fill />
+              </div>
+              <p className='px-7 py-5 text-gray-78'>초대된 대시보드가 없습니다.</p>
+            </div>
+          )}
+        </>
       )}
     </section>
   );
