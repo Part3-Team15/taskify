@@ -1,27 +1,22 @@
 import { useEffect } from 'react';
 import { useSelector } from 'react-redux';
 
-import ColumnDeleteModal from './ColumnDeleteModal';
 import ColumnModifyModal from './ColumnModifyModal';
+import ConfirmModal from './ConfirmModal';
 import DefaultModal from './DefaultModal';
-import DeleteDashboardModal from './DeleteDashboardModal';
-import EmailExistModal from './EmailExistModal';
 import InviteMemberModal from './InviteMemberModal';
 import NewColumnModal from './NewColumnModal';
 import NewDashboardModal from './NewDashboardModal';
-import SignUpSuccessModal from './SignupSuccessModal';
-import TextModal from './TextModal';
+import NotificationModal from './NotificationModal';
 
 import useModal from '@/hooks/useModal';
 import { modalSelector } from '@/store/reducers/modalSlice';
 import {
-  ColumnDeleteModalProps,
   ColumnModifyModalProps,
-  DeleteDashboardModalProps,
-  EmailExistModalProps,
+  ConfirmModalProps,
   InviteMemberModalProps,
   NewColumnModalProps,
-  TextModalProps,
+  NotificationModalProps,
 } from '@/types/Modal.interface';
 
 export default function Modal() {
@@ -50,20 +45,14 @@ export default function Modal() {
   // 전달받은 type에 따라 모달의 내부 컨텐트를 다르게 렌더
   const renderModalContent = () => {
     switch (type) {
+      case 'notification':
+        return modalProps ? <NotificationModal {...(modalProps as NotificationModalProps)} /> : null;
+
+      case 'confirm':
+        return modalProps ? <ConfirmModal {...(modalProps as ConfirmModalProps)} /> : null;
+
       case 'newDashboard':
         return <NewDashboardModal />;
-
-      case 'signupSuccess':
-        return <SignUpSuccessModal />;
-
-      case 'textModal':
-        return modalProps ? <TextModal modalProps={modalProps as TextModalProps} /> : null;
-
-      case 'deleteDashboard':
-        return modalProps ? <DeleteDashboardModal modalProps={modalProps as DeleteDashboardModalProps} /> : null;
-
-      case 'columnDeleteConfirm':
-        return modalProps ? <ColumnDeleteModal modalProps={modalProps as ColumnDeleteModalProps} /> : null;
 
       case 'newColumn':
         return modalProps ? <NewColumnModal modalProps={modalProps as NewColumnModalProps} /> : null;
@@ -73,9 +62,6 @@ export default function Modal() {
 
       case 'columnModify':
         return modalProps ? <ColumnModifyModal modalProps={modalProps as ColumnModifyModalProps} /> : null;
-
-      case 'emailExists':
-        return modalProps ? <EmailExistModal modalProps={modalProps as EmailExistModalProps} /> : null;
 
       default:
         return <DefaultModal />;
