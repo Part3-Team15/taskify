@@ -1,4 +1,5 @@
 import { useMutation } from '@tanstack/react-query';
+import { AxiosError } from 'axios';
 import { useDispatch } from 'react-redux';
 
 import { postSignIn } from '@/services/postService';
@@ -11,8 +12,8 @@ export const useSignIn = () => {
   return useMutation<SignInResponse, unknown, SignInForm, unknown>({
     mutationFn: postSignIn,
     onError: (error: unknown) => {
-      if (error instanceof Error) {
-        dispatch(setError(error.message));
+      if (error instanceof AxiosError) {
+        dispatch(setError(error.response?.data.message));
       } else {
         dispatch(setError('알 수 없는 오류가 발생했습니다.'));
       }

@@ -1,5 +1,5 @@
 import Image from 'next/image';
-import { MouseEventHandler, useState } from 'react';
+import { useState } from 'react';
 
 import ModalActionButton from '@/components/Button/ModalActionButton';
 import ModalCancelButton from '@/components/Button/ModalCancelButton';
@@ -14,11 +14,7 @@ interface DashboardState {
   color: string;
 }
 
-export default function NewDashboardModal({
-  handleCloseModal,
-}: {
-  handleCloseModal: MouseEventHandler<HTMLButtonElement>;
-}) {
+export default function NewDashboardModal() {
   const [value, setValue] = useState<DashboardState>({
     title: '',
     color: DASHBOARD_COLOR_OBJ['green'],
@@ -26,7 +22,7 @@ export default function NewDashboardModal({
 
   const [selectedColor, setSelectedColor] = useState<DashboardColor>('green');
 
-  const { openModal } = useModal();
+  const { openModal, closeModal } = useModal();
 
   const handleColorSelect = (color: DashboardColor) => {
     setSelectedColor(color);
@@ -39,9 +35,9 @@ export default function NewDashboardModal({
   const handlePostDashboard = async () => {
     try {
       await postNewDashboard(value);
-      openModal({ type: 'newDashboardSuccess' });
+      openModal({ type: 'textModal', modalProps: { text: '새로운 대시보드가 생성되었습니다!' } });
     } catch {
-      openModal({ type: 'newDashboardFailed' });
+      openModal({ type: 'textModal', modalProps: { text: '대시보드 생성을 실패하였습니다.' } });
     }
   };
 
@@ -76,7 +72,7 @@ export default function NewDashboardModal({
         ))}
       </div>
       <div className='flex justify-between md:justify-end md:gap-[15px]'>
-        <ModalCancelButton onClick={handleCloseModal}>취소</ModalCancelButton>
+        <ModalCancelButton onClick={closeModal}>취소</ModalCancelButton>
         <ModalActionButton disabled={value.title.length === 0} onClick={handlePostDashboard}>
           생성
         </ModalActionButton>

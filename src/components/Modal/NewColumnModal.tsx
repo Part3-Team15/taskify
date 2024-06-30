@@ -1,4 +1,4 @@
-import { MouseEventHandler, useState } from 'react';
+import { useState } from 'react';
 
 import ModalActionButton from '@/components/Button/ModalActionButton';
 import ModalCancelButton from '@/components/Button/ModalCancelButton';
@@ -6,12 +6,11 @@ import useModal from '@/hooks/useModal';
 import { postNewColumn } from '@/services/postService';
 
 interface NewColumnModalProps {
-  handleCloseModal: MouseEventHandler<HTMLButtonElement>;
   modalProps: { dashboardId: number };
 }
 
-export default function NewColumnModal({ handleCloseModal, modalProps }: NewColumnModalProps) {
-  const { openModal } = useModal();
+export default function NewColumnModal({ modalProps }: NewColumnModalProps) {
+  const { openModal, closeModal } = useModal();
 
   const [column, setColumn] = useState('');
 
@@ -19,9 +18,9 @@ export default function NewColumnModal({ handleCloseModal, modalProps }: NewColu
   const handlePostNewColumn = async () => {
     try {
       await postNewColumn({ title: column, dashboardId: dashboardId });
-      openModal({ type: 'newColumnSuccess' });
+      openModal({ type: 'textModal', modalProps: { text: '새로운 컬럼이 생성되었습니다!' } });
     } catch (error) {
-      openModal({ type: 'newColumnFailed' });
+      openModal({ type: 'textModal', modalProps: { text: '컬럼 생성을 실패하였습니다.' } });
     }
   };
 
@@ -40,7 +39,7 @@ export default function NewColumnModal({ handleCloseModal, modalProps }: NewColu
         />
       </div>
       <div className='flex justify-between md:justify-end md:gap-[15px]'>
-        <ModalCancelButton onClick={handleCloseModal}>취소</ModalCancelButton>
+        <ModalCancelButton onClick={closeModal}>취소</ModalCancelButton>
         <ModalActionButton disabled={column.length === 0} onClick={handlePostNewColumn}>
           생성
         </ModalActionButton>

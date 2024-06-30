@@ -1,4 +1,4 @@
-import { MouseEventHandler, useState } from 'react';
+import { useState } from 'react';
 
 import ModalActionButton from '@/components/Button/ModalActionButton';
 import ModalCancelButton from '@/components/Button/ModalCancelButton';
@@ -6,23 +6,17 @@ import useModal from '@/hooks/useModal';
 import { putColumn } from '@/services/putService';
 import { ColumnModifyModalProps } from '@/types/Modal.interface';
 
-export default function ColumnModifyModal({
-  handleCloseModal,
-  modalProps,
-}: {
-  handleCloseModal: MouseEventHandler<HTMLButtonElement>;
-  modalProps: ColumnModifyModalProps;
-}) {
+export default function ColumnModifyModal({ modalProps }: { modalProps: ColumnModifyModalProps }) {
   const id = modalProps?.columnId;
   const [title, setTitle] = useState(modalProps?.columnTitle || '');
-  const { openModal } = useModal();
+  const { openModal, closeModal } = useModal();
 
   const handleModifyButton = async () => {
     try {
       await putColumn(id, { title });
-      openModal({ type: 'columnModifySuccess' });
+      openModal({ type: 'textModal', modalProps: { text: '컬럼이 성공적으로 변경되었습니다.' } });
     } catch {
-      openModal({ type: 'columnModifyFailed' });
+      openModal({ type: 'textModal', modalProps: { text: '컬럼이 변경되지 않았습니다.' } });
     }
   };
 
@@ -54,7 +48,7 @@ export default function ColumnModifyModal({
           </button>
         </div>
         <div className='flex justify-between md:justify-end md:gap-[15px]'>
-          <ModalCancelButton onClick={handleCloseModal}>취소</ModalCancelButton>
+          <ModalCancelButton onClick={closeModal}>취소</ModalCancelButton>
           <ModalActionButton disabled={!(title?.length > 0)} onClick={handleModifyButton}>
             변경
           </ModalActionButton>
