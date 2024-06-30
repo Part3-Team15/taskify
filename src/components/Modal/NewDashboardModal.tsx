@@ -35,9 +35,9 @@ export default function NewDashboardModal() {
   const handlePostDashboard = async () => {
     try {
       await postNewDashboard(value);
-      openModal({ type: 'newDashboardSuccess' });
+      openModal({ type: 'textModal', modalProps: { text: '새로운 대시보드가 생성되었습니다!' } });
     } catch {
-      openModal({ type: 'newDashboardFailed' });
+      openModal({ type: 'textModal', modalProps: { text: '대시보드 생성을 실패하였습니다.' } });
     }
   };
 

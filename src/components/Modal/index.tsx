@@ -9,11 +9,9 @@ import EmailExistModal from './EmailExistModal';
 import InviteMemberModal from './InviteMemberModal';
 import NewColumnModal from './NewColumnModal';
 import NewDashboardModal from './NewDashboardModal';
-import NotificationModal from './NotificationModal';
 import SignUpSuccessModal from './SignupSuccessModal';
 import TextModal from './TextModal';
 
-import { NOTIFICATION_TEXT_OBJ } from '@/constants';
 import useModal from '@/hooks/useModal';
 import { modalSelector } from '@/store/reducers/modalSlice';
 import {
@@ -52,17 +50,6 @@ export default function Modal() {
   };
   const renderModalContent = () => {
     switch (type) {
-      case 'pwdNotEqual':
-      case 'curPwdNotEqual':
-      case 'newDashboardSuccess':
-      case 'newDashboardFailed':
-      case 'newColumnSuccess':
-      case 'newColumnFailed':
-      case 'inviteMemberSuccess':
-      case 'inviteMemberFailed':
-      case 'columnModifySuccess':
-      case 'columnModifyFailed':
-        return <NotificationModal notificationText={NOTIFICATION_TEXT_OBJ[type]} />;
       case 'textModal':
         return modalProps ? <TextModal modalProps={modalProps as TextModalProps} /> : null;
       case 'newDashboard':

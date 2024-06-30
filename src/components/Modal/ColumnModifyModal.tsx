@@ -14,9 +14,9 @@ export default function ColumnModifyModal({ modalProps }: { modalProps: ColumnMo
   const handleModifyButton = async () => {
     try {
       await putColumn(id, { title });
-      openModal({ type: 'columnModifySuccess' });
+      openModal({ type: 'textModal', modalProps: { text: '컬럼이 성공적으로 변경되었습니다.' } });
     } catch {
-      openModal({ type: 'columnModifyFailed' });
+      openModal({ type: 'textModal', modalProps: { text: '컬럼이 변경되지 않았습니다.' } });
     }
   };
 

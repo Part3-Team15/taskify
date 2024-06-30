@@ -29,7 +29,7 @@ export default function InviteMemberModal({ modalProps }: { modalProps: InviteMe
   const handleMemberInviteButton = async () => {
     try {
       await postMemberInvite(modalProps.dashboardId, { email });
-      openModal({ type: 'inviteMemberSuccess' });
+      openModal({ type: 'textModal', modalProps: { text: '해당 멤버를 초대하였습니다!' } });
     } catch (error) {
       if (error instanceof AxiosError) {
         setErrorMessage(error.response?.data.message || '초대 중 에러가 발생했습니다.');

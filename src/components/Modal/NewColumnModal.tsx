@@ -18,9 +18,9 @@ export default function NewColumnModal({ modalProps }: NewColumnModalProps) {
   const handlePostNewColumn = async () => {
     try {
       await postNewColumn({ title: column, dashboardId: dashboardId });
-      openModal({ type: 'newColumnSuccess' });
+      openModal({ type: 'textModal', modalProps: { text: '새로운 컬럼이 생성되었습니다!' } });
     } catch (error) {
-      openModal({ type: 'newColumnFailed' });
+      openModal({ type: 'textModal', modalProps: { text: '컬럼 생성을 실패하였습니다.' } });
     }
   };
 
