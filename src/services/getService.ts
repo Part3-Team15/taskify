@@ -28,6 +28,15 @@ export const getMembersList = async (
   return await instance.get(`/members?page=${page}&size=${size}&dashboardId=${dashboardId}`);
 };
 
+// 대시보드 초대 목록 조회
+export const getDashboardInvitations = async (
+  dashboardId: number,
+  page: number = 1, // 기본값 1
+  size: number = 5, // 기본값 5
+) => {
+  return await instance.get(`/dashboards/${dashboardId}/invitations?page=${page}&size=${size}`);
+};
+
 // 내가 받은 초대 목록 조회
 export const getInvitationsList = async (size: number = 10, cursorId?: number, title?: string) => {
   const params = new URLSearchParams();
