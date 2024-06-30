@@ -28,46 +28,55 @@ export default function Modal() {
   const { closeModal } = useModal();
   const { type, modalProps } = useSelector(modalSelector);
 
+  // 모달이 열릴 때, overflow-hidden으로 스크롤 동작 방지
   useEffect(() => {
     if (type) {
-      // 모달이 열렸을 때 body의 overflow를 hidden으로 설정
       document.body.style.overflow = 'hidden';
     } else {
-      // 모달이 닫힐 때 body의 overflow를 auto로 설정
       document.body.style.overflow = 'auto';
     }
-
-    // cleanup 함수로 모달이 닫힐 때 overflow를 auto로 설정
     return () => {
       document.body.style.overflow = 'auto';
     };
   }, [type]);
 
+  // 바깥을 눌렀을 때 모달이 닫힘
   const handleOutsideClick = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
     if (e.target === e.currentTarget) {
       closeModal();
     }
   };
+
+  // 전달받은 type에 따라 모달의 내부 컨텐트를 다르게 렌더
   const renderModalContent = () => {
     switch (type) {
-      case 'textModal':
-        return modalProps ? <TextModal modalProps={modalProps as TextModalProps} /> : null;
       case 'newDashboard':
         return <NewDashboardModal />;
-      case 'deleteDashboard':
-        return <DeleteDashboardModal modalProps={modalProps as DeleteDashboardModalProps} />;
-      case 'columnDeleteConfirm':
-        return modalProps ? <ColumnDeleteModal modalProps={modalProps as ColumnDeleteModalProps} /> : null;
-      case 'newColumn':
-        return modalProps ? <NewColumnModal modalProps={modalProps as NewColumnModalProps} /> : null;
-      case 'inviteMember':
-        return modalProps ? <InviteMemberModal modalProps={modalProps as InviteMemberModalProps} /> : null;
-      case 'columnModify':
-        return modalProps ? <ColumnModifyModal modalProps={modalProps as ColumnModifyModalProps} /> : null;
-      case 'emailExists':
-        return modalProps ? <EmailExistModal modalProps={modalProps as EmailExistModalProps} /> : null;
+
       case 'signupSuccess':
         return <SignUpSuccessModal />;
+
+      case 'textModal':
+        return modalProps ? <TextModal modalProps={modalProps as TextModalProps} /> : null;
+
+      case 'deleteDashboard':
+        return modalProps ? <DeleteDashboardModal modalProps={modalProps as DeleteDashboardModalProps} /> : null;
+
+      case 'columnDeleteConfirm':
+        return modalProps ? <ColumnDeleteModal modalProps={modalProps as ColumnDeleteModalProps} /> : null;
+
+      case 'newColumn':
+        return modalProps ? <NewColumnModal modalProps={modalProps as NewColumnModalProps} /> : null;
+
+      case 'inviteMember':
+        return modalProps ? <InviteMemberModal modalProps={modalProps as InviteMemberModalProps} /> : null;
+
+      case 'columnModify':
+        return modalProps ? <ColumnModifyModal modalProps={modalProps as ColumnModifyModalProps} /> : null;
+
+      case 'emailExists':
+        return modalProps ? <EmailExistModal modalProps={modalProps as EmailExistModalProps} /> : null;
+
       default:
         return <DefaultModal />;
     }
@@ -75,6 +84,7 @@ export default function Modal() {
 
   return (
     <>
+      {/* 타입이 존재할 때만 모달이 열림 */}
       {type && (
         <div
           className='fixed inset-0 z-50 flex items-center justify-center bg-black-17 bg-opacity-[0.3] backdrop-blur-[2px]'
