@@ -34,13 +34,17 @@ export default function UserMenuDropdown() {
       {isOpen && (
         <ul className='dd-container absolute right-0 top-11 w-28 bg-white'>
           <li className='dd-menu' onClick={handleMenuClick}>
-            <Link href='/mydashboard'>내 대시보드</Link>
+            <Link href='/mydashboard' className='align-center size-full'>
+              내 대시보드
+            </Link>
           </li>
           <li className='dd-menu' onClick={handleMenuClick}>
-            <Link href='/mypage'>계정관리</Link>
+            <Link href='/mypage' className='align-center size-full'>
+              계정관리
+            </Link>
           </li>
           <li className='dd-menu'>
-            <button type='button' onClick={handleLogoutClick}>
+            <button type='button' className='align-center size-full' onClick={handleLogoutClick}>
               로그아웃
             </button>
           </li>
