@@ -61,8 +61,8 @@ export default function InviteMemberModal() {
         <ModalCancelButton type='button' onClick={closeModal}>
           취소
         </ModalCancelButton>
-        <ModalActionButton type='button' onClick={handleInviteClick} disabled={!!errorMessage}>
-          생성
+        <ModalActionButton type='button' onClick={handleInviteClick} disabled={!(email && !errorMessage)}>
+          초대
         </ModalActionButton>
       </div>
     </div>
