@@ -9,6 +9,7 @@ import PwdInputWithLabel from '@/containers/signin&signup/PwdInputWithLabel';
 import TextInputWithLabel from '@/containers/signin&signup/TextInputWithLabel';
 import useModal from '@/hooks/useModal';
 import { postSignUp } from '@/services/postService';
+import hashPassword from '@/utils/hashPassword';
 
 export type TSignUpInputs = {
   email: string;
@@ -54,8 +55,9 @@ export default function SignUpForm() {
   };
 
   const onSubmit = async (data: TSignUpInputs) => {
+    const { password } = data;
     try {
-      await postSignUp(data);
+      await postSignUp({ ...data, password: hashPassword(password) });
       openModal({
         type: 'notification',
         modalProps: { text: '가입이 완료되었습니다!', onClick: handleSignUpSuccess },
