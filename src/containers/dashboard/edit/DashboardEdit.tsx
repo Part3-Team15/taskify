@@ -2,6 +2,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 
+import DashboardModifySection from './DashboardModifySection';
 import InvitedMembersSection from './InvitedMembersSection';
 import MembersSection from './MembersSection';
 
@@ -25,7 +26,7 @@ export default function DashboardEdit() {
         돌아가기
       </Link>
       <div className='flex flex-col gap-4'>
-        {/* 대시보드 수정 */}
+        <DashboardModifySection />
         <MembersSection />
         <InvitedMembersSection />
       </div>

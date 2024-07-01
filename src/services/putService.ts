@@ -1,8 +1,14 @@
 import instance from './axios';
 
+import { DashboardInfoState } from '@/types/Dashboard.interface';
 import { UpdatePasswordForm } from '@/types/post/UpdatePasswordForm.interface';
 import { UpdateProfileForm } from '@/types/post/UpdateProfileForm.interface';
 import { User } from '@/types/User.interface';
+
+// 대시보드 정보 수정
+export const putDashboardInfo = async (dashbordId: number, formData: DashboardInfoState) => {
+  return await instance.put(`/dashboards/${dashbordId}`, formData);
+};
 
 // 대시보드 초대 수락
 export const putAcceptInvitation = async (invitationId: number, inviteAccepted: boolean) => {
