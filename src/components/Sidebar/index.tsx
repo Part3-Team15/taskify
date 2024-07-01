@@ -9,6 +9,7 @@ import { useFetchDashboards } from '@/hooks/useFetchDashboards';
 import { RootState } from '@/store/store';
 
 export default function Sidebar() {
+  const { user } = useSelector((state: RootState) => state.user);
   const router = useRouter();
   const { id } = router.query;
 
@@ -21,7 +22,7 @@ export default function Sidebar() {
         <div>Loading...</div>
       ) : (
         <>
-          <Link href='/' className='flex items-center justify-center md:block md:px-3'>
+          <Link href={user ? '/mydashboard' : '/'} className='flex items-center justify-center md:block md:px-3'>
             <div className='relative hidden h-[33px] w-[110px] md:block'>
               <Image src={'/icons/logo.svg'} alt='logo' priority className='' fill />
             </div>
