@@ -26,7 +26,8 @@ export interface NewColumnModalProps extends ModalProps {
   columns: Column[];
 }
 
-export interface ColumnModifyModalProps {
+export interface ModifyColumnModalProps extends ModalProps {
+  columns: Column[];
   columnTitle: string;
   columnId: number;
 }
