@@ -2,13 +2,13 @@ import Link from 'next/link';
 
 export default function Footer() {
   return (
-    <footer className='flex h-[100px] w-dvw items-center justify-around bg-dark-500 text-white'>
+    <footer className='bg-dark-500 flex h-[100px] w-dvw items-center justify-around text-gray-9f'>
       <div>
-        <p>@2024</p>
+        <p>©codeit - 2023</p>
       </div>
       <div>
-        <Link href='/'> Privacy Policy </Link>
-        <Link href='/'> FAQ </Link>
+        <p> Privacy Policy </p>
+        <p> FAQ </p>
       </div>
       <div>
         <Link href='/'> Github </Link>
