@@ -6,6 +6,7 @@ import { Provider } from 'react-redux';
 import { PersistGate } from 'redux-persist/integration/react';
 
 import Modal from '@/components/Modal';
+import Redirect from '@/components/Redirect';
 import MainLayout from '@/layouts/MainLayout';
 import { store, persistor } from '@/store/store';
 
@@ -16,11 +17,13 @@ export default function App({ Component, pageProps }: AppProps) {
     <Provider store={store}>
       <PersistGate loading={null} persistor={persistor}>
         <QueryClientProvider client={queryClient}>
-          <Modal />
-          <MainLayout>
-            <Component {...pageProps} />
-          </MainLayout>
-          <ReactQueryDevtools initialIsOpen={false} />
+          <Redirect>
+            <Modal />
+            <MainLayout>
+              <Component {...pageProps} />
+            </MainLayout>
+            <ReactQueryDevtools initialIsOpen={false} />
+          </Redirect>
         </QueryClientProvider>
       </PersistGate>
     </Provider>

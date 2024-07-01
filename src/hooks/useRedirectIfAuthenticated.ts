@@ -9,7 +9,7 @@ const useRedirectIfAuthenticated = () => {
   const { user } = useSelector((state: RootState) => state.user);
   const router = useRouter();
   const { openModal } = useModal();
-  const [isRedirecting, setIsRedirecting] = useState(false);
+  const [isRedirecting, setIsRedirecting] = useState(true);
   const [initialCheck, setInitialCheck] = useState(true);
 
   useEffect(() => {
@@ -22,6 +22,7 @@ const useRedirectIfAuthenticated = () => {
         setIsRedirecting(true);
         router.replace('/mydashboard');
       }
+      setIsRedirecting(false);
       setInitialCheck(false);
     }
   }, [user, openModal, router, initialCheck]);
