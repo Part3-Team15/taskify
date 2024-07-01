@@ -1,6 +1,6 @@
 import instance from './axios';
 
-import { NewDashboardFormData, NewColumnFormData, MemberInviteFormData } from '@/types/post/ModalPost.interface';
+import { NewDashboardForm, NewColumnForm, InviteMemberForm } from '@/types/post/ModalForm.interface';
 import { SignInForm, SignInResponse } from '@/types/post/SignInForm.interface';
 import { SignUpForm } from '@/types/post/SignUpForm.interface';
 import { UploadImageForm, UploadImageResponse } from '@/types/post/UploadImageForm.interface';
@@ -17,17 +17,17 @@ export const postSignIn = async (formData: SignInForm): Promise<SignInResponse> 
 };
 
 // 대쉬보드 생성
-export const postNewDashboard = async (formData: NewDashboardFormData) => {
+export const postNewDashboard = async (formData: NewDashboardForm) => {
   return await instance.post(`/dashboards`, formData);
 };
 
 // 컬럼 생성
-export const postNewColumn = async (formData: NewColumnFormData) => {
+export const postNewColumn = async (formData: NewColumnForm) => {
   return await instance.post(`/columns`, formData);
 };
 
 // 대시보드 멤버 초대하기
-export const postMemberInvite = async (dashboardId: number, formData: MemberInviteFormData) => {
+export const postInviteMember = async (dashboardId: number, formData: InviteMemberForm) => {
   return await instance.post(`dashboards/${dashboardId}/invitations`, formData);
 };
 

@@ -1,4 +1,4 @@
-import DashboardEdit from '@/containers/dashboard/edit/DashboardEdit';
+import DashboardEdit from '@/containers/dashboard/edit';
 import useRedirectIfNotAuth from '@/hooks/useRedirectIfNotAuth';
 
 export default function DashboardEditPage() {

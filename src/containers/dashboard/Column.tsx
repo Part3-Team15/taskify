@@ -1,5 +1,4 @@
 import Image from 'next/image';
-import React from 'react';
 
 import Card from './Card';
 
@@ -11,9 +10,10 @@ import { Column as ColumnType } from '@/types/Column.interface';
 
 interface ColumnProps {
   column: ColumnType;
+  columns: ColumnType[];
 }
 
-function Column({ column }: ColumnProps) {
+function Column({ column, columns }: ColumnProps) {
   const { openModal } = useModal();
   const {
     data: cardList,
@@ -43,9 +43,12 @@ function Column({ column }: ColumnProps) {
           </div>
           {/* Column Edit Button */}
           <button
-            className='duration-400 transition ease-in-out hover:rotate-90'
+            className='transition duration-300 ease-in-out hover:rotate-90'
             onClick={() => {
-              openModal({ type: 'columnModify', modalProps: { columnId: column.id, columnTitle: column.title } });
+              openModal({
+                type: 'modifyColumn',
+                modalProps: { columnId: column.id, columnTitle: column.title, columns },
+              });
             }}
           >
             <Image src='/icons/gear.svg' width={24} height={24} alt='톱니바퀴 아이콘' />

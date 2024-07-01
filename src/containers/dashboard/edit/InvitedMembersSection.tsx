@@ -8,12 +8,14 @@ import InvitedMemberList from './InvitedMemberList';
 import Pagination from '@/components/Pagination';
 import useDeleteData from '@/hooks/useDeleteData';
 import useFetchData from '@/hooks/useFetchData';
+import useModal from '@/hooks/useModal';
 import { deleteInvitation } from '@/services/deleteService';
 import { getDashboardInvitations } from '@/services/getService';
 import { CancelInvitationInput } from '@/types/delete/CancelInvitation.interface';
 import { DashboardInvitationsResponse } from '@/types/Invitation.interface';
 
 export default function InvitedMembersSection() {
+  const { openModal } = useModal();
   const router = useRouter();
   const { id } = router.query;
   const [currentChunk, setCurrentChunk] = useState(1);
@@ -44,11 +46,6 @@ export default function InvitedMembersSection() {
     }
   };
 
-  const handleInviteClick = () => {
-    // TODO: 모달 연결
-    alert('초대 모달');
-  };
-
   const handleCancelInvitation = (invitationId: number) => {
     const handleDelete = async () => {
       if (!id) return;
@@ -72,7 +69,7 @@ export default function InvitedMembersSection() {
           <button
             className='btn-violet absolute right-0 top-12 flex gap-1.5 rounded-md px-3 text-xs md:static md:px-4'
             type='button'
-            onClick={handleInviteClick}
+            onClick={() => openModal({ type: 'inviteMember' })}
           >
             <div className='relative my-[7px] size-[14px] md:my-2 md:size-4'>
               <Image src='/icons/plusbox-white.svg' alt='초대 아이콘' fill priority />
