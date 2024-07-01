@@ -4,6 +4,7 @@ import { ChangeEvent, FormEventHandler, useState } from 'react';
 import ActionButton from '@/components/Button/ActionButton';
 import PwdInput from '@/components/Input/PwdInput';
 import { putPassword } from '@/services/putService';
+import hashPassword from '@/utils/hashPassword';
 
 interface PasswordChangeForm {
   password: string;
@@ -78,7 +79,7 @@ export default function PwdChangeForm() {
     const putData = async () => {
       const { password, newPassword } = inputData;
       try {
-        await putPassword({ password, newPassword });
+        await putPassword({ password: hashPassword(password), newPassword: hashPassword(newPassword) });
         // NOTE: 전체 페이지 리로드보다 시간이 훨씬 적게 걸려서 값만 비우도록 했습니다.
         setInputData(INITIAL_INPUT_DATA);
         alert('비밀번호가 변경되었습니다.');
