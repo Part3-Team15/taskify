@@ -1,9 +1,9 @@
 import { useEffect } from 'react';
 import { useSelector } from 'react-redux';
 
-import ColumnModifyModal from './ColumnModifyModal';
 import ConfirmModal from './ConfirmModal';
 import InviteMemberModal from './InviteMemberModal';
+import ModifyColumnModal from './ModifyColumnModal';
 import NewColumnModal from './NewColumnModal';
 import NewDashboardModal from './NewDashboardModal';
 import NotificationModal from './NotificationModal';
@@ -11,7 +11,7 @@ import NotificationModal from './NotificationModal';
 import useModal from '@/hooks/useModal';
 import { modalSelector } from '@/store/reducers/modalSlice';
 import {
-  ColumnModifyModalProps,
+  ModifyColumnModalProps,
   ConfirmModalProps,
   InviteMemberModalProps,
   NewColumnModalProps,
@@ -59,8 +59,8 @@ export default function Modal() {
       case 'inviteMember':
         return modalProps ? <InviteMemberModal modalProps={modalProps as InviteMemberModalProps} /> : null;
 
-      case 'columnModify':
-        return modalProps ? <ColumnModifyModal modalProps={modalProps as ColumnModifyModalProps} /> : null;
+      case 'modifyColumn':
+        return modalProps ? <ModifyColumnModal {...(modalProps as ModifyColumnModalProps)} /> : null;
 
       default:
         return <NotificationModal text='' />;
