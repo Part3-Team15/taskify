@@ -9,7 +9,7 @@ export default function InvitedMemberItem({ email, onCancelClick }: InvitedMembe
   return (
     <div className='flex items-center justify-between'>
       {email}
-      <CancelButton className='text-sm' onClick={onCancelClick}>
+      <CancelButton className='text-sm' type='button' onClick={onCancelClick}>
         취소
       </CancelButton>
     </div>

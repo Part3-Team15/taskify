@@ -14,7 +14,9 @@ export default function NotificationModal({ text, onClick }: NotificationModalPr
       <div className='flex size-full flex-col'>
         <p className='align-center grow'>{text}</p>
         <div className='flex justify-center md:justify-end'>
-          <ModalActionButton onClick={handleClick}>확인</ModalActionButton>
+          <ModalActionButton type='button' onClick={handleClick}>
+            확인
+          </ModalActionButton>
         </div>
       </div>
     </div>

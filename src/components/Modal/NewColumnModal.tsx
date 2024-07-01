@@ -57,8 +57,10 @@ export default function NewColumnModal({ columns, dashboardId }: NewColumnModalP
         {errorMessage && <p className='mt-2 text-sm text-red'>{errorMessage}</p>}
       </div>
       <div className='flex justify-between md:justify-end md:gap-3'>
-        <ModalCancelButton onClick={closeModal}>취소</ModalCancelButton>
-        <ModalActionButton onClick={handlePostNewColumn} disabled={!!errorMessage}>
+        <ModalCancelButton type='button' onClick={closeModal}>
+          취소
+        </ModalCancelButton>
+        <ModalActionButton type='button' onClick={handlePostNewColumn} disabled={!!errorMessage}>
           생성
         </ModalActionButton>
       </div>

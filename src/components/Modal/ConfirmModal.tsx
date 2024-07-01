@@ -16,8 +16,10 @@ export default function ConfirmModal({ text, onActionClick }: ConfirmModalProps)
       <div className='flex size-full flex-col'>
         <p className='align-center grow'>{text}</p>
         <div className='flex justify-between gap-3 md:justify-end'>
-          <ModalCancelButton onClick={closeModal}>취소</ModalCancelButton>
-          <ModalActionButton className='btn-red' onClick={handleActionClick}>
+          <ModalCancelButton type='button' onClick={closeModal}>
+            취소
+          </ModalCancelButton>
+          <ModalActionButton type='button' className='btn-red' onClick={handleActionClick}>
             삭제
           </ModalActionButton>
         </div>
