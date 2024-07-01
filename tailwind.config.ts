@@ -54,6 +54,7 @@ const config: Config = {
       red: {
         DEFAULT: '#D6173A',
         hover: '#b51230',
+        active: '#9c0823',
       },
       green: {
         DEFAULT: '#7ac555',
@@ -75,6 +76,15 @@ const config: Config = {
       backgroundImage: {
         'gradient-radial': 'radial-gradient(var(--tw-gradient-stops))',
         'gradient-conic': 'conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))',
+      },
+      animation: {
+        'scroll-horizontal': 'scroll-horizontal 20s linear infinite',
+      },
+      keyframes: {
+        'scroll-horizontal': {
+          '0%': { transform: 'translateX(0%)' },
+          '100%': { transform: 'translateX(-100%)' },
+        },
       },
     },
   },

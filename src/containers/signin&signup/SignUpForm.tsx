@@ -1,5 +1,6 @@
 import { yupResolver } from '@hookform/resolvers/yup';
 import { AxiosError } from 'axios';
+import { useRouter } from 'next/router';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import * as yup from 'yup';
@@ -27,6 +28,7 @@ const schema = yup.object().shape({
 });
 
 export default function SignUpForm() {
+  const router = useRouter();
   const { openModal } = useModal();
 
   const [checkTerms, setCheckTerms] = useState(false);
@@ -42,29 +44,35 @@ export default function SignUpForm() {
     mode: 'onChange',
   });
 
+  const handleEmailExist = () => {
+    resetField('email');
+    setFocus('email');
+  };
+
+  const handleSignUpSuccess = () => {
+    router.push('/signin');
+  };
+
   const onSubmit = async (data: TSignUpInputs) => {
     try {
       await postSignUp(data);
-      openModal({ type: 'signupSuccess' });
+      openModal({
+        type: 'notification',
+        modalProps: { text: '가입이 완료되었습니다!', onClick: handleSignUpSuccess },
+      });
     } catch (error) {
       if (error instanceof AxiosError && error.response?.status === 409) {
         openModal({
-          type: 'emailExists',
-          modalProps: {
-            onResetField: () => {
-              resetField('email');
-            },
-            onSetFocus: () => {
-              setFocus('email');
-            },
-          },
+          type: 'notification',
+          modalProps: { text: '중복된 이메일 입니다.', onClick: handleEmailExist },
         });
       } else if (error instanceof AxiosError) {
         if (error.response?.data.message) {
-          openModal({ type: 'textModal', modalProps: { text: error.response.data.message } });
+          openModal({ type: 'notification', modalProps: { text: error.response.data.message } });
         }
       } else {
-        openModal({ type: 'textModal', modalProps: { text: '회원가입을 실패하였습니다.' } });
+        openModal({ type: 'notification', modalProps: { text: '회원가입을 실패하였습니다.' } });
+        console.log(error);
       }
     }
   };

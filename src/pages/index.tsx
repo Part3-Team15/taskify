@@ -37,7 +37,7 @@ const Home: React.FC = () => {
           <button
             className='btn-violet h-[40px] w-[125px]'
             onClick={() => {
-              openModal({ type: 'pwdNotEqual' });
+              openModal({ type: 'textModal', modalProps: { text: '비밀번호가 일치하지 않습니다.' } });
             }}
           >
             비밀번호 불일치
@@ -61,7 +61,7 @@ const Home: React.FC = () => {
           <button
             className='btn-violet h-[40px] w-[125px]'
             onClick={() => {
-              openModal({ type: 'curPwdNotEqual' });
+              openModal({ type: 'textModal', modalProps: { text: '현재 비밀번호가 틀렸습니다.' } });
             }}
           >
             현재 비번 틀림

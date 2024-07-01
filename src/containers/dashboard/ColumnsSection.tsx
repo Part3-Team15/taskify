@@ -91,6 +91,7 @@ export default function ColumnsSection({ id }: ColumnsSectionProps) {
                       <Column
                         key={`column-${column.id}`}
                         column={column}
+                        columns={columns.data}
                         index={index}
                         cards={cardLists[column.id] || []}
                       />
