@@ -5,7 +5,7 @@ import Sidebar from '@/components/Sidebar';
 
 export default function MainLayout({ children }: { children: React.ReactNode }) {
   const router = useRouter();
-  const currentPath = router.asPath;
+  const currentPath = router.pathname;
 
   if (currentPath === '/') {
     return (
@@ -17,6 +17,8 @@ export default function MainLayout({ children }: { children: React.ReactNode }) 
   }
 
   const isDisabled = currentPath === '/signin' || currentPath === '/signup' || currentPath === '/404';
+
+  console.log('isDisabled', isDisabled);
 
   if (isDisabled) return <div className='min-w-[360px]'>{children}</div>;
 
