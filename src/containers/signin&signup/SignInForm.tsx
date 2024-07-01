@@ -44,11 +44,11 @@ export default function SignInForm() {
       onError: (error) => {
         if (error instanceof AxiosError) {
           dispatch(setError(error.response?.data.message));
-          openModal({ type: 'textModal', modalProps: { text: error.response?.data.message } });
+          openModal({ type: 'notification', modalProps: { text: error.response?.data.message } });
         } else {
           const unknownError = '알 수 없는 오류가 발생했습니다.';
           dispatch(setError(unknownError));
-          openModal({ type: 'textModal', modalProps: { text: unknownError } });
+          openModal({ type: 'notification', modalProps: { text: unknownError } });
         }
       },
     });

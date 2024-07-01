@@ -1,43 +1,36 @@
+import { Column } from './Column.interface';
+
+export interface ModalState {
+  type: string | null;
+  modalProps: ModalProps;
+}
+
+export interface ModalActionState {
+  type?: string;
+  modalProps?: ModalProps;
+}
+
+export interface ModalProps {}
+
+export interface NotificationModalProps extends ModalProps {
+  text: string;
+  onClick?: () => void;
+}
+
+export interface ConfirmModalProps extends ModalProps {
+  text: string;
+  onActionClick: () => void;
+}
+
+export interface NewColumnModalProps extends ModalProps {
+  columns: Column[];
+}
+
 export interface ColumnModifyModalProps {
   columnTitle: string;
   columnId: number;
 }
-export interface ColumnDeleteModalProps {
-  columnId: number;
-}
-
-export interface NewColumnModalProps {
-  dashboardId: number;
-}
 
 export interface InviteMemberModalProps {
   dashboardId: number;
-}
-
-export interface DeleteDashboardModalProps {
-  dashboardId: number;
-}
-
-export interface TextModalProps {
-  text: string;
-}
-
-export interface EmailExistModalProps {
-  onResetField: () => void;
-  onSetFocus: () => void;
-}
-
-export type ModalProps =
-  | ColumnModifyModalProps
-  | ColumnDeleteModalProps
-  | NewColumnModalProps
-  | InviteMemberModalProps
-  | DeleteDashboardModalProps
-  | EmailExistModalProps
-  | TextModalProps
-  | null;
-
-export interface ModalState {
-  type: string | null;
-  modalProps?: ModalProps;
 }

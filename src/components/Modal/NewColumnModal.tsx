@@ -1,46 +1,70 @@
+import { useQueryClient } from '@tanstack/react-query';
+import { AxiosError } from 'axios';
+import { useRouter } from 'next/router';
 import { useState } from 'react';
 
 import ModalActionButton from '@/components/Button/ModalActionButton';
 import ModalCancelButton from '@/components/Button/ModalCancelButton';
 import useModal from '@/hooks/useModal';
 import { postNewColumn } from '@/services/postService';
+import { NewColumnModalProps } from '@/types/Modal.interface';
 
-interface NewColumnModalProps {
-  modalProps: { dashboardId: number };
-}
-
-export default function NewColumnModal({ modalProps }: NewColumnModalProps) {
+export default function NewColumnModal({ columns }: NewColumnModalProps) {
   const { openModal, closeModal } = useModal();
+  const queryClient = useQueryClient();
 
-  const [column, setColumn] = useState('');
+  const router = useRouter();
+  const { id } = router.query;
+  const [name, setName] = useState('');
+  const [errorMessage, setErrorMessage] = useState('');
 
-  const { dashboardId } = modalProps;
+  const columnNames = columns.map((column) => column.title);
+
+  const handleValidCheck = () => {
+    if (!name) {
+      setErrorMessage('이름을 입력해주세요');
+    } else if (columnNames.includes(name)) {
+      setErrorMessage('중복된 컬럼 이름입니다');
+    } else {
+      setErrorMessage('');
+    }
+  };
+
   const handlePostNewColumn = async () => {
     try {
-      await postNewColumn({ title: column, dashboardId: dashboardId });
-      openModal({ type: 'textModal', modalProps: { text: '새로운 컬럼이 생성되었습니다!' } });
+      await postNewColumn({ title: name, dashboardId: Number(id) });
+      queryClient.invalidateQueries({ queryKey: ['columns', id] });
+      openModal({ type: 'notification', modalProps: { text: '새로운 컬럼이 생성되었습니다!' } });
     } catch (error) {
-      openModal({ type: 'textModal', modalProps: { text: '컬럼 생성을 실패하였습니다.' } });
+      if (error instanceof AxiosError && error.response?.data.message) {
+        openModal({ type: 'notification', modalProps: { text: error.response.data.message } });
+      } else {
+        openModal({ type: 'notification', modalProps: { text: '컬럼 생성을 실패하였습니다.' } });
+        console.log(error);
+      }
     }
   };
 
   return (
-    <div className='flex h-[266px] w-[327px] flex-col justify-between rounded-[8px] bg-white px-[18px] py-[32px] md:h-[301px] md:w-[540px]'>
-      <h1 className='text-[20px] font-bold text-black-33 md:text-[24px]'>새 컬럼 생성</h1>
-      <div className='flex flex-col'>
-        <label className='mb-[10px] text-[16px] text-black-33 md:text-[18px]'>이름</label>
-        {/* 이미 존재한 컬럼일 경우 Input 에러 표시 (현재 대쉬보드에 컬럼과 비교하면 될 듯) */}
+    <div className='modal w-[327px] md:w-[540px]'>
+      <h2 className='section-title'>새 컬럼 생성</h2>
+      <div className='my-6 md:mb-7 md:mt-8'>
+        <label className='label'>이름</label>
         <input
-          className='h-[42px] rounded-[6px] border border-gray-d9 px-[15px] text-[14px] md:h-[48px] md:text-[16px]'
           type='text'
+          className={`input mt-[10px] ${errorMessage ? 'border-2 border-red' : ''}`}
           placeholder='생성할 컬럼 이름을 입력해 주세요'
-          value={column}
-          onChange={(e) => setColumn(e.target.value)}
+          value={name}
+          onChange={(e) => setName(e.target.value)}
+          onBlur={handleValidCheck}
         />
+        {errorMessage && <p className='mt-2 text-sm text-red'>{errorMessage}</p>}
       </div>
-      <div className='flex justify-between md:justify-end md:gap-[15px]'>
-        <ModalCancelButton onClick={closeModal}>취소</ModalCancelButton>
-        <ModalActionButton disabled={column.length === 0} onClick={handlePostNewColumn}>
+      <div className='flex justify-between md:justify-end md:gap-3'>
+        <ModalCancelButton type='button' onClick={closeModal}>
+          취소
+        </ModalCancelButton>
+        <ModalActionButton type='button' onClick={handlePostNewColumn} disabled={!!errorMessage}>
           생성
         </ModalActionButton>
       </div>

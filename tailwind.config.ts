@@ -54,6 +54,7 @@ const config: Config = {
       red: {
         DEFAULT: '#D6173A',
         hover: '#b51230',
+        active: '#9c0823',
       },
       green: {
         DEFAULT: '#7ac555',

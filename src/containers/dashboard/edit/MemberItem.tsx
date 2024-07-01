@@ -12,10 +12,15 @@ export default function MemberItem({ member, onDeleteClick }: InvitedMemberProps
     <div className='flex items-center justify-between'>
       <div className='flex items-center gap-2 md:gap-3'>
         {/* TODO: ProfileIcon PR 반영해야함 */}
-        <ProfileIcon user={member} imgClassName='size-[34px] md:size-[38px]' fontClassName='md:text-base text-sm' />
+        <ProfileIcon
+          user={member}
+          userId={member.userId}
+          imgClassName='size-[34px] md:size-[38px]'
+          fontClassName='md:text-base text-sm'
+        />
         <p className='text-base font-medium'>{member.nickname}</p>
       </div>
-      <CancelButton className='text-sm' onClick={onDeleteClick}>
+      <CancelButton type='button' className='text-sm' onClick={onDeleteClick}>
         삭제
       </CancelButton>
     </div>

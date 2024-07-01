@@ -39,7 +39,11 @@ export default function ColumnsSection({ id }: ColumnsSectionProps) {
             className='btn-violet-light mb-4 h-[70px] w-full rounded-[6px] py-[24px] lg:mb-0 lg:w-[354px]'
             // 새로운 컬럼 추가하기 모달
             onClick={() => {
-              openModal({ type: 'newColumn', modalProps: { dashboardId: Number(id) } });
+              if (columns?.data && columns.data.length >= 10) {
+                openModal({ type: 'notification', modalProps: { text: '컬럼은 최대 10개까지 생성할 수 있습니다.' } });
+              } else {
+                openModal({ type: 'newColumn', modalProps: { columns: columns?.data } });
+              }
             }}
           >
             <div className='mr-[12px] text-lg font-bold text-black-33'>새로운 컬럼 추가하기</div>

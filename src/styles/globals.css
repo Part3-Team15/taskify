@@ -10,19 +10,23 @@
 
 @layer components {
   .btn-violet {
-    @apply align-center disabled:bg-violet-disabled rounded-[8px] bg-violet text-white transition-all hover:bg-violet-hover active:bg-violet-active;
+    @apply align-center rounded-[8px] bg-violet text-white transition-all hover:bg-violet-hover active:bg-violet-active disabled:bg-violet-disabled;
   }
 
   .btn-violet-light {
-    @apply align-center disabled:bg-violet-light-disabled gray-border rounded-[8px] bg-white transition-all hover:bg-violet-light-hover active:bg-violet-light-active;
+    @apply align-center gray-border rounded-[8px] bg-white transition-all hover:bg-violet-light-hover active:bg-violet-light-active disabled:bg-violet-light-disabled;
   }
 
   .btn-white {
-    @apply align-center disabled:bg-white-disabled gray-border rounded-[8px] bg-white text-gray-78 transition-all hover:bg-white-hover active:bg-white-active;
+    @apply align-center gray-border rounded-[8px] bg-white text-gray-78 transition-all hover:bg-white-hover active:bg-white-active disabled:bg-white-disabled;
   }
 
   .btn-gray {
-    @apply align-center bg-gray-f5 rounded-md hover:bg-gray-ee active:bg-gray-d9;
+    @apply align-center rounded-md bg-gray-f5 hover:bg-gray-ee active:bg-gray-d9;
+  }
+
+  .btn-red {
+    @apply align-center active:bg-red-active rounded-[8px] bg-red text-white transition-all hover:bg-red-hover disabled:bg-violet-disabled;
   }
 
   .section {
@@ -46,7 +50,15 @@
   }
 
   .dd-menu {
-    @apply align-center active:bg-violet-e8 h-[30px] w-full rounded-sm text-xs hover:bg-violet-f1 md:h-8 md:text-sm;
+    @apply align-center h-[30px] w-full rounded-sm text-xs hover:bg-violet-f1 active:bg-violet-e8 md:h-8 md:text-sm;
+  }
+
+  .modal {
+    @apply rounded-[8px] bg-white px-5 py-7 text-base text-black-33 md:px-7 md:text-lg;
+  }
+
+  .modal-basic {
+    @apply h-[220px] w-[327px] md:h-[250px] md:w-[540px];
   }
 }
 
