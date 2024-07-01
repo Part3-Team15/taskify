@@ -101,18 +101,18 @@ export default function InvitedDashboardList() {
 
   if (error) {
     return (
-      <div className='h-full max-w-screen-lg overflow-hidden rounded-lg border-0 bg-white'>
+      <section className='max-h-[calc(100vh-610px)] min-h-[580px] grow overflow-hidden rounded-lg border-0 bg-white md:max-h-[calc(100vh-390px)]'>
         <p className='px-7 pb-5 pt-8 text-base font-bold text-black-33'>초대받은 대시보드</p>
         <div className='flex items-center justify-center'>
           <p>데이터를 가져오는 중 오류가 발생했습니다.</p>
           <p>{error.message}</p>
         </div>
-      </div>
+      </section>
     );
   }
 
   return (
-    <section className='h-full min-h-80 overflow-hidden rounded-lg border-0 bg-white'>
+    <section className='h-dvh max-h-[calc(100vh-590px)] min-h-[400px] grow overflow-hidden rounded-lg border-0 bg-white md:max-h-[calc(100dvh-465px)] lg:max-h-[calc(100dvh-410px)]'>
       <p className='px-7 pb-5 pt-8 text-base font-bold text-black-33'>초대받은 대시보드</p>
       {isLoading ? (
         <div className='flex animate-pulse flex-col'>
@@ -140,8 +140,6 @@ export default function InvitedDashboardList() {
                   ))}
                 </div>
               ))}
-
-              <div ref={observerRef} className='h-1' />
             </div>
           </div>
         </div>
