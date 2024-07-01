@@ -1,33 +1,21 @@
 import Image from 'next/image';
+import { Draggable, Droppable } from 'react-beautiful-dnd';
 
 import Card from './Card';
 
-import useFetchData from '@/hooks/useFetchData';
 import useModal from '@/hooks/useModal';
-import { getCardsList } from '@/services/getService';
-import { CardsListResponse } from '@/types/Card.interface';
+import { Card as CardType } from '@/types/Card.interface';
 import { Column as ColumnType } from '@/types/Column.interface';
 
 interface ColumnProps {
   column: ColumnType;
   columns: ColumnType[];
+  index: number;
+  cards: CardType[];
 }
 
-function Column({ column, columns }: ColumnProps) {
+function Column({ column, index, cards, columns }: ColumnProps) {
   const { openModal } = useModal();
-  const {
-    data: cardList,
-    isLoading,
-    error,
-  } = useFetchData<CardsListResponse>(['cardList', column.id], () => getCardsList(column.id));
-
-  if (isLoading) {
-    return <div>Loading...</div>;
-  }
-
-  if (error) {
-    return <div>Error: {error.message}</div>;
-  }
 
   return (
     <div className='block lg:flex'>
@@ -38,7 +26,7 @@ function Column({ column, columns }: ColumnProps) {
             <span className='mr-[8px] text-xs text-violet'>𒊹</span>
             <h2 className='mr-[12px] text-lg font-bold text-black-33'>{column.title}</h2>
             <span className='flex size-[20px] items-center justify-center rounded-[6px] bg-gray-ee text-xs text-gray-78'>
-              {cardList?.totalCount || 0} {/* API에서 가져온 카드 개수 */}
+              {cards.length}
             </span>
           </div>
           {/* Column Edit Button */}
@@ -64,8 +52,23 @@ function Column({ column, columns }: ColumnProps) {
         </button>
 
         {/* Card List Section */}
-        <div className='lg:h-[700px] lg:overflow-y-auto'>
-          {cardList && cardList.cards.map((card) => <Card key={card.id} card={card} />)}
+        <div className='scrollbar-hide lg:h-[700px] lg:overflow-y-auto'>
+          <Droppable droppableId={`column-${column.id}`} key={`column-${column.id}`}>
+            {(provided) => (
+              <div ref={provided.innerRef} {...provided.droppableProps}>
+                {cards.map((card, index) => (
+                  <Draggable key={`card-${card.id}`} draggableId={`card-${card.id}`} index={index}>
+                    {(provided) => (
+                      <div ref={provided.innerRef} {...provided.draggableProps} {...provided.dragHandleProps}>
+                        <Card key={`card-${card.id}`} card={card} />
+                      </div>
+                    )}
+                  </Draggable>
+                ))}
+                {provided.placeholder}
+              </div>
+            )}
+          </Droppable>
         </div>
       </div>
 

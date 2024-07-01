@@ -11,7 +11,7 @@ interface CardProps {
 
 export default function Card({ card }: CardProps) {
   return (
-    <div className='mb-[16px] mr-[6px] mt-[4px] flex flex-col gap-[10px] rounded-[6px] border border-gray-d9 bg-white p-[20px] transition-transform duration-200 ease-in-out hover:-translate-y-1 hover:cursor-pointer hover:shadow-sm md:flex-row md:justify-between lg:flex-col'>
+    <div className='mb-[16px] mt-[4px] flex flex-col gap-[10px] rounded-[6px] border border-gray-d9 bg-white p-[20px] transition-transform duration-200 ease-in-out hover:-translate-y-1 hover:cursor-pointer hover:shadow-sm md:flex-row md:justify-between lg:flex-col'>
       {/* Card Image */}
       {card.imageUrl && (
         <section className='relative h-[160px] w-full rounded-[6px] md:mr-[10px] md:h-[54px] md:w-[90px] lg:h-[160px] lg:w-full'>
