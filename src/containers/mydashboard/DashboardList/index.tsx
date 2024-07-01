@@ -4,11 +4,13 @@ import { useState } from 'react';
 
 import Pagination from '@/components/Pagination';
 import useFetchData from '@/hooks/useFetchData';
+import useModal from '@/hooks/useModal';
 import { getDashboardsList } from '@/services/getService';
 import { DashboardsResponse } from '@/types/Dashboard.interface';
 
 export default function DashboardList() {
   const [currentChunk, setCurrentChunk] = useState<number>(1);
+  const { openModal } = useModal();
 
   const {
     data: dashboardResponse,
@@ -44,7 +46,11 @@ export default function DashboardList() {
     <section className='w-max grow flex-col justify-between'>
       <ul className='grid grid-rows-1 gap-3 font-semibold text-black-33 md:min-h-[216px] md:grid-cols-2 md:grid-rows-3 lg:min-h-[140px] lg:grid-cols-3'>
         <li className='h-12 w-64 rounded-lg border border-gray-d9 bg-white md:h-16 md:w-60 lg:w-[300px]'>
-          <button className='btn-violet-light size-full gap-4'>
+          <button
+            className='btn-violet-light size-full gap-4'
+            type='button'
+            onClick={() => openModal({ type: 'newDashboard' })}
+          >
             새로운 대시보드
             <Image src={'/icons/plus-filled.svg'} alt='plus' width={22} height={22} />
           </button>
