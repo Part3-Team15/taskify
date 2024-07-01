@@ -1,3 +1,6 @@
+// 이메일 정규표현식
+export const EMAIL_REGEX = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+
 // 프로필 아이콘 배경색상 리스트
 export const PROFILE_COLORS = [
   '#7CE34F',

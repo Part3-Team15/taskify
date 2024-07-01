@@ -13,7 +13,6 @@ import { modalSelector } from '@/store/reducers/modalSlice';
 import {
   ColumnModifyModalProps,
   ConfirmModalProps,
-  InviteMemberModalProps,
   NewColumnModalProps,
   NotificationModalProps,
 } from '@/types/Modal.interface';
@@ -57,7 +56,7 @@ export default function Modal() {
         return modalProps ? <NewColumnModal {...(modalProps as NewColumnModalProps)} /> : null;
 
       case 'inviteMember':
-        return modalProps ? <InviteMemberModal modalProps={modalProps as InviteMemberModalProps} /> : null;
+        return <InviteMemberModal />;
 
       case 'columnModify':
         return modalProps ? <ColumnModifyModal modalProps={modalProps as ColumnModifyModalProps} /> : null;
