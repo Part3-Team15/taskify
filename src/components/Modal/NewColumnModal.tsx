@@ -23,6 +23,8 @@ export default function NewColumnModal({ columns }: NewColumnModalProps) {
   const handleValidCheck = () => {
     if (!name) {
       setErrorMessage('이름을 입력해주세요');
+    } else if (name.length > 10) {
+      setErrorMessage('10자 이내로 입력해주세요');
     } else if (columnNames.includes(name)) {
       setErrorMessage('중복된 컬럼 이름입니다');
     } else {
@@ -36,10 +38,10 @@ export default function NewColumnModal({ columns }: NewColumnModalProps) {
       queryClient.invalidateQueries({ queryKey: ['columns', id] });
       openModal({ type: 'notification', modalProps: { text: '새로운 컬럼이 생성되었습니다!' } });
     } catch (error) {
-      if (error instanceof AxiosError && error.response?.data.message) {
-        openModal({ type: 'notification', modalProps: { text: error.response.data.message } });
+      if (error instanceof AxiosError) {
+        setErrorMessage(error.response?.data.message || '컬럼 생성을 실패하였습니다.');
       } else {
-        openModal({ type: 'notification', modalProps: { text: '컬럼 생성을 실패하였습니다.' } });
+        setErrorMessage('컬럼 생성을 실패하였습니다.');
         console.log(error);
       }
     }
@@ -64,7 +66,7 @@ export default function NewColumnModal({ columns }: NewColumnModalProps) {
         <ModalCancelButton type='button' onClick={closeModal}>
           취소
         </ModalCancelButton>
-        <ModalActionButton type='button' onClick={handlePostNewColumn} disabled={!!errorMessage}>
+        <ModalActionButton type='button' onClick={handlePostNewColumn} disabled={!(name && !errorMessage)}>
           생성
         </ModalActionButton>
       </div>

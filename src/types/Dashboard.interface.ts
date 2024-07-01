@@ -13,3 +13,10 @@ export interface DashboardsResponse {
   totalCount: number;
   cursorId: number | null;
 }
+
+export interface DashboardInfoState {
+  title: string;
+  color: string;
+}
+
+export type DashboardColor = 'green' | 'purple' | 'orange' | 'blue' | 'pink';

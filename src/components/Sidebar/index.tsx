@@ -2,15 +2,20 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useState } from 'react';
+import { useSelector } from 'react-redux';
+
+import NavButton from '../Button/NavButton';
 
 import DashboardItem from './DashboardItem';
 
 import useFetchData from '@/hooks/useFetchData';
 import useModal from '@/hooks/useModal';
 import { getDashboardsList } from '@/services/getService';
+import { RootState } from '@/store/store';
 import { DashboardsResponse } from '@/types/Dashboard.interface';
 
 export default function Sidebar() {
+  const { user } = useSelector((state: RootState) => state.user);
   const router = useRouter();
   const { id } = router.query;
   const [page, setPage] = useState<number>(1);
@@ -39,8 +44,8 @@ export default function Sidebar() {
   };
 
   return (
-    <aside className='flex h-screen min-w-16 flex-col border-r border-gray-d9 px-3 py-5 md:min-w-40 lg:min-w-72'>
-      <Link href='/' className='flex items-center justify-center pb-14 md:block md:px-3'>
+    <aside className='flex min-w-16 max-w-[300px] flex-col border-r border-gray-d9 px-3 py-5 md:min-w-40 lg:min-w-72'>
+      <Link href={user ? '/mydashboard' : '/'} className='flex items-center justify-center pb-14 md:block md:px-3'>
         <div className='relative hidden h-[33px] w-[110px] md:block'>
           <Image src={'/icons/logo.svg'} alt='logo' priority className='' fill />
         </div>
@@ -49,10 +54,9 @@ export default function Sidebar() {
         </div>
       </Link>
 
-      <div className='flex flex-col gap-2 md:min-h-[790px]'>
+      <div className='flex grow flex-col gap-2'>
         <div className='flex items-center justify-center md:justify-between'>
           <p className='hidden px-3 text-xs font-bold text-gray-78 md:block'>Dashboards</p>
-
           <button
             className='p-3'
             onClick={() => {
@@ -86,7 +90,7 @@ export default function Sidebar() {
         <div className='m-2 border-b border-gray-d9' />
 
         {isLoading ? (
-          <ul className='flex animate-pulse flex-col gap-2'>
+          <ul className='flex h-min animate-pulse flex-col gap-2'>
             {[...Array(10)].map((_, i) => (
               <li
                 key={i}
@@ -95,36 +99,24 @@ export default function Sidebar() {
             ))}
           </ul>
         ) : (
-          <ul className='flex flex-col gap-2'>
-            {data?.dashboards.map((dashboard) => (
-              <DashboardItem key={dashboard.id} dashboard={dashboard} nowDashboard={Number(id)} />
-            ))}
-          </ul>
-        )}
-      </div>
+          <>
+            <ul className='flex h-min flex-col gap-2'>
+              {data?.dashboards.map((dashboard) => (
+                <DashboardItem key={dashboard.id} dashboard={dashboard} nowDashboard={Number(id)} />
+              ))}
+            </ul>
 
-      <div className='flex flex-col items-center pt-3 md:flex-row'>
-        <NavButton direction='left' onClick={handlePrev} isDisable={page === 1} />
-        <NavButton direction='right' onClick={handleNext} isDisable={page === totalPage} />
+            {totalPage > 1 ? (
+              <div className='flex flex-col items-center pt-3 md:flex-row'>
+                <NavButton direction='left' onClick={handlePrev} isDisable={page === 1} />
+                <NavButton direction='right' onClick={handleNext} isDisable={page === totalPage} />
+              </div>
+            ) : (
+              <></>
+            )}
+          </>
+        )}
       </div>
     </aside>
   );
 }
-
-interface NavButtonProps {
-  direction: 'left' | 'right';
-  onClick: () => void;
-  isDisable?: boolean;
-}
-
-const NavButton = ({ direction, onClick, isDisable }: NavButtonProps) => (
-  <button
-    className={`btn-white rounded-none ${direction === 'left' ? 'rounded-s-[4px]' : 'rounded-e-[4px]'} size-10`}
-    onClick={onClick}
-    disabled={isDisable}
-  >
-    <div className={`${direction === 'left' ? 'rotate-180' : ''} relative h-[12px] w-[8px]`}>
-      <Image src={'/icons/arrow-white.svg'} alt={`arrow-${direction}`} fill />
-    </div>
-  </button>
-);

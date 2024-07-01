@@ -6,16 +6,10 @@ import ModalCancelButton from '@/components/Button/ModalCancelButton';
 import { DASHBOARD_COLOR_OBJ } from '@/constants';
 import useModal from '@/hooks/useModal';
 import { postNewDashboard } from '@/services/postService';
-
-type DashboardColor = 'green' | 'purple' | 'orange' | 'blue' | 'pink';
-
-interface DashboardState {
-  title: string;
-  color: string;
-}
+import { DashboardColor, DashboardInfoState } from '@/types/Dashboard.interface';
 
 export default function NewDashboardModal() {
-  const [value, setValue] = useState<DashboardState>({
+  const [value, setValue] = useState<DashboardInfoState>({
     title: '',
     color: DASHBOARD_COLOR_OBJ['green'],
   });
