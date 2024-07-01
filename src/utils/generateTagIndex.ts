@@ -1,4 +1,4 @@
-const NUM_TAG_COLORS = 16;
+const NUM_TAG_COLORS = 6;
 
 const generateTagIndex = (tag: string) => {
   const asciiList = tag.split('').map((c) => c.charCodeAt(0));

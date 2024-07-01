@@ -21,12 +21,12 @@ export default function MainLayout({ children }: { children: React.ReactNode }) 
   if (isDisabled) return <div className='min-w-[360px]'>{children}</div>;
 
   return (
-    <div className='flex min-h-lvh min-w-[360px]'>
+    <div className='flex min-w-[375px]'>
       <Sidebar />
 
       <div className='flex grow flex-col'>
         <Header />
-        <main className='flex grow flex-col overflow-y-scroll bg-gray-fa'>{children}</main>
+        <main className='flex grow flex-col bg-gray-fa'>{children}</main>
       </div>
     </div>
   );

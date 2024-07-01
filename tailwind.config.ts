@@ -49,6 +49,7 @@ const config: Config = {
       violet: {
         DEFAULT: '#5534da',
         f1: '#f1effd',
+        e8: '#e8e6f7',
         hover: '#3925a8',
         active: '#261680',
         disabled: '#9FA6B2',
@@ -56,11 +57,12 @@ const config: Config = {
           hover: '#f4f2ff',
           active: '#ebe8fc',
           disabled: '#ebebeb',
-        }
+        },
       },
       red: {
         DEFAULT: '#D6173A',
         hover: '#b51230',
+        active: '#9c0823',
       },
       green: {
         DEFAULT: '#7ac555',
@@ -83,9 +85,20 @@ const config: Config = {
         'gradient-radial': 'radial-gradient(var(--tw-gradient-stops))',
         'gradient-conic': 'conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))',
       },
+      animation: {
+        'scroll-horizontal': 'scroll-horizontal 20s linear infinite',
+      },
+      keyframes: {
+        'scroll-horizontal': {
+          '0%': { transform: 'translateX(0%)' },
+          '100%': { transform: 'translateX(-100%)' },
+        },
+      },
     },
   },
-  plugins: [],
+  plugins: [
+    require("tailwind-scrollbar-hide"),
+  ],
 };
 
 export default config;

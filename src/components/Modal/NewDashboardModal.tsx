@@ -1,32 +1,35 @@
+import { useQueryClient } from '@tanstack/react-query';
+import { AxiosError } from 'axios';
 import Image from 'next/image';
-import { MouseEventHandler, useState } from 'react';
+import { useState } from 'react';
 
 import ModalActionButton from '@/components/Button/ModalActionButton';
 import ModalCancelButton from '@/components/Button/ModalCancelButton';
 import { DASHBOARD_COLOR_OBJ } from '@/constants';
 import useModal from '@/hooks/useModal';
 import { postNewDashboard } from '@/services/postService';
+import { DashboardColor, DashboardInfoState } from '@/types/Dashboard.interface';
 
-type DashboardColor = 'green' | 'purple' | 'orange' | 'blue' | 'pink';
-
-interface DashboardState {
-  title: string;
-  color: string;
-}
-
-export default function NewDashboardModal({
-  handleCloseModal,
-}: {
-  handleCloseModal: MouseEventHandler<HTMLButtonElement>;
-}) {
-  const [value, setValue] = useState<DashboardState>({
+export default function NewDashboardModal() {
+  const [value, setValue] = useState<DashboardInfoState>({
     title: '',
     color: DASHBOARD_COLOR_OBJ['green'],
   });
-
   const [selectedColor, setSelectedColor] = useState<DashboardColor>('green');
+  const [errorMessage, setErrorMessage] = useState('');
 
-  const { openModal } = useModal();
+  const queryClient = useQueryClient();
+  const { openModal, closeModal } = useModal();
+
+  const handleValidCheck = () => {
+    if (!value.title) {
+      setErrorMessage('이름을 입력해주세요.');
+    } else if (value.title.length > 10) {
+      setErrorMessage('10자 이내로 입력해주세요');
+    } else {
+      setErrorMessage('');
+    }
+  };
 
   const handleColorSelect = (color: DashboardColor) => {
     setSelectedColor(color);
@@ -39,22 +42,29 @@ export default function NewDashboardModal({
   const handlePostDashboard = async () => {
     try {
       await postNewDashboard(value);
-      openModal({ type: 'newDashboardSuccess' });
-    } catch {
-      openModal({ type: 'newDashboardFailed' });
+      queryClient.invalidateQueries({ queryKey: ['sideDashboards'] });
+      queryClient.invalidateQueries({ queryKey: ['dashboards'] });
+      openModal({ type: 'notification', modalProps: { text: '새로운 대시보드가 생성되었습니다!' } });
+    } catch (error) {
+      if (error instanceof AxiosError) {
+        setErrorMessage(error.response?.data.message || '대시보드 생성을 실패하였습니다');
+      } else {
+        setErrorMessage('대시보드 생성을 실패하였습니다');
+      }
     }
   };
 
   return (
-    <div className='flex h-[293px] w-[327px] flex-col justify-between rounded-[8px] bg-white px-[18px] py-[32px] md:h-[334px] md:w-[540px]'>
-      <h1 className='text-[20px] font-bold text-black-33 md:text-[24px]'>새로운 대시보드</h1>
-      <div className='flex flex-col'>
-        <label className='mb-[10px] text-[16px] text-black-33 md:text-[18px]'>대시보드 이름</label>
+    <div className='modal w-[327px] md:w-[540px]'>
+      <h1 className='section-title'>새로운 대시보드</h1>
+      <div className='my-6 md:mb-7 md:mt-8'>
+        <label className='label'>대시보드 이름</label>
         <input
-          className='h-[42px] rounded-[6px] border border-gray-d9 px-[15px] text-[14px] md:h-[48px] md:text-[16px]'
+          className={`input mt-[10px] ${errorMessage ? 'border-2 border-red' : ''}`}
           type='text'
           placeholder='생성할 대시보드 이름을 입력해 주세요'
           value={value.title}
+          onBlur={handleValidCheck}
           onChange={(e) => {
             setValue((prevValue) => ({
               ...prevValue,
@@ -62,11 +72,13 @@ export default function NewDashboardModal({
             }));
           }}
         />
+        {errorMessage && <p className='mt-2 text-sm text-red'>{errorMessage}</p>}
       </div>
-      <div className='flex gap-[10px]'>
+      <div className='mb-6 flex gap-[10px] md:mb-7'>
         {(['green', 'purple', 'orange', 'blue', 'pink'] as DashboardColor[]).map((color) => (
           <button
             key={`${color}-button`}
+            type='button'
             style={{ backgroundColor: DASHBOARD_COLOR_OBJ[color] }}
             className={`flex size-[28px] items-center justify-center rounded-full bg-white md:size-[30px]`}
             onClick={() => handleColorSelect(color)}
@@ -75,9 +87,11 @@ export default function NewDashboardModal({
           </button>
         ))}
       </div>
-      <div className='flex justify-between md:justify-end md:gap-[15px]'>
-        <ModalCancelButton onClick={handleCloseModal}>취소</ModalCancelButton>
-        <ModalActionButton disabled={value.title.length === 0} onClick={handlePostDashboard}>
+      <div className='flex justify-between md:justify-end md:gap-3'>
+        <ModalCancelButton type='button' onClick={closeModal}>
+          취소
+        </ModalCancelButton>
+        <ModalActionButton type='button' disabled={!(value.title && !errorMessage)} onClick={handlePostDashboard}>
           생성
         </ModalActionButton>
       </div>

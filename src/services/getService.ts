@@ -1,8 +1,8 @@
 import instance from './axios';
 
 // 컬럼 목록 조회
-export const getColumnsList = async (id: string) => {
-  return await instance.get(`/columns?dashboardId=${id}`);
+export const getColumnsList = async (dashboardId: number) => {
+  return await instance.get(`/columns?dashboardId=${dashboardId}`);
 };
 
 // 대시보드 목록 조회
@@ -14,6 +14,11 @@ export const getDashboardsList = async (
   return await instance.get(`/dashboards?navigationMethod=${navigationMethod}&page=${page}&size=${size}`);
 };
 
+// 대시보드 상세 조회
+export const getDashboard = async (id: string) => {
+  return await instance.get(`/dashboards/${id}`);
+};
+
 // 대시보드 멤버 목록 조회
 export const getMembersList = async (
   dashboardId: number,
@@ -21,6 +26,15 @@ export const getMembersList = async (
   size: number = 4, // 기본값 4
 ) => {
   return await instance.get(`/members?page=${page}&size=${size}&dashboardId=${dashboardId}`);
+};
+
+// 대시보드 초대 목록 조회
+export const getDashboardInvitations = async (
+  dashboardId: number,
+  page: number = 1, // 기본값 1
+  size: number = 5, // 기본값 5
+) => {
+  return await instance.get(`/dashboards/${dashboardId}/invitations?page=${page}&size=${size}`);
 };
 
 // 내가 받은 초대 목록 조회
@@ -35,4 +49,14 @@ export const getInvitationsList = async (size: number = 10, cursorId?: number, t
     params.append('title', title);
   }
   return await instance.get(`/invitations`, { params });
+};
+
+// 카드 목록 조회
+export const getCardsList = async (columnId: number) => {
+  return await instance.get(`/cards?columnId=${columnId}`);
+};
+
+// 상세 카드 조회
+export const getCard = async (cardId: number) => {
+  return await instance.get(`/cards/${cardId}`);
 };

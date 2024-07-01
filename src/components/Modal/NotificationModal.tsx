@@ -1,24 +1,23 @@
-import { MouseEventHandler } from 'react';
-
 import ModalActionButton from '@/components/Button/ModalActionButton';
+import useModal from '@/hooks/useModal';
+import { NotificationModalProps } from '@/types/Modal.interface';
 
-export default function NotificationModal({
-  handleCloseModal,
-  notificationText,
-}: {
-  handleCloseModal: MouseEventHandler<HTMLButtonElement>;
-  notificationText: string;
-}) {
+export default function NotificationModal({ text, onClick }: NotificationModalProps) {
+  const { closeModal } = useModal();
+  const handleClick = () => {
+    if (onClick) onClick();
+    closeModal();
+  };
+
   return (
-    <div className='h-[220px] w-[327px] rounded-[8px] bg-white px-[28px] py-[32px] md:h-[250px] md:w-[540px]'>
-      <div className='relative flex size-full items-center justify-center'>
-        <h1 className='mb-[15px] text-[16px] text-black-33 md:text-[18px]'>{notificationText}</h1>
-        <ModalActionButton
-          className='absolute bottom-0 right-1/2 translate-x-1/2 md:right-0 md:translate-x-0'
-          onClick={handleCloseModal}
-        >
-          확인
-        </ModalActionButton>
+    <div className='modal modal-basic'>
+      <div className='flex size-full flex-col'>
+        <p className='align-center grow'>{text}</p>
+        <div className='flex justify-center md:justify-end'>
+          <ModalActionButton type='button' onClick={handleClick}>
+            확인
+          </ModalActionButton>
+        </div>
       </div>
     </div>
   );
