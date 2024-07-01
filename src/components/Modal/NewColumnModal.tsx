@@ -36,10 +36,10 @@ export default function NewColumnModal({ columns }: NewColumnModalProps) {
       queryClient.invalidateQueries({ queryKey: ['columns', id] });
       openModal({ type: 'notification', modalProps: { text: '새로운 컬럼이 생성되었습니다!' } });
     } catch (error) {
-      if (error instanceof AxiosError && error.response?.data.message) {
-        openModal({ type: 'notification', modalProps: { text: error.response.data.message } });
+      if (error instanceof AxiosError) {
+        setErrorMessage(error.response?.data.message || '컬럼 생성을 실패하였습니다.');
       } else {
-        openModal({ type: 'notification', modalProps: { text: '컬럼 생성을 실패하였습니다.' } });
+        setErrorMessage('컬럼 생성을 실패하였습니다.');
         console.log(error);
       }
     }

@@ -36,10 +36,10 @@ export default function ModifyColumnModal({ columnId, columnTitle = '', columns 
       queryClient.invalidateQueries({ queryKey: ['columns', dashboardId] });
       openModal({ type: 'notification', modalProps: { text: '컬럼이 성공적으로 변경되었습니다.' } });
     } catch (error) {
-      if (error instanceof AxiosError && error.response?.data.message) {
-        openModal({ type: 'notification', modalProps: { text: error.response.data.message } });
+      if (error instanceof AxiosError) {
+        setErrorMessage(error.response?.data.message || '컬럼 변경을 실패하였습니다.');
       } else {
-        openModal({ type: 'notification', modalProps: { text: '컬럼이 변경에 실패했습니다.' } });
+        setErrorMessage('컬럼 변경을 실패하였습니다.');
         console.log(error);
       }
     }
