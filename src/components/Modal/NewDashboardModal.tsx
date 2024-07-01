@@ -24,8 +24,8 @@ export default function NewDashboardModal() {
   const handleValidCheck = () => {
     if (!value.title) {
       setErrorMessage('이름을 입력해주세요.');
-    } else if (value.title.length > 10) {
-      setErrorMessage('10자 이내로 입력해주세요');
+    } else if (value.title.length > 15) {
+      setErrorMessage('15자 이내로 입력해주세요');
     } else {
       setErrorMessage('');
     }
