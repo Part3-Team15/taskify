@@ -23,6 +23,8 @@ export default function NewColumnModal({ columns }: NewColumnModalProps) {
   const handleValidCheck = () => {
     if (!name) {
       setErrorMessage('이름을 입력해주세요');
+    } else if (name.length > 10) {
+      setErrorMessage('10자 이내로 입력해주세요');
     } else if (columnNames.includes(name)) {
       setErrorMessage('중복된 컬럼 이름입니다');
     } else {
@@ -64,7 +66,7 @@ export default function NewColumnModal({ columns }: NewColumnModalProps) {
         <ModalCancelButton type='button' onClick={closeModal}>
           취소
         </ModalCancelButton>
-        <ModalActionButton type='button' onClick={handlePostNewColumn} disabled={!!errorMessage}>
+        <ModalActionButton type='button' onClick={handlePostNewColumn} disabled={!(name && !errorMessage)}>
           생성
         </ModalActionButton>
       </div>
