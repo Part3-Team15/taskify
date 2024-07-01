@@ -55,7 +55,7 @@ export default function Modal() {
         return <NewDashboardModal />;
 
       case 'newColumn':
-        return modalProps ? <NewColumnModal modalProps={modalProps as NewColumnModalProps} /> : null;
+        return modalProps ? <NewColumnModal {...(modalProps as NewColumnModalProps)} /> : null;
 
       case 'inviteMember':
         return modalProps ? <InviteMemberModal modalProps={modalProps as InviteMemberModalProps} /> : null;

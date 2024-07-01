@@ -1,3 +1,5 @@
+import { Column } from './Column.interface';
+
 export interface ModalState {
   type: string | null;
   modalProps: ModalProps;
@@ -20,13 +22,14 @@ export interface ConfirmModalProps extends ModalProps {
   onActionClick: () => void;
 }
 
+export interface NewColumnModalProps extends ModalProps {
+  columns: Column[];
+  dashboardId: string; // NOTE: ColumnsSection에서 이미 string으로 사용중이라서
+}
+
 export interface ColumnModifyModalProps {
   columnTitle: string;
   columnId: number;
-}
-
-export interface NewColumnModalProps {
-  dashboardId: number;
 }
 
 export interface InviteMemberModalProps {
