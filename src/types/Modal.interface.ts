@@ -24,7 +24,6 @@ export interface ConfirmModalProps extends ModalProps {
 
 export interface NewColumnModalProps extends ModalProps {
   columns: Column[];
-  dashboardId: string; // NOTE: ColumnsSection에서 이미 string으로 사용중이라서
 }
 
 export interface ColumnModifyModalProps {

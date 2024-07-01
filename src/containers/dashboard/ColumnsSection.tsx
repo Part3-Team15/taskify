@@ -42,7 +42,7 @@ export default function ColumnsSection({ id }: ColumnsSectionProps) {
               if (columns?.data && columns.data.length >= 10) {
                 openModal({ type: 'notification', modalProps: { text: '컬럼은 최대 10개까지 생성할 수 있습니다.' } });
               } else {
-                openModal({ type: 'newColumn', modalProps: { columns: columns?.data, dashboardId: id } });
+                openModal({ type: 'newColumn', modalProps: { columns: columns?.data } });
               }
             }}
           >

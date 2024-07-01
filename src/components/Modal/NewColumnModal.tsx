@@ -1,5 +1,6 @@
 import { useQueryClient } from '@tanstack/react-query';
 import { AxiosError } from 'axios';
+import { useRouter } from 'next/router';
 import { useState } from 'react';
 
 import ModalActionButton from '@/components/Button/ModalActionButton';
@@ -8,9 +9,12 @@ import useModal from '@/hooks/useModal';
 import { postNewColumn } from '@/services/postService';
 import { NewColumnModalProps } from '@/types/Modal.interface';
 
-export default function NewColumnModal({ columns, dashboardId }: NewColumnModalProps) {
+export default function NewColumnModal({ columns }: NewColumnModalProps) {
   const { openModal, closeModal } = useModal();
   const queryClient = useQueryClient();
+
+  const router = useRouter();
+  const { id } = router.query;
   const [name, setName] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
 
@@ -28,8 +32,8 @@ export default function NewColumnModal({ columns, dashboardId }: NewColumnModalP
 
   const handlePostNewColumn = async () => {
     try {
-      await postNewColumn({ title: name, dashboardId: Number(dashboardId) });
-      queryClient.invalidateQueries({ queryKey: ['columns', dashboardId] });
+      await postNewColumn({ title: name, dashboardId: Number(id) });
+      queryClient.invalidateQueries({ queryKey: ['columns', id] });
       openModal({ type: 'notification', modalProps: { text: '새로운 컬럼이 생성되었습니다!' } });
     } catch (error) {
       if (error instanceof AxiosError && error.response?.data.message) {
