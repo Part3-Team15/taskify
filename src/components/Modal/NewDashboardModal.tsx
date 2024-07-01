@@ -21,6 +21,16 @@ export default function NewDashboardModal() {
   const queryClient = useQueryClient();
   const { openModal, closeModal } = useModal();
 
+  const handleValidCheck = () => {
+    if (!value.title) {
+      setErrorMessage('이름을 입력해주세요.');
+    } else if (value.title.length > 10) {
+      setErrorMessage('10자 이내로 입력해주세요');
+    } else {
+      setErrorMessage('');
+    }
+  };
+
   const handleColorSelect = (color: DashboardColor) => {
     setSelectedColor(color);
     setValue((prevValue) => ({
@@ -50,10 +60,11 @@ export default function NewDashboardModal() {
       <div className='my-6 md:mb-7 md:mt-8'>
         <label className='label'>대시보드 이름</label>
         <input
-          className={`input mt-[10px]`}
+          className={`input mt-[10px] ${errorMessage ? 'border-2 border-red' : ''}`}
           type='text'
           placeholder='생성할 대시보드 이름을 입력해 주세요'
           value={value.title}
+          onBlur={handleValidCheck}
           onChange={(e) => {
             setValue((prevValue) => ({
               ...prevValue,
@@ -80,7 +91,7 @@ export default function NewDashboardModal() {
         <ModalCancelButton type='button' onClick={closeModal}>
           취소
         </ModalCancelButton>
-        <ModalActionButton type='button' disabled={!value.title} onClick={handlePostDashboard}>
+        <ModalActionButton type='button' disabled={!(value.title && !errorMessage)} onClick={handlePostDashboard}>
           생성
         </ModalActionButton>
       </div>
