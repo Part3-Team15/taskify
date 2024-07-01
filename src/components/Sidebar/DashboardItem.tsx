@@ -19,7 +19,7 @@ export default function DashboardItem({ dashboard, nowDashboard }: DashboardItem
         className={`${itemClasses} flex items-center justify-center rounded-md py-3 hover:bg-violet/20 md:justify-start md:px-3`}
       >
         <div className='rounded-full p-1' style={{ backgroundColor: dashboard.color }} />
-        <p className='hidden pl-4 pr-[6px] text-lg font-medium md:block'>{dashboard.title}</p>
+        <p className='hidden overflow-hidden pl-4 pr-[6px] text-lg font-medium md:block'>{dashboard.title}</p>
         {dashboard.createdByMe && (
           <Image src={'/icons/crown.svg'} alt='my' className='hidden md:block' width={18} height={14} />
         )}

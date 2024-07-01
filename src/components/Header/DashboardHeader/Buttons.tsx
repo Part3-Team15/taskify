@@ -3,16 +3,14 @@ import Link from 'next/link';
 
 import settingsIcon from '@/../public/icons/gear.svg';
 import plusIcon from '@/../public/icons/plus-boxed.svg';
+import useModal from '@/hooks/useModal';
 
 interface ButtonsProps {
   id: number;
 }
 
 export default function Buttons({ id }: ButtonsProps) {
-  const handleInviteClick = () => {
-    // TODO: 모달 구현되면 연결하기
-    alert('초대하기 모달');
-  };
+  const { openModal } = useModal();
 
   return (
     <div className='flex gap-1.5 text-[14px] text-gray-78 md:gap-3 lg:gap-4'>
@@ -22,7 +20,7 @@ export default function Buttons({ id }: ButtonsProps) {
       </Link>
       <button
         type='button'
-        onClick={handleInviteClick}
+        onClick={() => openModal({ type: 'inviteMember' })}
         className='btn-white gap-2 rounded-[8px] px-3 py-1.5 md:px-4 md:py-2 lg:py-2.5'
       >
         <Image src={plusIcon} alt='초대 아이콘' className='hidden md:inline' />
