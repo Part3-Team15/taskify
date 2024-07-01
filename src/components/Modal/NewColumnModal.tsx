@@ -10,7 +10,7 @@ import { postNewColumn } from '@/services/postService';
 import { NewColumnModalProps } from '@/types/Modal.interface';
 
 export default function NewColumnModal({ columns }: NewColumnModalProps) {
-  const { openModal, closeModal } = useModal();
+  const { openNotificationModal, closeModal } = useModal();
   const queryClient = useQueryClient();
 
   const router = useRouter();
@@ -23,8 +23,8 @@ export default function NewColumnModal({ columns }: NewColumnModalProps) {
   const handleValidCheck = () => {
     if (!name) {
       setErrorMessage('이름을 입력해주세요');
-    } else if (name.length > 10) {
-      setErrorMessage('10자 이내로 입력해주세요');
+    } else if (name.length > 15) {
+      setErrorMessage('15자 이내로 입력해주세요');
     } else if (columnNames.includes(name)) {
       setErrorMessage('중복된 컬럼 이름입니다');
     } else {
@@ -36,7 +36,7 @@ export default function NewColumnModal({ columns }: NewColumnModalProps) {
     try {
       await postNewColumn({ title: name, dashboardId: Number(id) });
       queryClient.invalidateQueries({ queryKey: ['columns', id] });
-      openModal({ type: 'notification', modalProps: { text: '새로운 컬럼이 생성되었습니다!' } });
+      openNotificationModal({ text: '새로운 컬럼이 생성되었습니다!' });
     } catch (error) {
       if (error instanceof AxiosError) {
         setErrorMessage(error.response?.data.message || '컬럼 생성을 실패하였습니다.');

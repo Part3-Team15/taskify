@@ -25,7 +25,7 @@ export default function Sidebar() {
   const totalPage = data ? Math.max(1, Math.ceil(data.totalCount / 10)) : 1;
   const activePath = router.pathname;
 
-  const { openModal } = useModal();
+  const { openNewDashboardModal } = useModal();
 
   const handleNext = () => {
     const nextChunk = page + 1;
@@ -60,7 +60,7 @@ export default function Sidebar() {
           <button
             className='p-3'
             onClick={() => {
-              openModal({ type: 'newDashboard' });
+              openNewDashboardModal();
             }}
           >
             <Image src={'/icons/plus.svg'} alt='add' width={15} height={15} />

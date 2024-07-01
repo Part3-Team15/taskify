@@ -15,7 +15,7 @@ import { CancelInvitationInput } from '@/types/delete/CancelInvitation.interface
 import { DashboardInvitationsResponse } from '@/types/Invitation.interface';
 
 export default function InvitedMembersSection() {
-  const { openModal } = useModal();
+  const { openInviteMemberModal } = useModal();
   const router = useRouter();
   const { id } = router.query;
   const [currentChunk, setCurrentChunk] = useState(1);
@@ -69,7 +69,7 @@ export default function InvitedMembersSection() {
           <button
             className='btn-violet absolute right-0 top-12 flex gap-1.5 rounded-md px-3 text-xs md:static md:px-4'
             type='button'
-            onClick={() => openModal({ type: 'inviteMember' })}
+            onClick={() => openInviteMemberModal()}
           >
             <div className='relative my-[7px] size-[14px] md:my-2 md:size-4'>
               <Image src='/icons/plusbox-white.svg' alt='초대 아이콘' fill priority />

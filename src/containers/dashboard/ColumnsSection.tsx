@@ -12,7 +12,7 @@ interface ColumnsSectionProps {
 }
 
 export default function ColumnsSection({ id }: ColumnsSectionProps) {
-  const { openModal } = useModal();
+  const { openNewColumnModal, openNotificationModal } = useModal();
   const {
     data: columns, // 컬럼 목록 배열
     isLoading,
@@ -41,9 +41,9 @@ export default function ColumnsSection({ id }: ColumnsSectionProps) {
             // 새로운 컬럼 추가하기 모달
             onClick={() => {
               if (columns?.data && columns.data.length >= 10) {
-                openModal({ type: 'notification', modalProps: { text: '컬럼은 최대 10개까지 생성할 수 있습니다.' } });
-              } else {
-                openModal({ type: 'newColumn', modalProps: { columns: columns?.data } });
+                openNotificationModal({ text: '컬럼은 최대 10개까지 생성할 수 있습니다.' });
+              } else if (columns?.data) {
+                openNewColumnModal({ columns: columns.data });
               }
             }}
           >

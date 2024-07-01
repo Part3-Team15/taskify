@@ -10,7 +10,7 @@ interface ButtonsProps {
 }
 
 export default function Buttons({ id }: ButtonsProps) {
-  const { openModal } = useModal();
+  const { openInviteMemberModal } = useModal();
 
   return (
     <div className='flex gap-1.5 text-[14px] text-gray-78 md:gap-3 lg:gap-4'>
@@ -20,7 +20,7 @@ export default function Buttons({ id }: ButtonsProps) {
       </Link>
       <button
         type='button'
-        onClick={() => openModal({ type: 'inviteMember' })}
+        onClick={() => openInviteMemberModal()}
         className='btn-white gap-2 rounded-[8px] px-3 py-1.5 md:px-4 md:py-2 lg:py-2.5'
       >
         <Image src={plusIcon} alt='초대 아이콘' className='hidden md:inline' />
