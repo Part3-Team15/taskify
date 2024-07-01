@@ -11,7 +11,7 @@ export default function NotFound() {
     <div className='flex h-screen items-center justify-center'>
       <div className='mb-24 w-[350px] items-center justify-center md:w-[520px]'>
         <div className='relative h-[180px] w-[350px] md:h-[380px] md:w-[520px]'>
-          <Image src='/images/not-found.svg' fill alt='404' />
+          <Image src='/images/not-found.svg' fill alt='404' priority />
         </div>
         <p className='my-[80px] text-center text-xl font-black text-black-33 md:text-2xl'>
           요청하신 페이지를 찾을 수 없습니다.
