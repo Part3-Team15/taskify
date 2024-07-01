@@ -51,10 +51,7 @@ export default function ColumnsSection({ id }: ColumnsSectionProps) {
     const sourceCards = Array.from(cardLists[sourceColumnId]);
     const [movedCard] = sourceCards.splice(source.index, 1);
 
-    if (sourceColumnId === destinationColumnId) {
-      sourceCards.splice(destination.index, 0, movedCard);
-      setCardLists((prev) => ({ ...prev, [sourceColumnId]: sourceCards }));
-    } else {
+    if (sourceColumnId !== destinationColumnId) {
       const destinationCards = Array.from(cardLists[destinationColumnId]);
       destinationCards.splice(destination.index, 0, movedCard);
 
