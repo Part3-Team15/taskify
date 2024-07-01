@@ -3,7 +3,6 @@ import { useSelector } from 'react-redux';
 
 import ColumnModifyModal from './ColumnModifyModal';
 import ConfirmModal from './ConfirmModal';
-import DefaultModal from './DefaultModal';
 import InviteMemberModal from './InviteMemberModal';
 import NewColumnModal from './NewColumnModal';
 import NewDashboardModal from './NewDashboardModal';
@@ -64,7 +63,7 @@ export default function Modal() {
         return modalProps ? <ColumnModifyModal modalProps={modalProps as ColumnModifyModalProps} /> : null;
 
       default:
-        return <DefaultModal />;
+        return <NotificationModal text='' />;
     }
   };
 
