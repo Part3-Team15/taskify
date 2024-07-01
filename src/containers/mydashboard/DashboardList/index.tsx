@@ -68,9 +68,11 @@ export default function DashboardList() {
                 <Link href={`/dashboard/${dashboard.id}`} className={'btn-violet-light size-full rounded-md px-5'}>
                   <div className='flex size-full items-center'>
                     <div className='rounded-full p-1' style={{ backgroundColor: dashboard.color }} />
-                    <p className='h-[28px] max-w-[150px] overflow-hidden pl-4 pr-1 text-lg font-medium lg:max-w-[200px]'>
-                      {dashboard.title}
-                    </p>
+                    <div className='h-[28px] max-w-[150px] overflow-hidden pl-4 pr-1 text-lg font-medium lg:max-w-[200px]'>
+                      <p className={`${dashboard.title.length > 9 ? 'hover:animate-scroll-horizontal' : ''}`}>
+                        {dashboard.title}
+                      </p>
+                    </div>
                     {dashboard.createdByMe && <Image src={'/icons/crown.svg'} alt='my' width={20} height={16} />}
                   </div>
                   <Image src={'/icons/arrow-black.svg'} alt='arrow' width={14} height={14} />
