@@ -1,35 +1,38 @@
+import { useQueryClient } from '@tanstack/react-query';
 import { AxiosError } from 'axios';
-import { useState, ChangeEvent } from 'react';
+import { useRouter } from 'next/router';
+import { useState } from 'react';
 
 import ModalActionButton from '@/components/Button/ModalActionButton';
 import ModalCancelButton from '@/components/Button/ModalCancelButton';
+import { EMAIL_REGEX } from '@/constants';
 import useModal from '@/hooks/useModal';
-import { postMemberInvite } from '@/services/postService';
-import { InviteMemberModalProps } from '@/types/Modal.interface';
+import { postInviteMember } from '@/services/postService';
 
-export default function InviteMemberModal({ modalProps }: { modalProps: InviteMemberModalProps }) {
+export default function InviteMemberModal() {
   const { openModal, closeModal } = useModal();
-  const [email, setEmail] = useState('');
-  const [isValid, setIsValid] = useState(true);
-  const [errorMessage, setErrorMessage] = useState('');
-  const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+  const queryClient = useQueryClient();
 
-  const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
-    const value = e.target.value;
-    setEmail(value);
-    if (emailRegex.test(value)) {
-      setIsValid(true);
-      setErrorMessage('');
+  const router = useRouter();
+  const { id: dashboardId } = router.query;
+  const [email, setEmail] = useState('');
+  const [errorMessage, setErrorMessage] = useState('');
+
+  const handleValidCheck = () => {
+    if (!email) {
+      setErrorMessage('이메일을 입력해주세요');
+    } else if (!EMAIL_REGEX.test(email)) {
+      setErrorMessage('유효한 이메일 주소를 입력해주세요');
     } else {
-      setIsValid(false);
-      setErrorMessage('유효한 이메일 주소를 입력해주세요.');
+      setErrorMessage('');
     }
   };
 
-  const handleMemberInviteButton = async () => {
+  const handleInviteClick = async () => {
     try {
-      await postMemberInvite(modalProps.dashboardId, { email });
-      openModal({ type: 'textModal', modalProps: { text: '해당 멤버를 초대하였습니다!' } });
+      await postInviteMember(Number(dashboardId), { email });
+      queryClient.invalidateQueries({ queryKey: ['invitations', dashboardId] });
+      openModal({ type: 'notification', modalProps: { text: '해당 멤버를 초대하였습니다!' } });
     } catch (error) {
       if (error instanceof AxiosError) {
         setErrorMessage(error.response?.data.message || '초대 중 에러가 발생했습니다.');
@@ -40,22 +43,25 @@ export default function InviteMemberModal({ modalProps }: { modalProps: InviteMe
   };
 
   return (
-    <div className='flex h-[266px] w-[327px] flex-col justify-between rounded-[8px] bg-white px-[18px] py-[32px] md:h-[301px] md:w-[540px]'>
-      <h1 className='text-[20px] font-bold text-black-33 md:text-[24px]'>초대하기</h1>
-      <div className='flex flex-col'>
-        <label className='mb-[10px] text-[16px] text-black-33 md:text-[18px]'>이메일</label>
+    <div className='modal w-[327px] md:w-[540px]'>
+      <h2 className='section-title'>초대하기</h2>
+      <div className='my-6 md:mb-7 md:mt-8'>
+        <label className='label'>이메일</label>
         <input
-          className={`h-[42px] rounded-[6px] border border-gray-d9 px-[15px] text-[14px] md:h-[48px] md:text-[16px] ${!isValid ? 'border-2 border-red' : ''}`}
           type='text'
+          className={`input mt-[10px] ${errorMessage ? 'border-2 border-red' : ''}`}
           placeholder='초대할 멤버의 이메일을 입력해 주세요'
           value={email}
-          onChange={handleChange}
+          onChange={(e) => setEmail(e.target.value)}
+          onBlur={handleValidCheck}
         />
-        {errorMessage && <p className='mt-2 text-[14px] text-red'>{errorMessage}</p>}
+        {errorMessage && <p className='mt-2 text-sm text-red'>{errorMessage}</p>}
       </div>
-      <div className='flex justify-between md:justify-end md:gap-[15px]'>
-        <ModalCancelButton onClick={closeModal}>취소</ModalCancelButton>
-        <ModalActionButton disabled={email.length === 0 || !isValid} onClick={handleMemberInviteButton}>
+      <div className='flex justify-between md:justify-end md:gap-3'>
+        <ModalCancelButton type='button' onClick={closeModal}>
+          취소
+        </ModalCancelButton>
+        <ModalActionButton type='button' onClick={handleInviteClick} disabled={!(email && !errorMessage)}>
           초대
         </ModalActionButton>
       </div>

@@ -31,7 +31,3 @@ export interface ModifyColumnModalProps extends ModalProps {
   columnTitle: string;
   columnId: number;
 }
-
-export interface InviteMemberModalProps {
-  dashboardId: number;
-}
