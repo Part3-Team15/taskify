@@ -112,7 +112,7 @@ export default function InvitedDashboardList() {
   }
 
   return (
-    <section className='max-h-[calc(100vh-610px)] min-h-[580px] grow overflow-hidden rounded-lg border-0 bg-white md:max-h-[calc(100vh-390px)]'>
+    <section className='h-dvh max-h-[calc(100vh-590px)] min-h-[400px] grow overflow-hidden rounded-lg border-0 bg-white md:max-h-[calc(100dvh-465px)] lg:max-h-[calc(100dvh-410px)]'>
       <p className='px-7 pb-5 pt-8 text-base font-bold text-black-33'>초대받은 대시보드</p>
       {isLoading ? (
         <div className='flex animate-pulse flex-col'>

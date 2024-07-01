@@ -44,7 +44,7 @@ export default function Sidebar() {
   };
 
   return (
-    <aside className='flex min-w-16 flex-col border-r border-gray-d9 px-3 py-5 md:min-w-40 lg:min-w-72'>
+    <aside className='flex min-w-16 max-w-[300px] flex-col border-r border-gray-d9 px-3 py-5 md:min-w-40 lg:min-w-72'>
       <Link href={user ? '/mydashboard' : '/'} className='flex items-center justify-center pb-14 md:block md:px-3'>
         <div className='relative hidden h-[33px] w-[110px] md:block'>
           <Image src={'/icons/logo.svg'} alt='logo' priority className='' fill />
@@ -99,16 +99,23 @@ export default function Sidebar() {
             ))}
           </ul>
         ) : (
-          <ul className='flex h-min flex-col gap-2'>
-            {data?.dashboards.map((dashboard) => (
-              <DashboardItem key={dashboard.id} dashboard={dashboard} nowDashboard={Number(id)} />
-            ))}
-          </ul>
+          <>
+            <ul className='flex h-min flex-col gap-2'>
+              {data?.dashboards.map((dashboard) => (
+                <DashboardItem key={dashboard.id} dashboard={dashboard} nowDashboard={Number(id)} />
+              ))}
+            </ul>
+
+            {totalPage > 1 ? (
+              <div className='flex flex-col items-center pt-3 md:flex-row'>
+                <NavButton direction='left' onClick={handlePrev} isDisable={page === 1} />
+                <NavButton direction='right' onClick={handleNext} isDisable={page === totalPage} />
+              </div>
+            ) : (
+              <></>
+            )}
+          </>
         )}
-        <div className='flex flex-col items-center pt-3 md:flex-row'>
-          <NavButton direction='left' onClick={handlePrev} isDisable={page === 1} />
-          <NavButton direction='right' onClick={handleNext} isDisable={page === totalPage} />
-        </div>
       </div>
     </aside>
   );

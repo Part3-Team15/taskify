@@ -42,7 +42,7 @@ export default function DashboardList() {
 
   return (
     <section className='w-max grow flex-col justify-between'>
-      <ul className='grid grid-rows-1 gap-3 font-semibold text-black-33 md:min-h-[216px] md:grid-cols-2 md:grid-rows-3 lg:min-h-[140px] lg:grid-cols-3 lg:grid-rows-2'>
+      <ul className='grid grid-rows-1 gap-3 font-semibold text-black-33 md:min-h-[216px] md:grid-cols-2 md:grid-rows-3 lg:min-h-[140px] lg:grid-cols-3'>
         <li className='h-12 w-64 rounded-lg border border-gray-d9 bg-white md:h-16 md:w-60 lg:w-[300px]'>
           <button className='btn-violet-light size-full gap-4'>
             새로운 대시보드
@@ -68,7 +68,9 @@ export default function DashboardList() {
                 <Link href={`/dashboard/${dashboard.id}`} className={'btn-violet-light size-full rounded-md px-5'}>
                   <div className='flex size-full items-center'>
                     <div className='rounded-full p-1' style={{ backgroundColor: dashboard.color }} />
-                    <p className='pl-4 pr-1 text-lg font-medium'>{dashboard.title}</p>
+                    <p className='h-[28px] max-w-[150px] overflow-hidden pl-4 pr-1 text-lg font-medium lg:max-w-[200px]'>
+                      {dashboard.title}
+                    </p>
                     {dashboard.createdByMe && <Image src={'/icons/crown.svg'} alt='my' width={20} height={16} />}
                   </div>
                   <Image src={'/icons/arrow-black.svg'} alt='arrow' width={14} height={14} />
@@ -78,7 +80,7 @@ export default function DashboardList() {
           </>
         )}
 
-        <div className='md:col-span-2 lg:col-span-3'>
+        <div className='md:col-span-2 lg:col-span-3 lg:row-start-3'>
           <Pagination
             currentChunk={currentChunk}
             totalPage={totalPage}
