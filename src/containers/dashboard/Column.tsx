@@ -14,7 +14,7 @@ interface ColumnProps {
 }
 
 function Column({ column, columns }: ColumnProps) {
-  const { openModal } = useModal();
+  const { openModifyColumnModal } = useModal();
   const {
     data: cardList,
     isLoading,
@@ -45,10 +45,7 @@ function Column({ column, columns }: ColumnProps) {
           <button
             className='transition duration-300 ease-in-out hover:rotate-90'
             onClick={() => {
-              openModal({
-                type: 'modifyColumn',
-                modalProps: { columnId: column.id, columnTitle: column.title, columns },
-              });
+              openModifyColumnModal({ columns, columnId: column.id, columnTitle: column.title });
             }}
           >
             <Image src='/icons/gear.svg' width={24} height={24} alt='톱니바퀴 아이콘' />

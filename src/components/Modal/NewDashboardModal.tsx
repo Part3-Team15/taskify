@@ -19,7 +19,7 @@ export default function NewDashboardModal() {
   const [errorMessage, setErrorMessage] = useState('');
 
   const queryClient = useQueryClient();
-  const { openModal, closeModal } = useModal();
+  const { openNotificationModal, closeModal } = useModal();
 
   const handleValidCheck = () => {
     if (!value.title) {
@@ -44,7 +44,7 @@ export default function NewDashboardModal() {
       await postNewDashboard(value);
       queryClient.invalidateQueries({ queryKey: ['sideDashboards'] });
       queryClient.invalidateQueries({ queryKey: ['dashboards'] });
-      openModal({ type: 'notification', modalProps: { text: '새로운 대시보드가 생성되었습니다!' } });
+      openNotificationModal({ text: '새로운 대시보드가 생성되었습니다!' });
     } catch (error) {
       if (error instanceof AxiosError) {
         setErrorMessage(error.response?.data.message || '대시보드 생성을 실패하였습니다');

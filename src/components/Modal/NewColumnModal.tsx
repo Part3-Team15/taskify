@@ -10,7 +10,7 @@ import { postNewColumn } from '@/services/postService';
 import { NewColumnModalProps } from '@/types/Modal.interface';
 
 export default function NewColumnModal({ columns }: NewColumnModalProps) {
-  const { openModal, closeModal } = useModal();
+  const { openNotificationModal, closeModal } = useModal();
   const queryClient = useQueryClient();
 
   const router = useRouter();
@@ -36,7 +36,7 @@ export default function NewColumnModal({ columns }: NewColumnModalProps) {
     try {
       await postNewColumn({ title: name, dashboardId: Number(id) });
       queryClient.invalidateQueries({ queryKey: ['columns', id] });
-      openModal({ type: 'notification', modalProps: { text: '새로운 컬럼이 생성되었습니다!' } });
+      openNotificationModal({ text: '새로운 컬럼이 생성되었습니다!' });
     } catch (error) {
       if (error instanceof AxiosError) {
         setErrorMessage(error.response?.data.message || '컬럼 생성을 실패하였습니다.');
