@@ -1,3 +1,4 @@
+import { useQueryClient } from '@tanstack/react-query';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
@@ -14,6 +15,7 @@ export default function DashboardModifySection() {
   const router = useRouter();
   const { id } = router.query;
   const { openModal } = useModal();
+  const queryClient = useQueryClient();
 
   const [value, setValue] = useState<DashboardInfoState>({
     title: '',
@@ -24,7 +26,6 @@ export default function DashboardModifySection() {
   const [fixedColor, setFixedColor] = useState<string>('');
   const [isButtonDisabled, setIsButtonDisabled] = useState<boolean>(true);
 
-  // API RESPONSE로 받은 COLOR CODE를 COLOR STRING으로 변환 (ex: #어쩌구저쩌구 -> 'red')
   const getColorString = (colorValue: string): string | undefined => {
     return (Object.keys(DASHBOARD_COLOR_OBJ) as (keyof typeof DASHBOARD_COLOR_OBJ)[]).find(
       (key: keyof typeof DASHBOARD_COLOR_OBJ) => DASHBOARD_COLOR_OBJ[key] === colorValue,
@@ -35,28 +36,27 @@ export default function DashboardModifySection() {
     data: dashboard,
     isLoading,
     error,
-    refetch,
   } = useFetchData<Dashboard>(['dashboard', id], () => getDashboard(id as string));
 
   const handleModifyButton = async () => {
     try {
       await putDashboardInfo(Number(id), value);
       openModal({ type: 'textModal', modalProps: { text: '대시보드 정보가 수정되었습니다!' } });
-      refetch();
+      queryClient.invalidateQueries({ queryKey: ['dashboard', id] });
+      queryClient.invalidateQueries({ queryKey: ['sideDashboards'] });
     } catch {
       openModal({ type: 'textModal', modalProps: { text: '대시보드 정보 수정을 실패하였습니다.' } });
     }
   };
 
   useEffect(() => {
-    // API Response로 받은 title과 color를 현재 state에 반영
     if (dashboard) {
       setValue({
         title: dashboard.title,
         color: dashboard.color,
       });
-      setFixedTitle(dashboard.title); // 서버에 저장된 title과 현재 state title을 비교하기 위한 state
-      setFixedColor(dashboard.color); // 서버에 저장된 color와 현재 state color를 비교하기 위한 state
+      setFixedTitle(dashboard.title);
+      setFixedColor(dashboard.color);
       const colorKey = getColorString(dashboard.color);
       if (colorKey) {
         setSelectedColor(colorKey as DashboardColor);
@@ -65,11 +65,9 @@ export default function DashboardModifySection() {
   }, [dashboard]);
 
   useEffect(() => {
-    // 현재 선택된 컬러와 입력된 대쉬보드 이름이 이전과 같거나 데이터를 입력하지 않았을 때 button disabled
     setIsButtonDisabled((value.title === fixedTitle && value.color === fixedColor) || value.title.trim() === '');
   }, [value.title, value.color, fixedTitle, fixedColor]);
 
-  // 컬러 선택 변경 버튼 함수
   const handleColorSelect = (color: DashboardColor) => {
     setSelectedColor(color);
     setValue((prevValue) => ({
@@ -85,35 +83,25 @@ export default function DashboardModifySection() {
   if (error) {
     return (
       <section className='section flex h-[211px] items-center justify-center px-[18px] py-[32px] md:h-[256px]'>
-        <h1 className='text-[22px] font-bold text-black-33'>대시보드 정보가 없습니다!</h1>
+        <p role='alert' className='text-[22px] font-bold text-black-33'>
+          대시보드 정보가 없습니다!
+        </p>
       </section>
     );
   }
 
   return (
-    <section className='section flex h-[211px] flex-col justify-between px-[18px] py-[22px] md:h-[256px] md:py-[26px]'>
+    <section className='section relative flex h-[211px] flex-col justify-between px-[18px] py-[22px] md:h-[256px] md:py-[26px]'>
       <header className='flex justify-between'>
         <h2 className='text-[20px] font-bold text-black-33'>{fixedTitle}</h2>
-        <div className='flex gap-[10px]'>
-          {(['green', 'purple', 'orange', 'blue', 'pink'] as DashboardColor[]).map((color) => (
-            <button
-              key={`${color}-button`}
-              style={{ backgroundColor: DASHBOARD_COLOR_OBJ[color] }}
-              className={`flex size-[28px] items-center justify-center rounded-full bg-white md:size-[30px]`}
-              onClick={() => handleColorSelect(color)}
-            >
-              {selectedColor === color && <Image src='/icons/check.svg' alt='체크' width={16} height={16} />}
-            </button>
-          ))}
-        </div>
       </header>
       <main>
         <div className='flex flex-col'>
-          <label htmlFor='dashboardTitle' className='mb-[10px] text-[16px] text-black-33 md:text-[18px]'>
+          <label htmlFor='dashboardTitle' className='label mb-[12px] text-[16px] md:text-[18px]'>
             대시보드 이름
           </label>
           <input
-            className='h-[42px] rounded-[6px] border border-gray-d9 px-[15px] text-[14px] md:h-[48px] md:text-[16px]'
+            className='input text-[14px] md:text-[16px]'
             id='dashboardTitle'
             type='text'
             value={value.title}
@@ -127,6 +115,20 @@ export default function DashboardModifySection() {
           변경
         </ActionButton>
       </footer>
+      <div className='absolute bottom-[28px] flex h-[20px] gap-[10px] md:bottom-0 md:right-[18px] md:top-[26px]'>
+        {(['green', 'purple', 'orange', 'blue', 'pink'] as DashboardColor[]).map((color) => (
+          <button
+            key={`${color}-button`}
+            style={{ backgroundColor: DASHBOARD_COLOR_OBJ[color] }}
+            className={`flex size-[20px] items-center justify-center rounded-full bg-white md:size-[30px]`}
+            onClick={() => handleColorSelect(color)}
+          >
+            {selectedColor === color && (
+              <Image src='/icons/check.svg' alt='체크' width={10} height={10} className='md:size-[16px]' />
+            )}
+          </button>
+        ))}
+      </div>
     </section>
   );
 }
