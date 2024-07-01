@@ -2,8 +2,15 @@ import Link from 'next/link';
 
 import SignInForm from '@/containers/signin&signup/SignInForm';
 import TopLogoSection from '@/containers/signin&signup/TopLogoSection';
+import useRedirectIfAuthenticated from '@/hooks/useRedirectIfAuthenticated';
 
 export default function SignInPage() {
+  const isRedirecting = useRedirectIfAuthenticated();
+
+  if (isRedirecting) {
+    return <></>;
+  }
+
   return (
     <div className='flex items-center justify-center'>
       <div className='w-[350px] items-center justify-center md:w-[520px]'>

@@ -2,15 +2,18 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useState } from 'react';
+import { useSelector } from 'react-redux';
 
 import DashboardItem from './DashboardItem';
 
 import useFetchData from '@/hooks/useFetchData';
 import useModal from '@/hooks/useModal';
 import { getDashboardsList } from '@/services/getService';
+import { RootState } from '@/store/store';
 import { DashboardsResponse } from '@/types/Dashboard.interface';
 
 export default function Sidebar() {
+  const { user } = useSelector((state: RootState) => state.user);
   const router = useRouter();
   const { id } = router.query;
   const [page, setPage] = useState<number>(1);
@@ -40,7 +43,7 @@ export default function Sidebar() {
 
   return (
     <aside className='flex h-screen min-w-16 flex-col border-r border-gray-d9 px-3 py-5 md:min-w-40 lg:min-w-72'>
-      <Link href='/' className='flex items-center justify-center pb-14 md:block md:px-3'>
+      <Link href={user ? '/mydashboard' : '/'} className='flex items-center justify-center pb-14 md:block md:px-3'>
         <div className='relative hidden h-[33px] w-[110px] md:block'>
           <Image src={'/icons/logo.svg'} alt='logo' priority className='' fill />
         </div>

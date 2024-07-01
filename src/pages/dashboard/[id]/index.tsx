@@ -1,8 +1,15 @@
 import { useRouter } from 'next/router';
 
 import ColumnsSection from '@/containers/dashboard/ColumnsSection';
+import useRedirectIfNotAuth from '@/hooks/useRedirectIfNotAuth';
 
 function DashboardIdPage() {
+  const isRedirecting = useRedirectIfNotAuth();
+
+  if (isRedirecting) {
+    return <></>;
+  }
+
   const router = useRouter();
   const { id } = router.query;
 
