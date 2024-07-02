@@ -20,6 +20,9 @@ export default function App({ Component, pageProps }: AppProps) {
           <Modal />
           <Head>
             <title>Taskify</title>
+            <meta name='og:title' content='Taskify' />
+            <meta name='og:description' content='새로운 일정 관리 Taskify' />
+            <meta name='og:image' content='/public/images/logo_large.png' />
           </Head>
           <MainLayout>
             <Component {...pageProps} />
