@@ -113,7 +113,7 @@ export default function InvitedDashboardList() {
   }
 
   return (
-    <section className='h-full min-h-80 overflow-hidden rounded-lg border-0 bg-white'>
+    <section className='h-full max-h-[calc(100vh-410px)] min-h-[530px] max-w-[350px] overflow-hidden rounded-lg border-0 bg-white md:max-w-full lg:max-w-screen-lg'>
       <p className='px-7 pb-5 pt-8 text-base font-bold text-black-33'>초대받은 대시보드</p>
       {isLoading ? (
         <Skeleton />
