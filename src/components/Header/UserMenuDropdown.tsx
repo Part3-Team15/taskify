@@ -27,7 +27,7 @@ export default function UserMenuDropdown() {
   };
 
   return (
-    <div className='relative flex items-center'>
+    <div className='relative z-10 flex items-center'>
       <button type='button' onClick={handleDropdownClick}>
         <UserProfile />
       </button>
