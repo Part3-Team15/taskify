@@ -6,6 +6,7 @@ import Head from 'next/head';
 import { Provider } from 'react-redux';
 import { PersistGate } from 'redux-persist/integration/react';
 
+import InvitationNotice from '@/components/Header/InvitationNotice';
 import Modal from '@/components/Modal';
 import MainLayout from '@/layouts/MainLayout';
 import { store, persistor } from '@/store/store';
@@ -24,6 +25,7 @@ export default function App({ Component, pageProps }: AppProps) {
             <meta name='og:description' content='새로운 일정 관리 Taskify' />
             <meta name='og:image' content='/public/images/logo_large.png' />
           </Head>
+          <InvitationNotice />
           <MainLayout>
             <Component {...pageProps} />
           </MainLayout>
