@@ -1,8 +1,10 @@
 import Image from 'next/image';
 import { useRouter } from 'next/router';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 
+import MemberProfile from './MemberProfile';
 import MembersDropDown from './MembersDropDown';
+import TagsWrapper from './TagsWrapper';
 
 import CARROT_DOWN from '@/../public/icons/carrot-down.svg';
 import ModalActionButton from '@/components/Button/ModalActionButton';
@@ -50,36 +52,89 @@ export default function NewCardModal({ columnId }: NewCardModalProps) {
   const [isOpen, setIsOpen] = useState(false);
   const [members, setMembers] = useState<Member[]>([]);
   const [formValues, setFormValues] = useState<postCardData>(formInitialState);
+  const [profileImageFile, setProfileImageFile] = useState<File | null>(null);
+
+  const dropdownRef = useRef<HTMLDivElement>(null);
+  const toggleRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const getMembers = async () => {
       try {
         const response = await getMembersList(Number(id), 1, 99);
-        const filterdMembers = response.data.members.map((member: Member) => ({
+        const filteredMembers = response.data.members.map((member: Member) => ({
           userId: member.userId,
           nickname: member.nickname,
           profileImageUrl: member.profileImageUrl,
         }));
-        setMembers(filterdMembers); // AxiosResponse 객체에서 data를 추출하여 상태에 설정
+        setMembers(filteredMembers); // AxiosResponse 객체에서 data를 추출하여 상태에 설정
       } catch (error) {
         console.error('Error fetching members:', error);
       }
     };
     if (id) {
       getMembers();
+      setFormValues((prevValues) => ({
+        ...prevValues,
+        dashboardId: Number(id),
+        columnId: Number(columnId),
+      }));
     }
   }, [id]);
 
   useEffect(() => {
-    console.log(members);
-  }, [members]);
+    const handleClickOutside = (event: MouseEvent) => {
+      if (
+        dropdownRef.current &&
+        !dropdownRef.current.contains(event.target as Node) &&
+        toggleRef.current &&
+        !toggleRef.current.contains(event.target as Node)
+      ) {
+        setIsOpen(false);
+      }
+    };
+    if (isOpen) {
+      document.addEventListener('mousedown', handleClickOutside);
+    } else {
+      document.removeEventListener('mousedown', handleClickOutside);
+    }
+
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [isOpen]);
 
   const handleSelectMember = (userId: number) => {
     setFormValues((prevValues) => ({
       ...prevValues,
       assigneeUserId: userId,
     }));
-    setIsOpen(false); // 드롭다운 닫기
+    setIsOpen(false);
+  };
+
+  const handleTagsKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
+    if (event.key === 'Enter') {
+      event.preventDefault();
+      const value = event.currentTarget.value.trim();
+      if (value && !formValues.tags.includes(value) && event.nativeEvent.isComposing === false) {
+        setFormValues((prevValues) => ({
+          ...prevValues,
+          tags: [...prevValues.tags, value],
+        }));
+        event.currentTarget.value = ''; // 입력 필드를 초기화합니다.
+      }
+    }
+  };
+
+  const handleTagDeleteClick = (tag: string) => {
+    setFormValues((prevValue) => ({ ...prevValue, tags: prevValue.tags.filter((t) => t !== tag) }));
+  };
+
+  const handleImageChange = (image: File) => {
+    setProfileImageFile(image);
+  };
+
+  const handleImageDelete = () => {
+    setProfileImageFile(null);
   };
 
   const selectedMember = members.find((member) => member.userId === formValues.assigneeUserId);
@@ -94,24 +149,33 @@ export default function NewCardModal({ columnId }: NewCardModalProps) {
               담당자
             </label>
             <div className='relative md:w-[217px]'>
-              <span
+              <div
                 className='input cursor-pointer text-[14px] md:text-[16px]'
                 onClick={() => {
                   setIsOpen(!isOpen);
                 }}
+                ref={toggleRef}
               >
-                {selectedMember ? selectedMember.nickname : '담당자를 선택해 주세요'}
-              </span>
-              <button
-                className='absolute right-[20px] top-[18px] md:top-[24px]'
-                type='button'
-                onClick={() => {
-                  setIsOpen(!isOpen);
-                }}
-              >
-                <Image src={CARROT_DOWN} alt='메뉴 내리기 버튼' />
-              </button>
-              {isOpen && <MembersDropDown members={members} onSelectMember={handleSelectMember} />}
+                {selectedMember ? (
+                  <MemberProfile
+                    userId={selectedMember.userId}
+                    nickname={selectedMember.nickname}
+                    profileImageUrl={selectedMember.profileImageUrl}
+                  />
+                ) : (
+                  '담당자를 선택해 주세요'
+                )}
+                <Image
+                  className={`absolute right-[20px] top-[18px] md:top-[24px] ${isOpen ? 'rotate-180' : ''}`}
+                  src={CARROT_DOWN}
+                  alt='메뉴 내리기 버튼'
+                />
+              </div>
+              {isOpen && (
+                <div ref={dropdownRef}>
+                  <MembersDropDown members={members} onSelectMember={handleSelectMember} />
+                </div>
+              )}
             </div>
           </div>
           <div>
@@ -127,7 +191,7 @@ export default function NewCardModal({ columnId }: NewCardModalProps) {
               onChange={(e) => {
                 setFormValues((prevValues) => ({ ...prevValues, title: e.target.value }));
               }}
-            ></input>
+            />
           </div>
           <div>
             <label htmlFor='description' className='label mb-[15px] block text-[16px] md:text-[18px]'>
@@ -150,9 +214,12 @@ export default function NewCardModal({ columnId }: NewCardModalProps) {
             <input
               className='input text-[14px] md:text-[16px]'
               id='dueDate'
-              type='date'
+              type='datetime-local'
               placeholder='날짜를 입력해 주세요'
-            ></input>
+              onChange={(e) => {
+                setFormValues((prevValues) => ({ ...prevValues, dueDate: e.target.value }));
+              }}
+            />
           </div>
           <div>
             <label htmlFor='tags' className='label mb-[15px] block text-[16px] md:text-[18px]'>
@@ -163,18 +230,25 @@ export default function NewCardModal({ columnId }: NewCardModalProps) {
               id='tags'
               type='text'
               placeholder='입력 후 Enter'
-            ></input>
+              onKeyDown={handleTagsKeyDown}
+            />
+            <TagsWrapper tags={formValues.tags} onTagClick={handleTagDeleteClick} />
           </div>
           <div>
             <label htmlFor='card-profile' className='label mb-[15px] block text-[16px] md:text-[18px]'>
               이미지
             </label>
             <div className='size-[58px] md:size-[76px]'>
-              <ImageInput name='card-profile' value={''} onChange={() => {}} onDeleteClick={() => {}} />
+              <ImageInput
+                name='card-profile'
+                value={formValues.imageUrl || null}
+                onChange={handleImageChange}
+                onDeleteClick={handleImageDelete}
+              />
             </div>
           </div>
           <div className='flex justify-end gap-[10px]'>
-            <ModalCancelButton>취소</ModalCancelButton>
+            <ModalCancelButton type='button'>취소</ModalCancelButton>
             <ModalActionButton>생성</ModalActionButton>
           </div>
         </form>

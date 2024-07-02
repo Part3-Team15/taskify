@@ -1,3 +1,5 @@
+import MemberProfile from './MemberProfile';
+
 export default function MembersDropDown({
   members,
   onSelectMember,
@@ -10,18 +12,17 @@ export default function MembersDropDown({
   onSelectMember: (userId: number) => void;
 }) {
   return (
-    <ul className='absolute bottom-[-48px] w-full rounded-[6px] border border-gray-d9 bg-white px-4 py-2 md:bottom-[-53px]'>
+    <ul className='absolute top-[110%] w-full rounded-[6px] border border-gray-d9 bg-white px-4 py-2'>
       {members.map((member) => {
         return (
           <li
-            className='cursor-pointer rounded-[6px] px-[3px] hover:bg-violet hover:text-white'
+            className='flex cursor-pointer items-center rounded-[6px] px-[6px] py-[5px] text-[14px] transition-all hover:bg-violet-light-hover md:text-[16px]'
             key={`member-${member.userId}`}
             onClick={() => {
               onSelectMember(member.userId);
             }}
           >
-            <p className={`font-montserrat font-semibold text-white`}>{member.nickname.substring(0, 1)}</p>
-            {member.nickname}
+            <MemberProfile userId={member.userId} nickname={member.nickname} profileImageUrl={member.profileImageUrl} />
           </li>
         );
       })}
