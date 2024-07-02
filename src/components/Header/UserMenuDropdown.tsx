@@ -1,33 +1,14 @@
 import Link from 'next/link';
-import { useRouter } from 'next/router';
-import { useState } from 'react';
-import { useDispatch } from 'react-redux';
 
 import UserProfile from './UserProfile';
 
-import { clearUser } from '@/store/reducers/userSlice';
+import useUserDropdown from '@/hooks/useUserDropdown';
 
 export default function UserMenuDropdown() {
-  const [isOpen, setIsOpen] = useState(false);
-  const router = useRouter();
-  const dispatch = useDispatch();
-
-  const handleDropdownClick = () => {
-    setIsOpen((isOpen) => !isOpen);
-  };
-
-  const handleMenuClick = () => {
-    setIsOpen(false);
-  };
-
-  const handleLogoutClick = () => {
-    dispatch(clearUser());
-    handleMenuClick();
-    router.push('/');
-  };
+  const { isOpen, dropdownRef, handleDropdownClick, handleMenuClick, handleLogoutClick } = useUserDropdown();
 
   return (
-    <div className='flex items-center'>
+    <div className='flex items-center' ref={dropdownRef}>
       <button type='button' onClick={handleDropdownClick}>
         <UserProfile />
       </button>
