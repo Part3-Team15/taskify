@@ -44,24 +44,41 @@ export default function DashboardList() {
 
   return (
     <section className='flex-col justify-between'>
-      <ul className='grid max-w-[350px] grid-rows-1 gap-3 font-semibold text-black-33 md:min-h-[216px] md:max-w-full md:grid-cols-2 md:grid-rows-3 lg:min-h-[140px] lg:max-w-screen-lg lg:grid-cols-3'>
+      <ul className='grid max-w-[350px] grid-rows-1 gap-3 font-semibold text-black-33 md:min-h-[216px] md:max-w-full md:grid-cols-2 md:grid-rows-3 lg:min-h-[140px] lg:max-w-screen-lg lg:grid-cols-3 dark:text-dark-10'>
         <li className='h-12 w-full rounded-lg border border-gray-d9 bg-white md:h-16'>
-          <button className='btn-violet-light size-full gap-4' type='button' onClick={() => openNewDashboardModal()}>
+          <button
+            className='btn-violet-light dark:btn-violet-dark size-full gap-4'
+            type='button'
+            onClick={() => openNewDashboardModal()}
+          >
             새로운 대시보드
-            <Image src={'/icons/plus-filled.svg'} alt='plus' width={22} height={22} />
+            <Image src={'/icons/plus-filled.svg'} alt='plus' width={22} height={22} className='dark:hidden' />
+            <Image
+              src={'/icons/plus-boxed.svg'}
+              alt='plus'
+              width={30}
+              height={30}
+              className='-mx-1 hidden dark:block'
+            />
           </button>
         </li>
         {isLoading ? (
           <>
             {[...Array(5)].map((_, i) => (
-              <li key={i} className='h-12 w-full animate-pulse rounded-lg border border-gray-d9 bg-gray-fa md:h-16' />
+              <li
+                key={i}
+                className='h-12 w-full animate-pulse rounded-lg border border-gray-d9 bg-gray-fa md:h-16 dark:bg-dark-300'
+              />
             ))}
           </>
         ) : (
           <>
             {dashboardResponse?.dashboards.map((dashboard) => (
-              <li className='h-12 w-full rounded-lg border border-gray-d9 bg-white md:h-16' key={dashboard.id}>
-                <Link href={`/dashboard/${dashboard.id}`} className={'btn-violet-light size-full rounded-md px-5'}>
+              <li className='h-12 w-full md:h-16' key={dashboard.id}>
+                <Link
+                  href={`/dashboard/${dashboard.id}`}
+                  className={'btn-violet-light dark:btn-violet-dark size-full rounded-md px-5'}
+                >
                   <div className='flex size-full items-center'>
                     <div className='rounded-full p-1' style={{ backgroundColor: dashboard.color }} />
                     <div className='mx-4 h-[28px] grow overflow-hidden text-ellipsis text-lg font-medium'>

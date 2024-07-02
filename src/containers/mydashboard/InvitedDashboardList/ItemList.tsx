@@ -12,7 +12,7 @@ interface InvitationListProps {
 
 export default function InvitationItemList({ invitations, handleAcceptInvitation, observerRef }: InvitationListProps) {
   return (
-    <div className='h-[calc(100%-130px)] pt-6 md:h-[calc(100%-170px)]'>
+    <div className='h-full max-h-[calc(100%-180px)]'>
       <div className='hidden grid-cols-3 pb-6 pl-7 text-gray-9f md:grid md:pr-7'>
         <p>이름</p>
         <p>초대자</p>
@@ -23,14 +23,14 @@ export default function InvitationItemList({ invitations, handleAcceptInvitation
           <div className='relative size-[60px] md:size-[100px]'>
             <Image src={'/icons/invitations.svg'} alt='invitations' fill />
           </div>
-          <p className='px-7 py-5 text-gray-78'>검색 결과가 없습니다.</p>
+          <p className='px-7 py-5 text-gray-78 dark:text-dark-10'>검색 결과가 없습니다.</p>
         </div>
       ) : (
         <ul className='h-full overflow-y-auto'>
           {invitations.map((invitation: Invitation) => (
             <li
               key={invitation.id}
-              className='grid h-max grid-cols-1 gap-[10px] border-b border-gray-ee p-4 text-sm text-black-33 md:h-16 md:grid-cols-3 md:gap-0 md:px-7 md:py-0 md:text-base'
+              className='grid h-max grid-cols-1 gap-[10px] border-b border-gray-ee p-4 text-sm text-black-33 md:h-16 md:grid-cols-3 md:gap-0 md:px-7 md:py-0 md:text-base dark:border-dark-200 dark:text-dark-10'
             >
               <div className='grid grid-cols-3 items-center md:flex'>
                 <p className='flex items-center md:hidden'>이름</p>
