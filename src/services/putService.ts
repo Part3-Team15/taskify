@@ -30,3 +30,11 @@ export const putPassword = async (formData: UpdatePasswordForm) => {
 export const putColumn = async (columnId: number, formData: { title: string }) => {
   return await instance.put(`/columns/${columnId}`, formData);
 };
+
+// 컬럼 아이디 값 수정 : 다른 컬럼으로 카드 이동 (DnD)
+export const moveToOtherColumn = async (cardId: number, destinationColumnId: number) => {
+  const formData = {
+    columnId: destinationColumnId,
+  };
+  return await instance.put(`/cards/${cardId}`, formData);
+};
