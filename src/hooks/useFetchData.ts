@@ -16,6 +16,7 @@ const useFetchData = <T>(
         throw new Error('데이터를 불러오는 중 에러 발생: ' + error);
       }
     },
+    retry: 1,
     refetchInterval: refetchInterval,
   });
 };
