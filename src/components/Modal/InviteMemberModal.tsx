@@ -10,7 +10,7 @@ import useModal from '@/hooks/useModal';
 import { postInviteMember } from '@/services/postService';
 
 export default function InviteMemberModal() {
-  const { openModal, closeModal } = useModal();
+  const { openNotificationModal, closeModal } = useModal();
   const queryClient = useQueryClient();
 
   const router = useRouter();
@@ -32,7 +32,7 @@ export default function InviteMemberModal() {
     try {
       await postInviteMember(Number(dashboardId), { email });
       queryClient.invalidateQueries({ queryKey: ['invitations', dashboardId] });
-      openModal({ type: 'notification', modalProps: { text: '해당 멤버를 초대하였습니다!' } });
+      openNotificationModal({ text: '해당 멤버를 초대하였습니다!' });
     } catch (error) {
       if (error instanceof AxiosError) {
         setErrorMessage(error.response?.data.message || '초대 중 에러가 발생했습니다.');
