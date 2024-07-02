@@ -39,7 +39,7 @@ export default function DashboardHeader() {
         {createdByMe && <Image src='/icons/crown.svg' alt='왕관 아이콘' width={20} height={16} />}
       </div>
       <div className='flex gap-4 md:gap-8 lg:gap-10'>
-        <Buttons id={dashboardId} />
+        {createdByMe && <Buttons id={dashboardId} />}
         <div className='flex items-center gap-3 md:gap-6 lg:gap-8'>
           <MemberProfiles id={dashboardId} />
           <div className='h-[34px] w-0 border-l border-gray-d9' />
