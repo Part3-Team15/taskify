@@ -27,23 +27,23 @@ export default function UserMenuDropdown() {
   };
 
   return (
-    <div className='relative flex items-center'>
+    <div className='flex items-center'>
       <button type='button' onClick={handleDropdownClick}>
         <UserProfile />
       </button>
       {isOpen && (
-        <ul className='dd-container absolute right-0 top-11 w-28 bg-white'>
-          <li className='dd-menu' onClick={handleMenuClick}>
+        <ul className='dd-container absolute right-2 top-14 w-28 bg-white text-sm md:top-16 md:w-[150px] md:text-base'>
+          <li className='dd-menu md:h-10' onClick={handleMenuClick}>
             <Link href='/mydashboard' className='align-center size-full'>
               내 대시보드
             </Link>
           </li>
-          <li className='dd-menu' onClick={handleMenuClick}>
+          <li className='dd-menu md:h-10' onClick={handleMenuClick}>
             <Link href='/mypage' className='align-center size-full'>
               계정관리
             </Link>
           </li>
-          <li className='dd-menu'>
+          <li className='dd-menu md:h-10'>
             <button type='button' className='align-center size-full' onClick={handleLogoutClick}>
               로그아웃
             </button>
