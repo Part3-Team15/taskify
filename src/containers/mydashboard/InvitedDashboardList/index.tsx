@@ -102,7 +102,7 @@ export default function InvitedDashboardList() {
 
   if (error) {
     return (
-      <div className='h-full max-w-screen-lg overflow-hidden rounded-lg border-0 bg-white'>
+      <div className='h-full max-w-screen-lg overflow-hidden rounded-lg border-0 bg-white dark:bg-dark'>
         <p className='px-7 pb-5 pt-8 text-base font-bold text-black-33'>초대받은 대시보드</p>
         <div className='flex items-center justify-center'>
           <p>데이터를 가져오는 중 오류가 발생했습니다.</p>
@@ -113,8 +113,8 @@ export default function InvitedDashboardList() {
   }
 
   return (
-    <section className='h-full max-h-[calc(100vh-410px)] min-h-[530px] max-w-[350px] overflow-hidden rounded-lg border-0 bg-white md:max-w-full lg:max-w-screen-lg'>
-      <p className='px-7 pb-5 pt-8 text-base font-bold text-black-33'>초대받은 대시보드</p>
+    <section className='h-full max-h-[calc(100vh-410px)] min-h-[530px] max-w-[350px] overflow-hidden rounded-lg border-0 bg-white md:max-h-[calc(100vh-470px)] md:max-w-full lg:max-h-[calc(100vh-410px)] lg:max-w-screen-lg dark:bg-dark'>
+      <p className='px-7 pb-5 pt-8 text-base font-bold text-black-33 dark:text-dark-10'>초대받은 대시보드</p>
       {isLoading ? (
         <Skeleton />
       ) : (

@@ -16,10 +16,10 @@ export default function DashboardItem({ dashboard, nowDashboard }: DashboardItem
     <li>
       <Link
         href={`/dashboard/${dashboard.id}`}
-        className={`${itemClasses} flex items-center justify-center rounded-md py-3 hover:bg-violet/20 md:justify-start md:px-3`}
+        className={`${itemClasses} dark:btn-violet-dark btn-violet-light border-none py-3 md:justify-start md:px-3`}
       >
         <div className='rounded-full p-1' style={{ backgroundColor: dashboard.color }} />
-        <div className='ml-4 mr-[6px] hidden h-[28px] overflow-x-hidden text-nowrap text-lg font-medium md:block'>
+        <div className='ml-4 mr-[6px] hidden h-[28px] overflow-x-hidden text-nowrap text-lg font-medium md:block dark:text-dark-10'>
           <p>{dashboard.title}</p>
         </div>
         {dashboard.createdByMe && (
