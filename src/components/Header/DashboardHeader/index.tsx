@@ -1,3 +1,4 @@
+import Head from 'next/head';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
 
@@ -34,6 +35,9 @@ export default function DashboardHeader() {
 
   return (
     <header className='flex h-[60px] w-full items-center justify-end border-b border-gray-d9 bg-white px-[24px] text-black-33 md:h-[70px] md:px-[40px] lg:justify-between'>
+      <Head>
+        <title>Taskify | {title}</title>
+      </Head>
       <div className='hidden items-center gap-2 lg:flex'>
         <h1 className='text-xl font-bold'>{title}</h1>
         {createdByMe && <Image src='/icons/crown.svg' alt='왕관 아이콘' width={20} height={16} />}

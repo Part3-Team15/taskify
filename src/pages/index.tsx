@@ -1,3 +1,4 @@
+import Head from 'next/head';
 import Image from 'next/image';
 import Link from 'next/link';
 
@@ -6,6 +7,9 @@ import Footer from '@/components/Footer';
 function Home() {
   return (
     <main className='h-dvh max-h-[calc(100dvh-70px)] overflow-y-scroll bg-dark-500 text-white'>
+      <Head>
+        <title>Taskify</title>
+      </Head>
       <div className='flex flex-col items-center'>
         <section className='flex max-w-[1200px] flex-col items-center pb-[180px] pt-24 md:pb-[180px]'>
           <div className='relative h-[168px] w-[287px] md:h-[314px] md:w-[537px] lg:h-[422px] lg:w-[722px]'>
