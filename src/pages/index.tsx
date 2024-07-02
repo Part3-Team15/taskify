@@ -11,7 +11,7 @@ function Home() {
           <div className='relative h-[168px] w-[287px] md:h-[314px] md:w-[537px] lg:h-[422px] lg:w-[722px]'>
             <Image src={'/images/landing0.svg'} alt='invitations' fill priority />
           </div>
-          
+
           <p className='pb-6 pt-7 text-center text-[40px] font-bold leading-[64px] tracking-[-4px] md:pt-12 md:text-[56px] lg:text-[76px]'>
             새로운 일정 관리 <br className='md:hidden' />
             <span className='text-[42px] tracking-normal text-violet md:text-[70px] lg:text-[90px]'>Taskify</span>
