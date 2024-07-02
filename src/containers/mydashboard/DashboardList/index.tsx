@@ -43,9 +43,9 @@ export default function DashboardList() {
   };
 
   return (
-    <section className='w-max grow flex-col justify-between'>
-      <ul className='grid grid-rows-1 gap-3 font-semibold text-black-33 md:min-h-[216px] md:grid-cols-2 md:grid-rows-3 lg:min-h-[140px] lg:grid-cols-3'>
-        <li className='h-12 w-64 rounded-lg border border-gray-d9 bg-white md:h-16 md:w-60 lg:w-[300px]'>
+    <section className='grow flex-col justify-between'>
+      <ul className='grid max-w-[350px] grid-rows-1 gap-3 font-semibold text-black-33 md:min-h-[216px] md:max-w-full md:grid-cols-2 md:grid-rows-3 lg:min-h-[140px] lg:max-w-screen-lg lg:grid-cols-3'>
+        <li className='h-12 w-full rounded-lg border border-gray-d9 bg-white md:h-16'>
           <button className='btn-violet-light size-full gap-4' type='button' onClick={() => openNewDashboardModal()}>
             새로운 대시보드
             <Image src={'/icons/plus-filled.svg'} alt='plus' width={22} height={22} />
@@ -54,28 +54,22 @@ export default function DashboardList() {
         {isLoading ? (
           <>
             {[...Array(5)].map((_, i) => (
-              <li
-                key={i}
-                className='h-12 w-64 animate-pulse rounded-lg border border-gray-d9 bg-gray-fa md:h-16 md:w-60 lg:w-[300px]'
-              />
+              <li key={i} className='h-12 w-full animate-pulse rounded-lg border border-gray-d9 bg-gray-fa md:h-16' />
             ))}
           </>
         ) : (
           <>
             {dashboardResponse?.dashboards.map((dashboard) => (
-              <li
-                className='h-12 w-64 rounded-lg border border-gray-d9 bg-white md:h-16 md:w-60 lg:w-[300px]'
-                key={dashboard.id}
-              >
+              <li className='h-12 w-full rounded-lg border border-gray-d9 bg-white md:h-16' key={dashboard.id}>
                 <Link href={`/dashboard/${dashboard.id}`} className={'btn-violet-light size-full rounded-md px-5'}>
                   <div className='flex size-full items-center'>
                     <div className='rounded-full p-1' style={{ backgroundColor: dashboard.color }} />
-                    <div className='h-[28px] max-w-[150px] overflow-hidden pl-4 pr-1 text-lg font-medium lg:max-w-[200px]'>
-                      <p className={`${dashboard.title.length > 9 ? 'hover:animate-scroll-horizontal' : ''}`}>
-                        {dashboard.title}
-                      </p>
+                    <div className='mx-4 h-[28px] grow overflow-hidden text-ellipsis text-lg font-medium'>
+                      <p className={`size-full`}>{dashboard.title}</p>
                     </div>
-                    {dashboard.createdByMe && <Image src={'/icons/crown.svg'} alt='my' width={20} height={16} />}
+                    {dashboard.createdByMe && (
+                      <Image src={'/icons/crown.svg'} className='mr-3' alt='my' width={20} height={16} />
+                    )}
                   </div>
                   <Image src={'/icons/arrow-black.svg'} alt='arrow' width={14} height={14} />
                 </Link>

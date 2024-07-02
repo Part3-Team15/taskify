@@ -10,6 +10,7 @@ import TextInputWithLabel from '@/containers/signin&signup/TextInputWithLabel';
 import useModal from '@/hooks/useModal';
 import { useSignIn } from '@/hooks/useSignIn';
 import { setError } from '@/store/reducers/userSlice';
+import hashPassword from '@/utils/hashPassword';
 
 export type TSignInInputs = {
   email: string;
@@ -37,21 +38,25 @@ export default function SignInForm() {
   const { openNotificationModal } = useModal();
 
   const onSubmit = (data: TSignInInputs) => {
-    mutation.mutate(data, {
-      onSuccess: () => {
-        router.push('/mydashboard'); // 로그인 성공 시 리다이렉트
+    const { email, password } = data;
+    mutation.mutate(
+      { email, password: hashPassword(password) },
+      {
+        onSuccess: () => {
+          router.push('/mydashboard'); // 로그인 성공 시 리다이렉트
+        },
+        onError: (error) => {
+          if (error instanceof AxiosError) {
+            dispatch(setError(error.response?.data.message));
+            openNotificationModal({ text: error.response?.data.message });
+          } else {
+            const unknownError = '알 수 없는 오류가 발생했습니다.';
+            dispatch(setError(unknownError));
+            openNotificationModal({ text: unknownError });
+          }
+        },
       },
-      onError: (error) => {
-        if (error instanceof AxiosError) {
-          dispatch(setError(error.response?.data.message));
-          openNotificationModal({ text: error.response?.data.message });
-        } else {
-          const unknownError = '알 수 없는 오류가 발생했습니다.';
-          dispatch(setError(unknownError));
-          openNotificationModal({ text: unknownError });
-        }
-      },
-    });
+    );
   };
 
   return (
