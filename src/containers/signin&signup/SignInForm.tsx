@@ -34,7 +34,7 @@ export default function SignInForm() {
   const mutation = useSignIn();
   const router = useRouter();
 
-  const { openModal } = useModal();
+  const { openNotificationModal } = useModal();
 
   const onSubmit = (data: TSignInInputs) => {
     mutation.mutate(data, {
@@ -44,11 +44,11 @@ export default function SignInForm() {
       onError: (error) => {
         if (error instanceof AxiosError) {
           dispatch(setError(error.response?.data.message));
-          openModal({ type: 'notification', modalProps: { text: error.response?.data.message } });
+          openNotificationModal({ text: error.response?.data.message });
         } else {
           const unknownError = '알 수 없는 오류가 발생했습니다.';
           dispatch(setError(unknownError));
-          openModal({ type: 'notification', modalProps: { text: unknownError } });
+          openNotificationModal({ text: unknownError });
         }
       },
     });

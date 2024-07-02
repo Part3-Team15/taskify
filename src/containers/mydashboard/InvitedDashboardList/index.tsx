@@ -5,6 +5,7 @@ import { useState, useEffect, useCallback, useRef } from 'react';
 
 import InvitationItemList from './ItemList';
 import SearchBar from './SearchBar';
+import Skeleton from './Skeleton';
 
 import useFetchData from '@/hooks/useFetchData';
 import { getInvitationsList } from '@/services/getService';
@@ -101,48 +102,21 @@ export default function InvitedDashboardList() {
 
   if (error) {
     return (
-      <section className='max-h-[calc(100vh-610px)] min-h-[580px] grow overflow-hidden rounded-lg border-0 bg-white md:max-h-[calc(100vh-390px)]'>
+      <div className='h-full max-w-screen-lg overflow-hidden rounded-lg border-0 bg-white'>
         <p className='px-7 pb-5 pt-8 text-base font-bold text-black-33'>초대받은 대시보드</p>
         <div className='flex items-center justify-center'>
           <p>데이터를 가져오는 중 오류가 발생했습니다.</p>
           <p>{error.message}</p>
         </div>
-      </section>
+      </div>
     );
   }
 
   return (
-    <section className='h-dvh max-h-[calc(100vh-590px)] min-h-[400px] grow overflow-hidden rounded-lg border-0 bg-white md:max-h-[calc(100dvh-465px)] lg:max-h-[calc(100dvh-410px)]'>
+    <section className='h-full min-h-80 overflow-hidden rounded-lg border-0 bg-white'>
       <p className='px-7 pb-5 pt-8 text-base font-bold text-black-33'>초대받은 대시보드</p>
       {isLoading ? (
-        <div className='flex animate-pulse flex-col'>
-          <div className='px-7'>
-            <div className='size-full h-[40px] rounded-md bg-gray-fa py-[8px] pl-12 pr-4' />
-          </div>
-          <div className='h-[calc(100%-130px)] pt-6 md:h-[calc(100%-170px)]'>
-            <div className='hidden h-[48px] grid-cols-9 pb-6 pl-7 md:grid md:pr-7'>
-              {[...Array(3)].map((_, i) => (
-                <>
-                  <div key={i} className='h-[24px] rounded-md bg-gray-fa'></div>
-                  <div key={i} className='h-[24px]'></div>
-                </>
-              ))}
-            </div>
-
-            <div className='h-full overflow-y-hidden'>
-              {[...Array(5)].map((_, i) => (
-                <div key={i} className='hidden h-[48px] grid-cols-6 pb-6 pl-7 md:grid md:pr-7'>
-                  {[...Array(3)].map((__, j) => (
-                    <>
-                      <div key={j} className='h-[24px] rounded-md bg-gray-fa'></div>
-                      <div key={j} className='h-[24px]'></div>
-                    </>
-                  ))}
-                </div>
-              ))}
-            </div>
-          </div>
-        </div>
+        <Skeleton />
       ) : (
         <>
           {invitations.length > 0 || isSearching ? (
