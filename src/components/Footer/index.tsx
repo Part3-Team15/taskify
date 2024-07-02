@@ -2,7 +2,7 @@ import Link from 'next/link';
 
 export default function Footer() {
   return (
-    <footer className='bg-dark-500 flex h-[100px] w-dvw items-center justify-around text-gray-9f'>
+    <footer className='flex h-[100px] w-dvw items-center justify-around bg-dark-500 text-gray-9f'>
       <div>
         <p>©codeit - 2023</p>
       </div>

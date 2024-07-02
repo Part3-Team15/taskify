@@ -94,13 +94,14 @@ export default function NewCardModal({ columnId }: NewCardModalProps) {
               담당자
             </label>
             <div className='relative md:w-[217px]'>
-              <input
-                className='input pointer-events-none text-[14px] md:text-[16px]'
-                id='memberSelect'
-                type='text'
-                value={selectedMember ? selectedMember.nickname : ''}
-                placeholder='담당자를 선택해 주세요'
-              />
+              <span
+                className='input cursor-pointer text-[14px] md:text-[16px]'
+                onClick={() => {
+                  setIsOpen(!isOpen);
+                }}
+              >
+                {selectedMember ? selectedMember.nickname : '담당자를 선택해 주세요'}
+              </span>
               <button
                 className='absolute right-[20px] top-[18px] md:top-[24px]'
                 type='button'

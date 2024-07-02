@@ -4,7 +4,7 @@ import { useSelector } from 'react-redux';
 import ConfirmModal from './ConfirmModal';
 import InviteMemberModal from './InviteMemberModal';
 import ModifyColumnModal from './ModifyColumnModal';
-import NewCardModal from './NewCardModal';
+import NewCardModal from './NewCardModal/index';
 import NewColumnModal from './NewColumnModal';
 import NewDashboardModal from './NewDashboardModal';
 import NotificationModal from './NotificationModal';
@@ -17,6 +17,7 @@ import {
   NewColumnModalProps,
   NotificationModalProps,
   NewCardModalProps,
+  MODAL,
 } from '@/types/Modal.interface';
 
 export default function Modal() {
@@ -45,25 +46,26 @@ export default function Modal() {
   // 전달받은 type에 따라 모달의 내부 컨텐트를 다르게 렌더
   const renderModalContent = () => {
     switch (type) {
-      case 'notification':
-        return modalProps ? <NotificationModal {...(modalProps as NotificationModalProps)} /> : null;
+      // NOTE: useModal 에서 open 함수가 각 모달에 맞는 타입의 modalProps 받음
+      case MODAL.NOTIFICATION:
+        return <NotificationModal {...(modalProps as NotificationModalProps)} />;
 
-      case 'confirm':
-        return modalProps ? <ConfirmModal {...(modalProps as ConfirmModalProps)} /> : null;
+      case MODAL.CONFIRM:
+        return <ConfirmModal {...(modalProps as ConfirmModalProps)} />;
 
-      case 'newDashboard':
+      case MODAL.NEW_DASHBOARD:
         return <NewDashboardModal />;
 
-      case 'newColumn':
-        return modalProps ? <NewColumnModal {...(modalProps as NewColumnModalProps)} /> : null;
+      case MODAL.NEW_COLUMN:
+        return <NewColumnModal {...(modalProps as NewColumnModalProps)} />;
 
-      case 'inviteMember':
+      case MODAL.INVITE_MEMBER:
         return <InviteMemberModal />;
 
-      case 'modifyColumn':
-        return modalProps ? <ModifyColumnModal {...(modalProps as ModifyColumnModalProps)} /> : null;
+      case MODAL.MODIFY_COLUMN:
+        return <ModifyColumnModal {...(modalProps as ModifyColumnModalProps)} />;
 
-      case 'newCard':
+      case MODAL.NEW_CARD:
         return modalProps ? <NewCardModal {...(modalProps as NewCardModalProps)} /> : null;
 
       default:

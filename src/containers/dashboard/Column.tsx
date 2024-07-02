@@ -6,6 +6,7 @@ import Card from './Card';
 import useModal from '@/hooks/useModal';
 import { Card as CardType } from '@/types/Card.interface';
 import { Column as ColumnType } from '@/types/Column.interface';
+import { MODAL } from '@/types/Modal.interface';
 
 interface ColumnProps {
   columnId: number;
@@ -16,7 +17,7 @@ interface ColumnProps {
 }
 
 function Column({ columnId, column, index, cards, columns }: ColumnProps) {
-  const { openModal } = useModal();
+  const { openModifyColumnModal, openNewCardModal } = useModal();
 
   return (
     <div className='block lg:flex'>
@@ -34,10 +35,7 @@ function Column({ columnId, column, index, cards, columns }: ColumnProps) {
           <button
             className='transition duration-300 ease-in-out hover:rotate-90'
             onClick={() => {
-              openModal({
-                type: 'modifyColumn',
-                modalProps: { columnId: column.id, columnTitle: column.title, columns },
-              });
+              openModifyColumnModal({ columns, columnId: column.id, columnTitle: column.title });
             }}
           >
             <Image src='/icons/gear.svg' width={24} height={24} alt='톱니바퀴 아이콘' />
@@ -48,7 +46,7 @@ function Column({ columnId, column, index, cards, columns }: ColumnProps) {
         <button
           className='btn-violet-light mb-[16px] h-[40px] rounded-[6px] border'
           onClick={() => {
-            openModal({ type: 'newCard', modalProps: { columnId: columnId } });
+            openNewCardModal({ columnId: columnId });
           }}
         >
           <Image src='/icons/plus-filled.svg' width={22} height={22} alt='카드 추가 아이콘' />
