@@ -8,13 +8,14 @@ import { Card as CardType } from '@/types/Card.interface';
 import { Column as ColumnType } from '@/types/Column.interface';
 
 interface ColumnProps {
+  columnId: number;
   column: ColumnType;
   columns: ColumnType[];
   index: number;
   cards: CardType[];
 }
 
-function Column({ column, index, cards, columns }: ColumnProps) {
+function Column({ columnId, column, index, cards, columns }: ColumnProps) {
   const { openModal } = useModal();
 
   return (
@@ -46,7 +47,9 @@ function Column({ column, index, cards, columns }: ColumnProps) {
         {/* Add Card Button */}
         <button
           className='btn-violet-light mb-[16px] h-[40px] rounded-[6px] border'
-          onClick={() => window.alert('카드 추가 모달')}
+          onClick={() => {
+            openModal({ type: 'newCard', modalProps: { columnId: columnId } });
+          }}
         >
           <Image src='/icons/plus-filled.svg' width={22} height={22} alt='카드 추가 아이콘' />
         </button>

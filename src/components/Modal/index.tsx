@@ -4,6 +4,7 @@ import { useSelector } from 'react-redux';
 import ConfirmModal from './ConfirmModal';
 import InviteMemberModal from './InviteMemberModal';
 import ModifyColumnModal from './ModifyColumnModal';
+import NewCardModal from './NewCardModal';
 import NewColumnModal from './NewColumnModal';
 import NewDashboardModal from './NewDashboardModal';
 import NotificationModal from './NotificationModal';
@@ -15,6 +16,7 @@ import {
   ConfirmModalProps,
   NewColumnModalProps,
   NotificationModalProps,
+  NewCardModalProps,
 } from '@/types/Modal.interface';
 
 export default function Modal() {
@@ -60,6 +62,9 @@ export default function Modal() {
 
       case 'modifyColumn':
         return modalProps ? <ModifyColumnModal {...(modalProps as ModifyColumnModalProps)} /> : null;
+
+      case 'newCard':
+        return modalProps ? <NewCardModal {...(modalProps as NewCardModalProps)} /> : null;
 
       default:
         return <NotificationModal text='' />;

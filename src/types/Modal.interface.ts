@@ -31,3 +31,7 @@ export interface ModifyColumnModalProps extends ModalProps {
   columnTitle: string;
   columnId: number;
 }
+
+export interface NewCardModalProps extends ModalProps {
+  columnId: number;
+}

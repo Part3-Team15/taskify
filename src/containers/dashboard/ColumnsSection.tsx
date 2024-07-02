@@ -90,6 +90,7 @@ export default function ColumnsSection({ id }: ColumnsSectionProps) {
                     <li ref={provided.innerRef} {...provided.droppableProps}>
                       <Column
                         key={`column-${column.id}`}
+                        columnId={column.id}
                         column={column}
                         columns={columns.data}
                         index={index}
