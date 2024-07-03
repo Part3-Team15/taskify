@@ -65,12 +65,14 @@ export default function Comment({ comment }: CommentProps) {
             </div>
             {isEditing ? (
               <textarea
-                className='w-full resize-none rounded-[2px] border border-gray-d9 text-[12px] text-black-33 focus:outline-none md:text-[14px]'
+                className='w-full resize-none rounded-[2px] border border-gray-d9 p-[10px] text-[12px] text-black-33 focus:outline-none md:text-[14px]'
                 value={editedComment}
                 onChange={(e) => setEditedComment(e.target.value)}
               />
             ) : (
-              <p className='text-[12px] text-black-33 hover:cursor-default md:text-[14px]'>{comment.content}</p>
+              <p className='max-w-[200px] break-words text-[12px] text-black-33 hover:cursor-default md:max-w-[300px] md:text-[14px]'>
+                {comment.content}
+              </p>
             )}
 
             {/* Button Section */}
