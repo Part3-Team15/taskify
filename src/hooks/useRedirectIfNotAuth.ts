@@ -8,24 +8,21 @@ import { RootState } from '@/store/store';
 const useRedirectIfNotAuth = () => {
   const { user } = useSelector((state: RootState) => state.user);
   const router = useRouter();
-  const { openModal } = useModal();
+  const { openNotificationModal } = useModal();
   const [isRedirecting, setIsRedirecting] = useState(true);
   const [initialCheck, setInitialCheck] = useState(true);
 
   useEffect(() => {
     if (initialCheck) {
       if (!user) {
-        openModal({
-          type: 'notification',
-          modalProps: { text: '로그인이 필요합니다.' },
-        });
+        openNotificationModal({ text: '로그인이 필요합니다.' });
         setIsRedirecting(true);
         router.replace('/signin');
       }
       setIsRedirecting(false);
       setInitialCheck(false);
     }
-  }, [user, openModal, router, initialCheck]);
+  }, [user, initialCheck]);
 
   return isRedirecting;
 };

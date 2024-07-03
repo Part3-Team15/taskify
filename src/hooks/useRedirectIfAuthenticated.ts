@@ -8,24 +8,21 @@ import { RootState } from '@/store/store';
 const useRedirectIfAuthenticated = () => {
   const { user } = useSelector((state: RootState) => state.user);
   const router = useRouter();
-  const { openModal } = useModal();
+  const { openNotificationModal } = useModal();
   const [isRedirecting, setIsRedirecting] = useState(true);
   const [initialCheck, setInitialCheck] = useState(true);
 
   useEffect(() => {
     if (initialCheck) {
       if (user) {
-        openModal({
-          type: 'notification',
-          modalProps: { text: '이미 로그인하셨습니다.' },
-        });
+        openNotificationModal({ text: '이미 로그인하셨습니다.' });
         setIsRedirecting(true);
         router.replace('/mydashboard');
       }
       setIsRedirecting(false);
       setInitialCheck(false);
     }
-  }, [user, openModal, router, initialCheck]);
+  }, [user, initialCheck]);
 
   return isRedirecting;
 };
