@@ -28,6 +28,11 @@ export interface ModifyColumnModalProps extends ModalProps {
   columnId: number;
 }
 
+export interface EditCardModalProps extends ModalProps {
+  columnId: number;
+  isEdit: boolean;
+}
+
 export interface TodoCardModalProps extends ModalProps {
   card: Card;
   column: Column;
@@ -41,6 +46,7 @@ export const MODAL = {
   NEW_COLUMN: 'newColumn',
   INVITE_MEMBER: 'inviteMember',
   MODIFY_COLUMN: 'modifyColumn',
+  EDIT_CARD: 'editCard',
   TODO_CARD: 'todoCard',
 } as const;
 

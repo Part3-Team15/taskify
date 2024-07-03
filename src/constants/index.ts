@@ -1,3 +1,5 @@
+import { ToastOptions } from 'react-toastify';
+
 // 이메일 정규표현식
 export const EMAIL_REGEX = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
 
@@ -64,3 +66,13 @@ export const TAG_COLORS = [
     background: '#d7daff',
   },
 ];
+
+export const TOAST_DEFAULT_SETTING: ToastOptions = {
+  position: 'top-right',
+  autoClose: 3000,
+  hideProgressBar: true,
+  closeOnClick: true,
+  pauseOnHover: true,
+  draggable: false,
+  theme: 'light',
+};
