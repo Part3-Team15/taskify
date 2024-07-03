@@ -5,6 +5,7 @@ import { useSelector } from 'react-redux';
 
 import ActionButton from '@/components/Button/ActionButton';
 import ImageInput from '@/components/Input/ImageInput';
+import useModal from '@/hooks/useModal';
 import { useUpdateProfile } from '@/hooks/useUpdateProfile';
 import { postImage } from '@/services/postService';
 import { RootState } from '@/store/store';
@@ -12,14 +13,16 @@ import { UpdateProfileForm } from '@/types/post/UpdateProfileForm.interface';
 
 export default function EditProfileForm() {
   const router = useRouter();
+  const { openNotificationModal } = useModal();
   const { mutate, isPending, isError, error } = useUpdateProfile();
 
   const { user } = useSelector((state: RootState) => state.user);
   const [nickname, setNickname] = useState(user?.nickname ?? '');
   const [profileImageFile, setProfileImageFile] = useState<File | null>(null);
+  const [isImageChanged, setIsImageChanged] = useState(false);
   const [isNicknameValid, setIsNicknameValid] = useState({
-    gtZero: true,
-    lteTen: true,
+    gtZero: nickname.length > 0,
+    lteTen: nickname.length <= 10,
   });
 
   if (!user) {
@@ -27,12 +30,11 @@ export default function EditProfileForm() {
   }
 
   if (isError) {
+    const message = '알 수 없는 오류가 발생했습니다!';
     if (error instanceof AxiosError) {
-      alert(error.response?.data.message);
-    } else if (error instanceof Error) {
-      alert(error.message);
+      openNotificationModal({ text: error.response?.data.message || message });
     } else {
-      alert('알 수 없는 오류가 발생했습니다!');
+      openNotificationModal({ text: message });
       console.log(error);
     }
   }
@@ -50,10 +52,12 @@ export default function EditProfileForm() {
   };
 
   const handleImageChange = (image: File) => {
+    setIsImageChanged(true);
     setProfileImageFile(image);
   };
 
   const handleImageDelete = () => {
+    setIsImageChanged(true);
     setProfileImageFile(null);
   };
 
@@ -81,7 +85,8 @@ export default function EditProfileForm() {
       const formData = await formProfileData();
 
       if (Object.keys(formData).length !== 0) {
-        mutate(formData);
+        await mutate(formData);
+        setIsImageChanged(false);
       }
     };
 
@@ -130,7 +135,11 @@ export default function EditProfileForm() {
       </div>
       <ActionButton
         type='submit'
-        disabled={isPending || !(isNicknameValid.gtZero && isNicknameValid.lteTen)}
+        disabled={
+          isPending ||
+          !(isNicknameValid.gtZero && isNicknameValid.lteTen) ||
+          (nickname === user?.nickname && !isImageChanged)
+        }
         className='ml-auto mt-4 md:mt-6'
       >
         {isPending ? '저장중..' : '저장'}

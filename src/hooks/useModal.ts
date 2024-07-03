@@ -1,20 +1,54 @@
 import { useDispatch } from 'react-redux';
 
 import { openModal, closeModal } from '@/store/reducers/modalSlice';
-import { ModalActionState } from '@/types/Modal.interface';
+import {
+  MODAL,
+  NotificationModalProps,
+  ConfirmModalProps,
+  NewColumnModalProps,
+  ModifyColumnModalProps,
+  TodoCardModalProps,
+} from '@/types/Modal.interface';
 
 const useModal = () => {
   const dispatch = useDispatch();
 
-  const handleOpenModal = ({ type, modalProps }: ModalActionState) => {
-    dispatch(openModal({ type, modalProps }));
+  const openNotificationModal = (modalProps: NotificationModalProps) => {
+    dispatch(openModal({ type: MODAL.NOTIFICATION, modalProps }));
+  };
+  const openConfirmModal = (modalProps: ConfirmModalProps) => {
+    dispatch(openModal({ type: MODAL.CONFIRM, modalProps }));
+  };
+  const openNewDashboardModal = () => {
+    dispatch(openModal({ type: MODAL.NEW_DASHBOARD, modalProps: {} }));
+  };
+  const openNewColumnModal = (modalProps: NewColumnModalProps) => {
+    dispatch(openModal({ type: MODAL.NEW_COLUMN, modalProps }));
+  };
+  const openInviteMemberModal = () => {
+    dispatch(openModal({ type: MODAL.INVITE_MEMBER, modalProps: {} }));
+  };
+  const openModifyColumnModal = (modalProps: ModifyColumnModalProps) => {
+    dispatch(openModal({ type: MODAL.MODIFY_COLUMN, modalProps }));
+  };
+  const openTodoCardModal = (modalProps: TodoCardModalProps) => {
+    dispatch(openModal({ type: MODAL.TODO_CARD, modalProps }));
   };
 
   const handleCloseModal = () => {
     dispatch(closeModal());
   };
 
-  return { openModal: handleOpenModal, closeModal: handleCloseModal };
+  return {
+    openNotificationModal,
+    openConfirmModal,
+    openNewDashboardModal,
+    openNewColumnModal,
+    openInviteMemberModal,
+    openModifyColumnModal,
+    openTodoCardModal,
+    closeModal: handleCloseModal,
+  };
 };
 
 export default useModal;

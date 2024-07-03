@@ -1,5 +1,6 @@
 import instance from './axios';
 
+import { Dashboard } from '@/types/Dashboard.interface';
 import { CommentForm } from '@/types/post/CommentForm.interface';
 import { NewDashboardForm, NewColumnForm, InviteMemberForm } from '@/types/post/ModalForm.interface';
 import { SignInForm, SignInResponse } from '@/types/post/SignInForm.interface';
@@ -18,8 +19,9 @@ export const postSignIn = async (formData: SignInForm): Promise<SignInResponse> 
 };
 
 // 대쉬보드 생성
-export const postNewDashboard = async (formData: NewDashboardForm) => {
-  return await instance.post(`/dashboards`, formData);
+export const postNewDashboard = async (formData: NewDashboardForm): Promise<Dashboard> => {
+  const response = await instance.post(`/dashboards`, formData);
+  return response.data;
 };
 
 // 컬럼 생성

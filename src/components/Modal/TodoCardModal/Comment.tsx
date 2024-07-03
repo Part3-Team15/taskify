@@ -86,7 +86,7 @@ export default function Comment({ comment }: CommentProps) {
                     </button>
                   </>
                 ) : (
-                  <div>
+                  <div className='flex gap-[12px] text-[12px] text-gray-9f'>
                     <button onClick={handleToggleEdit}>취소</button>
                     <button className='text-black-33 hover:text-violet' onClick={handleSaveEdit}>
                       저장

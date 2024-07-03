@@ -80,7 +80,7 @@ export default function TodoCardModal({ card, column, onClick }: TodoCardModalPr
           <div className='flex h-[484px] w-[288px] flex-col gap-[16px] overflow-y-auto scrollbar-hide md:h-[608px] md:w-[420px] lg:w-[450px]'>
             <p className='break-words text-[14px] leading-6'>{card.description}</p>
             {card.imageUrl && (
-              <Image className='rounded-[6px]' src='/ex.jpg' width={450} height={262} alt='카드 이미지' />
+              <Image className='rounded-[6px]' src={card.imageUrl} width={450} height={262} alt='카드 이미지' />
             )}
 
             <form className='relative' onSubmit={handleSubmitComment}>

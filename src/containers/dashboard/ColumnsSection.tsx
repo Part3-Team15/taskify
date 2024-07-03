@@ -16,7 +16,7 @@ interface ColumnsSectionProps {
 }
 
 export default function ColumnsSection({ id }: ColumnsSectionProps) {
-  const { openModal } = useModal();
+  const { openNewColumnModal, openNotificationModal } = useModal();
   const {
     data: columns,
     isLoading,
@@ -37,6 +37,14 @@ export default function ColumnsSection({ id }: ColumnsSectionProps) {
       });
     }
   }, [columnList]);
+
+  const handleNewColumnClick = () => {
+    if (columns?.data && columns.data.length >= 10) {
+      openNotificationModal({ text: '컬럼은 최대 10개까지 생성할 수 있습니다.' });
+    } else if (columns?.data) {
+      openNewColumnModal({ columns: columns.data });
+    }
+  };
 
   const onDragEnd = async (result: DropResult) => {
     const { source, destination } = result;
@@ -105,9 +113,7 @@ export default function ColumnsSection({ id }: ColumnsSectionProps) {
           <div className='p-5'>
             <button
               className='btn-violet-light mb-4 h-[70px] w-full rounded-[6px] py-[24px] lg:mb-0 lg:w-[354px]'
-              onClick={() => {
-                openModal({ type: 'newColumn', modalProps: { dashboardId: Number(id) } });
-              }}
+              onClick={handleNewColumnClick}
             >
               <div className='mr-[12px] text-lg font-bold text-black-33'>새로운 컬럼 추가하기</div>
               <Image src='/icons/plus-filled.svg' width={22} height={22} alt='카드 추가 아이콘' loading='lazy' />
