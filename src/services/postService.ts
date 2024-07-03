@@ -1,5 +1,6 @@
 import instance from './axios';
 
+import { CommentForm } from '@/types/post/CommentForm.interface';
 import { NewDashboardForm, NewColumnForm, InviteMemberForm } from '@/types/post/ModalForm.interface';
 import { SignInForm, SignInResponse } from '@/types/post/SignInForm.interface';
 import { SignUpForm } from '@/types/post/SignUpForm.interface';
@@ -39,4 +40,9 @@ export const postImage = async (formData: UploadImageForm) => {
     },
   });
   return response.data;
+};
+
+// 댓글 생성
+export const postComment = async (formData: CommentForm) => {
+  return await instance.post(`/comments`, formData);
 };

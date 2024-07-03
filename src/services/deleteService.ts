@@ -22,3 +22,7 @@ export const deleteMember = async ({ memberId }: DeleteMemberInput) => {
 export const deleteInvitation = async ({ dashboardId, invitationId }: CancelInvitationInput) => {
   return await instance.delete(`/dashboards/${dashboardId}/invitations/${invitationId}`);
 };
+
+export const deleteComment = async (commentId: number) => {
+  return await instance.delete(`/comments/${commentId}`);
+};
