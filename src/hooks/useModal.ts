@@ -7,6 +7,7 @@ import {
   ConfirmModalProps,
   NewColumnModalProps,
   ModifyColumnModalProps,
+  EditCardModalProps,
 } from '@/types/Modal.interface';
 
 const useModal = () => {
@@ -31,6 +32,9 @@ const useModal = () => {
     dispatch(openModal({ type: MODAL.MODIFY_COLUMN, modalProps }));
   };
 
+  const openNewCardModal = (modalProps: EditCardModalProps) => {
+    dispatch(openModal({ type: MODAL.EDIT_CARD, modalProps }));
+  };
   const handleCloseModal = () => {
     dispatch(closeModal());
   };
@@ -43,6 +47,7 @@ const useModal = () => {
     openInviteMemberModal,
     openModifyColumnModal,
     closeModal: handleCloseModal,
+    openNewCardModal,
   };
 };
 
