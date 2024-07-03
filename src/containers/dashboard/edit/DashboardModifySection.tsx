@@ -13,7 +13,12 @@ import { putDashboardInfo } from '@/services/putService';
 import { DashboardColor, DashboardInfoState, Dashboard } from '@/types/Dashboard.interface';
 import { addShareAccount, checkPublic, removeShareAccount } from '@/utils/shareAccount';
 
-export default function DashboardModifySection() {
+interface ModifySectionProps {
+  isPublic: boolean;
+  onToggleClick: () => void;
+}
+
+export default function DashboardModifySection({ isPublic, onToggleClick }: ModifySectionProps) {
   const router = useRouter();
   const { id } = router.query;
   const { openNotificationModal } = useModal();
@@ -23,7 +28,6 @@ export default function DashboardModifySection() {
     title: '',
     color: '',
   });
-  const [isPublic, setIsPublic] = useState(false);
   const [selectedColor, setSelectedColor] = useState<DashboardColor>('green');
   const [fixedTitle, setFixedTitle] = useState<string>('');
   const [fixedColor, setFixedColor] = useState<string>('');
@@ -63,14 +67,6 @@ export default function DashboardModifySection() {
       openNotificationModal({ text: '대시보드 정보 수정을 실패하였습니다.' });
     }
   };
-
-  useEffect(() => {
-    const handleInitialLoad = async () => {
-      setIsPublic(await checkPublic(Number(id)));
-    };
-
-    handleInitialLoad();
-  }, [id]);
 
   useEffect(() => {
     if (dashboard) {
@@ -126,7 +122,7 @@ export default function DashboardModifySection() {
         <h2 className='text-[20px] font-bold text-black-33'>{fixedTitle}</h2>
         <div className='align-center gap-2 md:gap-3'>
           <span>공유</span>
-          <Toggle isOn={isPublic} onToggleClick={() => setIsPublic((prevIsPublic) => !prevIsPublic)} />
+          <Toggle isOn={isPublic} onToggleClick={onToggleClick} />
         </div>
       </header>
       <main>

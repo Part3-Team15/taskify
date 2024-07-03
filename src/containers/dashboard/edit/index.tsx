@@ -2,6 +2,7 @@ import { useQueryClient } from '@tanstack/react-query';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
+import { useEffect, useState } from 'react';
 
 import DashboardModifySection from './DashboardModifySection';
 import InvitedMembersSection from './InvitedMembersSection';
@@ -11,12 +12,25 @@ import useDeleteData from '@/hooks/useDeleteData';
 import useModal from '@/hooks/useModal';
 import { deleteDashboard } from '@/services/deleteService';
 import { DeleteDashboardInput } from '@/types/delete/DeleteDashboardInput.interface';
+import { checkPublic } from '@/utils/shareAccount';
 
 export default function DashboardEdit() {
   const { openConfirmModal } = useModal();
   const queryClient = useQueryClient();
   const router = useRouter();
   const { id } = router.query;
+
+  const [isPublic, setIsPublic] = useState(false);
+
+  const handleToggle = () => {
+    setIsPublic((prevIsPublic) => !prevIsPublic);
+  };
+
+  const handleMemberDelete = (email: string) => {
+    if (email === process.env.NEXT_PUBLIC_SHARE_ACCOUNT_EMAIL) {
+      setIsPublic(false);
+    }
+  };
 
   const handleSuccess = () => {
     queryClient.invalidateQueries({ queryKey: ['sideDashboards'] });
@@ -36,6 +50,14 @@ export default function DashboardEdit() {
     });
   };
 
+  useEffect(() => {
+    const handleInitialLoad = async () => {
+      setIsPublic(await checkPublic(Number(id)));
+    };
+
+    handleInitialLoad();
+  }, [id]);
+
   return (
     <div className='px-3 py-4 text-black-33 md:p-5'>
       <Link
@@ -48,8 +70,8 @@ export default function DashboardEdit() {
         돌아가기
       </Link>
       <div className='flex flex-col gap-4'>
-        <DashboardModifySection />
-        <MembersSection />
+        <DashboardModifySection isPublic={isPublic} onToggleClick={handleToggle} />
+        <MembersSection onDeleteMember={handleMemberDelete} />
         <InvitedMembersSection />
       </div>
       <button
