@@ -4,6 +4,8 @@ import Image from 'next/image';
 import { useRouter } from 'next/router';
 import { useState } from 'react';
 
+import Toggle from '../Toggle';
+
 import ModalActionButton from '@/components/Button/ModalActionButton';
 import ModalCancelButton from '@/components/Button/ModalCancelButton';
 import { DASHBOARD_COLOR_OBJ } from '@/constants';
@@ -16,6 +18,7 @@ export default function NewDashboardModal() {
     title: '',
     color: DASHBOARD_COLOR_OBJ['green'],
   });
+  const [isPublic, setIsPublic] = useState(false);
   const [selectedColor, setSelectedColor] = useState<DashboardColor>('green');
   const [errorMessage, setErrorMessage] = useState('');
 
@@ -77,18 +80,24 @@ export default function NewDashboardModal() {
         />
         {errorMessage && <p className='mt-2 text-sm text-red'>{errorMessage}</p>}
       </div>
-      <div className='mb-6 flex gap-[10px] md:mb-7'>
-        {(['green', 'purple', 'orange', 'blue', 'pink'] as DashboardColor[]).map((color) => (
-          <button
-            key={`${color}-button`}
-            type='button'
-            style={{ backgroundColor: DASHBOARD_COLOR_OBJ[color] }}
-            className={`flex size-[28px] items-center justify-center rounded-full bg-white md:size-[30px]`}
-            onClick={() => handleColorSelect(color)}
-          >
-            {selectedColor === color && <Image src='/icons/check.svg' alt='체크' width={16} height={16} />}
-          </button>
-        ))}
+      <div className='mb-6 flex justify-between md:mb-7'>
+        <div className='flex gap-1.5 md:gap-[10px]'>
+          {(['green', 'purple', 'orange', 'blue', 'pink'] as DashboardColor[]).map((color) => (
+            <button
+              key={`${color}-button`}
+              type='button'
+              style={{ backgroundColor: DASHBOARD_COLOR_OBJ[color] }}
+              className={`flex size-[28px] items-center justify-center rounded-full bg-white md:size-[30px]`}
+              onClick={() => handleColorSelect(color)}
+            >
+              {selectedColor === color && <Image src='/icons/check.svg' alt='체크' width={16} height={16} />}
+            </button>
+          ))}
+        </div>
+        <div className='align-center gap-2 md:gap-3'>
+          <span>공유</span>
+          <Toggle isOn={isPublic} onToggleClick={() => setIsPublic((prevIsPublic) => !prevIsPublic)} />
+        </div>
       </div>
       <div className='flex justify-between md:justify-end md:gap-3'>
         <ModalCancelButton type='button' onClick={closeModal}>
