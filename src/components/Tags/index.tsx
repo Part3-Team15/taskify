@@ -65,7 +65,7 @@ export default function Tags({ tags, customClass, isDeleteOption = false }: Tags
       {tagList.map((tag) => (
         <span
           key={tag.id}
-          className={`align-center relative h-[24px] flex-row rounded-[4px] px-[6px] pb-[2px] pt-[4px] text-[12px] ${isDeleteOption ? 'duration-200 hover:cursor-pointer hover:opacity-40' : 'hover:cursor-default'}`}
+          className={`align-center relative h-[24px] flex-row rounded-[4px] px-[6px] pb-[2px] pt-[4px] text-[12px] ${isDeleteOption ? 'duration-200 hover:cursor-pointer hover:opacity-40' : ''}`}
           style={{ backgroundColor: tag.color.background, color: tag.color.text }}
           onClick={isDeleteOption ? () => handleDeleteTag(tag.id) : undefined}
         >
