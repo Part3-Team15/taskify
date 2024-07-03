@@ -1,6 +1,6 @@
 import instance from './axios';
 
-import { postCardData } from '@/components/Modal/NewCardModal';
+import { postCardData } from '@/components/Modal/EditCardModal';
 import { Dashboard } from '@/types/Dashboard.interface';
 import { NewDashboardForm, NewColumnForm, InviteMemberForm } from '@/types/post/ModalForm.interface';
 import { SignInForm, SignInResponse } from '@/types/post/SignInForm.interface';

@@ -15,7 +15,7 @@ import useModal from '@/hooks/useModal';
 import { getMembersList } from '@/services/getService';
 import { postImageForCard, postCard } from '@/services/postService';
 import { Member } from '@/types/Member.interface';
-import { NewCardModalProps } from '@/types/Modal.interface';
+import { EditCardModalProps } from '@/types/Modal.interface';
 import { formatDateTime } from '@/utils/formatDateTime';
 
 export interface postCardData {
@@ -40,7 +40,7 @@ const formInitialState = {
   imageUrl: '',
 };
 
-export default function NewCardModal({ columnId }: NewCardModalProps) {
+export default function EditCardModal({ columnId, isEdit }: EditCardModalProps) {
   const router = useRouter();
   const { id } = router.query;
   const queryClient = useQueryClient();
@@ -167,7 +167,8 @@ export default function NewCardModal({ columnId }: NewCardModalProps) {
       };
 
       await postCard(filteredFormValues as postCardData);
-      queryClient.invalidateQueries({ queryKey: ['columns', id] });
+      // resetQueries 수정 필요
+      queryClient.resetQueries({ queryKey: ['columns', id] });
       openNotificationModal({
         text: '할 일 카드가 생성되었습니다!',
       });
@@ -179,11 +180,13 @@ export default function NewCardModal({ columnId }: NewCardModalProps) {
   const selectedMember = members.find((member) => member.userId === formValues.assigneeUserId);
 
   return (
-    <div className='modal h-[766px] w-[327px] md:h-[907px] md:w-[506px]'>
+    <div className='modal h-[90vh] w-[327px] md:h-[90vh] md:w-[506px]'>
       <div className='flex h-full flex-col'>
-        <h1 className='section-title shrink-0 pb-4 text-[20px] md:text-[24px]'>할일 생성</h1>
-        <form className='flex h-full flex-col justify-between'>
-          <div>
+        <h1 className='section-title border-b-2 border-gray-d9 pb-4 text-[20px] md:text-[24px]'>
+          {isEdit ? '할일 수정' : '할일 생성'}
+        </h1>
+        <form className='flex h-full flex-col overflow-y-auto pr-5'>
+          <div className='my-[20px]'>
             <label htmlFor='memberSelect' className='label mb-[15px] block text-[16px] md:text-[18px]'>
               담당자
             </label>
@@ -202,7 +205,7 @@ export default function NewCardModal({ columnId }: NewCardModalProps) {
                     profileImageUrl={selectedMember.profileImageUrl}
                   />
                 ) : (
-                  '담당자를 선택해 주세요'
+                  <p className='text-gray-9f'>담당자를 선택해 주세요</p>
                 )}
                 <Image
                   className={`absolute right-[20px] top-[18px] md:top-[24px] ${isOpen ? 'rotate-180' : ''}`}
@@ -217,7 +220,7 @@ export default function NewCardModal({ columnId }: NewCardModalProps) {
               )}
             </div>
           </div>
-          <div>
+          <div className='mb-[20px]'>
             <label htmlFor='title' className='label mb-[15px] block text-[16px] md:text-[18px]'>
               제목 <span className='text-violet'>*</span>
             </label>
@@ -232,7 +235,7 @@ export default function NewCardModal({ columnId }: NewCardModalProps) {
               }}
             />
           </div>
-          <div>
+          <div className='mb-[20px]'>
             <label htmlFor='description' className='label mb-[15px] block text-[16px] md:text-[18px]'>
               설명 <span className='text-violet'>*</span>
             </label>
@@ -246,7 +249,7 @@ export default function NewCardModal({ columnId }: NewCardModalProps) {
               }}
             ></textarea>
           </div>
-          <div>
+          <div className='mb-[20px]'>
             <label htmlFor='dueDate' className='label mb-[15px] block text-[16px] md:text-[18px]'>
               마감일
             </label>
@@ -263,7 +266,7 @@ export default function NewCardModal({ columnId }: NewCardModalProps) {
               }}
             />
           </div>
-          <div>
+          <div className='mb-[20px]'>
             <label htmlFor='tags' className='label mb-[15px] block text-[16px] md:text-[18px]'>
               태그
             </label>
@@ -276,7 +279,7 @@ export default function NewCardModal({ columnId }: NewCardModalProps) {
             />
             <TagsWrapper tags={formValues.tags} onTagClick={handleTagClick} />
           </div>
-          <div>
+          <div className='mb-[20px]'>
             <label htmlFor='card-profile' className='label mb-[15px] block text-[16px] md:text-[18px]'>
               이미지
             </label>
@@ -289,13 +292,18 @@ export default function NewCardModal({ columnId }: NewCardModalProps) {
               />
             </div>
           </div>
-          <div className='flex justify-end gap-[10px]'>
-            <ModalCancelButton type='button' onClick={closeModal}>
-              취소
-            </ModalCancelButton>
-            <ModalActionButton onClick={handleSubmit}>생성</ModalActionButton>
-          </div>
         </form>
+        <div className='flex justify-end gap-[10px] border-t-2 border-gray-d9 bg-white pt-[20px]'>
+          <ModalCancelButton type='button' onClick={closeModal}>
+            취소
+          </ModalCancelButton>
+          <ModalActionButton
+            onClick={handleSubmit}
+            disabled={!(formValues.title.length > 0 && formValues.description.length > 0)}
+          >
+            {isEdit ? '수정' : '생성'}
+          </ModalActionButton>
+        </div>
       </div>
     </div>
   );

@@ -46,7 +46,7 @@ function Column({ columnId, column, index, cards, columns }: ColumnProps) {
         <button
           className='btn-violet-light mb-[16px] h-[40px] rounded-[6px] border'
           onClick={() => {
-            openNewCardModal({ columnId: columnId });
+            openNewCardModal({ columnId: columnId, isEdit: false });
           }}
         >
           <Image src='/icons/plus-filled.svg' width={22} height={22} alt='카드 추가 아이콘' />

@@ -2,9 +2,9 @@ import { useEffect } from 'react';
 import { useSelector } from 'react-redux';
 
 import ConfirmModal from './ConfirmModal';
+import EditCardModal from './EditCardModal';
 import InviteMemberModal from './InviteMemberModal';
 import ModifyColumnModal from './ModifyColumnModal';
-import NewCardModal from './NewCardModal/index';
 import NewColumnModal from './NewColumnModal';
 import NewDashboardModal from './NewDashboardModal';
 import NotificationModal from './NotificationModal';
@@ -16,8 +16,8 @@ import {
   ConfirmModalProps,
   NewColumnModalProps,
   NotificationModalProps,
-  NewCardModalProps,
   MODAL,
+  EditCardModalProps,
 } from '@/types/Modal.interface';
 
 export default function Modal() {
@@ -65,8 +65,8 @@ export default function Modal() {
       case MODAL.MODIFY_COLUMN:
         return <ModifyColumnModal {...(modalProps as ModifyColumnModalProps)} />;
 
-      case MODAL.NEW_CARD:
-        return modalProps ? <NewCardModal {...(modalProps as NewCardModalProps)} /> : null;
+      case MODAL.EDIT_CARD:
+        return modalProps ? <EditCardModal {...(modalProps as EditCardModalProps)} /> : null;
 
       default:
         return <NotificationModal text='' />;

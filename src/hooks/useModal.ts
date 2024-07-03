@@ -7,7 +7,7 @@ import {
   ConfirmModalProps,
   NewColumnModalProps,
   ModifyColumnModalProps,
-  NewCardModalProps,
+  EditCardModalProps,
 } from '@/types/Modal.interface';
 
 const useModal = () => {
@@ -32,8 +32,8 @@ const useModal = () => {
     dispatch(openModal({ type: MODAL.MODIFY_COLUMN, modalProps }));
   };
 
-  const openNewCardModal = (modalProps: NewCardModalProps) => {
-    dispatch(openModal({ type: MODAL.NEW_CARD, modalProps }));
+  const openNewCardModal = (modalProps: EditCardModalProps) => {
+    dispatch(openModal({ type: MODAL.EDIT_CARD, modalProps }));
   };
   const handleCloseModal = () => {
     dispatch(closeModal());
