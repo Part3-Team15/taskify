@@ -44,7 +44,7 @@ export default function Sidebar() {
   };
 
   return (
-    <aside className='flex h-dvh min-w-16 max-w-[300px] flex-col border-r border-gray-d9 px-3 py-5 md:min-w-40 lg:min-w-72'>
+    <aside className='flex min-w-16 max-w-[300px] flex-col border-r border-gray-d9 px-3 py-5 md:min-w-40 lg:min-w-72'>
       <Link href={user ? '/mydashboard' : '/'} className='flex items-center justify-center pb-14 md:block md:px-3'>
         <div className='relative hidden h-[33px] w-[110px] md:block'>
           <Image src={'/icons/logo.svg'} alt='logo' priority className='' fill />
