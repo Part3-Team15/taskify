@@ -6,7 +6,7 @@ import Footer from '@/components/Footer';
 
 function Home() {
   return (
-    <main className='h-dvh max-h-[calc(100dvh-70px)] overflow-y-scroll bg-dark-500 text-white'>
+    <main className='scrollbar-black h-dvh max-h-[calc(100dvh-70px)] overflow-y-auto bg-dark-500 text-white'>
       <Head>
         <title>Taskify</title>
       </Head>

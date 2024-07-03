@@ -18,14 +18,10 @@ export default function Header() {
   const { pathname } = router;
 
   // NOTE: 리다이렉션은 페이지에서 할 것이라 생각하고, 상태에 걸맞은 헤더 보여줌
-  if (!user) {
-    if (pathname === '/') {
-      // NOTE: 랜딩페이지
-      return <LandingHeader />;
-    }
 
-    // NOTE: 로그인 페이지 or 404 페이지
-    return <></>;
+  if (pathname === '/') {
+    // NOTE: 랜딩페이지
+    return <LandingHeader />;
   }
 
   if (pathname.startsWith('/dashboard/')) {
