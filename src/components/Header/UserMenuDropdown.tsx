@@ -8,7 +8,7 @@ export default function UserMenuDropdown() {
   const { isOpen, dropdownRef, handleDropdownClick, handleMenuClick, handleLogoutClick } = useUserDropdown();
 
   return (
-    <div className='flex items-center' ref={dropdownRef}>
+    <div className='z-10 flex items-center' ref={dropdownRef}>
       <button type='button' onClick={handleDropdownClick}>
         <UserProfile />
       </button>
