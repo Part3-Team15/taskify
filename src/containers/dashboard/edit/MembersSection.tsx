@@ -7,12 +7,14 @@ import MemberList from './MemberList';
 import Pagination from '@/components/Pagination';
 import useDeleteData from '@/hooks/useDeleteData';
 import useFetchData from '@/hooks/useFetchData';
+import useModal from '@/hooks/useModal';
 import { deleteMember } from '@/services/deleteService';
 import { getMembersList } from '@/services/getService';
 import { DeleteMemberInput } from '@/types/delete/DeleteMemberInput.interface';
 import { MembersResponse } from '@/types/Member.interface';
 
 export default function MembersSection() {
+  const { openConfirmModal } = useModal();
   const router = useRouter();
   const { id } = router.query;
   const [currentChunk, setCurrentChunk] = useState(1);
@@ -49,7 +51,7 @@ export default function MembersSection() {
       await mutate({ memberId });
     };
 
-    handleDelete();
+    openConfirmModal({ text: '정말 구성원을 삭제하시겠습니까?', onActionClick: handleDelete });
   };
 
   return (

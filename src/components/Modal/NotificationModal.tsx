@@ -12,7 +12,7 @@ export default function NotificationModal({ text, onClick }: NotificationModalPr
   return (
     <div className='modal modal-basic'>
       <div className='flex size-full flex-col'>
-        <p className='align-center grow'>{text}</p>
+        <p className='align-center grow whitespace-pre-wrap text-center'>{text}</p>
         <div className='flex justify-center md:justify-end'>
           <ModalActionButton type='button' onClick={handleClick}>
             확인

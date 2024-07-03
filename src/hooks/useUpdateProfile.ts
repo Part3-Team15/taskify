@@ -1,6 +1,8 @@
 import { useMutation } from '@tanstack/react-query';
 import { useDispatch, useSelector } from 'react-redux';
 
+import useModal from './useModal';
+
 import { putProfile } from '@/services/putService';
 import { setUser, isLoading, setError } from '@/store/reducers/userSlice';
 import { RootState } from '@/store/store';
@@ -9,6 +11,7 @@ import { User } from '@/types/User.interface';
 
 export const useUpdateProfile = () => {
   const dispatch = useDispatch();
+  const { openNotificationModal } = useModal();
   const prevUser = useSelector((state: RootState) => state.user);
 
   return useMutation<User, unknown, UpdateProfileForm, unknown>({
@@ -21,6 +24,7 @@ export const useUpdateProfile = () => {
     },
     onSuccess: (user) => {
       dispatch(setUser({ ...prevUser, user }));
+      openNotificationModal({ text: '프로필이 변경되었습니다.' });
       dispatch(isLoading(false));
     },
     onError: (error: unknown) => {
