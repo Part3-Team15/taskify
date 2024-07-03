@@ -113,7 +113,7 @@ export default function InvitedDashboardList() {
   }
 
   return (
-    <section className='h-full max-h-[600px] max-w-[350px] rounded-lg border-0 bg-white md:max-h-[740px] md:min-h-[530px] md:max-w-full lg:max-w-screen-lg'>
+    <section className='h-full max-h-[550px] max-w-[350px] rounded-lg border-0 bg-white md:max-h-[740px] md:min-h-[530px] md:max-w-full lg:max-w-screen-lg'>
       <p className='px-7 pb-5 pt-8 text-base font-bold text-black-33'>초대받은 대시보드</p>
       {isLoading ? (
         <Skeleton />
@@ -129,11 +129,11 @@ export default function InvitedDashboardList() {
               />
             </>
           ) : (
-            <div className='flex flex-col items-center justify-center pt-[200px]'>
+            <div className='flex flex-col items-center justify-center py-[100px]'>
               <div className='relative size-[60px] md:size-[150px]'>
                 <Image src={'/icons/invitations.svg'} alt='invitations' fill />
               </div>
-              <p className='px-7 py-5 text-gray-78'>초대된 대시보드가 없습니다.</p>
+              <p className='px-7 py-5 text-sm text-gray-78 md:text-base'>초대된 대시보드가 없습니다.</p>
             </div>
           )}
         </>

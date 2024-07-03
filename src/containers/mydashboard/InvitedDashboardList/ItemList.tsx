@@ -19,7 +19,7 @@ export default function InvitationItemList({ invitations, handleAcceptInvitation
         <p className='w-44'>수락 여부</p>
       </div>
       {invitations.length === 0 ? (
-        <div className='flex flex-col items-center pt-[200px]'>
+        <div className='flex flex-col items-center justify-center py-[100px]'>
           <div className='relative size-[60px] md:size-[100px]'>
             <Image src={'/icons/invitations.svg'} alt='invitations' fill />
           </div>
