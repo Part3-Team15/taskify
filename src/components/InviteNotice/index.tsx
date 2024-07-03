@@ -9,7 +9,7 @@ import { Invitation, InvitationsResponse } from '@/types/Invitation.interface';
 
 export default function InvitationNotice() {
   // NOTE: 3초마다 refetch 하도록 설정
-  const { data } = useFetchData<InvitationsResponse>(['invitations', 'notice'], () => getInvitationsList(), 3000);
+  const { data } = useFetchData<InvitationsResponse>(['invitations', 'notice'], () => getInvitationsList(), 5000);
   const [savedInvitations, setSavedInvitations] = useState<Invitation[]>(data?.invitations || []);
 
   useEffect(() => {
