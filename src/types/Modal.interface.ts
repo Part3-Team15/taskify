@@ -1,3 +1,4 @@
+import { Card } from './Card.interface';
 import { Column } from './Column.interface';
 
 export interface ModalState {
@@ -30,4 +31,10 @@ export interface ModifyColumnModalProps extends ModalProps {
   columns: Column[];
   columnTitle: string;
   columnId: number;
+}
+
+export interface TodoCardModalProps extends ModalProps {
+  card: Card;
+  column: Column;
+  onClick: () => void;
 }

@@ -59,7 +59,17 @@ function Column({ column, index, cards, columns }: ColumnProps) {
                 {cards.map((card, index) => (
                   <Draggable key={`card-${card.id}`} draggableId={`card-${card.id}`} index={index}>
                     {(provided) => (
-                      <div ref={provided.innerRef} {...provided.draggableProps} {...provided.dragHandleProps}>
+                      <div
+                        ref={provided.innerRef}
+                        {...provided.draggableProps}
+                        {...provided.dragHandleProps}
+                        onClick={() => {
+                          openModal({
+                            type: 'todoCard',
+                            modalProps: { card, column },
+                          });
+                        }}
+                      >
                         <Card key={`card-${card.id}`} card={card} />
                       </div>
                     )}
