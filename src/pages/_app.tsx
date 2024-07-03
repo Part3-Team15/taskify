@@ -6,6 +6,7 @@ import Head from 'next/head';
 import { Provider } from 'react-redux';
 import { PersistGate } from 'redux-persist/integration/react';
 
+import InvitationNotice from '@/components/InviteNotice';
 import Modal from '@/components/Modal';
 import Redirect from '@/components/Redirect';
 import MainLayout from '@/layouts/MainLayout';
@@ -26,6 +27,7 @@ export default function App({ Component, pageProps }: AppProps) {
               <meta name='og:image' content='/public/images/logo_large.png' />
             </Head>
             <Modal />
+            <InvitationNotice />
             <MainLayout>
               <Component {...pageProps} />
             </MainLayout>

@@ -1,4 +1,4 @@
-import UserMenuDropdown from './UserMenuDropdown';
+import UserMenuDropdown from '../UserMenuDropdown';
 
 interface DefaultHeaderProps {
   title: string;
