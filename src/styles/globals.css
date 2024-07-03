@@ -50,7 +50,7 @@
   }
 
   .dd-menu {
-    @apply align-center h-[30px] w-full rounded-sm text-xs hover:bg-violet-f1 active:bg-violet-e8 md:h-8 md:text-sm;
+    @apply align-center h-[30px] w-full rounded-md hover:bg-violet-f1 active:bg-violet-e8 md:h-8;
   }
 
   .modal {

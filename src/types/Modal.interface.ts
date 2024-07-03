@@ -1,13 +1,8 @@
 import { Column } from './Column.interface';
 
 export interface ModalState {
-  type: string | null;
+  type: ModalType | null;
   modalProps: ModalProps;
-}
-
-export interface ModalActionState {
-  type?: string;
-  modalProps?: ModalProps;
 }
 
 export interface ModalProps {}
@@ -31,3 +26,14 @@ export interface ModifyColumnModalProps extends ModalProps {
   columnTitle: string;
   columnId: number;
 }
+
+export const MODAL = {
+  NOTIFICATION: 'notification',
+  CONFIRM: 'confirm',
+  NEW_DASHBOARD: 'newDashboard',
+  NEW_COLUMN: 'newColumn',
+  INVITE_MEMBER: 'inviteMember',
+  MODIFY_COLUMN: 'modifyColumn',
+} as const;
+
+export type ModalType = (typeof MODAL)[keyof typeof MODAL];

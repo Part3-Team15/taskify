@@ -41,13 +41,10 @@ export default function InvitationItemList({ invitations, handleAcceptInvitation
               <p className='col-span-2 flex items-center md:min-w-28'>{invitation.inviter.nickname}</p>
             </div>
             <div className='flex items-center gap-[10px]'>
-              <ActionButton onClick={() => handleAcceptInvitation(invitation.id, true)} className='w-20 grow lg:grow-0'>
+              <ActionButton onClick={() => handleAcceptInvitation(invitation.id, true)} className='grow lg:grow-0'>
                 수락
               </ActionButton>
-              <CancelButton
-                onClick={() => handleAcceptInvitation(invitation.id, false)}
-                className='w-20 grow lg:grow-0'
-              >
+              <CancelButton onClick={() => handleAcceptInvitation(invitation.id, false)} className='grow lg:grow-0'>
                 거절
               </CancelButton>
             </div>

@@ -9,6 +9,7 @@ import PwdInputWithLabel from '@/containers/signin&signup/PwdInputWithLabel';
 import TextInputWithLabel from '@/containers/signin&signup/TextInputWithLabel';
 import useModal from '@/hooks/useModal';
 import { postSignUp } from '@/services/postService';
+import hashPassword from '@/utils/hashPassword';
 
 export type TSignUpInputs = {
   email: string;
@@ -29,7 +30,7 @@ const schema = yup.object().shape({
 
 export default function SignUpForm() {
   const router = useRouter();
-  const { openModal } = useModal();
+  const { openNotificationModal } = useModal();
 
   const [checkTerms, setCheckTerms] = useState(false);
 
@@ -54,24 +55,19 @@ export default function SignUpForm() {
   };
 
   const onSubmit = async (data: TSignUpInputs) => {
+    const { password } = data;
     try {
-      await postSignUp(data);
-      openModal({
-        type: 'notification',
-        modalProps: { text: '가입이 완료되었습니다!', onClick: handleSignUpSuccess },
-      });
+      await postSignUp({ ...data, password: hashPassword(password) });
+      openNotificationModal({ text: '가입이 완료되었습니다!', onClick: handleSignUpSuccess });
     } catch (error) {
       if (error instanceof AxiosError && error.response?.status === 409) {
-        openModal({
-          type: 'notification',
-          modalProps: { text: '중복된 이메일 입니다.', onClick: handleEmailExist },
-        });
+        openNotificationModal({ text: '중복된 이메일 입니다.', onClick: handleEmailExist });
       } else if (error instanceof AxiosError) {
         if (error.response?.data.message) {
-          openModal({ type: 'notification', modalProps: { text: error.response.data.message } });
+          openNotificationModal({ text: error.response.data.message });
         }
       } else {
-        openModal({ type: 'notification', modalProps: { text: '회원가입을 실패하였습니다.' } });
+        openNotificationModal({ text: '회원가입을 실패하였습니다.' });
         console.log(error);
       }
     }

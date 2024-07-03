@@ -14,7 +14,7 @@ import { DashboardColor, DashboardInfoState, Dashboard } from '@/types/Dashboard
 export default function DashboardModifySection() {
   const router = useRouter();
   const { id } = router.query;
-  const { openModal } = useModal();
+  const { openNotificationModal } = useModal();
   const queryClient = useQueryClient();
 
   const [value, setValue] = useState<DashboardInfoState>({
@@ -41,11 +41,11 @@ export default function DashboardModifySection() {
   const handleModifyButton = async () => {
     try {
       await putDashboardInfo(Number(id), value);
-      openModal({ type: 'textModal', modalProps: { text: '대시보드 정보가 수정되었습니다!' } });
+      openNotificationModal({ text: '대시보드 정보가 수정되었습니다!' });
       queryClient.invalidateQueries({ queryKey: ['dashboard', id] });
       queryClient.invalidateQueries({ queryKey: ['sideDashboards'] });
     } catch {
-      openModal({ type: 'textModal', modalProps: { text: '대시보드 정보 수정을 실패하였습니다.' } });
+      openNotificationModal({ text: '대시보드 정보 수정을 실패하였습니다.' });
     }
   };
 

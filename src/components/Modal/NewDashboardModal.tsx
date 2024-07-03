@@ -1,6 +1,7 @@
 import { useQueryClient } from '@tanstack/react-query';
 import { AxiosError } from 'axios';
 import Image from 'next/image';
+import { useRouter } from 'next/router';
 import { useState } from 'react';
 
 import ModalActionButton from '@/components/Button/ModalActionButton';
@@ -18,14 +19,15 @@ export default function NewDashboardModal() {
   const [selectedColor, setSelectedColor] = useState<DashboardColor>('green');
   const [errorMessage, setErrorMessage] = useState('');
 
+  const router = useRouter();
   const queryClient = useQueryClient();
-  const { openModal, closeModal } = useModal();
+  const { openNotificationModal, closeModal } = useModal();
 
   const handleValidCheck = () => {
     if (!value.title) {
       setErrorMessage('이름을 입력해주세요.');
-    } else if (value.title.length > 10) {
-      setErrorMessage('10자 이내로 입력해주세요');
+    } else if (value.title.length > 15) {
+      setErrorMessage('15자 이내로 입력해주세요');
     } else {
       setErrorMessage('');
     }
@@ -41,10 +43,11 @@ export default function NewDashboardModal() {
 
   const handlePostDashboard = async () => {
     try {
-      await postNewDashboard(value);
+      const { id } = await postNewDashboard(value);
       queryClient.invalidateQueries({ queryKey: ['sideDashboards'] });
       queryClient.invalidateQueries({ queryKey: ['dashboards'] });
-      openModal({ type: 'notification', modalProps: { text: '새로운 대시보드가 생성되었습니다!' } });
+      openNotificationModal({ text: '새로운 대시보드가 생성되었습니다!' });
+      router.push(`/dashboard/${id}`);
     } catch (error) {
       if (error instanceof AxiosError) {
         setErrorMessage(error.response?.data.message || '대시보드 생성을 실패하였습니다');
