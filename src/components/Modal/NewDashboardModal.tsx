@@ -12,6 +12,7 @@ import { DASHBOARD_COLOR_OBJ } from '@/constants';
 import useModal from '@/hooks/useModal';
 import { postNewDashboard } from '@/services/postService';
 import { DashboardColor, DashboardInfoState } from '@/types/Dashboard.interface';
+import { addShareAccount } from '@/utils/shareAccount';
 
 export default function NewDashboardModal() {
   const [value, setValue] = useState<DashboardInfoState>({
@@ -47,6 +48,10 @@ export default function NewDashboardModal() {
   const handlePostDashboard = async () => {
     try {
       const { id } = await postNewDashboard(value);
+      if (isPublic) {
+        addShareAccount(id);
+      }
+
       queryClient.invalidateQueries({ queryKey: ['sideDashboards'] });
       queryClient.invalidateQueries({ queryKey: ['dashboards'] });
       openNotificationModal({ text: '새로운 대시보드가 생성되었습니다!' });
