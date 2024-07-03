@@ -14,7 +14,7 @@ export default function ConfirmModal({ text, onActionClick }: ConfirmModalProps)
   return (
     <div className='modal modal-basic'>
       <div className='flex size-full flex-col'>
-        <p className='align-center grow'>{text}</p>
+        <p className='align-center grow whitespace-pre-wrap text-center'>{text}</p>
         <div className='flex justify-between gap-3 md:justify-end'>
           <ModalCancelButton type='button' onClick={closeModal}>
             취소

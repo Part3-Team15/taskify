@@ -3,6 +3,7 @@ import { ChangeEvent, FormEventHandler, useState } from 'react';
 
 import ActionButton from '@/components/Button/ActionButton';
 import PwdInput from '@/components/Input/PwdInput';
+import useModal from '@/hooks/useModal';
 import { putPassword } from '@/services/putService';
 import hashPassword from '@/utils/hashPassword';
 
@@ -35,6 +36,7 @@ export default function PwdChangeForm() {
   const [inputData, setInputData] = useState<PasswordChangeForm>(INITIAL_INPUT_DATA);
   const [lt8Error, setLt8Error] = useState<InputError>({});
   const [sameError, setSameError] = useState<InputError>({});
+  const { openNotificationModal } = useModal();
 
   const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
     const { id, value } = e.target;
@@ -82,14 +84,13 @@ export default function PwdChangeForm() {
         await putPassword({ password: hashPassword(password), newPassword: hashPassword(newPassword) });
         // NOTE: 전체 페이지 리로드보다 시간이 훨씬 적게 걸려서 값만 비우도록 했습니다.
         setInputData(INITIAL_INPUT_DATA);
-        alert('비밀번호가 변경되었습니다.');
+        openNotificationModal({ text: '비밀번호가 변경되었습니다.' });
       } catch (error) {
+        const message = '알 수 없는 오류가 발생했습니다!';
         if (error instanceof AxiosError) {
-          alert(error.response?.data.message);
-        } else if (error instanceof Error) {
-          alert(error.message);
+          openNotificationModal({ text: error.response?.data.message || message });
         } else {
-          alert('알 수 없는 오류가 발생했습니다!');
+          openNotificationModal({ text: message });
           console.log(error);
         }
       }
