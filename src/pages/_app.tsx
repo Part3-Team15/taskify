@@ -17,27 +17,37 @@ const queryClient = new QueryClient();
 
 export default function App({ Component, pageProps }: AppProps) {
   return (
-    <Provider store={store}>
-      <PersistGate loading={null} persistor={persistor}>
-        <QueryClientProvider client={queryClient}>
-          <Redirect>
-            <ThemeProvider attribute='class' defaultTheme='system' enableSystem={true}>
-              <Head>
-                <title>Taskify</title>
-                <meta name='og:title' content='Taskify' />
-                <meta name='og:description' content='새로운 일정 관리 Taskify' />
-                <meta name='og:image' content='/public/images/logo_large.png' />
-              </Head>
-              <Modal />
-              <InvitationNotice />
-              <MainLayout>
-                <Component {...pageProps} />
-              </MainLayout>
-              <ReactQueryDevtools initialIsOpen={false} />
-            </ThemeProvider>
-          </Redirect>
-        </QueryClientProvider>
-      </PersistGate>
-    </Provider>
+    <>
+      <Head>
+        <title>Taskify</title>
+        <meta name='description' content='새로운 일정 관리 Taskify' />
+        <link rel='icon' href='/favicon.ico' />
+
+        <meta name='og:title' content='Taskify' />
+        <meta name='og:description' content='새로운 일정 관리 Taskify' />
+        <meta name='og:image' content='/preview.png' />
+        <meta property='og:url' content='https://taskify-15.vercel.app/' />
+
+        <meta name='twitter:card' content='summary_large_image' />
+        <meta property='twitter:title' content='Taskify' />
+        <meta property='twitter:description' content='새로운 일정 관리 Taskify' />
+        <meta name='twitter:image' content='/preview.png' />
+      </Head>
+      <Provider store={store}>
+        <PersistGate loading={null} persistor={persistor}>
+          <QueryClientProvider client={queryClient}>
+            <Redirect>
+              <ThemeProvider attribute='class' defaultTheme='system' enableSystem={true}>
+                <Modal />
+                <MainLayout>
+                  <Component {...pageProps} />
+                </MainLayout>
+                <ReactQueryDevtools initialIsOpen={false} />
+              </ThemeProvider>
+            </Redirect>
+          </QueryClientProvider>
+        </PersistGate>
+      </Provider>
+    </>
   );
 }
