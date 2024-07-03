@@ -6,17 +6,15 @@ import Card from './Card';
 import useModal from '@/hooks/useModal';
 import { Card as CardType } from '@/types/Card.interface';
 import { Column as ColumnType } from '@/types/Column.interface';
-import { MODAL } from '@/types/Modal.interface';
 
 interface ColumnProps {
-  columnId: number;
   column: ColumnType;
   columns: ColumnType[];
   index: number;
   cards: CardType[];
 }
 
-function Column({ columnId, column, index, cards, columns }: ColumnProps) {
+function Column({ column, index, cards, columns }: ColumnProps) {
   const { openModifyColumnModal, openNewCardModal } = useModal();
 
   return (
@@ -46,7 +44,7 @@ function Column({ columnId, column, index, cards, columns }: ColumnProps) {
         <button
           className='btn-violet-light mb-[16px] h-[40px] rounded-[6px] border'
           onClick={() => {
-            openNewCardModal({ columnId: columnId, isEdit: false });
+            openNewCardModal({ columnId: column.id, isEdit: false });
           }}
         >
           <Image src='/icons/plus-filled.svg' width={22} height={22} alt='카드 추가 아이콘' />
