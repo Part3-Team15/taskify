@@ -1,13 +1,19 @@
 import { useEffect, useState } from 'react';
+import { useSelector } from 'react-redux';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
 import { TOAST_DEFAULT_SETTING } from '@/constants';
 import useFetchData from '@/hooks/useFetchData';
 import { getInvitationsList } from '@/services/getService';
+import { RootState } from '@/store/store';
 import { Invitation, InvitationsResponse } from '@/types/Invitation.interface';
 
 export default function InvitationNotice() {
+  const { user } = useSelector((state: RootState) => state.user);
+
+  if (!user) return null;
+
   // NOTE: 3초마다 refetch 하도록 설정
   const { data } = useFetchData<InvitationsResponse>(['invitations', 'notice'], () => getInvitationsList(), 5000);
   const [savedInvitations, setSavedInvitations] = useState<Invitation[]>(data?.invitations || []);
