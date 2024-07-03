@@ -1,3 +1,4 @@
+import { useQueryClient } from '@tanstack/react-query';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
 import { useEffect, useState, useRef } from 'react';
@@ -10,10 +11,14 @@ import CARROT_DOWN from '@/../public/icons/carrot-down.svg';
 import ModalActionButton from '@/components/Button/ModalActionButton';
 import ModalCancelButton from '@/components/Button/ModalCancelButton';
 import ImageInput from '@/components/Input/ImageInput';
+import useModal from '@/hooks/useModal';
 import { getMembersList } from '@/services/getService';
+import { postImageForCard, postCard } from '@/services/postService';
+import { Member } from '@/types/Member.interface';
 import { NewCardModalProps } from '@/types/Modal.interface';
+import { formatDateTime } from '@/utils/formatDateTime';
 
-interface postCardData {
+export interface postCardData {
   assigneeUserId: number;
   dashboardId: number;
   columnId: number;
@@ -23,6 +28,7 @@ interface postCardData {
   tags: string[];
   imageUrl: string;
 }
+
 const formInitialState = {
   assigneeUserId: 0,
   dashboardId: 0,
@@ -34,20 +40,12 @@ const formInitialState = {
   imageUrl: '',
 };
 
-interface Member {
-  createdAt: string;
-  email: string;
-  id: number;
-  isOwner: boolean;
-  nickname: string;
-  profileImageUrl: string | null;
-  updatedAt: string;
-  userId: number;
-}
-
 export default function NewCardModal({ columnId }: NewCardModalProps) {
   const router = useRouter();
   const { id } = router.query;
+  const queryClient = useQueryClient();
+
+  const { openNotificationModal, closeModal } = useModal();
 
   const [isOpen, setIsOpen] = useState(false);
   const [members, setMembers] = useState<Member[]>([]);
@@ -58,21 +56,24 @@ export default function NewCardModal({ columnId }: NewCardModalProps) {
   const toggleRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
+    // 현재 대시보드에 해당하는 멤버들 GET
     const getMembers = async () => {
       try {
         const response = await getMembersList(Number(id), 1, 99);
+        // 필요한 데이터만 정제
         const filteredMembers = response.data.members.map((member: Member) => ({
           userId: member.userId,
           nickname: member.nickname,
           profileImageUrl: member.profileImageUrl,
         }));
-        setMembers(filteredMembers); // AxiosResponse 객체에서 data를 추출하여 상태에 설정
+        setMembers(filteredMembers);
       } catch (error) {
         console.error('Error fetching members:', error);
       }
     };
     if (id) {
       getMembers();
+      // router query와 전달받은 columnId, state에 할당
       setFormValues((prevValues) => ({
         ...prevValues,
         dashboardId: Number(id),
@@ -81,6 +82,7 @@ export default function NewCardModal({ columnId }: NewCardModalProps) {
     }
   }, [id]);
 
+  // Members Dropdown 바깥 및 input 눌렀을 때 isOpen = false
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (
@@ -97,12 +99,12 @@ export default function NewCardModal({ columnId }: NewCardModalProps) {
     } else {
       document.removeEventListener('mousedown', handleClickOutside);
     }
-
     return () => {
       document.removeEventListener('mousedown', handleClickOutside);
     };
   }, [isOpen]);
 
+  // 멤버 선택 핸들러
   const handleSelectMember = (userId: number) => {
     setFormValues((prevValues) => ({
       ...prevValues,
@@ -111,7 +113,8 @@ export default function NewCardModal({ columnId }: NewCardModalProps) {
     setIsOpen(false);
   };
 
-  const handleTagsKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
+  // 태그 입력 핸들러
+  const handleTagsEnterKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
     if (event.key === 'Enter') {
       event.preventDefault();
       const value = event.currentTarget.value.trim();
@@ -125,16 +128,52 @@ export default function NewCardModal({ columnId }: NewCardModalProps) {
     }
   };
 
-  const handleTagDeleteClick = (tag: string) => {
+  // 태그 클릭 시 삭제 핸들러
+  const handleTagClick = (tag: string) => {
     setFormValues((prevValue) => ({ ...prevValue, tags: prevValue.tags.filter((t) => t !== tag) }));
   };
 
+  // 이미지 수정 핸들러
   const handleImageChange = (image: File) => {
     setProfileImageFile(image);
   };
 
+  // 이미지 삭제 핸들러
   const handleImageDelete = () => {
     setProfileImageFile(null);
+  };
+
+  const handleSubmit = async (event: React.FormEvent) => {
+    event.preventDefault();
+    try {
+      let imgUrl = '';
+      // 이미지 존재 시 이미지 POST 요청하여 URL 값 받음
+      if (profileImageFile) {
+        const response = await postImageForCard((columnId = columnId), { image: profileImageFile });
+        imgUrl = response.profileImageUrl;
+      }
+
+      const formValuesToSend = {
+        ...formValues,
+        imageUrl: imgUrl,
+      };
+
+      // 데이터가 할당되지 않은 state는 POST 요청하기 전에 제거
+      const filteredFormValues: Partial<postCardData> = {
+        ...formValuesToSend,
+        assigneeUserId: formValuesToSend.assigneeUserId || undefined,
+        imageUrl: formValuesToSend.imageUrl !== '' ? formValuesToSend.imageUrl : undefined,
+        dueDate: formValuesToSend.dueDate !== '' ? formValuesToSend.dueDate : undefined,
+      };
+
+      await postCard(filteredFormValues as postCardData);
+      queryClient.invalidateQueries({ queryKey: ['columns', id] });
+      openNotificationModal({
+        text: '할 일 카드가 생성되었습니다!',
+      });
+    } catch (error) {
+      console.error('Error submitting form:', error);
+    }
   };
 
   const selectedMember = members.find((member) => member.userId === formValues.assigneeUserId);
@@ -217,7 +256,10 @@ export default function NewCardModal({ columnId }: NewCardModalProps) {
               type='datetime-local'
               placeholder='날짜를 입력해 주세요'
               onChange={(e) => {
-                setFormValues((prevValues) => ({ ...prevValues, dueDate: e.target.value }));
+                setFormValues((prevValues) => ({
+                  ...prevValues,
+                  dueDate: e.target.value ? formatDateTime(e.target.value) : '',
+                }));
               }}
             />
           </div>
@@ -230,9 +272,9 @@ export default function NewCardModal({ columnId }: NewCardModalProps) {
               id='tags'
               type='text'
               placeholder='입력 후 Enter'
-              onKeyDown={handleTagsKeyDown}
+              onKeyDown={handleTagsEnterKeyDown}
             />
-            <TagsWrapper tags={formValues.tags} onTagClick={handleTagDeleteClick} />
+            <TagsWrapper tags={formValues.tags} onTagClick={handleTagClick} />
           </div>
           <div>
             <label htmlFor='card-profile' className='label mb-[15px] block text-[16px] md:text-[18px]'>
@@ -248,8 +290,10 @@ export default function NewCardModal({ columnId }: NewCardModalProps) {
             </div>
           </div>
           <div className='flex justify-end gap-[10px]'>
-            <ModalCancelButton type='button'>취소</ModalCancelButton>
-            <ModalActionButton>생성</ModalActionButton>
+            <ModalCancelButton type='button' onClick={closeModal}>
+              취소
+            </ModalCancelButton>
+            <ModalActionButton onClick={handleSubmit}>생성</ModalActionButton>
           </div>
         </form>
       </div>
