@@ -4,6 +4,7 @@ import { useRouter } from 'next/router';
 import { useState } from 'react';
 
 import Comment from './Comment';
+import EditDropdown from './EditDropdown';
 
 import ProfileIcon from '@/components/ProfileIcon';
 import Tags from '@/components/Tags';
@@ -54,10 +55,10 @@ export default function TodoCardModal({ card, column, onClick }: TodoCardModalPr
       {/* Title Section */}
       <section className='flex flex-row items-center justify-between'>
         <div className='text-[20px] font-[700] text-black-33 hover:cursor-default md:text-[24px]'>{card.title}</div>
-        <div>
-          <button>
-            <Image src='/icons/kebab.svg' alt=': 아이콘' width={32} height={32} />
-          </button>
+        <div className='flex'>
+          <div className='relative'>
+            <EditDropdown card={card} />
+          </div>
           <button onClick={handleModalClose}>
             <Image src='/icons/x.svg' alt='X 아이콘' width={32} height={32} />
           </button>
