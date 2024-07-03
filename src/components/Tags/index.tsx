@@ -61,7 +61,7 @@ export default function Tags({ tags, customClass, isDeleteOption = false }: Tags
   };
 
   return (
-    <div className={`flex flex-wrap gap-[6px] ${customClass}`}>
+    <div className={`flex gap-[6px] scrollbar-hide ${customClass}`}>
       {tagList.map((tag) => (
         <span
           key={tag.id}
