@@ -1,10 +1,11 @@
 import instance from './axios';
 
 import { CancelInvitationInput } from '@/types/delete/CancelInvitation.interface';
+import { DeleteDashboardInput } from '@/types/delete/DeleteDashboardInput.interface';
 import { DeleteMemberInput } from '@/types/delete/DeleteMemberInput.interface';
 
 // 대시보드 삭제
-export const deleteDashboard = async (dashboardId: number) => {
+export const deleteDashboard = async ({ dashboardId }: DeleteDashboardInput) => {
   return await instance.delete(`/dashboards/${dashboardId}`);
 };
 

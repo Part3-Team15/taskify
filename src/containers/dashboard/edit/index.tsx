@@ -1,3 +1,4 @@
+import { useQueryClient } from '@tanstack/react-query';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
@@ -6,12 +7,33 @@ import DashboardModifySection from './DashboardModifySection';
 import InvitedMembersSection from './InvitedMembersSection';
 import MembersSection from './MembersSection';
 
+import useDeleteData from '@/hooks/useDeleteData';
+import useModal from '@/hooks/useModal';
+import { deleteDashboard } from '@/services/deleteService';
+import { DeleteDashboardInput } from '@/types/delete/DeleteDashboardInput.interface';
+
 export default function DashboardEdit() {
+  const { openConfirmModal } = useModal();
+  const queryClient = useQueryClient();
   const router = useRouter();
   const { id } = router.query;
 
+  const handleSuccess = () => {
+    queryClient.invalidateQueries({ queryKey: ['sideDashboards'] });
+    router.replace('/mydashboard');
+  };
+  const { mutate } = useDeleteData<DeleteDashboardInput>({ mutationFn: deleteDashboard, handleSuccess });
+
   const handleDeleteClick = () => {
-    alert('대시보드 삭제');
+    const handleDelete = async () => {
+      if (!id) return;
+      await mutate({ dashboardId: Number(id) });
+    };
+
+    openConfirmModal({
+      text: `대시보드와 모든 구성요소가 사라집니다.\n정말 삭제하시겠습니까?`,
+      onActionClick: handleDelete,
+    });
   };
 
   return (

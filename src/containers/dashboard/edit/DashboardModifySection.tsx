@@ -16,6 +16,7 @@ export default function DashboardModifySection() {
   const { id } = router.query;
   const { openNotificationModal } = useModal();
   const queryClient = useQueryClient();
+  const [errorMessage, setErrorMessage] = useState('');
 
   const [value, setValue] = useState<DashboardInfoState>({
     title: '',
@@ -76,6 +77,16 @@ export default function DashboardModifySection() {
     }));
   };
 
+  const handleValidCheck = () => {
+    if (!value.title) {
+      setErrorMessage('이름을 입력해주세요.');
+    } else if (value.title.length > 15) {
+      setErrorMessage('15자 이내로 입력해주세요');
+    } else {
+      setErrorMessage('');
+    }
+  };
+
   if (isLoading) {
     return <section className='section h-[211px] animate-pulse bg-gray-f5 px-[18px] py-[32px] md:h-[256px]'></section>;
   }
@@ -106,12 +117,14 @@ export default function DashboardModifySection() {
             type='text'
             value={value.title}
             placeholder='대시보드 이름을 입력해 주세요'
+            onBlur={handleValidCheck}
             onChange={(e) => setValue((prevValue) => ({ ...prevValue, title: e.target.value }))}
           />
+          {errorMessage && <p className='mt-2 text-sm text-red'>{errorMessage}</p>}
         </div>
       </main>
       <footer className='flex justify-end'>
-        <ActionButton onClick={handleModifyButton} disabled={isButtonDisabled}>
+        <ActionButton onClick={handleModifyButton} disabled={isButtonDisabled || !!errorMessage}>
           변경
         </ActionButton>
       </footer>
