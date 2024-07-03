@@ -19,7 +19,7 @@ function Column({ column, index, cards, columns }: ColumnProps) {
 
   return (
     <div className='block lg:flex'>
-      <div className='flex flex-col bg-gray-fa p-5 lg:min-w-[354px]'>
+      <div className='flex flex-col bg-gray-fa p-5 lg:w-[354px]'>
         {/* Column Header */}
         <div className='mb-[6px] flex cursor-default items-center justify-between'>
           <div className='flex items-center'>

@@ -68,16 +68,16 @@ export default function TodoCardModal({ card, column, onClick }: TodoCardModalPr
         {/* Tags Section */}
         <section className='order-2 flex flex-col gap-[16px] md:order-1'>
           <div className='flex gap-[10px]'>
-            <div className='flex h-[22px] items-center gap-[6px] rounded-[12px] bg-violet-f1 px-[4px] py-[8px] text-[12px] text-violet hover:cursor-default'>
+            <div className='flex h-[22px] items-center gap-[6px] rounded-[12px] bg-violet-f1 p-[8px] text-[12px] text-violet hover:cursor-default'>
               <p className='text-[10px]'>●</p>
-              <p>{column.title}</p>
+              <p className='w-max'>{column.title}</p>
             </div>
             <div className='text-[20px] font-[100] text-gray-d9 hover:cursor-default'>|</div>
-            <Tags tags={card.tags} />
+            <Tags tags={card.tags} customClass='overflow-x-auto whitespace-nowrap' />
           </div>
 
           {/* Card Description & Comment Section */}
-          <div className='flex h-[484px] w-[288px] flex-col gap-[16px] overflow-y-auto scrollbar-hide md:h-[608px] md:w-[420px] lg:w-[450px]'>
+          <div className='flex h-[484px] w-[288px] flex-col gap-[16px] overflow-y-auto pr-3 md:h-[608px] md:w-[420px] lg:w-[450px]'>
             <p className='break-words text-[14px] leading-6'>{card.description}</p>
             {card.imageUrl && (
               <Image className='rounded-[6px]' src={card.imageUrl} width={450} height={262} alt='카드 이미지' />
