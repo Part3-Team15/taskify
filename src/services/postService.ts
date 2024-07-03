@@ -51,7 +51,7 @@ export const postCard = async (formData: postCardData) => {
 
 // 카드 이미지 업로드
 export const postImageForCard = async (columnId: number, formData: UploadImageForm) => {
-  const response = await instance.post<UploadImageResponse>(`/columns/${columnId}/card-image`, formData, {
+  const response = await instance.post<{ imageUrl: string }>(`/columns/${columnId}/card-image`, formData, {
     headers: {
       'Content-Type': 'multipart/form-data',
     },

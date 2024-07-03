@@ -26,6 +26,14 @@ export default function MembersDropDown({
           </li>
         );
       })}
+      <li
+        className='flex cursor-pointer items-center rounded-[6px] px-[6px] py-[5px] text-[14px] text-gray-9f transition-all hover:bg-violet-light-hover md:text-[16px]'
+        onClick={() => {
+          onSelectMember(0);
+        }}
+      >
+        <p className='w-full text-center'>담당자 선택 안함</p>
+      </li>
     </ul>
   );
 }

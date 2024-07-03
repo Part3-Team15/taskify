@@ -59,7 +59,7 @@ export default function EditCardModal({ columnId, isEdit }: EditCardModalProps) 
     // 현재 대시보드에 해당하는 멤버들 GET
     const getMembers = async () => {
       try {
-        const response = await getMembersList(Number(id), 1, 99);
+        const response = await getMembersList(Number(id), 1, 10);
         // 필요한 데이터만 정제
         const filteredMembers = response.data.members.map((member: Member) => ({
           userId: member.userId,
@@ -150,13 +150,15 @@ export default function EditCardModal({ columnId, isEdit }: EditCardModalProps) 
       // 이미지 존재 시 이미지 POST 요청하여 URL 값 받음
       if (profileImageFile) {
         const response = await postImageForCard((columnId = columnId), { image: profileImageFile });
-        imgUrl = response.profileImageUrl;
+        imgUrl = response.imageUrl;
       }
 
       const formValuesToSend = {
         ...formValues,
         imageUrl: imgUrl,
       };
+
+      console.log(formValuesToSend);
 
       // 데이터가 할당되지 않은 state는 POST 요청하기 전에 제거
       const filteredFormValues: Partial<postCardData> = {
@@ -222,7 +224,7 @@ export default function EditCardModal({ columnId, isEdit }: EditCardModalProps) 
           </div>
           <div className='mb-[20px]'>
             <label htmlFor='title' className='label mb-[15px] block text-[16px] md:text-[18px]'>
-              제목 <span className='text-violet'>*</span>
+              제목 <span className='text-violet'>(필수)*</span>
             </label>
             <input
               className='input text-[14px] md:text-[16px]'
@@ -237,7 +239,7 @@ export default function EditCardModal({ columnId, isEdit }: EditCardModalProps) 
           </div>
           <div className='mb-[20px]'>
             <label htmlFor='description' className='label mb-[15px] block text-[16px] md:text-[18px]'>
-              설명 <span className='text-violet'>*</span>
+              설명 <span className='text-violet'>(필수)*</span>
             </label>
             <textarea
               className='input h-[84px] resize-none py-3 text-[14px] md:h-[96px] md:text-[16px]'
@@ -283,7 +285,7 @@ export default function EditCardModal({ columnId, isEdit }: EditCardModalProps) 
             <label htmlFor='card-profile' className='label mb-[15px] block text-[16px] md:text-[18px]'>
               이미지
             </label>
-            <div className='size-[58px] md:size-[76px]'>
+            <div className='h-[130px] w-full md:h-[210px]'>
               <ImageInput
                 name='card-profile'
                 value={formValues.imageUrl || null}
