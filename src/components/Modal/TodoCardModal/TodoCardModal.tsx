@@ -113,7 +113,7 @@ export default function TodoCardModal({ card, column, onClick }: TodoCardModalPr
         </section>
 
         {/* Assignee Section */}
-        <section className='order-1 mb-[20px] flex h-[74px] w-full flex-row gap-[62px] rounded-[8px] border border-gray-d9 px-[16px] py-[6px] text-[12px] md:order-2 md:mb-0 md:h-[156px] md:w-[180px] md:flex-col md:gap-[10px] md:p-[16px] lg:w-[200px]'>
+        <section className='order-1 mb-[20px] flex h-[74px] w-full flex-row items-center gap-[62px] rounded-[8px] border border-gray-d9 px-[16px] py-[6px] text-[12px] md:order-2 md:mb-0 md:h-[156px] md:w-[180px] md:flex-col md:gap-[10px] md:p-[16px] lg:w-[200px]'>
           <div>
             <p className='font-[600] hover:cursor-default'>담당자</p>
             {card.assignee ? (
