@@ -43,9 +43,9 @@ export default function DashboardList() {
   };
 
   return (
-    <section className='flex-col justify-between'>
+    <section className='grow flex-col justify-between'>
       <ul className='grid max-w-[350px] grid-rows-1 gap-3 font-semibold text-black-33 md:min-h-[216px] md:max-w-full md:grid-cols-2 md:grid-rows-3 lg:min-h-[140px] lg:max-w-screen-lg lg:grid-cols-3 dark:text-dark-10'>
-        <li className='h-12 w-full rounded-lg border border-gray-d9 bg-white md:h-16'>
+        <li className='h-12 w-full md:h-16'>
           <button
             className='btn-violet-light dark:btn-violet-dark size-full gap-4'
             type='button'
