@@ -34,5 +34,5 @@ export default function Header() {
   }
 
   // NOTE: 404 페이지
-  return <></>;
+  return <DefaultHeader title='' />;
 }
