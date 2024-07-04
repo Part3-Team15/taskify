@@ -60,3 +60,8 @@ export const getCardsList = async (columnId: number) => {
 export const getCard = async (cardId: number) => {
   return await instance.get(`/cards/${cardId}`);
 };
+
+// 댓글 목록 조회
+export const getComments = async (cardId: number) => {
+  return await instance.get(`/comments?size=10&cardId=${cardId}`);
+};

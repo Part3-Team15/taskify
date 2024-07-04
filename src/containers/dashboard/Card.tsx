@@ -25,7 +25,7 @@ export default function Card({ card }: CardProps) {
 
         <div className='flex flex-col gap-[10px] md:flex-row lg:flex-col'>
           {/* Tags */}
-          <Tags tags={card.tags} />
+          <Tags tags={card.tags} customClass='flex-wrap' />
 
           {/* CreatedAt & Assignee */}
           <div className='flex justify-between'>

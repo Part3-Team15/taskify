@@ -23,3 +23,13 @@ export const deleteMember = async ({ memberId }: DeleteMemberInput) => {
 export const deleteInvitation = async ({ dashboardId, invitationId }: CancelInvitationInput) => {
   return await instance.delete(`/dashboards/${dashboardId}/invitations/${invitationId}`);
 };
+
+// 댓글 삭제
+export const deleteComment = async (commentId: number) => {
+  return await instance.delete(`/comments/${commentId}`);
+};
+
+// 카드 삭제
+export const deleteCard = async (cardId: number) => {
+  return await instance.delete(`/cards/${cardId}`);
+};
