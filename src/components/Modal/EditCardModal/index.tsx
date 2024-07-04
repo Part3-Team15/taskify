@@ -3,6 +3,7 @@ import Image from 'next/image';
 import { useRouter } from 'next/router';
 import { useEffect, useState, useRef } from 'react';
 
+import ColumnsDropDown from './ColumnsDropDown';
 import MemberProfile from './MemberProfile';
 import MembersDropDown from './MembersDropDown';
 
@@ -12,8 +13,9 @@ import ModalCancelButton from '@/components/Button/ModalCancelButton';
 import ImageInput from '@/components/Input/ImageInput';
 import Tags from '@/components/Tags';
 import useModal from '@/hooks/useModal';
-import { getMembersList } from '@/services/getService';
+import { getColumnsList, getMembersList } from '@/services/getService';
 import { postImageForCard, postCard } from '@/services/postService';
+import { Column } from '@/types/Column.interface';
 import { Member } from '@/types/Member.interface';
 import { EditCardModalProps } from '@/types/Modal.interface';
 import { formatDateTime } from '@/utils/formatDateTime';
@@ -47,13 +49,17 @@ export default function EditCardModal({ columnId, isEdit }: EditCardModalProps) 
 
   const { openNotificationModal, closeModal } = useModal();
 
-  const [isOpen, setIsOpen] = useState(false);
+  const [membersIsOpen, setMembersIsOpen] = useState(false);
+  const [columnsIsOpen, setColumnsIsOpen] = useState(false);
   const [members, setMembers] = useState<Member[]>([]);
+  const [columns, setColumns] = useState<Column[]>([]);
   const [formValues, setFormValues] = useState<postCardData>(formInitialState);
   const [profileImageFile, setProfileImageFile] = useState<File | null>(null);
 
-  const dropdownRef = useRef<HTMLDivElement>(null);
-  const toggleRef = useRef<HTMLDivElement>(null);
+  const membersDropdownRef = useRef<HTMLDivElement>(null);
+  const membersToggleRef = useRef<HTMLDivElement>(null);
+  const columnsDropdownRef = useRef<HTMLDivElement>(null);
+  const columnsToggleRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     // 현재 대시보드에 해당하는 멤버들 GET
@@ -71,8 +77,20 @@ export default function EditCardModal({ columnId, isEdit }: EditCardModalProps) 
         console.error('Error fetching members:', error);
       }
     };
+
+    const getColumns = async () => {
+      try {
+        const response = await getColumnsList(Number(id));
+        const filteredColumns = response.data.data.map((column: Column) => ({
+          id: column.id,
+          title: column.title,
+        }));
+        setColumns(filteredColumns);
+      } catch {}
+    };
     if (id) {
       getMembers();
+      getColumns();
       // router query와 전달받은 columnId, state에 할당
       setFormValues((prevValues) => ({
         ...prevValues,
@@ -82,19 +100,19 @@ export default function EditCardModal({ columnId, isEdit }: EditCardModalProps) 
     }
   }, [id]);
 
-  // Members Dropdown 바깥 및 input 눌렀을 때 isOpen = false
+  // Members Dropdown isOpen Control
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (
-        dropdownRef.current &&
-        !dropdownRef.current.contains(event.target as Node) &&
-        toggleRef.current &&
-        !toggleRef.current.contains(event.target as Node)
+        membersDropdownRef.current &&
+        !membersDropdownRef.current.contains(event.target as Node) &&
+        membersToggleRef.current &&
+        !membersToggleRef.current.contains(event.target as Node)
       ) {
-        setIsOpen(false);
+        setMembersIsOpen(false);
       }
     };
-    if (isOpen) {
+    if (membersIsOpen) {
       document.addEventListener('mousedown', handleClickOutside);
     } else {
       document.removeEventListener('mousedown', handleClickOutside);
@@ -102,7 +120,29 @@ export default function EditCardModal({ columnId, isEdit }: EditCardModalProps) 
     return () => {
       document.removeEventListener('mousedown', handleClickOutside);
     };
-  }, [isOpen]);
+  }, [membersIsOpen]);
+
+  // Columns Dropdown isOpen Control
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (
+        columnsDropdownRef.current &&
+        !columnsDropdownRef.current.contains(event.target as Node) &&
+        columnsToggleRef.current &&
+        !columnsToggleRef.current.contains(event.target as Node)
+      ) {
+        setColumnsIsOpen(false);
+      }
+    };
+    if (columnsIsOpen) {
+      document.addEventListener('mousedown', handleClickOutside);
+    } else {
+      document.removeEventListener('mousedown', handleClickOutside);
+    }
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [columnsIsOpen]);
 
   // 멤버 선택 핸들러
   const handleSelectMember = (userId: number) => {
@@ -110,7 +150,16 @@ export default function EditCardModal({ columnId, isEdit }: EditCardModalProps) 
       ...prevValues,
       assigneeUserId: userId,
     }));
-    setIsOpen(false);
+    setMembersIsOpen(false);
+  };
+
+  // 컬럼 선택 핸들러
+  const handleSelectColumn = (columnId: number) => {
+    setFormValues((prevValues) => ({
+      ...prevValues,
+      columnId: columnId,
+    }));
+    setColumnsIsOpen(false);
   };
 
   // 태그 입력 핸들러
@@ -178,6 +227,7 @@ export default function EditCardModal({ columnId, isEdit }: EditCardModalProps) 
   };
 
   const selectedMember = members.find((member) => member.userId === formValues.assigneeUserId);
+  const selectedColumns = columns.find((column) => column.id === formValues.columnId);
 
   return (
     <div className='modal h-[90vh] w-[327px] md:h-[90vh] md:w-[506px]'>
@@ -186,38 +236,73 @@ export default function EditCardModal({ columnId, isEdit }: EditCardModalProps) 
           {isEdit ? '할일 수정' : '할일 생성'}
         </h2>
         <form className='flex h-full flex-col overflow-y-auto pr-5' onSubmit={handleSubmit}>
-          <div className='my-[20px]'>
-            <label htmlFor='memberSelect' className='label mb-[15px] block text-[16px] md:text-[18px]'>
-              담당자
-            </label>
-            <div className='relative md:w-[217px]'>
-              <div
-                className='input cursor-pointer text-[14px] md:text-[16px]'
-                onClick={() => {
-                  setIsOpen(!isOpen);
-                }}
-                ref={toggleRef}
-              >
-                {selectedMember ? (
-                  <MemberProfile
-                    userId={selectedMember.userId}
-                    nickname={selectedMember.nickname}
-                    profileImageUrl={selectedMember.profileImageUrl}
+          <div className='my-[20px] flex flex-col gap-[15px] md:flex-row'>
+            <div className='flex-1'>
+              <label htmlFor='memberSelect' className='label mb-[15px] block text-[16px] md:text-[18px]'>
+                컬럼
+              </label>
+              <div className='relative'>
+                <div
+                  className='input cursor-pointer text-[14px] md:text-[16px]'
+                  onClick={() => {
+                    setColumnsIsOpen(!columnsIsOpen);
+                  }}
+                  ref={columnsToggleRef}
+                >
+                  {selectedColumns ? (
+                    <div className='flex h-[22px] items-center gap-[6px] rounded-[12px] bg-violet-f1 p-[8px] text-[12px] text-violet'>
+                      <p className='text-[10px]'>●</p>
+                      <p className='w-max'>{selectedColumns.title}</p>
+                    </div>
+                  ) : (
+                    <p className='text-gray-9f'>컬럼을 선택해 주세요</p>
+                  )}
+                  <Image
+                    className={`absolute right-[20px] top-[18px] md:top-[24px] ${columnsIsOpen ? 'rotate-180' : ''}`}
+                    src={CARROT_DOWN}
+                    alt='메뉴 내리기 버튼'
                   />
-                ) : (
-                  <p className='text-gray-9f'>담당자를 선택해 주세요</p>
-                )}
-                <Image
-                  className={`absolute right-[20px] top-[18px] md:top-[24px] ${isOpen ? 'rotate-180' : ''}`}
-                  src={CARROT_DOWN}
-                  alt='메뉴 내리기 버튼'
-                />
-              </div>
-              {isOpen && (
-                <div ref={dropdownRef}>
-                  <MembersDropDown members={members} onSelectMember={handleSelectMember} />
                 </div>
-              )}
+                {columnsIsOpen && (
+                  <div ref={columnsDropdownRef}>
+                    <ColumnsDropDown columns={columns} onSelectColumn={handleSelectColumn} />
+                  </div>
+                )}
+              </div>
+            </div>
+            <div className='flex-1'>
+              <label htmlFor='memberSelect' className='label mb-[15px] block text-[16px] md:text-[18px]'>
+                담당자
+              </label>
+              <div className='relative'>
+                <div
+                  className='input cursor-pointer text-[14px] md:text-[16px]'
+                  onClick={() => {
+                    setMembersIsOpen(!membersIsOpen);
+                  }}
+                  ref={membersToggleRef}
+                >
+                  {selectedMember ? (
+                    <MemberProfile
+                      userId={selectedMember.userId}
+                      nickname={selectedMember.nickname}
+                      profileImageUrl={selectedMember.profileImageUrl}
+                    />
+                  ) : (
+                    <p className='text-gray-9f'>담당자를 선택해 주세요</p>
+                  )}
+                  <Image
+                    className={`absolute right-[20px] top-[18px] md:top-[24px] ${membersIsOpen ? 'rotate-180' : ''}`}
+                    src={CARROT_DOWN}
+                    alt='메뉴 내리기 버튼'
+                  />
+                </div>
+                {membersIsOpen && (
+                  <div ref={membersDropdownRef}>
+                    <MembersDropDown members={members} onSelectMember={handleSelectMember} />
+                  </div>
+                )}
+              </div>
             </div>
           </div>
           <div className='mb-[20px]'>
