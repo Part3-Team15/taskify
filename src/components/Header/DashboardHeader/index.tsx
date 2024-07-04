@@ -34,7 +34,7 @@ export default function DashboardHeader() {
   const { id: dashboardId, title, createdByMe } = dashboard;
 
   return (
-    <header className='relative flex h-[60px] w-full items-center justify-end border-b border-gray-d9 bg-white px-3 text-black-33 md:h-[70px] md:px-10 lg:justify-between'>
+    <header className='relative flex h-[60px] w-full items-center justify-end border-b border-gray-d9 bg-white px-3 text-black-33 md:h-[70px] md:px-5 lg:justify-between lg:px-10'>
       <Head>
         <title>Taskify | {title}</title>
       </Head>
@@ -42,9 +42,9 @@ export default function DashboardHeader() {
         <h1 className='text-xl font-bold'>{title}</h1>
         {createdByMe && <Image src='/icons/crown.svg' alt='왕관 아이콘' width={20} height={16} />}
       </div>
-      <div className='flex gap-4 md:gap-8 lg:gap-10'>
+      <div className='flex gap-4 md:gap-5 lg:gap-10'>
         {createdByMe && <Buttons id={dashboardId} />}
-        <div className='flex items-center gap-3 md:gap-6 lg:gap-8'>
+        <div className='flex items-center gap-3 md:gap-5 lg:gap-8'>
           <MemberProfiles id={dashboardId} />
           <div className='h-[34px] w-0 border-l border-gray-d9' />
           <UserMenuDropdown />
