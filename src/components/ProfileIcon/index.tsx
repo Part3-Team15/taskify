@@ -15,7 +15,7 @@ export default function ProfileIcon({ user, userId, imgClassName, fontClassName 
 
   return (
     <div
-      className={`align-center relative rounded-full border-2 border-solid border-white ${imgClassName}`}
+      className={`align-center relative rounded-full border-2 border-solid border-white dark:border-dark-200 ${imgClassName}`}
       style={colorStyle}
     >
       {user.profileImageUrl ? (
