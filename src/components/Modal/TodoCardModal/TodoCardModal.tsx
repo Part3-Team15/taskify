@@ -73,7 +73,9 @@ export default function TodoCardModal({ card, column, onClick }: TodoCardModalPr
               <p className='text-[10px]'>●</p>
               <p className='w-max'>{column.title}</p>
             </div>
-            <div className='text-[20px] font-[100] text-gray-d9 hover:cursor-default'>|</div>
+            {card.tags && card.tags.length > 0 && (
+              <div className='text-[20px] font-[100] text-gray-d9 hover:cursor-default'>|</div>
+            )}
             <Tags tags={card.tags} customClass='overflow-x-auto whitespace-nowrap' />
           </div>
 
@@ -85,17 +87,21 @@ export default function TodoCardModal({ card, column, onClick }: TodoCardModalPr
             )}
 
             <form className='relative' onSubmit={handleSubmitComment}>
-              <p className='mb-[8px] text-[14px] font-[500] hover:cursor-default md:mb-[10px] md:text-[16px] lg:text-[18px]'>
-                댓글
-              </p>
+              <div className='flex justify-between'>
+                <p className='mb-[8px] text-[14px] font-[500] hover:cursor-default md:mb-[10px] md:text-[16px] lg:text-[18px]'>
+                  댓글
+                </p>
+              </div>
+
               <textarea
-                className='h-[70px] w-full resize-none rounded-[6px] border border-gray-d9 p-[8px] text-[12px] focus:outline-none md:h-[110px] md:text-[14px]'
+                className='h-[70px] w-full resize-none rounded-[6px] border border-gray-d9 p-[12px] px-[20px] text-[12px] focus:outline-none md:h-[110px] md:text-[14px]'
                 value={newComment}
                 onChange={(e) => setNewComment(e.target.value)}
                 placeholder='댓글 작성하기'
               />
+
               <button
-                className='btn-white absolute bottom-5 right-3 h-[28px] w-[60px] rounded-[4px] text-[12px] text-violet md:h-[32px] md:w-[78px] lg:w-[84px]'
+                className='btn-white bottom-5 right-3 h-[28px] w-[60px] rounded-[4px] text-[12px] text-violet md:h-[32px] md:w-[78px] lg:w-[84px]'
                 type='submit'
               >
                 입력
@@ -113,7 +119,7 @@ export default function TodoCardModal({ card, column, onClick }: TodoCardModalPr
         </section>
 
         {/* Assignee Section */}
-        <section className='order-1 mb-[20px] flex h-[74px] w-full flex-row items-center gap-[62px] rounded-[8px] border border-gray-d9 px-[16px] py-[6px] text-[12px] md:order-2 md:mb-0 md:h-[156px] md:w-[180px] md:flex-col md:gap-[10px] md:p-[16px] lg:w-[200px]'>
+        <section className='order-1 mb-[20px] flex h-[74px] w-full flex-row items-center gap-[62px] rounded-[8px] border border-gray-d9 px-[16px] py-[6px] text-[12px] md:order-2 md:mb-0 md:h-[156px] md:w-[180px] md:flex-col md:items-start md:gap-[10px] md:p-[16px] lg:w-[200px]'>
           <div>
             <p className='font-[600] hover:cursor-default'>담당자</p>
             {card.assignee ? (
@@ -124,7 +130,7 @@ export default function TodoCardModal({ card, column, onClick }: TodoCardModalPr
                   imgClassName={`size-[34px] md:size-[38px]`}
                   fontClassName='md:font-base font-sm'
                 />
-                <p className='text-[14px]'>{card.assignee.nickname}</p>
+                <p className='text-[12px] md:text-[14px]'>{card.assignee.nickname}</p>
               </div>
             ) : (
               <>없음</>
@@ -133,7 +139,7 @@ export default function TodoCardModal({ card, column, onClick }: TodoCardModalPr
 
           <div>
             <p className='font-[600] hover:cursor-default'>마감일</p>
-            <div className='mt-[4px] text-[14px] md:mt-0'>{formatDate(card.dueDate)}</div>
+            <div className='mt-[4px] text-[12px] md:mt-0'>{card.dueDate ? formatDate(card.dueDate) : '미정'}</div>
           </div>
         </section>
       </section>
