@@ -119,7 +119,7 @@ export default function Sidebar() {
             )}
           </>
         )}
-        <ThemeChangeButton />
+        <ThemeChangeButton className='justify-center pt-2 md:justify-start' />
       </div>
     </aside>
   );
