@@ -10,15 +10,19 @@
 
 @layer components {
   .btn-violet {
-    @apply align-center rounded-[8px] bg-violet text-white transition-all hover:bg-violet-hover active:bg-violet-active disabled:bg-violet-disabled;
+    @apply align-center rounded-[8px] bg-violet text-white transition-all hover:bg-violet-hover active:bg-violet-active disabled:bg-violet-disabled dark:bg-dark-300 dark:text-dark-10 dark:hover:bg-dark-200 dark:active:bg-dark-400 dark:disabled:bg-dark-bg;
   }
 
   .btn-violet-light {
     @apply align-center gray-border rounded-[8px] bg-white transition-all hover:bg-violet-light-hover active:bg-violet-light-active disabled:bg-violet-light-disabled;
   }
 
+  .btn-violet-dark {
+    @apply align-center rounded-[8px] bg-dark text-dark-10 transition-all hover:bg-dark-purple-over active:bg-dark-500 disabled:bg-dark-200;
+  }
+
   .btn-white {
-    @apply align-center gray-border rounded-[8px] bg-white text-gray-78 transition-all hover:bg-white-hover active:bg-white-active disabled:bg-white-disabled;
+    @apply align-center gray-border rounded-[8px] bg-white text-gray-78 transition-all hover:bg-white-hover active:bg-white-active disabled:bg-white-disabled dark:bg-dark dark:text-dark-10 dark:hover:bg-dark-400 dark:active:bg-dark-200 dark:disabled:bg-dark-500;
   }
 
   .btn-gray {
@@ -26,7 +30,7 @@
   }
 
   .btn-red {
-    @apply align-center active:bg-red-active rounded-[8px] bg-red text-white transition-all hover:bg-red-hover disabled:bg-violet-disabled;
+    @apply align-center rounded-[8px] bg-red text-white transition-all hover:bg-red-hover active:bg-red-active disabled:bg-violet-disabled;
   }
 
   .section {
@@ -50,7 +54,7 @@
   }
 
   .dd-menu {
-    @apply align-center h-[30px] w-full rounded-md hover:bg-violet-f1 active:bg-violet-e8 md:h-8;
+    @apply align-center h-[30px] w-full rounded-md hover:bg-violet-f1 active:bg-violet-e8 md:h-8 dark:text-dark-10 dark:hover:bg-dark-400 dark:active:bg-dark-200;
   }
 
   .modal {
@@ -68,6 +72,6 @@
   }
 
   .gray-border {
-    @apply border border-gray-d9;
+    @apply border border-gray-d9 dark:border-dark-200;
   }
 }

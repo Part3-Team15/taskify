@@ -5,6 +5,7 @@ import { useState } from 'react';
 import { useSelector } from 'react-redux';
 
 import NavButton from '../Button/NavButton';
+import ThemeChangeButton from '../Button/ThemeChangeButton';
 
 import DashboardItem from './DashboardItem';
 
@@ -116,6 +117,7 @@ export default function Sidebar() {
             )}
           </>
         )}
+        <ThemeChangeButton />
       </div>
     </aside>
   );
