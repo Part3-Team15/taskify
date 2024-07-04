@@ -57,11 +57,11 @@ export default function Tags({ tags, customClass, onClick }: TagsProps) {
   }, [tags]);
 
   return (
-    <div className={`flex flex-wrap gap-[6px] ${customClass}`}>
+    <div className={`flex gap-[6px] scrollbar-hide ${customClass}`}>
       {tagList.map((tag) => (
         <span
           key={tag.id}
-          className={`align-center relative h-[24px] flex-row rounded-[4px] px-[6px] pb-[2px] pt-[4px] text-[12px] ${onClick ? 'duration-200 hover:cursor-pointer hover:opacity-40' : 'hover:cursor-default'}`}
+          className={`align-center relative h-[24px] flex-row rounded-[4px] px-[6px] pb-[2px] pt-[4px] text-[12px] ${onClick ? 'duration-200 hover:cursor-pointer hover:opacity-40' : ''}`}
           style={{ backgroundColor: tag.color.background, color: tag.color.text }}
           onClick={onClick ? () => onClick(tag.name) : undefined}
         >

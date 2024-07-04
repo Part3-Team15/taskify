@@ -8,6 +8,7 @@ import ModifyColumnModal from './ModifyColumnModal';
 import NewColumnModal from './NewColumnModal';
 import NewDashboardModal from './NewDashboardModal';
 import NotificationModal from './NotificationModal';
+import TodoCardModal from './TodoCardModal/TodoCardModal';
 
 import useModal from '@/hooks/useModal';
 import { modalSelector } from '@/store/reducers/modalSlice';
@@ -18,6 +19,7 @@ import {
   NotificationModalProps,
   MODAL,
   EditCardModalProps,
+  TodoCardModalProps,
 } from '@/types/Modal.interface';
 
 export default function Modal() {
@@ -67,6 +69,9 @@ export default function Modal() {
 
       case MODAL.EDIT_CARD:
         return modalProps ? <EditCardModal {...(modalProps as EditCardModalProps)} /> : null;
+
+      case MODAL.TODO_CARD:
+        return <TodoCardModal {...(modalProps as TodoCardModalProps)} />;
 
       default:
         return <NotificationModal text='' />;
