@@ -77,10 +77,29 @@ export default function InvitedDashboardList() {
     };
   }, [observerRef, handleObserver]);
 
-  const handleAcceptInvitation = async (invitationId: number, inviteAccepted: boolean) => {
+  const handleAcceptInvitation = async (invitationId: number, inviteAccepted: boolean, dashboardId: number) => {
     try {
+      // 거절할 초대들을 필터링
+      const invitationsToReject = invitations.filter(
+        (invitation) => invitation.dashboard.id === dashboardId && invitation.id !== invitationId,
+      );
+
+      // 모든 겹치는 초대를 거절
+      await Promise.all(
+        invitationsToReject.map(async (invitation) => {
+          await putAcceptInvitation(invitation.id, false);
+        }),
+      );
+
+      // 해당 초대를 수락 또는 거절
       await putAcceptInvitation(invitationId, inviteAccepted);
-      setInvitations((prevInvitations) => prevInvitations.filter((invitation) => invitation.id !== invitationId));
+
+      // 상태 업데이트
+      setInvitations((prevInvitations) =>
+        prevInvitations.filter((invitation) => invitation.dashboard.id !== dashboardId),
+      );
+
+      // 쿼리 무효화
       queryClient.invalidateQueries({ queryKey: ['dashboards'] });
       queryClient.invalidateQueries({ queryKey: ['sideDashboards'] });
     } catch (err) {
