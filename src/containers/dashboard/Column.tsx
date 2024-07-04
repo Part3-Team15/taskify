@@ -15,11 +15,11 @@ interface ColumnProps {
 }
 
 function Column({ column, index, cards, columns }: ColumnProps) {
-  const { openModifyColumnModal, openNewCardModal } = useModal();
+  const { openModifyColumnModal, openNewCardModal, openTodoCardModal } = useModal();
 
   return (
     <div className='block lg:flex'>
-      <div className='flex flex-col bg-gray-fa p-5 lg:min-w-[354px]'>
+      <div className='flex flex-col bg-gray-fa p-5 lg:w-[354px]'>
         {/* Column Header */}
         <div className='mb-[6px] flex cursor-default items-center justify-between'>
           <div className='flex items-center'>
@@ -58,7 +58,17 @@ function Column({ column, index, cards, columns }: ColumnProps) {
                 {cards.map((card, index) => (
                   <Draggable key={`card-${card.id}`} draggableId={`card-${card.id}`} index={index}>
                     {(provided) => (
-                      <div ref={provided.innerRef} {...provided.draggableProps} {...provided.dragHandleProps}>
+                      <div
+                        ref={provided.innerRef}
+                        {...provided.draggableProps}
+                        {...provided.dragHandleProps}
+                        onClick={() => {
+                          openTodoCardModal({
+                            card,
+                            column,
+                          });
+                        }}
+                      >
                         <Card key={`card-${card.id}`} card={card} />
                       </div>
                     )}
