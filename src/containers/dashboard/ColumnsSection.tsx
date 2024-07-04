@@ -88,37 +88,35 @@ export default function ColumnsSection({ id }: ColumnsSectionProps) {
 
   return (
     <DragDropContext onDragEnd={onDragEnd}>
-      <section>
-        <div className='block h-[calc(100dvh-70px)] w-[calc(100dvw-270px)] overflow-x-auto lg:flex'>
-          <ul className='block lg:flex'>
-            {columnList &&
-              columnList.map((column, index) => (
-                <Droppable droppableId={`column-${column.id}`} key={`column-${column.id}`}>
-                  {(provided) => (
-                    <li ref={provided.innerRef} {...provided.droppableProps}>
-                      <Column
-                        key={`column-${column.id}`}
-                        column={column}
-                        columns={columns.data}
-                        index={index}
-                        cards={cardLists[column.id] || []}
-                      />
-                      {provided.placeholder}
-                    </li>
-                  )}
-                </Droppable>
-              ))}
-            {columnList?.length === 0 && <p>컬럼이 없습니다.</p>}
-          </ul>
-          <div className='p-5'>
-            <button
-              className='btn-violet-light mb-4 h-[70px] w-full rounded-[6px] py-[24px] lg:mb-0 lg:w-[354px]'
-              onClick={handleNewColumnClick}
-            >
-              <div className='mr-[12px] text-lg font-bold text-black-33'>새로운 컬럼 추가하기</div>
-              <Image src='/icons/plus-filled.svg' width={22} height={22} alt='카드 추가 아이콘' loading='lazy' />
-            </button>
-          </div>
+      <section className='block h-full overflow-x-auto lg:flex lg:w-[calc(100dvw-300px)]'>
+        <ul className='block lg:flex'>
+          {columnList &&
+            columnList.map((column, index) => (
+              <Droppable droppableId={`column-${column.id}`} key={`column-${column.id}`}>
+                {(provided) => (
+                  <li ref={provided.innerRef} {...provided.droppableProps}>
+                    <Column
+                      key={`column-${column.id}`}
+                      column={column}
+                      columns={columns.data}
+                      index={index}
+                      cards={cardLists[column.id] || []}
+                    />
+                    {provided.placeholder}
+                  </li>
+                )}
+              </Droppable>
+            ))}
+          {columnList?.length === 0 && <p>컬럼이 없습니다.</p>}
+        </ul>
+        <div className='p-5'>
+          <button
+            className='btn-violet-light mb-4 h-[70px] w-full rounded-[6px] py-[24px] lg:mb-0 lg:w-[354px]'
+            onClick={handleNewColumnClick}
+          >
+            <div className='mr-[12px] text-lg font-bold text-black-33'>새로운 컬럼 추가하기</div>
+            <Image src='/icons/plus-filled.svg' width={22} height={22} alt='카드 추가 아이콘' loading='lazy' />
+          </button>
         </div>
       </section>
     </DragDropContext>
