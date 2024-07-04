@@ -7,7 +7,6 @@ import { ThemeProvider } from 'next-themes';
 import { Provider } from 'react-redux';
 import { PersistGate } from 'redux-persist/integration/react';
 
-import InvitationNotice from '@/components/InviteNotice';
 import Modal from '@/components/Modal';
 import Redirect from '@/components/Redirect';
 import MainLayout from '@/layouts/MainLayout';
