@@ -13,27 +13,34 @@ export default function MainLayout({ children }: { children: React.ReactNode }) 
 
   if (currentPath === '/') {
     return (
-      <div className='min-w-[360px]'>
+      <div className='min-h-screen min-w-[375px]'>
         <Header />
         {children}
       </div>
     );
   }
 
-  const isDisabled = currentPath === '/signin' || currentPath === '/signup';
+  if (currentPath === '/signin' || currentPath === '/signup') {
+    return <div className='min-h-screen min-w-[375px]'>{children}</div>;
+  }
 
-  if (isDisabled) return <div className='min-w-[375px]'>{children}</div>;
-
-  if (currentPath === '/404') {
-    if (!user) {
-      return <div className='min-w-[375px]'>{children}</div>;
-    }
+  if (currentPath === '/404' && !user) {
+    return (
+      <div className='flex min-h-screen min-w-[375px] flex-col'>
+        <Header />
+        {children}
+      </div>
+    );
   }
 
   return (
     <div className='flex min-h-screen min-w-[375px]'>
-      {user && <InvitationNotice />}
-      <Sidebar />
+      {user && (
+        <>
+          <InvitationNotice />
+          <Sidebar />
+        </>
+      )}
 
       <div className='flex grow flex-col'>
         <Header />

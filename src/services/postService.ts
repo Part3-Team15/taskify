@@ -2,6 +2,7 @@ import instance from './axios';
 
 import { postCardData } from '@/components/Modal/EditCardModal';
 import { Dashboard } from '@/types/Dashboard.interface';
+import { Invitation } from '@/types/Invitation.interface';
 import { CommentForm } from '@/types/post/CommentForm.interface';
 import { NewDashboardForm, NewColumnForm, InviteMemberForm } from '@/types/post/ModalForm.interface';
 import { SignInForm, SignInResponse } from '@/types/post/SignInForm.interface';
@@ -31,8 +32,9 @@ export const postNewColumn = async (formData: NewColumnForm) => {
 };
 
 // 대시보드 멤버 초대하기
-export const postInviteMember = async (dashboardId: number, formData: InviteMemberForm) => {
-  return await instance.post(`dashboards/${dashboardId}/invitations`, formData);
+export const postInviteMember = async (dashboardId: number, formData: InviteMemberForm): Promise<Invitation> => {
+  const response = await instance.post(`dashboards/${dashboardId}/invitations`, formData);
+  return response.data;
 };
 
 // 이미지 업로드

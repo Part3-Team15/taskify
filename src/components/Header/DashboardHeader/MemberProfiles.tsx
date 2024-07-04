@@ -4,7 +4,7 @@ import { getMembersList } from '@/services/getService';
 import { Member, MembersResponse } from '@/types/Member.interface';
 
 interface MemberProfilesProps {
-  id: number;
+  id: string;
 }
 
 const genMemberProfiles = (members: Member[], distance: number) =>
@@ -24,7 +24,9 @@ const genMemberProfiles = (members: Member[], distance: number) =>
   });
 
 export default function MemberProfiles({ id }: MemberProfilesProps) {
-  const { data, isLoading, error } = useFetchData<MembersResponse>(['members', id], () => getMembersList(id));
+  const { data, isLoading, error } = useFetchData<MembersResponse>(['members', id, 1], () =>
+    getMembersList(Number(id)),
+  );
   if (isLoading) {
     return <p>로딩중...</p>;
   }

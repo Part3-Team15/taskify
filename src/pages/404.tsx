@@ -9,7 +9,7 @@ export default function NotFound() {
   const { user } = useSelector((state: RootState) => state.user);
 
   return (
-    <div className='flex h-screen items-center justify-center'>
+    <div className='flex grow items-center justify-center'>
       <Head>
         <title>Taskify | 404</title>
       </Head>
