@@ -35,8 +35,12 @@ export default function MainLayout({ children }: { children: React.ReactNode }) 
 
   return (
     <div className='flex min-h-screen min-w-[375px]'>
-      {user && <InvitationNotice />}
-      <Sidebar />
+      {user && (
+        <>
+          <InvitationNotice />
+          <Sidebar />
+        </>
+      )}
 
       <div className='flex grow flex-col'>
         <Header />
