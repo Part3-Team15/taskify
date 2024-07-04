@@ -22,7 +22,7 @@ export default function DashboardHeader() {
     error,
   } = useFetchData<Dashboard>(['dashboard', id], () => getDashboard(id as string));
 
-  if (isLoading) {
+  if (isLoading || !id) {
     return <DefaultHeader title='로딩중...' />;
   }
 
@@ -45,7 +45,7 @@ export default function DashboardHeader() {
       <div className='flex gap-4 md:gap-5 lg:gap-10'>
         {createdByMe && <Buttons id={dashboardId} />}
         <div className='flex items-center gap-3 md:gap-5 lg:gap-8'>
-          <MemberProfiles id={dashboardId} />
+          <MemberProfiles id={String(dashboardId)} />
           <div className='h-[34px] w-0 border-l border-gray-d9' />
           <UserMenuDropdown />
         </div>

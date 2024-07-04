@@ -19,6 +19,7 @@ interface MemberSectionProps {
 
 export default function MembersSection({ onDeleteMember }: MemberSectionProps) {
   const { openConfirmModal } = useModal();
+  const queryClient = useQueryClient();
   const router = useRouter();
   const { id } = router.query;
   const [currentChunk, setCurrentChunk] = useState(1);
@@ -47,7 +48,6 @@ export default function MembersSection({ onDeleteMember }: MemberSectionProps) {
   };
 
   const { mutate } = useDeleteData<DeleteMemberInput>({ mutationFn: deleteMember, handleSuccess });
-  const queryClient = useQueryClient();
 
   const handleDeleteMember = (member: Member) => {
     const handleDelete = async () => {
