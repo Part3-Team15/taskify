@@ -16,7 +16,7 @@ export default function PwdInput(props: InputProps) {
     <div>
       <div className='relative'>
         <input
-          className={`input ${error && 'border-2 border-red'}`}
+          className={`input ${error && 'border-2 border-red'} dark:bg-dark-300`}
           type={type}
           id={id}
           placeholder={placeholder}

@@ -19,13 +19,13 @@ function Column({ column, index, cards, columns }: ColumnProps) {
 
   return (
     <div className='block lg:flex'>
-      <div className='flex flex-col bg-gray-fa p-5 lg:w-[354px]'>
+      <div className='flex flex-col bg-gray-fa p-5 transition-colors lg:w-[354px] dark:bg-dark-bg'>
         {/* Column Header */}
         <div className='mb-[6px] flex cursor-default items-center justify-between'>
           <div className='flex items-center'>
             <span className='mr-[8px] text-xs text-violet'>𒊹</span>
-            <h2 className='mr-[12px] text-lg font-bold text-black-33'>{column.title}</h2>
-            <span className='flex size-[20px] items-center justify-center rounded-[6px] bg-gray-ee text-xs text-gray-78'>
+            <h2 className='mr-[12px] text-lg font-bold text-black-33 dark:text-dark-10'>{column.title}</h2>
+            <span className='flex size-[20px] items-center justify-center rounded-[6px] bg-gray-ee text-xs text-gray-78 dark:bg-dark-200 dark:text-dark-10'>
               {cards.length}
             </span>
           </div>
@@ -42,12 +42,13 @@ function Column({ column, index, cards, columns }: ColumnProps) {
 
         {/* Add Card Button */}
         <button
-          className='btn-violet-light mb-[16px] h-[40px] rounded-[6px] border'
+          className='btn-violet-light dark:btn-violet-dark mb-[16px] h-[40px] rounded-[6px] border'
           onClick={() => {
             openNewCardModal({ columnId: column.id, isEdit: false });
           }}
         >
-          <Image src='/icons/plus-filled.svg' width={22} height={22} alt='카드 추가 아이콘' />
+          <Image src='/icons/plus-filled.svg' width={22} height={22} alt='카드 추가 아이콘' className='dark:hidden' />
+          <Image src='/icons/plus.svg' width={24} height={24} alt='카드 추가 아이콘' className='hidden dark:block' />
         </button>
 
         {/* Card List Section */}
@@ -82,7 +83,7 @@ function Column({ column, index, cards, columns }: ColumnProps) {
       </div>
 
       {/* Horizon Bar */}
-      <hr className='h-full border-l border-gray-d9' />
+      <hr className='h-full border-l border-gray-d9 dark:border-dark-200' />
     </div>
   );
 }

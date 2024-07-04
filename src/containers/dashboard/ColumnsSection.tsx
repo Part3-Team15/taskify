@@ -111,11 +111,26 @@ export default function ColumnsSection({ id }: ColumnsSectionProps) {
         </ul>
         <div className='p-5'>
           <button
-            className='btn-violet-light mb-4 h-[70px] w-full rounded-[6px] py-[24px] lg:mb-0 lg:w-[354px]'
+            className='btn-violet-light dark:btn-violet-dark mb-4 h-[70px] w-full rounded-[6px] py-[24px] lg:mb-0 lg:w-[354px]'
             onClick={handleNewColumnClick}
           >
-            <div className='mr-[12px] text-lg font-bold text-black-33'>새로운 컬럼 추가하기</div>
-            <Image src='/icons/plus-filled.svg' width={22} height={22} alt='카드 추가 아이콘' loading='lazy' />
+            <div className='mr-[12px] text-lg font-bold text-black-33 dark:text-dark-10'>새로운 컬럼 추가하기</div>
+            <Image
+              src='/icons/plus-filled.svg'
+              width={22}
+              height={22}
+              alt='카드 추가 아이콘'
+              loading='lazy'
+              className='dark:hidden'
+            />
+            <Image
+              src='/icons/plus.svg'
+              width={24}
+              height={24}
+              alt='카드 추가 아이콘'
+              loading='lazy'
+              className='hidden dark:block'
+            />
           </button>
         </div>
       </section>
