@@ -9,18 +9,29 @@ import InvitedMembersSection from './InvitedMembersSection';
 import MembersSection from './MembersSection';
 
 import useDeleteData from '@/hooks/useDeleteData';
+import useFetchData from '@/hooks/useFetchData';
 import useModal from '@/hooks/useModal';
 import { deleteDashboard } from '@/services/deleteService';
+import { getDashboard } from '@/services/getService';
+import { Dashboard } from '@/types/Dashboard.interface';
 import { DeleteDashboardInput } from '@/types/delete/DeleteDashboardInput.interface';
 import { checkPublic } from '@/utils/shareAccount';
 
 export default function DashboardEdit() {
-  const { openConfirmModal } = useModal();
+  const { openConfirmModal, openNotificationModal } = useModal();
   const queryClient = useQueryClient();
   const router = useRouter();
   const { id } = router.query;
 
   const [isPublic, setIsPublic] = useState(false);
+
+  const { data: dashboard } = useFetchData<Dashboard>(['dashboard', id], () => getDashboard(id as string));
+  if (dashboard && !dashboard.createdByMe) {
+    openNotificationModal({
+      text: '해당 페이지에 접근 권한이 없습니다.',
+    });
+    router.replace('/mydashboard');
+  }
 
   const handleToggle = () => {
     setIsPublic((prevIsPublic) => !prevIsPublic);
