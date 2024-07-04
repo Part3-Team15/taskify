@@ -42,7 +42,7 @@ const formInitialState = {
   imageUrl: '',
 };
 
-export default function EditCardModal({ columnId, isEdit }: EditCardModalProps) {
+export default function EditCardModal({ columnId, isEdit, cardData = formInitialState }: EditCardModalProps) {
   const router = useRouter();
   const { id } = router.query;
   const queryClient = useQueryClient();
@@ -52,14 +52,26 @@ export default function EditCardModal({ columnId, isEdit }: EditCardModalProps) 
   const [membersIsOpen, setMembersIsOpen] = useState(false);
   const [columnsIsOpen, setColumnsIsOpen] = useState(false);
   const [members, setMembers] = useState<Member[]>([]);
+
   const [columns, setColumns] = useState<Column[]>([]);
-  const [formValues, setFormValues] = useState<postCardData>(formInitialState);
+  const [formValues, setFormValues] = useState<postCardData>(cardData);
   const [profileImageFile, setProfileImageFile] = useState<File | null>(null);
 
   const membersDropdownRef = useRef<HTMLDivElement>(null);
   const membersToggleRef = useRef<HTMLDivElement>(null);
   const columnsDropdownRef = useRef<HTMLDivElement>(null);
   const columnsToggleRef = useRef<HTMLDivElement>(null);
+
+  // const { data } = useFetchData<ColumnsResponse>(['columns', id], () => getColumnsList(Number(columnId)));
+
+  // if (!data) {
+  //   return <>로딩 중</>;
+  // }
+
+  // const columns = data.data.map((column: Column) => ({
+  //   id: column.id,
+  //   title: column.title,
+  // }));
 
   useEffect(() => {
     // 현재 대시보드에 해당하는 멤버들 GET
@@ -255,7 +267,10 @@ export default function EditCardModal({ columnId, isEdit }: EditCardModalProps) 
                       <p className='w-max'>{selectedColumns.title}</p>
                     </div>
                   ) : (
-                    <p className='text-gray-9f'>컬럼을 선택해 주세요</p>
+                    <div className='flex h-[22px] items-center gap-[6px] rounded-[12px] bg-violet-f1 p-[8px] text-[12px] text-violet'>
+                      <p className='text-[10px]'>●</p>
+                      <p className='w-max'>{'temp'}</p>
+                    </div>
                   )}
                   <Image
                     className={`absolute right-[20px] top-[18px] md:top-[24px] ${columnsIsOpen ? 'rotate-180' : ''}`}
