@@ -7,6 +7,7 @@ import useModal from '@/hooks/useModal';
 import useUserDropdown from '@/hooks/useUserDropdown';
 import { deleteCard } from '@/services/deleteService';
 import { Card } from '@/types/Card.interface';
+import { revertFormattedDateTime } from '@/utils/formatDateTime';
 
 interface EditDropdownProps {
   card: Card;
@@ -17,7 +18,7 @@ export default function EditDropdown({ card }: EditDropdownProps) {
   const queryClient = useQueryClient();
   const router = useRouter();
   const { id: dashboardId } = router.query;
-  const { openNotificationModal } = useModal();
+  const { openNotificationModal, openEditCardModal } = useModal();
 
   const handleDeleteCard: MouseEventHandler<HTMLLIElement> = async (e: MouseEvent<HTMLLIElement>) => {
     // * resetQueries 수정 필요
@@ -31,6 +32,21 @@ export default function EditDropdown({ card }: EditDropdownProps) {
 
   const handleEditCard: MouseEventHandler<HTMLLIElement> = (e: MouseEvent<HTMLLIElement>) => {
     handleMenuClick(e);
+    openEditCardModal({
+      columnId: card.columnId,
+      isEdit: true,
+      cardId: card.id,
+      cardData: {
+        assigneeUserId: card.assignee?.id || 0,
+        dashboardId: Number(dashboardId),
+        columnId: card.columnId,
+        title: card.title,
+        description: card.description,
+        dueDate: card.dueDate ? revertFormattedDateTime(card.dueDate) : '',
+        tags: card.tags,
+        imageUrl: card.imageUrl || '',
+      },
+    });
   };
 
   return (

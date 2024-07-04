@@ -36,7 +36,7 @@ const useModal = () => {
     dispatch(openModal({ type: MODAL.TODO_CARD, modalProps }));
   };
 
-  const openNewCardModal = (modalProps: EditCardModalProps) => {
+  const openEditCardModal = (modalProps: EditCardModalProps) => {
     dispatch(openModal({ type: MODAL.EDIT_CARD, modalProps }));
   };
   const handleCloseModal = () => {
@@ -52,7 +52,7 @@ const useModal = () => {
     openModifyColumnModal,
     openTodoCardModal,
     closeModal: handleCloseModal,
-    openNewCardModal,
+    openEditCardModal,
   };
 };
 

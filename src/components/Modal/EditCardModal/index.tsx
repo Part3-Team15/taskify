@@ -15,20 +15,21 @@ import Tags from '@/components/Tags';
 import useModal from '@/hooks/useModal';
 import { getColumnsList, getMembersList } from '@/services/getService';
 import { postImageForCard, postCard } from '@/services/postService';
+import { putCard } from '@/services/putService';
 import { Column } from '@/types/Column.interface';
 import { Member } from '@/types/Member.interface';
 import { EditCardModalProps } from '@/types/Modal.interface';
 import { formatDateTime } from '@/utils/formatDateTime';
 
 export interface postCardData {
-  assigneeUserId: number;
+  assigneeUserId: number | null;
   dashboardId: number;
   columnId: number;
   title: string;
   description: string;
-  dueDate: string;
+  dueDate: string | null;
   tags: string[];
-  imageUrl: string;
+  imageUrl: string | null;
 }
 
 const formInitialState = {
@@ -42,7 +43,12 @@ const formInitialState = {
   imageUrl: '',
 };
 
-export default function EditCardModal({ columnId, isEdit, cardData = formInitialState }: EditCardModalProps) {
+export default function EditCardModal({
+  columnId,
+  isEdit = false,
+  cardId = 0,
+  cardData = formInitialState,
+}: EditCardModalProps) {
   const router = useRouter();
   const { id } = router.query;
   const queryClient = useQueryClient();
@@ -57,11 +63,12 @@ export default function EditCardModal({ columnId, isEdit, cardData = formInitial
   const [formValues, setFormValues] = useState<postCardData>(cardData);
   const [profileImageFile, setProfileImageFile] = useState<File | null>(null);
 
+  const [loading, setLoading] = useState(false);
+
   const membersDropdownRef = useRef<HTMLDivElement>(null);
   const membersToggleRef = useRef<HTMLDivElement>(null);
   const columnsDropdownRef = useRef<HTMLDivElement>(null);
   const columnsToggleRef = useRef<HTMLDivElement>(null);
-
   // const { data } = useFetchData<ColumnsResponse>(['columns', id], () => getColumnsList(Number(columnId)));
 
   // if (!data) {
@@ -91,6 +98,7 @@ export default function EditCardModal({ columnId, isEdit, cardData = formInitial
     };
 
     const getColumns = async () => {
+      // 현재 대시보드에 존재하는 컬럼들 GET
       try {
         const response = await getColumnsList(Number(id));
         const filteredColumns = response.data.data.map((column: Column) => ({
@@ -202,12 +210,17 @@ export default function EditCardModal({ columnId, isEdit, cardData = formInitial
   // 이미지 삭제 핸들러
   const handleImageDelete = () => {
     setProfileImageFile(null);
+    setFormValues((prevValues) => ({
+      ...prevValues,
+      imageUrl: null, // 이미지 URL도 함께 지웁니다.
+    }));
   };
 
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
+    setLoading(true);
     try {
-      let imgUrl = '';
+      let imgUrl = formValues.imageUrl;
       // 이미지 존재 시 이미지 POST 요청하여 URL 값 받음
       if (profileImageFile) {
         const response = await postImageForCard((columnId = columnId), { image: profileImageFile });
@@ -216,25 +229,33 @@ export default function EditCardModal({ columnId, isEdit, cardData = formInitial
 
       const formValuesToSend = {
         ...formValues,
+        dueDate: formValues.dueDate ? formatDateTime(formValues.dueDate) : '',
         imageUrl: imgUrl,
       };
 
       // 데이터가 할당되지 않은 state는 POST 요청하기 전에 제거
       const filteredFormValues: Partial<postCardData> = {
         ...formValuesToSend,
-        assigneeUserId: formValuesToSend.assigneeUserId || undefined,
-        imageUrl: formValuesToSend.imageUrl !== '' ? formValuesToSend.imageUrl : undefined,
-        dueDate: formValuesToSend.dueDate !== '' ? formValuesToSend.dueDate : undefined,
+        assigneeUserId: formValuesToSend.assigneeUserId || (isEdit ? null : undefined),
+        imageUrl: formValuesToSend.imageUrl !== '' ? formValuesToSend.imageUrl : isEdit ? null : undefined,
+        dueDate: formValuesToSend.dueDate !== '' ? formValuesToSend.dueDate : isEdit ? null : undefined,
       };
 
-      await postCard(filteredFormValues as postCardData);
+      if (isEdit) {
+        await putCard(cardId, filteredFormValues as postCardData);
+      } else {
+        await postCard(filteredFormValues as postCardData);
+      }
+
       // resetQueries 수정 필요
       queryClient.resetQueries({ queryKey: ['columns', id] });
       openNotificationModal({
-        text: '할 일 카드가 생성되었습니다!',
+        text: `할 일 카드가 ${isEdit ? '수정 ' : '생성 '}되었습니다!`,
       });
     } catch (error) {
       console.error('Error submitting form:', error);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -358,6 +379,7 @@ export default function EditCardModal({ columnId, isEdit, cardData = formInitial
               id='dueDate'
               type='datetime-local'
               placeholder='날짜를 입력해 주세요'
+              value={formValues.dueDate ? formValues.dueDate : ''}
               onChange={(e) => {
                 setFormValues((prevValues) => ({
                   ...prevValues,
