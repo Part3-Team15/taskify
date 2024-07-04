@@ -14,7 +14,7 @@
   }
 
   .btn-violet-light {
-    @apply align-center gray-border rounded-[8px] bg-white transition-all hover:bg-violet-light-hover active:bg-violet-light-active disabled:bg-violet-light-disabled;
+    @apply align-center gray-border rounded-[8px] bg-white transition-all hover:bg-violet-light-hover active:bg-violet-light-active disabled:bg-violet-light-disabled disabled:text-gray-78;
   }
 
   .btn-white {
@@ -26,7 +26,7 @@
   }
 
   .btn-red {
-    @apply align-center active:bg-red-active rounded-[8px] bg-red text-white transition-all hover:bg-red-hover disabled:bg-violet-disabled;
+    @apply align-center rounded-[8px] bg-red text-white transition-all hover:bg-red-hover active:bg-red-active disabled:bg-violet-disabled;
   }
 
   .section {
