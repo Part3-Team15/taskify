@@ -27,6 +27,11 @@ export interface ModifyColumnModalProps extends ModalProps {
   columnId: number;
 }
 
+export interface EditCardModalProps extends ModalProps {
+  columnId: number;
+  isEdit: boolean;
+}
+
 export const MODAL = {
   NOTIFICATION: 'notification',
   CONFIRM: 'confirm',
@@ -34,6 +39,7 @@ export const MODAL = {
   NEW_COLUMN: 'newColumn',
   INVITE_MEMBER: 'inviteMember',
   MODIFY_COLUMN: 'modifyColumn',
+  EDIT_CARD: 'editCard',
 } as const;
 
 export type ModalType = (typeof MODAL)[keyof typeof MODAL];

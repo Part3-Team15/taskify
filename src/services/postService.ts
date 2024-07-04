@@ -1,5 +1,6 @@
 import instance from './axios';
 
+import { postCardData } from '@/components/Modal/EditCardModal';
 import { Dashboard } from '@/types/Dashboard.interface';
 import { Invitation } from '@/types/Invitation.interface';
 import { NewDashboardForm, NewColumnForm, InviteMemberForm } from '@/types/post/ModalForm.interface';
@@ -38,6 +39,21 @@ export const postInviteMember = async (dashboardId: number, formData: InviteMemb
 // 이미지 업로드
 export const postImage = async (formData: UploadImageForm) => {
   const response = await instance.post<UploadImageResponse>(`/users/me/image`, formData, {
+    headers: {
+      'Content-Type': 'multipart/form-data',
+    },
+  });
+  return response.data;
+};
+
+// 카드 생성
+export const postCard = async (formData: postCardData) => {
+  return await instance.post(`/cards`, formData);
+};
+
+// 카드 이미지 업로드
+export const postImageForCard = async (columnId: number, formData: UploadImageForm) => {
+  const response = await instance.post<{ imageUrl: string }>(`/columns/${columnId}/card-image`, formData, {
     headers: {
       'Content-Type': 'multipart/form-data',
     },

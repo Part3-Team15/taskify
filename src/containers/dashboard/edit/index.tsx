@@ -59,7 +59,7 @@ export default function DashboardEdit() {
   }, [id]);
 
   return (
-    <div className='px-3 py-4 text-black-33 md:p-5'>
+    <div className='h-full px-3 py-4 text-black-33 md:p-5'>
       <Link
         href={`/dashboard/${id}`}
         className='mb-5 flex items-center gap-1.5 text-sm font-medium md:mb-6 md:text-base'

@@ -15,7 +15,7 @@ interface ColumnProps {
 }
 
 function Column({ column, index, cards, columns }: ColumnProps) {
-  const { openModifyColumnModal } = useModal();
+  const { openModifyColumnModal, openNewCardModal } = useModal();
 
   return (
     <div className='block lg:flex'>
@@ -43,7 +43,9 @@ function Column({ column, index, cards, columns }: ColumnProps) {
         {/* Add Card Button */}
         <button
           className='btn-violet-light mb-[16px] h-[40px] rounded-[6px] border'
-          onClick={() => window.alert('카드 추가 모달')}
+          onClick={() => {
+            openNewCardModal({ columnId: column.id, isEdit: false });
+          }}
         >
           <Image src='/icons/plus-filled.svg' width={22} height={22} alt='카드 추가 아이콘' />
         </button>

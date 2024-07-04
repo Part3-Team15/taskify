@@ -2,6 +2,7 @@ import { useRouter } from 'next/router';
 import { useSelector } from 'react-redux';
 
 import Header from '@/components/Header';
+import InvitationNotice from '@/components/InviteNotice';
 import Sidebar from '@/components/Sidebar';
 import { RootState } from '@/store/store';
 
@@ -30,7 +31,8 @@ export default function MainLayout({ children }: { children: React.ReactNode }) 
   }
 
   return (
-    <div className='flex min-w-[375px]'>
+    <div className='flex min-h-screen min-w-[375px]'>
+      {user && <InvitationNotice />}
       <Sidebar />
 
       <div className='flex grow flex-col'>

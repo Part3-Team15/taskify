@@ -69,7 +69,7 @@ export default function NewDashboardModal() {
     <div className='modal w-[327px] md:w-[540px]'>
       <h1 className='section-title'>새로운 대시보드</h1>
       <div className='my-6 md:mb-7 md:mt-8'>
-        <label className='label'>대시보드 이름</label>
+        <label className='label'>대시보드</label>
         <input
           className={`input mt-[10px] ${errorMessage ? 'border-2 border-red' : ''}`}
           type='text'
