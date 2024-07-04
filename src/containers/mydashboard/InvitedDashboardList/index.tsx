@@ -12,8 +12,13 @@ import { getInvitationsList } from '@/services/getService';
 import { putAcceptInvitation } from '@/services/putService';
 import { Invitation, InvitationsResponse } from '@/types/Invitation.interface';
 
-export default function InvitedDashboardList() {
-  const [invitations, setInvitations] = useState<Invitation[]>([]);
+interface InvitedDashboardListProps {
+  initialInvitedDashboard: InvitationsResponse;
+}
+
+export default function InvitedDashboardList({ initialInvitedDashboard }: InvitedDashboardListProps) {
+  const [invitations, setInvitations] = useState<Invitation[]>(initialInvitedDashboard.invitations);
+  const [isInitial, setIsInitial] = useState<boolean>(true);
   const [isFetchingNextPage, setIsFetchingNextPage] = useState(false);
   const [isSearching, setIsSearching] = useState(false);
   const observerRef = useRef<HTMLDivElement | null>(null);
@@ -25,8 +30,12 @@ export default function InvitedDashboardList() {
 
   useEffect(() => {
     if (data) {
-      setInvitations(data.invitations);
-      setCursorId(data.cursorId ? data.cursorId : 0);
+      if (!isInitial) {
+        setInvitations(data.invitations);
+        setCursorId(data.cursorId ? data.cursorId : 0);
+      } else {
+        setIsInitial(false);
+      }
     }
   }, [data]);
 
@@ -115,7 +124,7 @@ export default function InvitedDashboardList() {
   return (
     <section className='h-[400px] max-w-[350px] rounded-lg border-0 bg-white md:max-h-[740px] md:min-h-[530px] md:max-w-full lg:max-w-screen-lg'>
       <p className='px-7 pb-5 pt-8 text-base font-bold text-black-33'>초대받은 대시보드</p>
-      {isLoading ? (
+      {isLoading && !isInitial ? (
         <Skeleton />
       ) : (
         <>
