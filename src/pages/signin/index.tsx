@@ -6,7 +6,7 @@ import TopLogoSection from '@/containers/signin&signup/TopLogoSection';
 
 export default function SignInPage() {
   return (
-    <div className='flex items-center justify-center'>
+    <div className='flex max-h-dvh items-center justify-center py-[120px] md:py-[240px] lg:py-[223px]'>
       <Head>
         <title>Taskify | 로그인</title>
       </Head>
