@@ -26,7 +26,7 @@ function Home() {
           </Link>
         </section>
 
-        <section className='mb-[90px] flex h-min w-[343px] flex-col justify-between gap-48 rounded-lg bg-dark-400 md:w-[664px] md:gap-[220px] md:pt-[63px] lg:w-[1200px] lg:max-w-[1200px] lg:flex-row lg:pt-[100px]'>
+        <section className='mb-[90px] flex h-min w-[343px] flex-col justify-between gap-48 rounded-lg bg-dark-400 md:w-[664px] md:gap-[220px] md:pt-[63px] lg:w-[1200px] lg:max-w-[1200px] lg:flex-row lg:gap-0 lg:pt-[100px]'>
           <div className='flex flex-col gap-[60px] md:gap-[100px] md:pl-[60px]'>
             <p className='pt-[60px] text-center text-[22px] font-medium text-gray-9f md:pt-6 md:text-start'>Point 1</p>
             <p className='text-center text-4xl font-bold leading-[64px] md:text-start md:text-5xl'>
@@ -37,7 +37,7 @@ function Home() {
 
           <div className='flex justify-end'>
             <div className='relative row-span-2 h-[248px] w-[296px] md:h-[435px] md:w-[520px] lg:h-[500px] lg:w-[594px]'>
-              <Image src={'/images/landing1.svg'} alt='priority' fill />
+              <Image src={'/images/landing1.png'} alt='priority' fill />
             </div>
           </div>
         </section>
@@ -67,7 +67,7 @@ function Home() {
             <div className='max-h-96 max-w-min'>
               <div className='flex h-[235px] w-[343px] items-center justify-center rounded-t-lg bg-black-4b md:h-[260px] md:w-[380px]'>
                 <div className='relative h-[120px] w-[300px]'>
-                  <Image src={'/images/landing3.svg'} alt='settings' fill />
+                  <Image src={'/images/landing3.png'} alt='settings' fill />
                 </div>
               </div>
 
