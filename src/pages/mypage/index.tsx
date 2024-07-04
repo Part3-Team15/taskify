@@ -5,7 +5,7 @@ import PwdChangeForm from '@/containers/mypage/PwdChangeForm';
 
 export default function MyPage() {
   return (
-    <div className='flex flex-col gap-3 px-3 py-4 text-black-33 md:p-5'>
+    <div className='flex h-full flex-col gap-3 px-3 py-4 text-black-33 md:p-5'>
       <Head>
         <title>Taskify | 내 계정</title>
       </Head>

@@ -15,7 +15,7 @@ interface Tag {
 interface TagsProps {
   tags: string[]; // 태그 목록
   customClass?: string; // 커스텀 TailwindCSS 클래스 지정
-  isDeleteOption?: boolean; // 삭제 기능 토글 (default는 false)
+  onClick?: (tag: string) => void; // 클릭시 일어날 일
 }
 
 // 태그 이름과 색상 매핑
@@ -46,7 +46,7 @@ const generateTagColor = (tagList: Tag[]): Tag[] => {
   });
 };
 
-export default function Tags({ tags, customClass, isDeleteOption = false }: TagsProps) {
+export default function Tags({ tags, customClass, onClick }: TagsProps) {
   const [tagList, setTagList] = useState<Tag[]>([]); // 태그 객체 배열
 
   useEffect(() => {
@@ -56,18 +56,14 @@ export default function Tags({ tags, customClass, isDeleteOption = false }: Tags
     setTagList(tagsWithColors);
   }, [tags]);
 
-  const handleDeleteTag = (tagIdToDelete: number) => {
-    setTagList(tagList.filter((tag) => tag.id !== tagIdToDelete));
-  };
-
   return (
     <div className={`flex gap-[6px] scrollbar-hide ${customClass}`}>
       {tagList.map((tag) => (
         <span
           key={tag.id}
-          className={`align-center relative h-[24px] flex-row rounded-[4px] px-[6px] pb-[2px] pt-[4px] text-[12px] ${isDeleteOption ? 'duration-200 hover:cursor-pointer hover:opacity-40' : ''}`}
+          className={`align-center relative h-[24px] flex-row rounded-[4px] px-[6px] pb-[2px] pt-[4px] text-[12px] ${onClick ? 'duration-200 hover:cursor-pointer hover:opacity-40' : ''}`}
           style={{ backgroundColor: tag.color.background, color: tag.color.text }}
-          onClick={isDeleteOption ? () => handleDeleteTag(tag.id) : undefined}
+          onClick={onClick ? () => onClick(tag.name) : undefined}
         >
           {tag.name}
         </span>
