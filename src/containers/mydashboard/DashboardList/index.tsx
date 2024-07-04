@@ -16,8 +16,9 @@ export default function DashboardList({ initialDashboard }: DashboardListProps) 
   const [currentChunk, setCurrentChunk] = useState<number>(1);
   const { openNewDashboardModal } = useModal();
   const [dashboardData, setDashboards] = useState<DashboardsResponse>(initialDashboard);
-  const [isInitial, setIsInitial] = useState<boolean>(true);
+  const [isInitial, setIsInitial] = useState<boolean>(!!initialDashboard);
 
+  // 대시보드 데이터를 가져오는 커스텀 훅 사용
   const {
     data: dashboardResponse,
     error,
@@ -26,7 +27,19 @@ export default function DashboardList({ initialDashboard }: DashboardListProps) 
     getDashboardsList('pagination', currentChunk, 5),
   );
 
-  const totalPage = initialDashboard.totalCount ? Math.max(1, Math.ceil(initialDashboard.totalCount / 5)) : 1;
+  // 총 페이지 수 계산
+  const totalPage = initialDashboard?.totalCount ? Math.max(1, Math.ceil(initialDashboard.totalCount / 5)) : 1;
+
+  // 대시보드 데이터가 변경될 때 상태 업데이트
+  useEffect(() => {
+    if (dashboardResponse) {
+      if (!isInitial) {
+        setDashboards(dashboardResponse);
+      } else {
+        setIsInitial(false);
+      }
+    }
+  }, [dashboardResponse, isInitial]);
 
   if (error) {
     return (
@@ -37,53 +50,44 @@ export default function DashboardList({ initialDashboard }: DashboardListProps) 
     );
   }
 
+  // 다음 페이지로 이동하는 함수
   const handleNext = () => {
     if (currentChunk < totalPage) {
       setCurrentChunk((prev) => prev + 1);
     }
   };
+
+  // 이전 페이지로 이동하는 함수
   const handlePrev = () => {
     if (currentChunk > 1) {
       setCurrentChunk((prev) => prev - 1);
     }
   };
 
-  useEffect(() => {
-    if (dashboardResponse) {
-      if (!isInitial) {
-        setDashboards(dashboardResponse);
-      } else {
-        setIsInitial(false);
-      }
-    }
-  }, [dashboardResponse]);
-
-  if (!dashboardData) return;
+  if (!dashboardData) return null;
 
   return (
     <section className='flex-col justify-between'>
       <ul className='grid max-w-[350px] grid-rows-1 gap-3 font-semibold text-black-33 md:min-h-[216px] md:max-w-full md:grid-cols-2 md:grid-rows-3 lg:min-h-[140px] lg:max-w-screen-lg lg:grid-cols-3'>
+        {/* 새로운 대시보드 생성 버튼 */}
         <li className='h-12 w-full rounded-lg border border-gray-d9 bg-white md:h-16'>
           <button className='btn-violet-light size-full gap-4' type='button' onClick={() => openNewDashboardModal()}>
             새로운 대시보드
             <Image src={'/icons/plus-filled.svg'} alt='plus' width={22} height={22} />
           </button>
         </li>
-        {isLoading && !isInitial ? (
-          <>
-            {[...Array(5)].map((_, i) => (
+        {/* 대시보드 목록 표시 */}
+        {isLoading && !isInitial
+          ? [...Array(5)].map((_, i) => (
               <li key={i} className='h-12 w-full animate-pulse rounded-lg border border-gray-d9 bg-gray-fa md:h-16' />
-            ))}
-          </>
-        ) : (
-          <>
-            {dashboardData.dashboards.map((dashboard) => (
+            ))
+          : dashboardData.dashboards.map((dashboard) => (
               <li className='h-12 w-full rounded-lg border border-gray-d9 bg-white md:h-16' key={dashboard.id}>
-                <Link href={`/dashboard/${dashboard.id}`} className={'btn-violet-light size-full rounded-md px-5'}>
+                <Link href={`/dashboard/${dashboard.id}`} className='btn-violet-light size-full rounded-md px-5'>
                   <div className='flex size-full items-center'>
                     <div className='rounded-full p-1' style={{ backgroundColor: dashboard.color }} />
                     <div className='mx-4 h-[28px] grow overflow-hidden text-ellipsis text-lg font-medium'>
-                      <p className={`size-full`}>{dashboard.title}</p>
+                      <p className='size-full'>{dashboard.title}</p>
                     </div>
                     {dashboard.createdByMe && (
                       <Image src={'/icons/crown.svg'} className='mr-3' alt='my' width={20} height={16} />
@@ -93,9 +97,7 @@ export default function DashboardList({ initialDashboard }: DashboardListProps) 
                 </Link>
               </li>
             ))}
-          </>
-        )}
-
+        {/* 페이지네이션 */}
         <div className='md:col-span-2 lg:col-span-3 lg:row-start-3'>
           <Pagination
             currentChunk={currentChunk}

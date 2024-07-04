@@ -23,7 +23,7 @@ export const useSignIn = () => {
     onSuccess: (data) => {
       dispatch(setUser(data));
       dispatch(isLoading(false));
-      setCookie('token', data.accessToken, { httpOnly: true, sameSite: 'strict' });
+      setCookie('token', data.accessToken);
     },
     onMutate: async () => {
       dispatch(isLoading(true));
