@@ -422,7 +422,7 @@ export default function EditCardModal({
           <ModalActionButton
             type='submit'
             onClick={handleSubmit}
-            disabled={!(formValues.title.length > 0 && formValues.description.length > 0)}
+            disabled={loading || !(formValues.title.length > 0 && formValues.description.length > 0)}
           >
             {isEdit ? '수정' : '생성'}
           </ModalActionButton>
