@@ -113,7 +113,7 @@ export default function TodoCardModal({ card, column, onClick }: TodoCardModalPr
                 <Comment key={comment.id} comment={comment} columnId={column.id} cardId={card.id} />
               ))
             ) : (
-              <>아직 댓글이 없습니다</>
+              <>아직 댓글이 없습니다.</>
             )}
           </div>
         </section>
