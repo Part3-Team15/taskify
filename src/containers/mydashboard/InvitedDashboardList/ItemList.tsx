@@ -6,7 +6,7 @@ import { Invitation } from '@/types/Invitation.interface';
 
 interface InvitationListProps {
   invitations: Invitation[];
-  handleAcceptInvitation: (invitationId: number, inviteAccepted: boolean) => void;
+  handleAcceptInvitation: (invitationId: number, inviteAccepted: boolean, dashboardId: number) => void;
   observerRef: React.RefObject<HTMLDivElement>;
 }
 
@@ -42,13 +42,13 @@ export default function InvitationItemList({ invitations, handleAcceptInvitation
               </div>
               <div className='flex items-center gap-[10px]'>
                 <ActionButton
-                  onClick={() => handleAcceptInvitation(invitation.id, true)}
+                  onClick={() => handleAcceptInvitation(invitation.id, true, invitation.dashboard.id)}
                   className='w-[84px] grow lg:grow-0'
                 >
                   수락
                 </ActionButton>
                 <CancelButton
-                  onClick={() => handleAcceptInvitation(invitation.id, false)}
+                  onClick={() => handleAcceptInvitation(invitation.id, false, invitation.dashboard.id)}
                   className='w-[84px] grow lg:grow-0'
                 >
                   거절
