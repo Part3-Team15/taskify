@@ -49,7 +49,7 @@ export default function InvitationItemList({ invitations, handleAcceptInvitation
                 </ActionButton>
                 <CancelButton
                   onClick={() => handleAcceptInvitation(invitation.id, false)}
-                  className='w-[84px] grow lg:grow-0'
+                  className='w-[84px] grow lg:grow-0 dark:bg-dark-300'
                 >
                   거절
                 </CancelButton>
