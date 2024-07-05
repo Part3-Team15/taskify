@@ -57,13 +57,16 @@ export default function EditCardModal({
 
   const [membersIsOpen, setMembersIsOpen] = useState(false);
   const [columnsIsOpen, setColumnsIsOpen] = useState(false);
-  const [members, setMembers] = useState<Member[]>([]);
 
+  const [members, setMembers] = useState<Member[]>([]);
   const [columns, setColumns] = useState<Column[]>([]);
+
   const [formValues, setFormValues] = useState<postCardData>(cardData);
   const [profileImageFile, setProfileImageFile] = useState<File | null>(null);
   const [initialFormValues] = useState<postCardData>(cardData);
   const [isFormChanged, setIsFormChanged] = useState(false);
+
+  const [titleError, setTitleError] = useState<boolean>(false);
 
   const [loading, setLoading] = useState(false);
 
@@ -107,6 +110,18 @@ export default function EditCardModal({
       }));
     }
   }, [id]);
+
+  const getTitleLength = (title: string) => {
+    let length = 0;
+    for (let i = 0; i < title.length; i++) {
+      if (escape(title.charAt(i)).length > 4) {
+        length += 2;
+      } else {
+        length += 1;
+      }
+    }
+    return length;
+  };
 
   const checkFormChanged = (newFormValues: postCardData) => {
     const initialImageUrl = initialFormValues.imageUrl || '';
@@ -199,6 +214,14 @@ export default function EditCardModal({
   const handleImageDelete = () => {
     setProfileImageFile(null);
     const newFormValues = { ...formValues, imageUrl: null };
+    setFormValues(newFormValues);
+  };
+
+  const handleTitleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const newTitle = e.target.value;
+    const titleLength = getTitleLength(newTitle);
+    setTitleError(titleLength > 50);
+    const newFormValues = { ...formValues, title: newTitle };
     setFormValues(newFormValues);
   };
 
@@ -329,16 +352,16 @@ export default function EditCardModal({
               제목 <span className='text-violet'>(필수)*</span>
             </label>
             <input
-              className='input text-[14px] md:text-[16px]'
+              className={`input text-[14px] md:text-[16px] ${titleError ? 'border-red' : ''}`}
               id='title'
               type='text'
               placeholder='제목을 입력해 주세요'
               value={formValues.title}
-              onChange={(e) => {
-                const newFormValues = { ...formValues, title: e.target.value };
-                setFormValues(newFormValues);
-              }}
+              onChange={handleTitleChange}
             />
+            {titleError && (
+              <p className='mt-1 text-[14px] text-red'>제목은 한글 25자 이상, 영어 50자 이상 입력할 수 없습니다.</p>
+            )}
           </div>
           <div className='mb-[20px]'>
             <label htmlFor='description' className='label mb-[15px] block text-[16px] md:text-[18px]'>
@@ -405,7 +428,12 @@ export default function EditCardModal({
           <ModalActionButton
             type='submit'
             onClick={handleSubmit}
-            disabled={loading || !(formValues.title.length > 0 && formValues.description.length > 0) || !isFormChanged}
+            disabled={
+              loading ||
+              !(formValues.title.length > 0 && formValues.description.length > 0) ||
+              !isFormChanged ||
+              titleError
+            }
           >
             {isEdit ? '수정' : '생성'}
           </ModalActionButton>
