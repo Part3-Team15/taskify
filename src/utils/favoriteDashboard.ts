@@ -14,6 +14,11 @@ export const checkFavorite = async (id: number): Promise<boolean> => {
 };
 
 export const addFavorite = async (data: FavoriteDashboard): Promise<void> => {
+  if (await maxFavorite()) {
+    console.log('즐겨찾기는 최대 3개까지 가능합니다.');
+    throw new Error('즐겨찾기는 최대 3개까지 가능합니다.');
+  }
+
   try {
     const isFavorite = await checkFavorite(data.id);
     if (isFavorite) {
@@ -23,6 +28,16 @@ export const addFavorite = async (data: FavoriteDashboard): Promise<void> => {
     await postFavorite(data);
   } catch (error) {
     console.error('Failed to add favorite:', error);
+  }
+};
+
+export const maxFavorite = async (): Promise<boolean> => {
+  try {
+    const list = await getFavorite();
+    return list.length >= 3;
+  } catch (error) {
+    console.error('Failed to check favorite:', error);
+    return false;
   }
 };
 

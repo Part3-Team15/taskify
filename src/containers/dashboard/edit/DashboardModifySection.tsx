@@ -3,6 +3,8 @@ import Image from 'next/image';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 
+import { on } from 'events';
+
 import ActionButton from '@/components/Button/ActionButton';
 import Toggle from '@/components/Toggle';
 import { DASHBOARD_COLOR_OBJ } from '@/constants';
@@ -11,7 +13,7 @@ import useModal from '@/hooks/useModal';
 import { getDashboard } from '@/services/getService';
 import { putDashboardInfo } from '@/services/putService';
 import { DashboardColor, DashboardInfoState, Dashboard, FavoriteDashboard } from '@/types/Dashboard.interface';
-import { addFavorite, checkFavorite, removeFavorite } from '@/utils/favoriteDashboard';
+import { addFavorite, checkFavorite, maxFavorite, removeFavorite } from '@/utils/favoriteDashboard';
 import { addShareAccount, checkPublic, removeShareAccount } from '@/utils/shareAccount';
 
 interface ModifySectionProps {
@@ -79,13 +81,19 @@ export default function DashboardModifySection({
 
     try {
       await putDashboardInfo(Number(id), value);
-      await handleIsPublicChange();
       await handleFavoriteChange();
+      await handleIsPublicChange();
       openNotificationModal({ text: '대시보드 정보가 수정되었습니다!' });
       queryClient.invalidateQueries({ queryKey: ['dashboard', id] });
       queryClient.invalidateQueries({ queryKey: ['sideDashboards'] });
     } catch {
-      openNotificationModal({ text: '대시보드 정보 수정을 실패하였습니다.' });
+      if ((await maxFavorite()) && isFavorite) {
+        handleToggleFavorite();
+        if (isPublic) onToggleClick();
+        openNotificationModal({ text: '즐겨찾기는 최대 3개까지 가능합니다.' });
+      } else {
+        openNotificationModal({ text: '대시보드 정보 수정을 실패하였습니다.' });
+      }
     }
   };
 
