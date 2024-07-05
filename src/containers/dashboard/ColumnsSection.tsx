@@ -12,16 +12,16 @@ import { Card as CardType } from '@/types/Card.interface';
 import { ColumnsResponse } from '@/types/Column.interface';
 
 interface ColumnsSectionProps {
-  id: string;
+  dashboardId: string;
 }
 
-export default function ColumnsSection({ id }: ColumnsSectionProps) {
+export default function ColumnsSection({ dashboardId }: ColumnsSectionProps) {
   const { openNewColumnModal, openNotificationModal } = useModal();
   const {
     data: columns,
     isLoading,
     error,
-  } = useFetchData<ColumnsResponse>(['columns', id], () => getColumnsList(Number(id)));
+  } = useFetchData<ColumnsResponse>(['columns', dashboardId], () => getColumnsList(Number(dashboardId)));
   const columnList = columns?.data;
 
   const [cardLists, setCardLists] = useState<Record<number, CardType[]>>({});
