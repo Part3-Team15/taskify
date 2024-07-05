@@ -21,7 +21,7 @@ export default function InvitedDashboardList() {
 
   const queryClient = useQueryClient();
 
-  const { data, error, isLoading } = useFetchData<InvitationsResponse>(['invitations'], () => getInvitationsList());
+  const { data, error, isLoading } = useFetchData<InvitationsResponse>(['myInvitations'], () => getInvitationsList());
 
   useEffect(() => {
     if (data) {
