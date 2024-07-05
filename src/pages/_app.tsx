@@ -35,13 +35,15 @@ export default function App({ Component, pageProps }: AppProps) {
       <Provider store={store}>
         <PersistGate loading={null} persistor={persistor}>
           <QueryClientProvider client={queryClient}>
-            <ThemeProvider attribute='class' defaultTheme='system' enableSystem={true}>
-              <Modal />
-              <MainLayout>
-                <Component {...pageProps} />
-              </MainLayout>
-              <ReactQueryDevtools initialIsOpen={false} />
-            </ThemeProvider>
+            <Redirect>
+              <ThemeProvider attribute='class' defaultTheme='system' enableSystem={true}>
+                <Modal />
+                <MainLayout>
+                  <Component {...pageProps} />
+                </MainLayout>
+                <ReactQueryDevtools initialIsOpen={false} />
+              </ThemeProvider>
+            </Redirect>
           </QueryClientProvider>
         </PersistGate>
       </Provider>

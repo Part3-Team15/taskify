@@ -11,10 +11,15 @@ import useModal from '@/hooks/useModal';
 import { deleteMember } from '@/services/deleteService';
 import { getMembersList } from '@/services/getService';
 import { DeleteMemberInput } from '@/types/delete/DeleteMemberInput.interface';
-import { MembersResponse } from '@/types/Member.interface';
+import { Member, MembersResponse } from '@/types/Member.interface';
 
-export default function MembersSection() {
+interface MemberSectionProps {
+  onDeleteMember: (email: string) => void;
+}
+
+export default function MembersSection({ onDeleteMember }: MemberSectionProps) {
   const { openConfirmModal } = useModal();
+  const queryClient = useQueryClient();
   const router = useRouter();
   const { id } = router.query;
   const [currentChunk, setCurrentChunk] = useState(1);
@@ -43,12 +48,12 @@ export default function MembersSection() {
   };
 
   const { mutate } = useDeleteData<DeleteMemberInput>({ mutationFn: deleteMember, handleSuccess });
-  const queryClient = useQueryClient();
 
-  const handleDeleteMember = (memberId: number) => {
+  const handleDeleteMember = (member: Member) => {
     const handleDelete = async () => {
       if (!id) return;
-      await mutate({ memberId });
+      await mutate({ memberId: member.id });
+      onDeleteMember(member.email);
     };
 
     openConfirmModal({ text: '정말 구성원을 삭제하시겠습니까?', onActionClick: handleDelete });
