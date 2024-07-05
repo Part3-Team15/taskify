@@ -69,16 +69,6 @@ export default function EditCardModal({
   const membersToggleRef = useRef<HTMLDivElement>(null);
   const columnsDropdownRef = useRef<HTMLDivElement>(null);
   const columnsToggleRef = useRef<HTMLDivElement>(null);
-  // const { data } = useFetchData<ColumnsResponse>(['columns', id], () => getColumnsList(Number(columnId)));
-
-  // if (!data) {
-  //   return <>로딩 중</>;
-  // }
-
-  // const columns = data.data.map((column: Column) => ({
-  //   id: column.id,
-  //   title: column.title,
-  // }));
 
   useEffect(() => {
     // 현재 대시보드에 해당하는 멤버들 GET
