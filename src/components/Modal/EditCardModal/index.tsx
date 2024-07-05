@@ -48,7 +48,7 @@ export default function EditCardModal({ column, isEdit = false, card }: EditCard
   const { id } = router.query;
   const queryClient = useQueryClient();
 
-  const { openNotificationModal, closeModal, openTodoCardModal } = useModal();
+  const { closeModal, openTodoCardModal } = useModal();
 
   const [membersIsOpen, setMembersIsOpen] = useState(false);
   const [columnsIsOpen, setColumnsIsOpen] = useState(false);
@@ -262,16 +262,20 @@ export default function EditCardModal({ column, isEdit = false, card }: EditCard
         dueDate: formValuesToSend.dueDate !== '' ? formValuesToSend.dueDate : isEdit ? null : undefined,
       };
 
+      let responseCard;
       if (isEdit && card) {
-        await putCard(card.id, filteredFormValues as postCardData);
+        responseCard = await putCard(card.id, filteredFormValues as postCardData);
       } else {
-        await postCard(filteredFormValues as postCardData);
+        responseCard = await postCard(filteredFormValues as postCardData);
+      }
+
+      if (responseCard) {
+        const columnToOpen = columns.find((col) => col.id === responseCard.columnId);
+        const cardToOpen = responseCard;
+        openTodoCardModal({ card: cardToOpen, column: columnToOpen as Column });
       }
 
       queryClient.resetQueries({ queryKey: ['columns', id] });
-      openNotificationModal({
-        text: `할 일 카드가 ${isEdit ? '수정 ' : '생성 '}되었습니다!`,
-      });
     } catch (error) {
       console.error('Error submitting form:', error);
     } finally {
