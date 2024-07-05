@@ -15,7 +15,7 @@ interface ColumnProps {
 }
 
 function Column({ column, index, cards, columns }: ColumnProps) {
-  const { openModifyColumnModal, openNewCardModal, openTodoCardModal } = useModal();
+  const { openModifyColumnModal, openEditCardModal, openTodoCardModal } = useModal();
 
   return (
     <div className='block lg:flex'>
@@ -44,7 +44,7 @@ function Column({ column, index, cards, columns }: ColumnProps) {
         <button
           className='btn-violet-light dark:btn-violet-dark mb-[16px] h-[40px] rounded-[6px] border'
           onClick={() => {
-            openNewCardModal({ columnId: column.id, isEdit: false });
+            openEditCardModal({ columnId: column.id, isEdit: false });
           }}
         >
           <Image src='/icons/plus-filled.svg' width={22} height={22} alt='카드 추가 아이콘' className='dark:hidden' />
