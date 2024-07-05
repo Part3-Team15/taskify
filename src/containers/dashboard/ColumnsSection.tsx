@@ -1,15 +1,19 @@
 import Image from 'next/image';
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { DragDropContext, Droppable, DropResult } from 'react-beautiful-dnd';
+import { useSelector } from 'react-redux';
 
 import Column from './Column';
 
 import useFetchData from '@/hooks/useFetchData';
 import useModal from '@/hooks/useModal';
-import { getColumnsList, getCardsList } from '@/services/getService';
+import useRedirectIfNotMember from '@/hooks/useRedirectIfNotMember';
+import { getColumnsList, getCardsList, getDashboard } from '@/services/getService';
 import { moveToOtherColumn } from '@/services/putService';
+import { RootState } from '@/store/store';
 import { Card as CardType } from '@/types/Card.interface';
 import { ColumnsResponse } from '@/types/Column.interface';
+import { checkPublic } from '@/utils/shareAccount';
 
 interface ColumnsSectionProps {
   id: string;
@@ -17,13 +21,16 @@ interface ColumnsSectionProps {
 
 export default function ColumnsSection({ id }: ColumnsSectionProps) {
   const { openNewColumnModal, openNotificationModal } = useModal();
+  const redirectIfNotMember = useRedirectIfNotMember();
+  const { user } = useSelector((state: RootState) => state.user);
+  const [isPublic, setIsPublic] = useState(false);
+
   const {
     data: columns,
     isLoading,
     error,
   } = useFetchData<ColumnsResponse>(['columns', id], () => getColumnsList(Number(id)));
   const columnList = columns?.data;
-
   const [cardLists, setCardLists] = useState<Record<number, CardType[]>>({});
 
   useEffect(() => {
@@ -37,6 +44,22 @@ export default function ColumnsSection({ id }: ColumnsSectionProps) {
       });
     }
   }, [columnList]);
+
+  useEffect(() => {
+    const handleRedirect = async () => {
+      try {
+        const newIsPublic = await checkPublic(Number(id));
+        setIsPublic(newIsPublic);
+        if (!newIsPublic && id) {
+          await getDashboard(String(id));
+        }
+      } catch {
+        redirectIfNotMember();
+      }
+    };
+
+    handleRedirect();
+  }, [id]);
 
   const handleNewColumnClick = () => {
     if (columns?.data && columns.data.length >= 10) {
@@ -88,7 +111,9 @@ export default function ColumnsSection({ id }: ColumnsSectionProps) {
 
   return (
     <DragDropContext onDragEnd={onDragEnd}>
-      <section className='block h-full overflow-x-auto lg:flex lg:w-[calc(100dvw-300px)]'>
+      <section
+        className={`block h-full overflow-x-auto lg:flex ${isPublic && !user ? 'lg:w-screen' : 'lg:w-[calc(100dvw-300px)]'}`}
+      >
         <ul className='block lg:flex'>
           {columnList &&
             columnList.map((column, index) => (
