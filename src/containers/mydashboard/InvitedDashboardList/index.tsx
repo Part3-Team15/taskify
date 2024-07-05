@@ -16,7 +16,7 @@ interface InvitedDashboardListProps {
   initialInvitedDashboard: InvitationsResponse;
 }
 
-const InvitedDashboardList = ({ initialInvitedDashboard }: InvitedDashboardListProps) => {
+export default function InvitedDashboardList({ initialInvitedDashboard }: InvitedDashboardListProps) {
   const [invitations, setInvitations] = useState<Invitation[]>(initialInvitedDashboard?.invitations || []);
   const [isFetchingNextPage, setIsFetchingNextPage] = useState(false);
   const [isSearching, setIsSearching] = useState(false);
@@ -146,6 +146,4 @@ const InvitedDashboardList = ({ initialInvitedDashboard }: InvitedDashboardListP
       )}
     </section>
   );
-};
-
-export default InvitedDashboardList;
+}
