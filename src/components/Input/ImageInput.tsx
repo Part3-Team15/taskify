@@ -46,12 +46,17 @@ export default function ImageInput({ name, value, onChange, onDeleteClick }: Ima
             type='button'
             onClick={handleImageDelete}
           >
-            <Image src='/icons/x.svg' alt='이미지 삭제' fill className='rounded-md border border-black bg-white/40' />
+            <Image
+              src='/icons/x.svg'
+              alt='이미지 삭제'
+              fill
+              className='rounded-full border border-gray-9f bg-white/40'
+            />
           </button>
           <Image src='/icons/edit.svg' alt='이미지 수정' width={30} height={30} className='z-10' />
         </label>
       ) : (
-        <label htmlFor={name} className='btn-gray size-full cursor-pointer dark:bg-dark-200 dark:hover:bg-dark-200/40'>
+        <label htmlFor={name} className='btn-gray size-full cursor-pointer dark:bg-dark-200 dark:hover:bg-dark-100/50'>
           <div className='relative size-5 md:size-[30px]'>
             <Image src='/icons/plus-violet.svg' alt='이미지 추가' fill className='dark:hidden' />
             <Image src='/icons/plus-white.svg' alt='이미지 추가' fill className='hidden dark:block' />

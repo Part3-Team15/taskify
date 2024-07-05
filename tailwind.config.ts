@@ -35,7 +35,7 @@ const config: Config = {
         500: 'hsl(0, 0%, 6%)',
         purple: {
           DEFAULT: '#2C283A',
-          hover: '#312C40'
+          hover: "#3D3A4F",
         }
       },
       gray: {
