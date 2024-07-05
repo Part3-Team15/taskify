@@ -1,3 +1,5 @@
+import axios from 'axios';
+
 import instance from './axios';
 
 import { CancelInvitationInput } from '@/types/delete/CancelInvitation.interface';
@@ -32,4 +34,13 @@ export const deleteComment = async (commentId: number) => {
 // 카드 삭제
 export const deleteCard = async (cardId: number) => {
   return await instance.delete(`/cards/${cardId}`);
+};
+
+export const deleteFavorite = async (favoriteId: string) => {
+  try {
+    await axios.delete(`/api/task/${favoriteId}`);
+  } catch (error) {
+    console.error('Failed to delete favorite dashboards:');
+    throw error;
+  }
 };

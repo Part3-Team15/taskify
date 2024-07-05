@@ -1,4 +1,8 @@
+import axios from 'axios';
+
 import instance from './axios';
+
+import { FavoriteDashboard } from '@/types/Dashboard.interface';
 
 // 컬럼 목록 조회
 export const getColumnsList = async (dashboardId: number) => {
@@ -64,4 +68,15 @@ export const getCard = async (cardId: number) => {
 // 댓글 목록 조회
 export const getComments = async (cardId: number) => {
   return await instance.get(`/comments?size=10&cardId=${cardId}`);
+};
+
+export const getFavorite = async () => {
+  try {
+    const response = await axios.get('/api/task');
+    const data = response.data;
+    return data;
+  } catch (error) {
+    console.error('Failed to fetch favorite dashboards:');
+    throw error;
+  }
 };

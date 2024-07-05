@@ -10,15 +10,23 @@ import useFetchData from '@/hooks/useFetchData';
 import useModal from '@/hooks/useModal';
 import { getDashboard } from '@/services/getService';
 import { putDashboardInfo } from '@/services/putService';
-import { DashboardColor, DashboardInfoState, Dashboard } from '@/types/Dashboard.interface';
+import { DashboardColor, DashboardInfoState, Dashboard, FavoriteDashboard } from '@/types/Dashboard.interface';
+import { addFavorite, checkFavorite, removeFavorite } from '@/utils/favoriteDashboard';
 import { addShareAccount, checkPublic, removeShareAccount } from '@/utils/shareAccount';
 
 interface ModifySectionProps {
   isPublic: boolean;
   onToggleClick: () => void;
+  isFavorite: boolean;
+  handleToggleFavorite: () => void;
 }
 
-export default function DashboardModifySection({ isPublic, onToggleClick }: ModifySectionProps) {
+export default function DashboardModifySection({
+  isPublic,
+  onToggleClick,
+  isFavorite,
+  handleToggleFavorite,
+}: ModifySectionProps) {
   const router = useRouter();
   const { id } = router.query;
   const { openNotificationModal } = useModal();
@@ -58,9 +66,21 @@ export default function DashboardModifySection({ isPublic, onToggleClick }: Modi
       queryClient.invalidateQueries({ queryKey: ['members', id] });
     };
 
+    const handleFavoriteChange = async () => {
+      const initIsFavorite = await checkFavorite(Number(id));
+      if (isFavorite === initIsFavorite) return;
+
+      if (isFavorite) {
+        await addFavorite(dashboard as FavoriteDashboard);
+      } else {
+        await removeFavorite(Number(id));
+      }
+    };
+
     try {
       await putDashboardInfo(Number(id), value);
       await handleIsPublicChange();
+      await handleFavoriteChange();
       openNotificationModal({ text: '대시보드 정보가 수정되었습니다!' });
       queryClient.invalidateQueries({ queryKey: ['dashboard', id] });
       queryClient.invalidateQueries({ queryKey: ['sideDashboards'] });
@@ -86,14 +106,17 @@ export default function DashboardModifySection({ isPublic, onToggleClick }: Modi
 
   useEffect(() => {
     const handleButtonControl = async () => {
-      const initIsPublic = await checkPublic(Number(id));
+      const [initIsPublic, initIsFavorite] = await Promise.all([checkPublic(Number(id)), checkFavorite(Number(id))]);
       setIsButtonDisabled(
-        (value.title === fixedTitle && value.color === fixedColor && isPublic === initIsPublic) ||
+        (value.title === fixedTitle &&
+          value.color === fixedColor &&
+          isPublic === initIsPublic &&
+          isFavorite === initIsFavorite) ||
           value.title.trim() === '',
       );
     };
     handleButtonControl();
-  }, [value.title, value.color, fixedTitle, fixedColor, isPublic]);
+  }, [value.title, value.color, fixedTitle, fixedColor, isPublic, isFavorite]);
 
   const handleColorSelect = (color: DashboardColor) => {
     setSelectedColor(color);
@@ -136,6 +159,8 @@ export default function DashboardModifySection({ isPublic, onToggleClick }: Modi
         <div className='align-center gap-2 md:gap-3'>
           <span>공유</span>
           <Toggle isOn={isPublic} onToggleClick={onToggleClick} />
+          <span>즐겨찾기</span>
+          <Toggle isOn={isFavorite} onToggleClick={handleToggleFavorite} />
         </div>
       </header>
       <main>

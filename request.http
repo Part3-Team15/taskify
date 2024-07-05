@@ -1,0 +1,15 @@
+
+POST http://localhost:3000/api/task/
+Content-Type: application/json
+
+{
+  "title": "Task 1",
+  "description": "Description 1"
+}
+
+###
+
+GET http://localhost:3000/api/task/
+
+
+
