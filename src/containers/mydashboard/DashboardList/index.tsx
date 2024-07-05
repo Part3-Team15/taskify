@@ -16,7 +16,6 @@ export default function DashboardList({ initialDashboard }: DashboardListProps) 
   const [currentChunk, setCurrentChunk] = useState<number>(1);
   const { openNewDashboardModal } = useModal();
   const [dashboardData, setDashboards] = useState<DashboardsResponse>(initialDashboard);
-  const [isInitial, setIsInitial] = useState<boolean>(!!initialDashboard);
 
   // 대시보드 데이터를 가져오는 커스텀 훅 사용
   const {
@@ -28,18 +27,14 @@ export default function DashboardList({ initialDashboard }: DashboardListProps) 
   );
 
   // 총 페이지 수 계산
-  const totalPage = initialDashboard?.totalCount ? Math.max(1, Math.ceil(initialDashboard.totalCount / 5)) : 1;
+  const totalPage = dashboardData?.totalCount ? Math.max(1, Math.ceil(dashboardData.totalCount / 5)) : 1;
 
   // 대시보드 데이터가 변경될 때 상태 업데이트
   useEffect(() => {
     if (dashboardResponse) {
-      if (!isInitial) {
-        setDashboards(dashboardResponse);
-      } else {
-        setIsInitial(false);
-      }
+      setDashboards(dashboardResponse);
     }
-  }, [dashboardResponse, isInitial]);
+  }, [dashboardResponse]);
 
   if (error) {
     return (
@@ -77,7 +72,7 @@ export default function DashboardList({ initialDashboard }: DashboardListProps) 
           </button>
         </li>
         {/* 대시보드 목록 표시 */}
-        {isLoading && !isInitial
+        {isLoading && currentChunk !== 1
           ? [...Array(5)].map((_, i) => (
               <li key={i} className='h-12 w-full animate-pulse rounded-lg border border-gray-d9 bg-gray-fa md:h-16' />
             ))

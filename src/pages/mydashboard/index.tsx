@@ -7,9 +7,10 @@ import InvitedDashboardList from '@/containers/mydashboard/InvitedDashboardList'
 import instance from '@/services/axios';
 import { DashboardsResponse } from '@/types/Dashboard.interface';
 import { InvitationsResponse } from '@/types/Invitation.interface';
+import { createAuthHeaders } from '@/utils/createAuthHeaders';
 
 interface MyDashboardPageProps {
-  initialDashboard: DashboardsResponse; // 타입 정의에 따라 변경
+  initialDashboard: DashboardsResponse;
   initialInvitedDashboard: InvitationsResponse;
 }
 
@@ -33,22 +34,19 @@ export const getServerSideProps: GetServerSideProps = async ({ req, res }) => {
   let initialInvitedDashboard: InvitationsResponse | null = null;
 
   if (token) {
-    const dashboardResponse = await instance.get<DashboardsResponse>(
-      '/dashboards?navigationMethod=pagination&page=1&size=5',
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      },
-    );
-    const invitationsResponse = await instance.get<InvitationsResponse>('/invitations?size=10', {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    });
+    const authHeaders = createAuthHeaders(token);
 
-    initialDashboard = dashboardResponse.data;
-    initialInvitedDashboard = invitationsResponse.data;
+    try {
+      const [dashboardResponse, invitationsResponse] = await Promise.all([
+        instance.get<DashboardsResponse>('/dashboards?navigationMethod=pagination&page=1&size=5', authHeaders),
+        instance.get<InvitationsResponse>('/invitations?size=10', authHeaders),
+      ]);
+
+      initialDashboard = dashboardResponse.data;
+      initialInvitedDashboard = invitationsResponse.data;
+    } catch (error) {
+      console.error('Failed to fetch data:', error);
+    }
   }
 
   return {

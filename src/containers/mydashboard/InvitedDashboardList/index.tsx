@@ -18,7 +18,6 @@ interface InvitedDashboardListProps {
 
 const InvitedDashboardList = ({ initialInvitedDashboard }: InvitedDashboardListProps) => {
   const [invitations, setInvitations] = useState<Invitation[]>(initialInvitedDashboard?.invitations || []);
-  const [isInitial, setIsInitial] = useState<boolean>(!initialInvitedDashboard);
   const [isFetchingNextPage, setIsFetchingNextPage] = useState(false);
   const [isSearching, setIsSearching] = useState(false);
   const observerRef = useRef<HTMLDivElement | null>(null);
@@ -26,20 +25,14 @@ const InvitedDashboardList = ({ initialInvitedDashboard }: InvitedDashboardListP
 
   const queryClient = useQueryClient();
 
-  // 데이터를 가져오는 커스텀 훅
   const { data, error, isLoading } = useFetchData<InvitationsResponse>(['invitations'], getInvitationsList);
 
-  // 데이터가 변경될 때 초대 상태 업데이트
   useEffect(() => {
     if (data) {
-      if (!isInitial) {
-        setInvitations(data.invitations);
-        setCursorId(data.cursorId ?? 0);
-      } else {
-        setIsInitial(false);
-      }
+      setInvitations(data.invitations);
+      setCursorId(data.cursorId ?? 0);
     }
-  }, [data, isInitial]);
+  }, [data]);
 
   // 더 많은 초대 데이터를 가져오는 함수
   const handleMoreInvitations = useCallback(async (currentCursorId: number) => {
@@ -128,7 +121,7 @@ const InvitedDashboardList = ({ initialInvitedDashboard }: InvitedDashboardListP
   return (
     <section className='h-[400px] max-w-[350px] rounded-lg border-0 bg-white md:max-h-[740px] md:min-h-[530px] md:max-w-full lg:max-w-screen-lg'>
       <p className='px-7 pb-5 pt-8 text-base font-bold text-black-33'>초대받은 대시보드</p>
-      {isLoading && !isInitial && !initialInvitedDashboard ? (
+      {isLoading && !initialInvitedDashboard ? (
         <Skeleton />
       ) : (
         <>
