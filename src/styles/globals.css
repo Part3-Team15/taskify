@@ -60,6 +60,113 @@
   .modal-basic {
     @apply h-[220px] w-[327px] md:h-[250px] md:w-[540px];
   }
+
+  .scrollbar-white {
+    /* 스크롤바 전체 */
+    &::-webkit-scrollbar {
+      width: 10px;
+    }
+    /* 스크롤바 손잡이 */
+    &::-webkit-scrollbar-thumb {
+      background-color: #a0aec0;
+      border-radius: 6px;
+      border: 3px solid #f7fafc;
+    }
+    /* 스크롤바 손잡이 호버 */
+    &::-webkit-scrollbar-thumb:hover {
+      background-color: #718096;
+    }
+    /* 스크롤바 손잡이 클릭 */
+    &::-webkit-scrollbar-thumb:active {
+      background-color: #4a5568;
+    }
+    /* 스크롤바 배경 */
+    &::-webkit-scrollbar-track {
+      background-color: #f7fafc;
+    }
+  }
+
+  .scrollbar-black {
+    /* 스크롤바 전체 */
+    &::-webkit-scrollbar {
+      width: 10px;
+    }
+    /* 스크롤바 손잡이 */
+    &::-webkit-scrollbar-thumb {
+      background-color: #414141;
+      border-radius: 6px;
+      border: 3px solid #212121;
+    }
+    /* 스크롤바 손잡이 호버 */
+    &::-webkit-scrollbar-thumb:hover {
+      background-color: #505050;
+    }
+    /* 스크롤바 손잡이 클릭 */
+    &::-webkit-scrollbar-thumb:active {
+      background-color: #313131;
+    }
+    /* 스크롤바 배경 */
+    &::-webkit-scrollbar-track {
+      background-color: #212121;
+    }
+  }
+
+  .scrollbar-violet {
+    /* 스크롤바 전체 */
+    &::-webkit-scrollbar {
+      width: 10px;
+    }
+    /* 스크롤바 손잡이 */
+    &::-webkit-scrollbar-thumb {
+      background-color: #5534da;
+      border-radius: 6px;
+      border: 3px solid #f1effd;
+    }
+    /* 스크롤바 손잡이 호버 */
+    &::-webkit-scrollbar-thumb:hover {
+      background-color: #3925a8;
+    }
+    /* 스크롤바 손잡이 클릭 */
+    &::-webkit-scrollbar-thumb:active {
+      background-color: #261680;
+    }
+    /* 스크롤바 배경 */
+    &::-webkit-scrollbar-track {
+      background-color: #f1effd;
+    }
+  }
+
+  .scrollbar-violet-dark {
+    /* 스크롤바 전체 */
+    &::-webkit-scrollbar {
+      width: 10px;
+    }
+    /* 스크롤바 손잡이 */
+    &::-webkit-scrollbar-thumb {
+      background-color: #5534da;
+      border-radius: 6px;
+      border: 3px solid #212121;
+    }
+    /* 스크롤바 손잡이 호버 */
+    &::-webkit-scrollbar-thumb:hover {
+      background-color: #3925a8;
+    }
+    /* 스크롤바 손잡이 클릭 */
+    &::-webkit-scrollbar-thumb:active {
+      background-color: #261680;
+    }
+    /* 스크롤바 배경 */
+    &::-webkit-scrollbar-track {
+      background-color: #212121;
+    }
+  }
+
+  .scrollbar-none {
+    /* 스크롤바 전체 */
+    &::-webkit-scrollbar {
+      display: none;
+    }
+  }
 }
 
 @layer utilities {
