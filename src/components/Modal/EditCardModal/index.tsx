@@ -182,7 +182,7 @@ export default function EditCardModal({ columnId, isEdit }: EditCardModalProps) 
   return (
     <div className='modal h-[90vh] w-[327px] md:h-[90vh] md:w-[506px]'>
       <div className='flex h-full flex-col'>
-        <h2 className='section-title border-b-2 border-gray-d9 pb-4 text-[20px] md:text-[24px]'>
+        <h2 className='section-title border-b-2 border-gray-d9 pb-4 text-[20px] md:text-[24px] dark:border-dark-200'>
           {isEdit ? '할일 수정' : '할일 생성'}
         </h2>
         <form className='flex h-full flex-col overflow-y-auto pr-5' onSubmit={handleSubmit}>
@@ -293,7 +293,7 @@ export default function EditCardModal({ columnId, isEdit }: EditCardModalProps) 
             </div>
           </div>
         </form>
-        <div className='flex justify-end gap-[10px] border-t-2 border-gray-d9 bg-white pt-[20px]'>
+        <div className='flex justify-end gap-[10px] border-t-2 border-gray-d9 pt-[20px] dark:border-dark-200'>
           <ModalCancelButton type='button' onClick={closeModal}>
             취소
           </ModalCancelButton>

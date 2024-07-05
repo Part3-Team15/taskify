@@ -34,7 +34,7 @@ export default function DashboardHeader() {
   const { id: dashboardId, title, createdByMe } = dashboard;
 
   return (
-    <header className='relative flex h-[60px] w-full items-center justify-end border-b border-gray-d9 bg-white px-3 text-black-33 md:h-[70px] md:px-5 lg:justify-between lg:px-10'>
+    <header className='relative flex h-[60px] w-full items-center justify-end border-b border-gray-d9 bg-white px-3 text-black-33 transition-colors md:h-[70px] md:px-5 lg:justify-between lg:px-10 dark:border-dark-200 dark:bg-dark dark:text-dark-10'>
       <Head>
         <title>Taskify | {title}</title>
       </Head>
@@ -46,7 +46,7 @@ export default function DashboardHeader() {
         {createdByMe && <Buttons id={dashboardId} />}
         <div className='flex items-center gap-3 md:gap-5 lg:gap-8'>
           <MemberProfiles id={String(dashboardId)} />
-          <div className='h-[34px] w-0 border-l border-gray-d9' />
+          <div className='h-[34px] w-0 border-l border-gray-d9 dark:border-dark-200' />
           <UserMenuDropdown />
         </div>
       </div>

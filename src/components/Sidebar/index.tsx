@@ -5,6 +5,7 @@ import { useState } from 'react';
 import { useSelector } from 'react-redux';
 
 import NavButton from '../Button/NavButton';
+import ThemeChangeButton from '../Button/ThemeChangeButton';
 
 import DashboardItem from './DashboardItem';
 
@@ -44,19 +45,21 @@ export default function Sidebar() {
   };
 
   return (
-    <aside className='flex min-w-16 max-w-[300px] flex-col border-r border-gray-d9 px-3 py-5 md:min-w-40 lg:min-w-72'>
+    <aside className='flex min-w-16 max-w-[300px] flex-col border-r border-gray-d9 bg-white px-3 py-5 transition-all md:min-w-40 lg:min-w-72 dark:border-dark-200 dark:bg-dark'>
       <Link href={user ? '/mydashboard' : '/'} className='flex items-center justify-center pb-14 md:block md:px-3'>
         <div className='relative hidden h-[33px] w-[110px] md:block'>
-          <Image src={'/icons/logo.svg'} alt='logo' priority className='' fill />
+          <Image src={'/icons/logo.svg'} alt='logo' priority className='dark:hidden' fill />
+          <Image src={'/icons/logo-white.svg'} alt='logo' priority className='hidden dark:block' fill />
         </div>
         <div className='relative block size-[27px] md:hidden'>
           <Image src={'/icons/logo-small.svg'} alt='logo' priority className='' fill />
+          <Image src={'/icons/logo-white-s.svg'} alt='logo' priority className='' fill />
         </div>
       </Link>
 
       <div className='flex grow flex-col gap-2'>
         <div className='flex items-center justify-center md:justify-between'>
-          <p className='hidden px-3 text-xs font-bold text-gray-78 md:block'>Dashboards</p>
+          <p className='hidden px-3 text-xs font-bold text-gray-78 md:block dark:text-dark-10'>Dashboards</p>
           <button
             className='p-3'
             onClick={() => {
@@ -67,12 +70,12 @@ export default function Sidebar() {
           </button>
         </div>
 
-        <div className='mx-2 mb-2 border-b border-gray-d9' />
+        <div className='mx-2 mb-2 border-b border-gray-d9 dark:border-dark-200' />
 
         <div className='flex flex-col gap-2'>
           <Link
             href='/mydashboard'
-            className={`${activePath === '/mydashboard' ? 'bg-violet-f1 text-black-33/80' : 'text-gray-78'} flex items-center justify-center rounded-md py-1 hover:bg-violet/20 md:justify-start md:px-3 md:py-2`}
+            className={`${activePath === '/mydashboard' ? 'bg-violet-f1 text-black-33/80 dark:bg-dark-purple' : 'text-gray-78'} btn-violet-light dark:btn-violet-dark flex items-center justify-center rounded-md border-none py-1 hover:bg-violet/20 md:justify-start md:px-3 md:py-2`}
           >
             <p className='hidden pr-[6px] text-lg font-semibold md:block'>📋 My Dashboard</p>
             <p className='flex items-center justify-center text-lg font-medium md:hidden'>📋</p>
@@ -80,21 +83,21 @@ export default function Sidebar() {
 
           <Link
             href='/mypage'
-            className={`${activePath === '/mypage' ? 'bg-violet-f1 text-black-33/80' : 'text-gray-78'} flex items-center justify-center rounded-md py-1 hover:bg-violet/20 md:justify-start md:px-3 md:py-2`}
+            className={`${activePath === '/mypage' ? 'bg-violet-f1 text-black-33/80 dark:bg-dark-purple' : 'text-gray-78'} btn-violet-light dark:btn-violet-dark flex items-center justify-center rounded-md border-none py-1 hover:bg-violet/20 md:justify-start md:px-3 md:py-2`}
           >
             <p className='hidden pr-[6px] text-lg font-semibold md:block'>😺 My Page</p>
             <p className='flex items-center justify-center text-lg font-medium md:hidden'>😺</p>
           </Link>
         </div>
 
-        <div className='m-2 border-b border-gray-d9' />
+        <div className='m-2 border-b border-gray-d9 dark:border-dark-200' />
 
         {isLoading ? (
           <ul className='flex h-min animate-pulse flex-col gap-2'>
             {[...Array(10)].map((_, i) => (
               <li
                 key={i}
-                className='flex min-h-[32px] items-center justify-center rounded-md bg-gray-fa py-3 md:min-h-[52px] md:justify-start md:px-3'
+                className='flex min-h-[32px] items-center justify-center rounded-md bg-gray-fa py-3 md:min-h-[52px] md:justify-start md:px-3 dark:bg-dark-300'
               ></li>
             ))}
           </ul>
@@ -116,6 +119,7 @@ export default function Sidebar() {
             )}
           </>
         )}
+        <ThemeChangeButton className='justify-center rounded-md py-2' />
       </div>
     </aside>
   );

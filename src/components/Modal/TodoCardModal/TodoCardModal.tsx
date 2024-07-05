@@ -54,13 +54,16 @@ export default function TodoCardModal({ card, column, onClick }: TodoCardModalPr
     <div className='modal flex h-[716px] w-[328px] flex-col gap-[24px] md:h-[770px] md:w-[680px] lg:h-[762px] lg:w-[730px]'>
       {/* Title Section */}
       <section className='flex flex-row items-center justify-between'>
-        <div className='text-[20px] font-[700] text-black-33 hover:cursor-default md:text-[24px]'>{card.title}</div>
+        <div className='text-[20px] font-[700] text-black-33 hover:cursor-default md:text-[24px] dark:text-dark-10'>
+          {card.title}
+        </div>
         <div className='flex'>
           <div className='relative'>
             <EditDropdown card={card} />
           </div>
           <button onClick={handleModalClose}>
-            <Image src='/icons/x.svg' alt='X 아이콘' width={32} height={32} />
+            <Image src='/icons/x.svg' alt='X 아이콘' width={32} height={32} className='dark:hidden' />
+            <Image src='/icons/x-white.svg' alt='X 아이콘' width={32} height={32} className='hidden dark:block' />
           </button>
         </div>
       </section>
@@ -74,7 +77,7 @@ export default function TodoCardModal({ card, column, onClick }: TodoCardModalPr
               <p className='w-max'>{column.title}</p>
             </div>
             {card.tags && card.tags.length > 0 && (
-              <div className='text-[20px] font-[100] text-gray-d9 hover:cursor-default'>|</div>
+              <div className='text-[20px] font-[100] text-gray-d9 hover:cursor-default dark:text-dark-200'>|</div>
             )}
             <Tags tags={card.tags} customClass='overflow-x-auto whitespace-nowrap' />
           </div>
@@ -94,14 +97,14 @@ export default function TodoCardModal({ card, column, onClick }: TodoCardModalPr
               </div>
 
               <textarea
-                className='h-[70px] w-full resize-none rounded-[6px] border border-gray-d9 p-[12px] px-[20px] text-[12px] focus:outline-none md:h-[110px] md:text-[14px]'
+                className='h-[70px] w-full resize-none rounded-[6px] border border-gray-d9 p-[12px] px-[20px] text-[12px] focus:outline-none md:h-[110px] md:text-[14px] dark:bg-dark-300'
                 value={newComment}
                 onChange={(e) => setNewComment(e.target.value)}
                 placeholder='댓글 작성하기'
               />
 
               <button
-                className='btn-white bottom-5 right-3 h-[28px] w-[60px] rounded-[4px] text-[12px] text-violet md:h-[32px] md:w-[78px] lg:w-[84px]'
+                className='btn-white dark:btn-white bottom-5 right-3 h-[28px] w-[60px] rounded-[4px] text-[12px] text-violet md:h-[32px] md:w-[78px] lg:w-[84px] dark:rounded-[4px]'
                 type='submit'
               >
                 입력

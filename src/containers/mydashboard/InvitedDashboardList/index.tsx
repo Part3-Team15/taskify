@@ -132,8 +132,10 @@ export default function InvitedDashboardList() {
   }
 
   return (
-    <section className='h-[400px] max-w-[350px] rounded-lg border-0 bg-white md:max-h-[740px] md:min-h-[530px] md:max-w-full lg:max-w-screen-lg'>
-      <p className='px-7 pb-5 pt-8 text-base font-bold text-black-33'>초대받은 대시보드</p>
+    <section className='h-[400px] max-w-[350px] rounded-lg border-0 bg-white transition-colors md:max-h-[740px] md:min-h-[530px] md:max-w-full lg:max-w-screen-lg dark:bg-dark'>
+      <p className='px-7 pb-5 pt-8 text-base font-bold text-black-33 transition-colors dark:text-dark-10'>
+        초대받은 대시보드
+      </p>
       {isLoading ? (
         <Skeleton />
       ) : (

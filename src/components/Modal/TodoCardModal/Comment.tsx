@@ -60,24 +60,26 @@ export default function Comment({ comment }: CommentProps) {
           {/* Comment Section */}
           <div className='w-full pr-[20px]'>
             <div className='flex gap-[8px] hover:cursor-default'>
-              <p className='text-[12px] font-[600] text-black-33 md:text-[14px]'>{comment.author.nickname}</p>
+              <p className='text-[12px] font-[600] text-black-33 md:text-[14px] dark:text-dark-10'>
+                {comment.author.nickname}
+              </p>
               <p className='text-[10px] text-gray-9f md:text-[12px]'>{formatDate(comment.createdAt, true)}</p>
             </div>
             {isEditing ? (
               <textarea
-                className='w-full resize-none rounded-[2px] border border-gray-d9 p-[12px] text-[12px] text-black-33 focus:outline-none md:text-[14px]'
+                className='w-full resize-none rounded-[2px] border border-gray-d9 p-[12px] text-[12px] text-black-33 focus:outline-none md:text-[14px] dark:border-dark-200 dark:bg-dark-300 dark:text-dark-10'
                 value={editedComment}
                 onChange={(e) => setEditedComment(e.target.value)}
               />
             ) : (
-              <p className='max-w-[200px] whitespace-pre-wrap break-words text-[12px] text-black-33 hover:cursor-default md:max-w-[300px] md:text-[14px]'>
+              <p className='max-w-[200px] whitespace-pre-wrap break-words text-[12px] text-black-33 hover:cursor-default md:max-w-[300px] md:text-[14px] dark:text-dark-10'>
                 {comment.content}
               </p>
             )}
 
             {/* Button Section */}
             {user?.id === comment.author.id && (
-              <div className='flex gap-[12px] text-[12px] text-gray-9f'>
+              <div className='flex gap-[12px] text-[12px] text-gray-9f dark:text-dark-10'>
                 {!isEditing ? (
                   <>
                     <button className='underline' onClick={handleToggleEdit}>
@@ -90,7 +92,10 @@ export default function Comment({ comment }: CommentProps) {
                 ) : (
                   <div className='flex gap-[12px] text-[12px] text-gray-9f'>
                     <button onClick={handleToggleEdit}>취소</button>
-                    <button className='text-black-33 hover:text-violet' onClick={handleSaveEdit}>
+                    <button
+                      className='text-black-33 hover:text-violet dark:text-dark-10 dark:hover:text-violet-light-hover'
+                      onClick={handleSaveEdit}
+                    >
                       저장
                     </button>
                   </div>

@@ -109,7 +109,7 @@ export default function EditProfileForm() {
         <div className='flex flex-col gap-4 md:grow md:gap-5'>
           <div className='flex flex-col gap-2.5'>
             <label className='label'>이메일</label>
-            <p className='input text-gray-9f'>{user?.email}</p>
+            <p className='input text-gray-9f dark:bg-dark-300 dark:text-dark-10'>{user?.email}</p>
           </div>
 
           <div className='relative flex flex-col gap-2.5'>
@@ -117,7 +117,7 @@ export default function EditProfileForm() {
               닉네임
             </label>
             <input
-              className={`input ${!(isNicknameValid.gtZero && isNicknameValid.lteTen) ? 'border-2 border-red hover:border-red' : ''}`}
+              className={`input ${!(isNicknameValid.gtZero && isNicknameValid.lteTen) ? 'border-2 border-red hover:border-red' : ''} dark:bg-dark-300`}
               id='nickname'
               value={nickname}
               placeholder='닉네임을 입력해주세요'

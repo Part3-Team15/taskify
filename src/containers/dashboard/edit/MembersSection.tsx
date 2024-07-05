@@ -60,7 +60,7 @@ export default function MembersSection({ onDeleteMember }: MemberSectionProps) {
   };
 
   return (
-    <section className='section h-[341px] pb-4 md:h-[408px] md:pb-5'>
+    <section className='section h-[341px] pb-4 transition-colors md:h-[408px] md:pb-5 dark:bg-dark'>
       <header className='mb-[18px] mt-[22px] flex items-center justify-between md:mb-[27px] md:mt-[26px]'>
         <h2 className='section-title'>구성원</h2>
         <Pagination

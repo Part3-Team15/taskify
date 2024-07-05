@@ -13,7 +13,7 @@ interface InvitationListProps {
 export default function InvitationItemList({ invitations, handleAcceptInvitation, observerRef }: InvitationListProps) {
   return (
     <div className='h-[calc(100%-130px)] pt-6 md:h-[calc(100%-170px)]'>
-      <div className='hidden grid-cols-3 pb-6 pl-7 text-gray-9f md:grid md:pr-7'>
+      <div className='hidden grid-cols-3 pb-6 pl-7 text-gray-9f md:grid md:pr-7 dark:text-dark-10'>
         <p>이름</p>
         <p>초대자</p>
         <p className='w-44'>수락 여부</p>
@@ -30,7 +30,7 @@ export default function InvitationItemList({ invitations, handleAcceptInvitation
           {invitations.map((invitation: Invitation) => (
             <li
               key={invitation.id}
-              className='grid h-max grid-cols-1 gap-[10px] border-b border-gray-ee p-4 text-sm text-black-33 md:h-16 md:grid-cols-3 md:gap-0 md:px-7 md:py-0 md:text-base'
+              className='grid h-max grid-cols-1 gap-[10px] border-b border-gray-ee p-4 text-sm text-black-33 md:h-16 md:grid-cols-3 md:gap-0 md:px-7 md:py-0 md:text-base dark:border-dark-200 dark:text-dark-10'
             >
               <div className='grid grid-cols-3 items-center md:flex'>
                 <p className='flex items-center md:hidden'>이름</p>
@@ -49,7 +49,7 @@ export default function InvitationItemList({ invitations, handleAcceptInvitation
                 </ActionButton>
                 <CancelButton
                   onClick={() => handleAcceptInvitation(invitation.id, false, invitation.dashboard.id)}
-                  className='w-[84px] grow lg:grow-0'
+                  className='w-[84px] grow lg:grow-0 dark:bg-dark-300'
                 >
                   거절
                 </CancelButton>

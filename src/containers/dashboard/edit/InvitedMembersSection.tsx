@@ -56,7 +56,7 @@ export default function InvitedMembersSection() {
   };
 
   return (
-    <section className='section h-[395px] pb-4 md:h-[477px] md:pb-5'>
+    <section className='section h-[395px] pb-4 transition-colors md:h-[477px] md:pb-5 dark:bg-dark'>
       <header className='mb-4 mt-6 flex items-center justify-between md:my-7'>
         <h2 className='section-title'>초대 내역</h2>
         <nav className='align-center relative gap-3'>
