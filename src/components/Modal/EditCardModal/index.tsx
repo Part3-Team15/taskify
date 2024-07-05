@@ -8,6 +8,7 @@ import MemberProfile from './MemberProfile';
 import MembersDropDown from './MembersDropDown';
 
 import CARROT_DOWN from '@/../public/icons/carrot-down.svg';
+import SPINNER from '@/../public/icons/spinner.svg';
 import ModalActionButton from '@/components/Button/ModalActionButton';
 import ModalCancelButton from '@/components/Button/ModalCancelButton';
 import ImageInput from '@/components/Input/ImageInput';
@@ -462,7 +463,7 @@ export default function EditCardModal({ column, isEdit = false, card }: EditCard
               titleError
             }
           >
-            {isEdit ? '수정' : '생성'}
+            {loading ? <Image src={SPINNER} alt='로딩 중' /> : <>{isEdit ? '수정' : '생성'}</>}
           </ModalActionButton>
         </div>
       </div>
