@@ -9,18 +9,30 @@ import InvitedMembersSection from './InvitedMembersSection';
 import MembersSection from './MembersSection';
 
 import useDeleteData from '@/hooks/useDeleteData';
+import useFetchData from '@/hooks/useFetchData';
 import useModal from '@/hooks/useModal';
+import useRedirectIfNoPermission from '@/hooks/useRedirectIfNoPermission';
 import { deleteDashboard } from '@/services/deleteService';
+import { getDashboard } from '@/services/getService';
+import { Dashboard } from '@/types/Dashboard.interface';
 import { DeleteDashboardInput } from '@/types/delete/DeleteDashboardInput.interface';
 import { checkPublic } from '@/utils/shareAccount';
 
 export default function DashboardEdit() {
+  const redirectIfNoPermission = useRedirectIfNoPermission();
   const { openConfirmModal } = useModal();
   const queryClient = useQueryClient();
   const router = useRouter();
   const { id } = router.query;
 
+  const { data: dashboard, error } = useFetchData<Dashboard>(['dashboard', id], () => getDashboard(id as string));
   const [isPublic, setIsPublic] = useState(false);
+
+  const handleSuccess = () => {
+    queryClient.invalidateQueries({ queryKey: ['sideDashboards'] });
+    router.replace('/mydashboard');
+  };
+  const { mutate } = useDeleteData<DeleteDashboardInput>({ mutationFn: deleteDashboard, handleSuccess });
 
   const handleToggle = () => {
     setIsPublic((prevIsPublic) => !prevIsPublic);
@@ -31,12 +43,6 @@ export default function DashboardEdit() {
       setIsPublic(false);
     }
   };
-
-  const handleSuccess = () => {
-    queryClient.invalidateQueries({ queryKey: ['sideDashboards'] });
-    router.replace('/mydashboard');
-  };
-  const { mutate } = useDeleteData<DeleteDashboardInput>({ mutationFn: deleteDashboard, handleSuccess });
 
   const handleDeleteClick = () => {
     const handleDelete = async () => {
@@ -52,11 +58,23 @@ export default function DashboardEdit() {
 
   useEffect(() => {
     const handleInitialLoad = async () => {
-      setIsPublic(await checkPublic(Number(id)));
+      try {
+        setIsPublic(await checkPublic(Number(id)));
+      } catch {
+        redirectIfNoPermission(-1);
+      }
     };
 
     handleInitialLoad();
   }, [id]);
+
+  useEffect(() => {
+    if (dashboard) {
+      redirectIfNoPermission(dashboard.userId);
+    } else if (error) {
+      redirectIfNoPermission(-1);
+    }
+  }, [dashboard, error]);
 
   return (
     <div className='h-full px-3 py-4 text-black-33 md:p-5'>
