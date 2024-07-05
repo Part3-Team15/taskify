@@ -90,7 +90,11 @@ export default function Comment({ comment }: CommentProps) {
                 ) : (
                   <div className='flex gap-[12px] text-[12px] text-gray-9f'>
                     <button onClick={handleToggleEdit}>취소</button>
-                    <button className='text-black-33 hover:text-violet' onClick={handleSaveEdit}>
+                    <button
+                      className='text-black-33 hover:text-violet disabled:text-gray-9f'
+                      disabled={editedComment === comment.content}
+                      onClick={handleSaveEdit}
+                    >
                       저장
                     </button>
                   </div>
