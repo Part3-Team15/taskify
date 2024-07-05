@@ -4,14 +4,21 @@ import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 
 import ActionButton from '@/components/Button/ActionButton';
+import Toggle from '@/components/Toggle';
 import { DASHBOARD_COLOR_OBJ } from '@/constants';
 import useFetchData from '@/hooks/useFetchData';
 import useModal from '@/hooks/useModal';
 import { getDashboard } from '@/services/getService';
 import { putDashboardInfo } from '@/services/putService';
 import { DashboardColor, DashboardInfoState, Dashboard } from '@/types/Dashboard.interface';
+import { addShareAccount, checkPublic, removeShareAccount } from '@/utils/shareAccount';
 
-export default function DashboardModifySection() {
+interface ModifySectionProps {
+  isPublic: boolean;
+  onToggleClick: () => void;
+}
+
+export default function DashboardModifySection({ isPublic, onToggleClick }: ModifySectionProps) {
   const router = useRouter();
   const { id } = router.query;
   const { openNotificationModal } = useModal();
@@ -40,8 +47,20 @@ export default function DashboardModifySection() {
   } = useFetchData<Dashboard>(['dashboard', id], () => getDashboard(id as string));
 
   const handleModifyButton = async () => {
+    const handleIsPublicChange = async () => {
+      const initIsPublic = await checkPublic(Number(id));
+      if (isPublic === initIsPublic) return;
+      if (isPublic) {
+        await addShareAccount(Number(id));
+      } else {
+        await removeShareAccount(Number(id));
+      }
+      queryClient.invalidateQueries({ queryKey: ['members', id] });
+    };
+
     try {
       await putDashboardInfo(Number(id), value);
+      await handleIsPublicChange();
       openNotificationModal({ text: '대시보드 정보가 수정되었습니다!' });
       queryClient.invalidateQueries({ queryKey: ['dashboard', id] });
       queryClient.invalidateQueries({ queryKey: ['sideDashboards'] });
@@ -66,8 +85,15 @@ export default function DashboardModifySection() {
   }, [dashboard]);
 
   useEffect(() => {
-    setIsButtonDisabled((value.title === fixedTitle && value.color === fixedColor) || value.title.trim() === '');
-  }, [value.title, value.color, fixedTitle, fixedColor]);
+    const handleButtonControl = async () => {
+      const initIsPublic = await checkPublic(Number(id));
+      setIsButtonDisabled(
+        (value.title === fixedTitle && value.color === fixedColor && isPublic === initIsPublic) ||
+          value.title.trim() === '',
+      );
+    };
+    handleButtonControl();
+  }, [value.title, value.color, fixedTitle, fixedColor, isPublic]);
 
   const handleColorSelect = (color: DashboardColor) => {
     setSelectedColor(color);
@@ -105,6 +131,10 @@ export default function DashboardModifySection() {
     <section className='section relative flex h-[211px] flex-col justify-between px-[18px] py-[22px] md:h-[256px] md:py-[26px]'>
       <header className='flex justify-between'>
         <h2 className='text-[20px] font-bold text-black-33'>{fixedTitle}</h2>
+        <div className='align-center gap-2 md:gap-3'>
+          <span>공유</span>
+          <Toggle isOn={isPublic} onToggleClick={onToggleClick} />
+        </div>
       </header>
       <main>
         <div className='flex flex-col'>
@@ -123,25 +153,25 @@ export default function DashboardModifySection() {
           {errorMessage && <p className='mt-2 text-sm text-red'>{errorMessage}</p>}
         </div>
       </main>
-      <footer className='flex justify-end'>
+      <footer className='flex items-center justify-between'>
+        <div className='flex gap-[10px]'>
+          {(['green', 'purple', 'orange', 'blue', 'pink'] as DashboardColor[]).map((color) => (
+            <button
+              key={`${color}-button`}
+              style={{ backgroundColor: DASHBOARD_COLOR_OBJ[color] }}
+              className={`flex size-[20px] items-center justify-center rounded-full bg-white md:size-[30px]`}
+              onClick={() => handleColorSelect(color)}
+            >
+              {selectedColor === color && (
+                <Image src='/icons/check.svg' alt='체크' width={10} height={10} className='md:size-[16px]' />
+              )}
+            </button>
+          ))}
+        </div>
         <ActionButton onClick={handleModifyButton} disabled={isButtonDisabled || !!errorMessage}>
           변경
         </ActionButton>
       </footer>
-      <div className='absolute bottom-[28px] flex h-[20px] gap-[10px] md:bottom-0 md:right-[18px] md:top-[26px]'>
-        {(['green', 'purple', 'orange', 'blue', 'pink'] as DashboardColor[]).map((color) => (
-          <button
-            key={`${color}-button`}
-            style={{ backgroundColor: DASHBOARD_COLOR_OBJ[color] }}
-            className={`flex size-[20px] items-center justify-center rounded-full bg-white md:size-[30px]`}
-            onClick={() => handleColorSelect(color)}
-          >
-            {selectedColor === color && (
-              <Image src='/icons/check.svg' alt='체크' width={10} height={10} className='md:size-[16px]' />
-            )}
-          </button>
-        ))}
-      </div>
     </section>
   );
 }

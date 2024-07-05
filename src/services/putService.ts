@@ -38,3 +38,8 @@ export const moveToOtherColumn = async (cardId: number, destinationColumnId: num
   };
   return await instance.put(`/cards/${cardId}`, formData);
 };
+
+// 댓글 수정
+export const putComment = async (commentId: number, formData: { content: string }) => {
+  return await instance.put(`/comments/${commentId}`, formData);
+};

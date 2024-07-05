@@ -4,7 +4,7 @@ import { getMembersList } from '@/services/getService';
 import { Member, MembersResponse } from '@/types/Member.interface';
 
 interface MemberProfilesProps {
-  id: number;
+  id: string;
 }
 
 const genMemberProfiles = (members: Member[], distance: number) =>
@@ -24,7 +24,9 @@ const genMemberProfiles = (members: Member[], distance: number) =>
   });
 
 export default function MemberProfiles({ id }: MemberProfilesProps) {
-  const { data, isLoading, error } = useFetchData<MembersResponse>(['members', id], () => getMembersList(id));
+  const { data, isLoading, error } = useFetchData<MembersResponse>(['members', id, 1], () =>
+    getMembersList(Number(id)),
+  );
   if (isLoading) {
     return <p>로딩중...</p>;
   }
@@ -44,9 +46,9 @@ export default function MemberProfiles({ id }: MemberProfilesProps) {
   const numMembers = data.totalCount;
   const numPC = Math.min(numMembers, 4);
   const numNonPC = Math.min(numMembers, 2);
-  const wPC = numMembers >= 4 ? 38 + 30 * numPC : 38 + 30 * (numPC - 1);
-  const wTablet = numMembers >= 2 ? 38 + 30 * numNonPC : 38 + 30 * (numNonPC - 1);
-  const wMobile = numMembers >= 2 ? 34 + 24 * numNonPC : 34 + 24 * (numNonPC - 1);
+  const wPC = numMembers > 4 ? 38 + 30 * numPC : 38 + 30 * (numPC - 1);
+  const wTablet = numMembers > 2 ? 38 + 30 * numNonPC : 38 + 30 * (numNonPC - 1);
+  const wMobile = numMembers > 2 ? 34 + 24 * numNonPC : 34 + 24 * (numNonPC - 1);
   return (
     <>
       <ul className='relative hidden h-[34px] text-sm md:h-[38px] md:text-base lg:block' style={{ width: wPC }}>

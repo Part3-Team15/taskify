@@ -1,3 +1,4 @@
+import { Card } from './Card.interface';
 import { Column } from './Column.interface';
 
 export interface ModalState {
@@ -32,6 +33,12 @@ export interface EditCardModalProps extends ModalProps {
   isEdit: boolean;
 }
 
+export interface TodoCardModalProps extends ModalProps {
+  card: Card;
+  column: Column;
+  onClick?: () => void;
+}
+
 export const MODAL = {
   NOTIFICATION: 'notification',
   CONFIRM: 'confirm',
@@ -40,6 +47,7 @@ export const MODAL = {
   INVITE_MEMBER: 'inviteMember',
   MODIFY_COLUMN: 'modifyColumn',
   EDIT_CARD: 'editCard',
+  TODO_CARD: 'todoCard',
 } as const;
 
 export type ModalType = (typeof MODAL)[keyof typeof MODAL];

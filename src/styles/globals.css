@@ -14,7 +14,7 @@
   }
 
   .btn-violet-light {
-    @apply align-center gray-border rounded-[8px] bg-white transition-all hover:bg-violet-light-hover active:bg-violet-light-active disabled:bg-violet-light-disabled;
+    @apply align-center gray-border rounded-[8px] bg-white transition-all hover:bg-violet-light-hover active:bg-violet-light-active disabled:bg-violet-light-disabled disabled:text-gray-78;
   }
 
   .btn-white {

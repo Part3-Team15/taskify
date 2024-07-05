@@ -5,12 +5,12 @@ import { useEffect, useState, useRef } from 'react';
 
 import MemberProfile from './MemberProfile';
 import MembersDropDown from './MembersDropDown';
-import TagsWrapper from './TagsWrapper';
 
 import CARROT_DOWN from '@/../public/icons/carrot-down.svg';
 import ModalActionButton from '@/components/Button/ModalActionButton';
 import ModalCancelButton from '@/components/Button/ModalCancelButton';
 import ImageInput from '@/components/Input/ImageInput';
+import Tags from '@/components/Tags';
 import useModal from '@/hooks/useModal';
 import { getMembersList } from '@/services/getService';
 import { postImageForCard, postCard } from '@/services/postService';
@@ -158,8 +158,6 @@ export default function EditCardModal({ columnId, isEdit }: EditCardModalProps) 
         imageUrl: imgUrl,
       };
 
-      console.log(formValuesToSend);
-
       // 데이터가 할당되지 않은 state는 POST 요청하기 전에 제거
       const filteredFormValues: Partial<postCardData> = {
         ...formValuesToSend,
@@ -279,7 +277,7 @@ export default function EditCardModal({ columnId, isEdit }: EditCardModalProps) 
               placeholder='입력 후 Enter'
               onKeyDown={handleTagsEnterKeyDown}
             />
-            <TagsWrapper tags={formValues.tags} onTagClick={handleTagClick} />
+            <Tags tags={formValues.tags} customClass='mt-[10px]' onClick={handleTagClick} />
           </div>
           <div className='mb-[20px]'>
             <label htmlFor='card-profile' className='label mb-[15px] block text-[16px] md:text-[18px]'>

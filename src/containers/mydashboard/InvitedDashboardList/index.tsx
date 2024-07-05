@@ -102,18 +102,18 @@ export default function InvitedDashboardList() {
 
   if (error) {
     return (
-      <div className='h-full max-w-screen-lg overflow-hidden rounded-lg border-0 bg-white'>
+      <section className='h-[400px] max-w-[350px] rounded-lg border-0 bg-white md:max-w-full lg:max-w-screen-lg'>
         <p className='px-7 pb-5 pt-8 text-base font-bold text-black-33'>초대받은 대시보드</p>
         <div className='flex items-center justify-center'>
           <p>데이터를 가져오는 중 오류가 발생했습니다.</p>
           <p>{error.message}</p>
         </div>
-      </div>
+      </section>
     );
   }
 
   return (
-    <section className='h-full max-h-[calc(100vh-410px)] min-h-[530px] max-w-[350px] overflow-hidden rounded-lg border-0 bg-white md:max-w-full lg:max-w-screen-lg'>
+    <section className='h-[400px] max-w-[350px] rounded-lg border-0 bg-white md:max-h-[740px] md:min-h-[530px] md:max-w-full lg:max-w-screen-lg'>
       <p className='px-7 pb-5 pt-8 text-base font-bold text-black-33'>초대받은 대시보드</p>
       {isLoading ? (
         <Skeleton />
@@ -129,11 +129,11 @@ export default function InvitedDashboardList() {
               />
             </>
           ) : (
-            <div className='flex h-full flex-col items-center justify-center'>
-              <div className='relative size-[60px] md:size-[100px]'>
+            <div className='flex flex-col items-center justify-center py-[100px]'>
+              <div className='relative size-[60px] md:size-[150px]'>
                 <Image src={'/icons/invitations.svg'} alt='invitations' fill />
               </div>
-              <p className='px-7 py-5 text-gray-78'>초대된 대시보드가 없습니다.</p>
+              <p className='px-7 py-5 text-sm text-gray-78 md:text-base'>초대된 대시보드가 없습니다.</p>
             </div>
           )}
         </>
