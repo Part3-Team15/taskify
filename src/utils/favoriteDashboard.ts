@@ -34,7 +34,7 @@ export const addFavorite = async (data: FavoriteDashboard): Promise<void> => {
 export const maxFavorite = async (): Promise<boolean> => {
   try {
     const list = await getFavorite();
-    return list.length >= 3;
+    return list.length > 3;
   } catch (error) {
     console.error('Failed to check favorite:', error);
     return false;
