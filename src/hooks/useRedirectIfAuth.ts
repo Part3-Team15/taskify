@@ -5,15 +5,16 @@ import { useSelector } from 'react-redux';
 import useModal from '@/hooks/useModal';
 import { RootState } from '@/store/store';
 
-const useRedirectIfAuthenticated = () => {
+const useRedirectIfAuth = () => {
   const { user } = useSelector((state: RootState) => state.user);
-  const router = useRouter();
   const { openNotificationModal } = useModal();
-  const [isRedirecting, setIsRedirecting] = useState(true);
+  const router = useRouter();
+  const currentPath = router.pathname;
+  const [isRedirecting, setIsRedirecting] = useState(false);
   const [initialCheck, setInitialCheck] = useState(true);
 
   useEffect(() => {
-    if (initialCheck) {
+    if (['/', '/signup', '/signin'].includes(currentPath) && initialCheck) {
       if (user) {
         openNotificationModal({ text: '이미 로그인하셨습니다.' });
         setIsRedirecting(true);
@@ -27,4 +28,4 @@ const useRedirectIfAuthenticated = () => {
   return isRedirecting;
 };
 
-export default useRedirectIfAuthenticated;
+export default useRedirectIfAuth;
