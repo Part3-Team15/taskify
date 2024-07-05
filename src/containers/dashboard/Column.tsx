@@ -1,9 +1,11 @@
 import Image from 'next/image';
 import { Draggable, Droppable } from 'react-beautiful-dnd';
+import { useSelector } from 'react-redux';
 
 import Card from './Card';
 
 import useModal from '@/hooks/useModal';
+import { RootState } from '@/store/store';
 import { Card as CardType } from '@/types/Card.interface';
 import { Column as ColumnType } from '@/types/Column.interface';
 
@@ -14,8 +16,9 @@ interface ColumnProps {
   cards: CardType[];
 }
 
-function Column({ column, index, cards, columns }: ColumnProps) {
+function Column({ column, cards, columns }: ColumnProps) {
   const { openModifyColumnModal, openNewCardModal, openTodoCardModal } = useModal();
+  const { user } = useSelector((state: RootState) => state.user);
 
   return (
     <div className='block lg:flex'>
@@ -31,7 +34,8 @@ function Column({ column, index, cards, columns }: ColumnProps) {
           </div>
           {/* Column Edit Button */}
           <button
-            className='transition duration-300 ease-in-out hover:rotate-90'
+            className='transition duration-300 ease-in-out hover:rotate-90 disabled:rotate-0'
+            disabled={!user}
             onClick={() => {
               openModifyColumnModal({ columns, columnId: column.id, columnTitle: column.title });
             }}
@@ -43,6 +47,7 @@ function Column({ column, index, cards, columns }: ColumnProps) {
         {/* Add Card Button */}
         <button
           className='btn-violet-light mb-[16px] h-[40px] rounded-[6px] border'
+          disabled={!user}
           onClick={() => {
             openNewCardModal({ columnId: column.id, isEdit: false });
           }}
@@ -52,22 +57,22 @@ function Column({ column, index, cards, columns }: ColumnProps) {
 
         {/* Card List Section */}
         <div className='scrollbar-hide lg:h-[700px] lg:overflow-y-auto'>
-          <Droppable droppableId={`column-${column.id}`} key={`column-${column.id}`}>
+          <Droppable droppableId={`column-${column.id}`} key={`column-${column.id}`} isDropDisabled={!user}>
             {(provided) => (
               <div ref={provided.innerRef} {...provided.droppableProps}>
                 {cards.map((card, index) => (
-                  <Draggable key={`card-${card.id}`} draggableId={`card-${card.id}`} index={index}>
+                  <Draggable
+                    key={`card-${card.id}`}
+                    draggableId={`card-${card.id}`}
+                    index={index}
+                    isDragDisabled={!user}
+                  >
                     {(provided) => (
                       <div
                         ref={provided.innerRef}
                         {...provided.draggableProps}
                         {...provided.dragHandleProps}
-                        onClick={() => {
-                          openTodoCardModal({
-                            card,
-                            column,
-                          });
-                        }}
+                        onClick={() => openTodoCardModal({ card, column })}
                       >
                         <Card key={`card-${card.id}`} card={card} />
                       </div>

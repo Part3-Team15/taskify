@@ -138,6 +138,7 @@ export default function ColumnsSection({ id }: ColumnsSectionProps) {
           <button
             className='btn-violet-light mb-4 h-[70px] w-full rounded-[6px] py-[24px] lg:mb-0 lg:w-[354px]'
             onClick={handleNewColumnClick}
+            disabled={!user}
           >
             <div className='mr-[12px] text-lg font-bold text-black-33'>새로운 컬럼 추가하기</div>
             <Image src='/icons/plus-filled.svg' width={22} height={22} alt='카드 추가 아이콘' loading='lazy' />

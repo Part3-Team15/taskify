@@ -8,7 +8,7 @@ import ModifyColumnModal from './ModifyColumnModal';
 import NewColumnModal from './NewColumnModal';
 import NewDashboardModal from './NewDashboardModal';
 import NotificationModal from './NotificationModal';
-import TodoCardModal from './TodoCardModal/TodoCardModal';
+import TodoCardModal from './TodoCardModal';
 
 import useModal from '@/hooks/useModal';
 import { modalSelector } from '@/store/reducers/modalSlice';
