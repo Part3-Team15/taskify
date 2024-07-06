@@ -20,20 +20,10 @@ import { putCard } from '@/services/putService';
 import { Column } from '@/types/Column.interface';
 import { Member } from '@/types/Member.interface';
 import { EditCardModalProps } from '@/types/Modal.interface';
+import { PostCardData } from '@/types/post/EditModalPostData.interface';
 import { formatDateTime, revertFormattedDateTime } from '@/utils/formatDateTime';
 
-export interface postCardData {
-  assigneeUserId: number | null;
-  dashboardId: number;
-  columnId: number;
-  title: string;
-  description: string;
-  dueDate: string | null;
-  tags: string[];
-  imageUrl: string | null;
-}
-
-const formInitialState: postCardData = {
+const formInitialState: PostCardData = {
   assigneeUserId: 0,
   dashboardId: 0,
   columnId: 0,
@@ -49,7 +39,7 @@ export default function EditCardModal({ column, isEdit = false, card }: EditCard
   const { id } = router.query;
   const queryClient = useQueryClient();
 
-  const { closeModal, openTodoCardModal } = useModal();
+  const { closeModal, openTodoCardModal, openNotificationModal } = useModal();
 
   const [membersIsOpen, setMembersIsOpen] = useState(false);
   const [columnsIsOpen, setColumnsIsOpen] = useState(false);
@@ -57,7 +47,7 @@ export default function EditCardModal({ column, isEdit = false, card }: EditCard
   const [members, setMembers] = useState<Member[]>([]);
   const [columns, setColumns] = useState<Column[]>([]);
 
-  const initializeFormValues = useCallback((): postCardData => {
+  const initializeFormValues = useCallback((): PostCardData => {
     if (card) {
       return {
         assigneeUserId: card.assignee?.id || 0,
@@ -78,9 +68,9 @@ export default function EditCardModal({ column, isEdit = false, card }: EditCard
     }
   }, [card, column, id]);
 
-  const [formValues, setFormValues] = useState<postCardData>(initializeFormValues);
+  const [formValues, setFormValues] = useState<PostCardData>(initializeFormValues);
   const [profileImageFile, setProfileImageFile] = useState<File | null>(null);
-  const [initialFormValues, setInitialFormValues] = useState<postCardData>(initializeFormValues);
+  const [initialFormValues, setInitialFormValues] = useState<PostCardData>(initializeFormValues);
   const [isFormChanged, setIsFormChanged] = useState(false);
 
   const [titleError, setTitleError] = useState<boolean>(false);
@@ -138,7 +128,7 @@ export default function EditCardModal({ column, isEdit = false, card }: EditCard
     return length;
   };
 
-  const checkFormChanged = (newFormValues: postCardData) => {
+  const checkFormChanged = (newFormValues: PostCardData) => {
     const initialImageUrl = initialFormValues.imageUrl || '';
     const currentImageUrl = profileImageFile ? 'new_image' : newFormValues.imageUrl || '';
     const currentFormValues = { ...newFormValues, imageUrl: currentImageUrl };
@@ -256,7 +246,7 @@ export default function EditCardModal({ column, isEdit = false, card }: EditCard
         imageUrl: imgUrl,
       };
 
-      const filteredFormValues: Partial<postCardData> = {
+      const filteredFormValues: Partial<PostCardData> = {
         ...formValuesToSend,
         assigneeUserId: formValuesToSend.assigneeUserId || (isEdit ? null : undefined),
         imageUrl: formValuesToSend.imageUrl !== '' ? formValuesToSend.imageUrl : isEdit ? null : undefined,
@@ -265,15 +255,17 @@ export default function EditCardModal({ column, isEdit = false, card }: EditCard
 
       let responseCard;
       if (isEdit && card) {
-        responseCard = await putCard(card.id, filteredFormValues as postCardData);
+        responseCard = await putCard(card.id, filteredFormValues as PostCardData);
       } else {
-        responseCard = await postCard(filteredFormValues as postCardData);
+        responseCard = await postCard(filteredFormValues as PostCardData);
       }
 
-      if (responseCard) {
+      if (responseCard && isEdit) {
         const columnToOpen = columns.find((col) => col.id === responseCard.columnId);
         const cardToOpen = responseCard;
         openTodoCardModal({ card: cardToOpen, column: columnToOpen as Column });
+      } else {
+        openNotificationModal({ text: '할 일 카드가 생성되었습니다!' });
       }
 
       queryClient.resetQueries({ queryKey: ['columns', id] });
