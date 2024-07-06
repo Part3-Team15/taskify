@@ -15,7 +15,7 @@ export default function MemberList({ members, onDeleteClick }: Props) {
       {members.slice(0, members.length - 1).map((member) => (
         <li key={member.id} className='flex flex-col gap-3 md:gap-4'>
           <MemberItem member={member} onDeleteClick={() => onDeleteClick(member)} />
-          <div className='h-0 w-full border border-gray-ee' />
+          <div className='h-0 w-full border border-gray-ee dark:border-dark-200' />
         </li>
       ))}
       {lastItem && (

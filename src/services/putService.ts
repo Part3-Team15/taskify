@@ -1,5 +1,6 @@
 import instance from './axios';
 
+import { postCardData } from '@/components/Modal/EditCardModal';
 import { DashboardInfoState } from '@/types/Dashboard.interface';
 import { UpdatePasswordForm } from '@/types/post/UpdatePasswordForm.interface';
 import { UpdateProfileForm } from '@/types/post/UpdateProfileForm.interface';
@@ -42,4 +43,9 @@ export const moveToOtherColumn = async (cardId: number, destinationColumnId: num
 // 댓글 수정
 export const putComment = async (commentId: number, formData: { content: string }) => {
   return await instance.put(`/comments/${commentId}`, formData);
+};
+
+// 카드 수정
+export const putCard = async (cardId: number, formData: postCardData) => {
+  return await instance.put(`/cards/${cardId}`, formData);
 };

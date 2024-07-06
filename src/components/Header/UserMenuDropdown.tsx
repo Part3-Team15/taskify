@@ -25,7 +25,7 @@ export default function UserMenuDropdown() {
         <UserProfile user={user} />
       </button>
       {isOpen && (
-        <ul className='dd-container absolute right-2 top-14 w-28 bg-white text-sm md:top-16 md:w-[150px] md:text-base'>
+        <ul className='dd-container absolute right-2 top-14 w-28 bg-white text-sm md:top-16 md:w-[150px] md:text-base dark:bg-dark'>
           <li className='dd-menu md:h-10' onClick={handleMenuClick}>
             <Link href='/mydashboard' className='align-center size-full'>
               내 대시보드

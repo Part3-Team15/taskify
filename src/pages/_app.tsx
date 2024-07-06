@@ -3,6 +3,7 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import type { AppProps } from 'next/app';
 import Head from 'next/head';
+import { ThemeProvider } from 'next-themes';
 import { Provider } from 'react-redux';
 import { PersistGate } from 'redux-persist/integration/react';
 
@@ -35,11 +36,13 @@ export default function App({ Component, pageProps }: AppProps) {
         <PersistGate loading={null} persistor={persistor}>
           <QueryClientProvider client={queryClient}>
             <Redirect>
-              <Modal />
-              <MainLayout>
-                <Component {...pageProps} />
-              </MainLayout>
-              <ReactQueryDevtools initialIsOpen={false} />
+              <ThemeProvider attribute='class' defaultTheme='system' enableSystem={true}>
+                <Modal />
+                <MainLayout>
+                  <Component {...pageProps} />
+                </MainLayout>
+                <ReactQueryDevtools initialIsOpen={false} />
+              </ThemeProvider>
             </Redirect>
           </QueryClientProvider>
         </PersistGate>

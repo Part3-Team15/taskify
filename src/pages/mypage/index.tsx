@@ -9,11 +9,11 @@ export default function MyPage() {
       <Head>
         <title>Taskify | 내 계정</title>
       </Head>
-      <section className='w-full max-w-[620px] rounded-lg bg-white p-5 pt-0 md:p-7 md:pt-0'>
+      <section className='w-full max-w-[620px] rounded-lg bg-white p-5 pt-0 md:p-7 md:pt-0 dark:bg-dark dark:text-dark-10'>
         <h2 className='section-title mb-6 mt-7 md:my-8'>프로필</h2>
         <EditProfileForm />
       </section>
-      <section className='w-full max-w-[620px] rounded-lg bg-white p-5 pt-0 md:p-7 md:pt-0'>
+      <section className='w-full max-w-[620px] rounded-lg bg-white p-5 pt-0 md:p-7 md:pt-0 dark:bg-dark dark:text-dark-10'>
         <h2 className='section-title mb-6 mt-7 md:my-8'>비밀번호 변경</h2>
         <PwdChangeForm />
       </section>

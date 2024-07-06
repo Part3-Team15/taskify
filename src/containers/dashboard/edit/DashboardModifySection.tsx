@@ -114,7 +114,9 @@ export default function DashboardModifySection({ isPublic, onToggleClick }: Modi
   };
 
   if (isLoading) {
-    return <section className='section h-[211px] animate-pulse bg-gray-f5 px-[18px] py-[32px] md:h-[256px]'></section>;
+    return (
+      <section className='section h-[211px] animate-pulse bg-gray-f5 px-[18px] py-[32px] md:h-[256px] dark:bg-dark-300'></section>
+    );
   }
 
   if (error) {
@@ -128,9 +130,9 @@ export default function DashboardModifySection({ isPublic, onToggleClick }: Modi
   }
 
   return (
-    <section className='section relative flex h-[211px] flex-col justify-between px-[18px] py-[22px] md:h-[256px] md:py-[26px]'>
+    <section className='section relative flex h-[211px] flex-col justify-between px-[18px] py-[22px] transition-colors md:h-[256px] md:py-[26px] dark:bg-dark'>
       <header className='flex justify-between'>
-        <h2 className='text-[20px] font-bold text-black-33'>{fixedTitle}</h2>
+        <h2 className='text-[20px] font-bold text-black-33 dark:text-dark-10'>{fixedTitle}</h2>
         <div className='align-center gap-2 md:gap-3'>
           <span>공유</span>
           <Toggle isOn={isPublic} onToggleClick={onToggleClick} />
@@ -142,7 +144,7 @@ export default function DashboardModifySection({ isPublic, onToggleClick }: Modi
             대시보드 이름
           </label>
           <input
-            className='input text-[14px] md:text-[16px]'
+            className='input text-[14px] md:text-[16px] dark:bg-dark-300'
             id='dashboardTitle'
             type='text'
             value={value.title}

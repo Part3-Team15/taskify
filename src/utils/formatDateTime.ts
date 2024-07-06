@@ -9,3 +9,11 @@ export function formatDateTime(dateTimeString: string) {
 
   return `${year}-${month}-${day} ${hours}:${minutes}`;
 }
+
+export function revertFormattedDateTime(formattedString: string): string {
+  const [datePart, timePart] = formattedString.split(' ');
+  const [year, month, day] = datePart.split('-');
+  const [hours, minutes] = timePart.split(':');
+
+  return `${year}-${month}-${day}T${hours}:${minutes}`;
+}

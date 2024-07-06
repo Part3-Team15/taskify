@@ -22,13 +22,13 @@ export default function PwdInputWithLabel<T extends FieldValues>({
 
   return (
     <div>
-      <label htmlFor={id} className='mb-[10px] block text-[16px] text-black-33'>
+      <label htmlFor={id} className='mb-[10px] block text-[16px] text-black-33 dark:text-dark-10'>
         {label}
       </label>
       <div className='relative'>
         <input
           {...register(id)}
-          className={`h-[50px] w-full rounded-[8px] border border-gray-d9 bg-white px-[15px] text-[16px] text-black-33 placeholder:text-gray-9f ${
+          className={`h-[50px] w-full rounded-[8px] border border-gray-d9 bg-white px-[15px] text-[16px] text-black-33 placeholder:text-gray-9f dark:bg-dark-300 dark:text-dark-10 ${
             error && 'border-2 border-red'
           }`}
           type={type}

@@ -11,7 +11,7 @@ interface CardProps {
 
 export default function Card({ card }: CardProps) {
   return (
-    <div className='mb-[16px] mt-[4px] flex flex-col gap-[10px] rounded-[6px] border border-gray-d9 bg-white p-[20px] transition-transform duration-200 ease-in-out hover:-translate-y-1 hover:cursor-pointer hover:shadow-sm md:flex-row md:justify-between lg:flex-col'>
+    <div className='mb-[16px] mt-[4px] flex flex-col gap-[10px] rounded-[6px] border border-gray-d9 bg-white p-[20px] transition-transform duration-200 ease-in-out hover:-translate-y-1 hover:cursor-pointer hover:shadow-sm md:flex-row md:justify-between lg:flex-col dark:border-dark-200 dark:bg-dark'>
       {/* Card Image */}
       {card.imageUrl && (
         <section className='relative h-[160px] w-full rounded-[6px] md:mr-[10px] md:h-[54px] md:w-[90px] lg:h-[160px] lg:w-full'>
@@ -21,7 +21,7 @@ export default function Card({ card }: CardProps) {
 
       <section className='mr-0 flex flex-col gap-[10px] md:mr-auto lg:mr-0'>
         {/* Card Title */}
-        <div className='text-[16px] font-[500] text-black-33'>{card.title}</div>
+        <div className='text-[16px] font-[500] text-black-33 dark:text-dark-10'>{card.title}</div>
 
         <div className='flex flex-col gap-[10px] md:flex-row lg:flex-col'>
           {/* Tags */}
@@ -33,7 +33,9 @@ export default function Card({ card }: CardProps) {
               <span>
                 <Image src='/icons/calendar.svg' width={18} height={18} alt='달력 아이콘' />
               </span>
-              <span className='pt-[2px] text-[12px] font-[500] text-gray-78'>{formatDate(card.createdAt)}</span>
+              <span className='pt-[2px] text-[12px] font-[500] text-gray-78 dark:text-dark-10'>
+                {formatDate(card.createdAt)}
+              </span>
             </div>
 
             <div className='md:hidden lg:block'>

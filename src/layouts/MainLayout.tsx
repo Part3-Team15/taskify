@@ -44,7 +44,7 @@ export default function MainLayout({ children }: { children: React.ReactNode }) 
 
       <div className='flex grow flex-col'>
         <Header />
-        <main className='flex grow flex-col bg-gray-fa'>{children}</main>
+        <main className='flex grow flex-col bg-gray-fa transition-colors dark:bg-dark-bg'>{children}</main>
       </div>
     </div>
   );
