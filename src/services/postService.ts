@@ -49,7 +49,8 @@ export const postImage = async (formData: UploadImageForm) => {
 
 // 카드 생성
 export const postCard = async (formData: postCardData) => {
-  return await instance.post(`/cards`, formData);
+  const response = await instance.post(`/cards`, formData);
+  return response.data;
 };
 
 // 카드 이미지 업로드

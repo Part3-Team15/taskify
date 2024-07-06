@@ -1,13 +1,14 @@
 import { useQueryClient } from '@tanstack/react-query';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
-import { useEffect, useState, useRef } from 'react';
+import { useEffect, useState, useRef, useCallback } from 'react';
 
 import ColumnsDropDown from './ColumnsDropDown';
 import MemberProfile from './MemberProfile';
 import MembersDropDown from './MembersDropDown';
 
 import CARROT_DOWN from '@/../public/icons/carrot-down.svg';
+import SPINNER from '@/../public/icons/spinner.svg';
 import ModalActionButton from '@/components/Button/ModalActionButton';
 import ModalCancelButton from '@/components/Button/ModalCancelButton';
 import ImageInput from '@/components/Input/ImageInput';
@@ -19,20 +20,10 @@ import { putCard } from '@/services/putService';
 import { Column } from '@/types/Column.interface';
 import { Member } from '@/types/Member.interface';
 import { EditCardModalProps } from '@/types/Modal.interface';
-import { formatDateTime } from '@/utils/formatDateTime';
+import { PostCardData } from '@/types/post/EditModalPostData.interface';
+import { formatDateTime, revertFormattedDateTime } from '@/utils/formatDateTime';
 
-export interface postCardData {
-  assigneeUserId: number | null;
-  dashboardId: number;
-  columnId: number;
-  title: string;
-  description: string;
-  dueDate: string | null;
-  tags: string[];
-  imageUrl: string | null;
-}
-
-const formInitialState = {
+const formInitialState: PostCardData = {
   assigneeUserId: 0,
   dashboardId: 0,
   columnId: 0,
@@ -43,17 +34,12 @@ const formInitialState = {
   imageUrl: '',
 };
 
-export default function EditCardModal({
-  columnId,
-  isEdit = false,
-  cardId = 0,
-  cardData = formInitialState,
-}: EditCardModalProps) {
+export default function EditCardModal({ column, isEdit = false, card }: EditCardModalProps) {
   const router = useRouter();
   const { id } = router.query;
   const queryClient = useQueryClient();
 
-  const { openNotificationModal, closeModal } = useModal();
+  const { closeModal, openTodoCardModal, openNotificationModal } = useModal();
 
   const [membersIsOpen, setMembersIsOpen] = useState(false);
   const [columnsIsOpen, setColumnsIsOpen] = useState(false);
@@ -61,9 +47,30 @@ export default function EditCardModal({
   const [members, setMembers] = useState<Member[]>([]);
   const [columns, setColumns] = useState<Column[]>([]);
 
-  const [formValues, setFormValues] = useState<postCardData>(cardData);
+  const initializeFormValues = useCallback((): PostCardData => {
+    if (card) {
+      return {
+        assigneeUserId: card.assignee?.id || 0,
+        dashboardId: Number(id),
+        columnId: card.columnId,
+        title: card.title,
+        description: card.description,
+        dueDate: card.dueDate ? revertFormattedDateTime(card.dueDate) : '',
+        tags: card.tags,
+        imageUrl: card.imageUrl || '',
+      };
+    } else {
+      return {
+        ...formInitialState,
+        dashboardId: Number(id),
+        columnId: column ? column.id : 0,
+      };
+    }
+  }, [card, column, id]);
+
+  const [formValues, setFormValues] = useState<PostCardData>(initializeFormValues);
   const [profileImageFile, setProfileImageFile] = useState<File | null>(null);
-  const [initialFormValues] = useState<postCardData>(cardData);
+  const [initialFormValues, setInitialFormValues] = useState<PostCardData>(initializeFormValues);
   const [isFormChanged, setIsFormChanged] = useState(false);
 
   const [titleError, setTitleError] = useState<boolean>(false);
@@ -100,16 +107,14 @@ export default function EditCardModal({
         setColumns(filteredColumns);
       } catch {}
     };
+
     if (id) {
       getMembers();
       getColumns();
-      setFormValues((prevValues) => ({
-        ...prevValues,
-        dashboardId: Number(id),
-        columnId: Number(columnId),
-      }));
+      setFormValues(initializeFormValues());
+      setInitialFormValues(initializeFormValues());
     }
-  }, [id]);
+  }, [id, initializeFormValues]);
 
   const getTitleLength = (title: string) => {
     let length = 0;
@@ -123,7 +128,7 @@ export default function EditCardModal({
     return length;
   };
 
-  const checkFormChanged = (newFormValues: postCardData) => {
+  const checkFormChanged = (newFormValues: PostCardData) => {
     const initialImageUrl = initialFormValues.imageUrl || '';
     const currentImageUrl = profileImageFile ? 'new_image' : newFormValues.imageUrl || '';
     const currentFormValues = { ...newFormValues, imageUrl: currentImageUrl };
@@ -231,7 +236,7 @@ export default function EditCardModal({
     try {
       let imgUrl = formValues.imageUrl;
       if (profileImageFile) {
-        const response = await postImageForCard(columnId, { image: profileImageFile });
+        const response = await postImageForCard(formValues.columnId, { image: profileImageFile });
         imgUrl = response.imageUrl;
       }
 
@@ -241,23 +246,29 @@ export default function EditCardModal({
         imageUrl: imgUrl,
       };
 
-      const filteredFormValues: Partial<postCardData> = {
+      const filteredFormValues: Partial<PostCardData> = {
         ...formValuesToSend,
         assigneeUserId: formValuesToSend.assigneeUserId || (isEdit ? null : undefined),
         imageUrl: formValuesToSend.imageUrl !== '' ? formValuesToSend.imageUrl : isEdit ? null : undefined,
         dueDate: formValuesToSend.dueDate !== '' ? formValuesToSend.dueDate : isEdit ? null : undefined,
       };
 
-      if (isEdit) {
-        await putCard(cardId, filteredFormValues as postCardData);
+      let responseCard;
+      if (isEdit && card) {
+        responseCard = await putCard(card.id, filteredFormValues as PostCardData);
       } else {
-        await postCard(filteredFormValues as postCardData);
+        responseCard = await postCard(filteredFormValues as PostCardData);
+      }
+
+      if (responseCard && isEdit) {
+        const columnToOpen = columns.find((col) => col.id === responseCard.columnId);
+        const cardToOpen = responseCard;
+        openTodoCardModal({ card: cardToOpen, column: columnToOpen as Column });
+      } else {
+        openNotificationModal({ text: '할 일 카드가 생성되었습니다!' });
       }
 
       queryClient.resetQueries({ queryKey: ['columns', id] });
-      openNotificationModal({
-        text: `할 일 카드가 ${isEdit ? '수정 ' : '생성 '}되었습니다!`,
-      });
     } catch (error) {
       console.error('Error submitting form:', error);
     } finally {
@@ -422,7 +433,16 @@ export default function EditCardModal({
           </div>
         </form>
         <div className='flex justify-end gap-[10px] border-t-2 border-gray-d9 pt-[20px] dark:border-dark-200'>
-          <ModalCancelButton type='button' onClick={closeModal}>
+          <ModalCancelButton
+            type='button'
+            onClick={() => {
+              if (isEdit && card) {
+                openTodoCardModal({ card: card, column: column });
+              } else {
+                closeModal();
+              }
+            }}
+          >
             취소
           </ModalCancelButton>
           <ModalActionButton
@@ -435,7 +455,7 @@ export default function EditCardModal({
               titleError
             }
           >
-            {isEdit ? '수정' : '생성'}
+            {loading ? <Image src={SPINNER} alt='로딩 중' /> : <>{isEdit ? '수정' : '생성'}</>}
           </ModalActionButton>
         </div>
       </div>

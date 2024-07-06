@@ -47,5 +47,6 @@ export const putComment = async (commentId: number, formData: { content: string 
 
 // 카드 수정
 export const putCard = async (cardId: number, formData: postCardData) => {
-  return await instance.put(`/cards/${cardId}`, formData);
+  const response = await instance.put(`/cards/${cardId}`, formData);
+  return response.data;
 };
