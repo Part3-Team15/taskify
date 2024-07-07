@@ -16,7 +16,7 @@ import { TodoCardModalProps } from '@/types/Modal.interface';
 import { CommentsResponse, CommentForm } from '@/types/post/CommentForm.interface';
 import formatDate from '@/utils/formatDate';
 
-export default function TodoCardModal({ card, column, onClick }: TodoCardModalProps) {
+export default function TodoCardModal({ card, column, isMember, onClick }: TodoCardModalProps) {
   const { data, refetch } = useFetchData<CommentsResponse>(['comments', card.id], () => getComments(card.id));
   const [newComment, setNewComment] = useState('');
   const [isCommentEmpty, setIsCommentEmpty] = useState(true);
@@ -68,9 +68,11 @@ export default function TodoCardModal({ card, column, onClick }: TodoCardModalPr
           {card.title}
         </div>
         <div className='flex'>
-          <div className='relative'>
-            <EditDropdown card={card} column={column} />
-          </div>
+          {isMember && (
+            <div className='relative'>
+              <EditDropdown card={card} column={column} />
+            </div>
+          )}
           <button onClick={handleModalClose} className='transition-all duration-200 hover:opacity-50'>
             <Image src='/icons/x.svg' alt='X 아이콘' width={32} height={32} className='dark:hidden' />
             <Image src='/icons/x-white.svg' alt='X 아이콘' width={32} height={32} className='hidden dark:block' />
@@ -112,12 +114,13 @@ export default function TodoCardModal({ card, column, onClick }: TodoCardModalPr
                   value={newComment}
                   onChange={(e) => setNewComment(e.target.value)}
                   placeholder='댓글을 입력하세요.'
+                  disabled={!isMember}
                 />
 
                 <button
                   className='btn-violet-light dark:btn-white absolute right-1 h-[28px] w-[60px] rounded-[4px] text-[12px] text-violet md:h-[32px] md:w-[78px] lg:w-[84px] dark:rounded-[4px]'
                   type='submit'
-                  disabled={isCommentEmpty}
+                  disabled={isCommentEmpty || !isMember}
                 >
                   입력
                 </button>

@@ -12,6 +12,7 @@ import MembersSection from './MembersSection';
 import useDeleteData from '@/hooks/useDeleteData';
 import useFetchData from '@/hooks/useFetchData';
 import useModal from '@/hooks/useModal';
+import useRedirectIfNoPermission from '@/hooks/useRedirectIfNoPermission';
 import { deleteDashboard } from '@/services/deleteService';
 import { getDashboard } from '@/services/getService';
 import { RootState } from '@/store/store';
@@ -21,23 +22,22 @@ import { checkFavorite } from '@/utils/favoriteDashboard';
 import { checkPublic } from '@/utils/shareAccount';
 
 export default function DashboardEdit() {
-  const { openConfirmModal, openNotificationModal } = useModal();
+  const redirectIfNoPermission = useRedirectIfNoPermission();
+  const { openConfirmModal } = useModal();
   const queryClient = useQueryClient();
   const router = useRouter();
   const { id } = router.query;
 
+  const { data: dashboard, error } = useFetchData<Dashboard>(['dashboard', id], () => getDashboard(id as string));
   const [isPublic, setIsPublic] = useState(false);
-
   const [isFavorite, setIsFavorite] = useState(false);
   const { user } = useSelector((state: RootState) => state.user);
 
-  const { data: dashboard } = useFetchData<Dashboard>(['dashboard', id], () => getDashboard(id as string));
-  if (dashboard && !dashboard.createdByMe) {
-    openNotificationModal({
-      text: '해당 페이지에 접근 권한이 없습니다.',
-    });
+  const handleSuccess = () => {
+    queryClient.invalidateQueries({ queryKey: ['sideDashboards'] });
     router.replace('/mydashboard');
-  }
+  };
+  const { mutate } = useDeleteData<DeleteDashboardInput>({ mutationFn: deleteDashboard, handleSuccess });
 
   const handlePublicToggle = () => {
     setIsPublic((prevIsPublic) => !prevIsPublic);
@@ -54,12 +54,6 @@ export default function DashboardEdit() {
     setIsFavorite((prevIsFavorite) => !prevIsFavorite);
   };
 
-  const handleSuccess = () => {
-    queryClient.invalidateQueries({ queryKey: ['sideDashboards'] });
-    router.replace('/mydashboard');
-  };
-  const { mutate } = useDeleteData<DeleteDashboardInput>({ mutationFn: deleteDashboard, handleSuccess });
-
   const handleDeleteClick = () => {
     const handleDelete = async () => {
       if (!id) return;
@@ -74,12 +68,25 @@ export default function DashboardEdit() {
 
   useEffect(() => {
     const handleInitialLoad = async () => {
+      try {
+        setIsPublic(await checkPublic(Number(id)));
+      } catch {
+        redirectIfNoPermission(-1);
+      }
       setIsPublic(await checkPublic(Number(id)));
       setIsFavorite(await checkFavorite(Number(user?.id), Number(id)));
     };
 
     handleInitialLoad();
   }, [id]);
+
+  useEffect(() => {
+    if (dashboard) {
+      redirectIfNoPermission(dashboard.userId);
+    } else if (error) {
+      redirectIfNoPermission(-1);
+    }
+  }, [dashboard, error]);
 
   return (
     <div className='h-full px-3 py-4 text-black-33 md:p-5 dark:text-dark-10'>

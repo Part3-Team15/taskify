@@ -103,7 +103,8 @@ export default function Comment({ comment }: CommentProps) {
                       취소
                     </button>
                     <button
-                      className='text-black-33 transition-all duration-100 hover:text-violet hover:underline dark:text-dark-10 dark:hover:text-violet-light-hover'
+                      className='text-black-33 transition-all duration-100 hover:text-violet hover:underline disabled:text-gray-9f dark:text-dark-10 dark:hover:text-violet-light-hover dark:disabled:text-gray-9f'
+                      disabled={editedComment === comment.content}
                       onClick={handleSaveEdit}
                     >
                       저장

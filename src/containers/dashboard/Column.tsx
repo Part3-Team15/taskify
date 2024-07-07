@@ -14,9 +14,10 @@ interface ColumnProps {
   column: ColumnType;
   columns: ColumnType[];
   index: number;
+  isMember: boolean;
 }
 
-function Column({ column, index, columns }: ColumnProps) {
+function Column({ column, columns, isMember }: ColumnProps) {
   const { openModifyColumnModal, openEditCardModal, openTodoCardModal } = useModal();
   const { data: cardsData, isLoading } = useFetchData<{ cards: CardType[] }>(['cards', column.id], () =>
     getCardsList(column.id),
@@ -41,7 +42,8 @@ function Column({ column, index, columns }: ColumnProps) {
 
           {/* Column Edit Button */}
           <button
-            className='transition duration-300 ease-in-out hover:rotate-90'
+            className='transition duration-300 ease-in-out hover:rotate-90 disabled:rotate-0'
+            disabled={!isMember}
             onClick={() => {
               openModifyColumnModal({ columns, columnId: column.id, columnTitle: column.title });
             }}
@@ -53,6 +55,7 @@ function Column({ column, index, columns }: ColumnProps) {
         {/* Add Card Button */}
         <button
           className='btn-violet-light dark:btn-violet-dark mb-[16px] h-[40px] rounded-[6px] border'
+          disabled={!isMember}
           onClick={() => {
             openEditCardModal({ column: column, isEdit: false });
           }}
@@ -63,7 +66,7 @@ function Column({ column, index, columns }: ColumnProps) {
 
         {/* Card List Section */}
         <div className='scrollbar-hide lg:h-[700px] lg:overflow-y-auto'>
-          <Droppable droppableId={`column-${column.id}`} key={`column-${column.id}`}>
+          <Droppable droppableId={`column-${column.id}`} key={`column-${column.id}`} isDropDisabled={!isMember}>
             {(provided) => (
               <div
                 ref={provided.innerRef}
@@ -71,18 +74,18 @@ function Column({ column, index, columns }: ColumnProps) {
                 style={{ minHeight: '100px' }} // 최소 높이
               >
                 {cards.map((card, index) => (
-                  <Draggable key={`card-${card.id}`} draggableId={`card-${card.id}`} index={index}>
+                  <Draggable
+                    key={`card-${card.id}`}
+                    draggableId={`card-${card.id}`}
+                    index={index}
+                    isDragDisabled={!isMember}
+                  >
                     {(provided) => (
                       <div
                         ref={provided.innerRef}
                         {...provided.draggableProps}
                         {...provided.dragHandleProps}
-                        onClick={() => {
-                          openTodoCardModal({
-                            card,
-                            column,
-                          });
-                        }}
+                        onClick={() => openTodoCardModal({ card, column, isMember })}
                       >
                         <Card key={`card-${card.id}`} card={card} />
                       </div>
