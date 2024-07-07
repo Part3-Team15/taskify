@@ -1,4 +1,15 @@
+import mongoose from 'mongoose';
 export interface Dashboard {
+  id: number;
+  title: string;
+  color: string;
+  userId: number;
+  createdAt: string;
+  updatedAt: string;
+  createdByMe: boolean;
+}
+
+export interface FavoriteDashboard extends mongoose.Document {
   id: number;
   title: string;
   color: string;

@@ -2,23 +2,34 @@ import { useQueryClient } from '@tanstack/react-query';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
+import { useSelector } from 'react-redux';
 
 import ActionButton from '@/components/Button/ActionButton';
 import Toggle from '@/components/Toggle';
 import { DASHBOARD_COLOR_OBJ } from '@/constants';
 import useFetchData from '@/hooks/useFetchData';
 import useModal from '@/hooks/useModal';
+import { deleteFavorite } from '@/services/deleteService';
 import { getDashboard } from '@/services/getService';
 import { putDashboardInfo } from '@/services/putService';
-import { DashboardColor, DashboardInfoState, Dashboard } from '@/types/Dashboard.interface';
+import { RootState } from '@/store/store';
+import { DashboardColor, DashboardInfoState, Dashboard, FavoriteDashboard } from '@/types/Dashboard.interface';
+import { checkFavorite, createFavorite, limitCheckFavorite, findUserById } from '@/utils/favoriteDashboard';
 import { addShareAccount, checkPublic, removeShareAccount } from '@/utils/shareAccount';
 
 interface ModifySectionProps {
   isPublic: boolean;
-  onToggleClick: () => void;
+  handlePublicToggle: () => void;
+  isFavorite: boolean;
+  handleFavoriteToggle: () => void;
 }
 
-export default function DashboardModifySection({ isPublic, onToggleClick }: ModifySectionProps) {
+export default function DashboardModifySection({
+  isPublic,
+  handlePublicToggle: onToggleClick,
+  isFavorite,
+  handleFavoriteToggle: handleFavoriteToggle,
+}: ModifySectionProps) {
   const router = useRouter();
   const { id } = router.query;
   const { openNotificationModal } = useModal();
@@ -33,6 +44,7 @@ export default function DashboardModifySection({ isPublic, onToggleClick }: Modi
   const [fixedTitle, setFixedTitle] = useState<string>('');
   const [fixedColor, setFixedColor] = useState<string>('');
   const [isButtonDisabled, setIsButtonDisabled] = useState<boolean>(true);
+  const { user } = useSelector((state: RootState) => state.user);
 
   const getColorString = (colorValue: string): string | undefined => {
     return (Object.keys(DASHBOARD_COLOR_OBJ) as (keyof typeof DASHBOARD_COLOR_OBJ)[]).find(
@@ -58,14 +70,36 @@ export default function DashboardModifySection({ isPublic, onToggleClick }: Modi
       queryClient.invalidateQueries({ queryKey: ['members', id] });
     };
 
+    const handleFavoriteChange = async () => {
+      const initIsFavorite = await checkFavorite(Number(user?.id), Number(id));
+      if (isFavorite === initIsFavorite) return;
+
+      const favoriteUser = await findUserById(Number(user?.id));
+      if (isFavorite) {
+        await createFavorite(favoriteUser, dashboard as FavoriteDashboard);
+      } else {
+        await deleteFavorite(Number(id), favoriteUser);
+      }
+    };
+
     try {
       await putDashboardInfo(Number(id), value);
+      await handleFavoriteChange();
       await handleIsPublicChange();
       openNotificationModal({ text: '대시보드 정보가 수정되었습니다!' });
       queryClient.invalidateQueries({ queryKey: ['dashboard', id] });
       queryClient.invalidateQueries({ queryKey: ['sideDashboards'] });
+      queryClient.invalidateQueries({ queryKey: ['favoritesDashboards'] });
+
+      setIsButtonDisabled(true);
     } catch {
-      openNotificationModal({ text: '대시보드 정보 수정을 실패하였습니다.' });
+      if ((await limitCheckFavorite(Number(user?.id))) && isFavorite) {
+        handleFavoriteToggle();
+        if (isPublic) onToggleClick();
+        openNotificationModal({ text: '즐겨찾기는 최대 3개까지 가능합니다.' });
+      } else {
+        openNotificationModal({ text: '대시보드 정보 수정을 실패하였습니다.' });
+      }
     }
   };
 
@@ -86,14 +120,20 @@ export default function DashboardModifySection({ isPublic, onToggleClick }: Modi
 
   useEffect(() => {
     const handleButtonControl = async () => {
-      const initIsPublic = await checkPublic(Number(id));
+      const [initIsPublic, initIsFavorite] = await Promise.all([
+        checkPublic(Number(id)),
+        checkFavorite(Number(user?.id), Number(id)),
+      ]);
       setIsButtonDisabled(
-        (value.title === fixedTitle && value.color === fixedColor && isPublic === initIsPublic) ||
+        (value.title === fixedTitle &&
+          value.color === fixedColor &&
+          isPublic === initIsPublic &&
+          isFavorite === initIsFavorite) ||
           value.title.trim() === '',
       );
     };
     handleButtonControl();
-  }, [value.title, value.color, fixedTitle, fixedColor, isPublic]);
+  }, [value.title, value.color, fixedTitle, fixedColor, isPublic, isFavorite]);
 
   const handleColorSelect = (color: DashboardColor) => {
     setSelectedColor(color);
@@ -136,6 +176,8 @@ export default function DashboardModifySection({ isPublic, onToggleClick }: Modi
         <div className='align-center gap-2 md:gap-3'>
           <span>공유</span>
           <Toggle isOn={isPublic} onToggleClick={onToggleClick} />
+          <span>즐겨찾기</span>
+          <Toggle isOn={isFavorite} onToggleClick={handleFavoriteToggle} />
         </div>
       </header>
       <main>
