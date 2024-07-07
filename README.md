@@ -313,7 +313,24 @@ Github Flow에 백업용 브랜치를 추가한 형태로, main, develop, featur
 
 ### 대시보드의 카드 드래그 앤 드랍으로 컬럼 이동
 
-- // TODO: 여기서 or 대시보드 페이지에서 설명
+- 대시보드 내 카드 드래그앤드롭을 구현하기 위해, `react-beautiful-dnd` 라이브러리를 사용했습니다.
+- `DragDropContext`로 드래그 앤 드롭 동작을 감지하고, 드래그 시작, 드래그 종료, 드래그 업데이트 등의 이벤트를 통해 상태를 추적했습니다.
+- `onDragEnd` 콜백 함수를 통해 드래그 중 발생하는 상태 변화를 쉽게 처리할 수 있었습니다.
+- 관련: [PR #145](https://github.com/Part3-Team15/taskify/pull/145)
+
+<details>
+<summary>DnD 구현 원리</summary>
+<div markdown="1">
+  <img src="https://velog.velcdn.com/images/wayandway/post/97c289e1-3e66-4e1f-a429-a8ec1ccd900a/image.gif" width=300 />
+
+- `DragDropContext`: 드래그앤드롭 기능을 제공하는 컨텍스트
+- `Droppable`: 드롭 가능한 영역을 정의하며, 각 컬럼을 `Droppable`로 감싸줌
+- `Droppable` 내에서 각 카드에 대해 `Draggable`을 사용해 드래그할 수 있음
+</div>
+</details>    
+
+
+
 
 ### 초대 알림 기능 추가
 
