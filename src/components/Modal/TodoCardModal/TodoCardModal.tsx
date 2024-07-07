@@ -1,7 +1,7 @@
 import { useQueryClient } from '@tanstack/react-query';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
-import { useState } from 'react';
+import { FormEvent, useEffect, useState } from 'react';
 
 import Comment from './Comment';
 import EditDropdown from './EditDropdown';
@@ -19,6 +19,7 @@ import formatDate from '@/utils/formatDate';
 export default function TodoCardModal({ card, column, onClick }: TodoCardModalProps) {
   const { data } = useFetchData<CommentsResponse>(['comments'], () => getComments(card.id));
   const [newComment, setNewComment] = useState('');
+  const [errorMessage, setErrorMessage] = useState('');
   const comments = data?.comments;
   const { closeModal } = useModal();
   const router = useRouter();
@@ -30,7 +31,7 @@ export default function TodoCardModal({ card, column, onClick }: TodoCardModalPr
     closeModal();
   };
 
-  const handleSubmitComment = async (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmitComment = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     const commentData: CommentForm = {
@@ -44,9 +45,13 @@ export default function TodoCardModal({ card, column, onClick }: TodoCardModalPr
       await postComment(commentData);
       queryClient.invalidateQueries({ queryKey: ['comments', card.id] });
       setNewComment('');
+      setErrorMessage(''); // 성공 시 에러 메시지 초기화
     } catch (error) {
-      console.error('댓글 추가 중 에러 발생:', error);
-      // 에러 처리
+      if (error) {
+        setErrorMessage('내용을 작성해주세요.');
+      } else {
+        setErrorMessage('댓글을 작성하는 데 실패했습니다.');
+      }
     }
   };
 
