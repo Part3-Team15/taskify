@@ -3,6 +3,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
+import { useSelector } from 'react-redux';
 
 import DashboardModifySection from './DashboardModifySection';
 import InvitedMembersSection from './InvitedMembersSection';
@@ -13,9 +14,10 @@ import useFetchData from '@/hooks/useFetchData';
 import useModal from '@/hooks/useModal';
 import { deleteDashboard } from '@/services/deleteService';
 import { getDashboard } from '@/services/getService';
+import { RootState } from '@/store/store';
 import { Dashboard } from '@/types/Dashboard.interface';
 import { DeleteDashboardInput } from '@/types/delete/DeleteDashboardInput.interface';
-import { checkFavorite } from '@/utils/favoriteDashboard';
+import { FavoriteCheck } from '@/utils/favoriteDashboard';
 import { checkPublic } from '@/utils/shareAccount';
 
 export default function DashboardEdit() {
@@ -27,6 +29,7 @@ export default function DashboardEdit() {
   const [isPublic, setIsPublic] = useState(false);
 
   const [isFavorite, setIsFavorite] = useState(false);
+  const { user } = useSelector((state: RootState) => state.user);
 
   const { data: dashboard } = useFetchData<Dashboard>(['dashboard', id], () => getDashboard(id as string));
   if (dashboard && !dashboard.createdByMe) {
@@ -72,7 +75,7 @@ export default function DashboardEdit() {
   useEffect(() => {
     const handleInitialLoad = async () => {
       setIsPublic(await checkPublic(Number(id)));
-      setIsFavorite(await checkFavorite(Number(id)));
+      setIsFavorite(await FavoriteCheck(Number(user?.id), Number(id)));
     };
 
     handleInitialLoad();

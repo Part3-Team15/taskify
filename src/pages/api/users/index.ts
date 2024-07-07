@@ -1,7 +1,7 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 
 import dbConnect from '@/db/dbConnect';
-import Taskify from '@/db/models/taskify';
+import User from '@/models/User';
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   await dbConnect();
@@ -9,8 +9,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   switch (req.method) {
     case 'GET':
       try {
-        const getFavoriteTask = await Taskify.find();
-        res.status(200).json(getFavoriteTask);
+        const getUser = await User.find();
+        res.status(200).json(getUser);
       } catch (error) {
         res.status(500).json({ error: 'Failed to fetch tasks' });
       }
@@ -18,8 +18,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
     case 'POST':
       try {
-        const favoriteTask = await Taskify.create(req.body);
-        res.status(201).json(favoriteTask);
+        const createUser = await User.create(req.body);
+        res.status(201).json(createUser);
       } catch (error) {
         res.status(400).json({ error: 'Failed to create task' });
       }

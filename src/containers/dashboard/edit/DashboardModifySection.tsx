@@ -2,18 +2,20 @@ import { useQueryClient } from '@tanstack/react-query';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
-
-import { on } from 'events';
+import { useSelector } from 'react-redux';
 
 import ActionButton from '@/components/Button/ActionButton';
 import Toggle from '@/components/Toggle';
 import { DASHBOARD_COLOR_OBJ } from '@/constants';
 import useFetchData from '@/hooks/useFetchData';
 import useModal from '@/hooks/useModal';
-import { getDashboard } from '@/services/getService';
+import { deleteFavorite } from '@/services/deleteService';
+import { getDashboard, getFavoriteUsers } from '@/services/getService';
+import { postFavorite } from '@/services/postService';
 import { putDashboardInfo } from '@/services/putService';
+import { RootState } from '@/store/store';
 import { DashboardColor, DashboardInfoState, Dashboard, FavoriteDashboard } from '@/types/Dashboard.interface';
-import { addFavorite, checkFavorite, maxFavorite, removeFavorite } from '@/utils/favoriteDashboard';
+import { FavoriteCheck, FavoriteLimitCheck, findUserById, UserCheck } from '@/utils/favoriteDashboard';
 import { addShareAccount, checkPublic, removeShareAccount } from '@/utils/shareAccount';
 
 interface ModifySectionProps {
@@ -43,6 +45,7 @@ export default function DashboardModifySection({
   const [fixedTitle, setFixedTitle] = useState<string>('');
   const [fixedColor, setFixedColor] = useState<string>('');
   const [isButtonDisabled, setIsButtonDisabled] = useState<boolean>(true);
+  const { user } = useSelector((state: RootState) => state.user);
 
   const getColorString = (colorValue: string): string | undefined => {
     return (Object.keys(DASHBOARD_COLOR_OBJ) as (keyof typeof DASHBOARD_COLOR_OBJ)[]).find(
@@ -69,13 +72,14 @@ export default function DashboardModifySection({
     };
 
     const handleFavoriteChange = async () => {
-      const initIsFavorite = await checkFavorite(Number(id));
+      const initIsFavorite = await FavoriteCheck(Number(user?.id), Number(id));
       if (isFavorite === initIsFavorite) return;
 
+      const favoriteUser = await findUserById(Number(user?.id));
       if (isFavorite) {
-        await addFavorite(dashboard as FavoriteDashboard);
+        await postFavorite(favoriteUser, dashboard as FavoriteDashboard);
       } else {
-        await removeFavorite(Number(id));
+        await deleteFavorite(Number(id), Number(user?.id));
       }
     };
 
@@ -87,7 +91,7 @@ export default function DashboardModifySection({
       queryClient.invalidateQueries({ queryKey: ['dashboard', id] });
       queryClient.invalidateQueries({ queryKey: ['sideDashboards'] });
     } catch {
-      if ((await maxFavorite()) && isFavorite) {
+      if ((await FavoriteLimitCheck(Number(user?.id))) && isFavorite) {
         handleToggleFavorite();
         if (isPublic) onToggleClick();
         openNotificationModal({ text: '즐겨찾기는 최대 3개까지 가능합니다.' });
@@ -114,7 +118,10 @@ export default function DashboardModifySection({
 
   useEffect(() => {
     const handleButtonControl = async () => {
-      const [initIsPublic, initIsFavorite] = await Promise.all([checkPublic(Number(id)), checkFavorite(Number(id))]);
+      const [initIsPublic, initIsFavorite] = await Promise.all([
+        checkPublic(Number(id)),
+        FavoriteCheck(Number(user?.id), Number(id)),
+      ]);
       setIsButtonDisabled(
         (value.title === fixedTitle &&
           value.color === fixedColor &&

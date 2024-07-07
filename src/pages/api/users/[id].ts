@@ -1,7 +1,7 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 
 import dbConnect from '@/db/dbConnect';
-import Taskify from '@/db/models/taskify';
+import User from '@/models/User';
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   await dbConnect();
@@ -14,9 +14,9 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
           return res.status(400).json({ error: 'Task ID is required' });
         }
 
-        const task = await Taskify.findByIdAndDelete(id);
+        const user = await User.findByIdAndDelete(id);
 
-        if (!task) {
+        if (!user) {
           return res.status(404).json({ error: 'Task not found' });
         }
 

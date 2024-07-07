@@ -36,11 +36,31 @@ export const deleteCard = async (cardId: number) => {
   return await instance.delete(`/cards/${cardId}`);
 };
 
-export const deleteFavorite = async (favoriteId: string) => {
+// export const deleteFavorite = async (favoriteId: string) => {
+//   try {
+//     await axios.delete(`/api/task/${favoriteId}`);
+//   } catch (error) {
+//     console.error('Failed to delete favorite dashboards:');
+//     throw error;
+//   }
+// };
+
+// 사용자 삭제하기
+export const deleteFavoriteUser = async (userId: number) => {
   try {
-    await axios.delete(`/api/task/${favoriteId}`);
+    await axios.delete(`/api/users/${userId}`);
   } catch (error) {
-    console.error('Failed to delete favorite dashboards:');
-    throw error;
+    throw new Error('Failed to delete user');
+  }
+};
+
+// 즐겨찾기 항목 삭제하기
+export const deleteFavorite = async (favoriteId: number, userId: number) => {
+  try {
+    await axios.delete(`/api/favorites/${favoriteId}`, {
+      data: { userId },
+    });
+  } catch (error) {
+    throw new Error('Failed to delete favorite');
   }
 };

@@ -70,13 +70,14 @@ export const getComments = async (cardId: number) => {
   return await instance.get(`/comments?size=10&cardId=${cardId}`);
 };
 
-export const getFavorite = async () => {
-  try {
-    const response = await axios.get('/api/task');
-    const data = response.data;
-    return data;
-  } catch (error) {
-    console.error('Failed to fetch favorite dashboards:');
-    throw error;
-  }
+// 모든 사용자 목록 조회
+export const getFavoriteUsers = async () => {
+  const response = await axios.get(`/api/users/`);
+  return response.data;
+};
+
+// 특정 사용자 ID의 즐겨찾기 항목 가져오기
+export const getFavorites = async (id: string) => {
+  const response = await axios.get(`/api/favorites/${id}/`);
+  return response.data;
 };

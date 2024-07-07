@@ -12,9 +12,11 @@ import DashboardItem from './DashboardItem';
 
 import useFetchData from '@/hooks/useFetchData';
 import useModal from '@/hooks/useModal';
-import { getDashboardsList, getFavorite } from '@/services/getService';
+import { getDashboardsList, getFavorites, getFavoriteUsers } from '@/services/getService';
+import { postFavoriteUser } from '@/services/postService';
 import { RootState } from '@/store/store';
 import { DashboardsResponse, FavoriteDashboard } from '@/types/Dashboard.interface';
+import { fetchFavorites, findUserById, UserCheck } from '@/utils/favoriteDashboard';
 
 export default function Sidebar() {
   const { user } = useSelector((state: RootState) => state.user);
@@ -28,6 +30,7 @@ export default function Sidebar() {
   const activePath = router.pathname;
 
   const [favoriteList, setFavoriteList] = useState<FavoriteDashboard[]>([]);
+  const [userIdForFavorites, setUserIdForFavorites] = useState<string>('');
 
   const { openNewDashboardModal } = useModal();
 
@@ -47,13 +50,41 @@ export default function Sidebar() {
     }
   };
 
+  const handleCheckUser = async () => {
+    try {
+      const isUserExists = await UserCheck(Number(user?.id));
+      if (!isUserExists) {
+        const createdUser = await postFavoriteUser({ userId: Number(user?.id) });
+        setUserIdForFavorites(createdUser._id); // 생성된 유저의 _id 저장
+      } else {
+        const userId = await findUserById(Number(user?.id));
+        setUserIdForFavorites(userId); // 기존 유저의 _id 저장
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const loadFavorites = async (userId: string) => {
+    try {
+      const favorites = await fetchFavorites(userId);
+      setFavoriteList(favorites || []);
+    } catch (error) {
+      console.error('Failed to fetch favorites:', error);
+    }
+  };
+
   useEffect(() => {
-    const handleFavorite = async () => {
-      const list = await getFavorite();
-      setFavoriteList(list);
-    };
-    handleFavorite();
-  });
+    if (user?.id) {
+      handleCheckUser();
+    }
+  }, [user?.id]);
+
+  useEffect(() => {
+    if (userIdForFavorites) {
+      loadFavorites(userIdForFavorites);
+    }
+  }, [userIdForFavorites]);
 
   return (
     <aside className='flex min-w-16 max-w-[300px] flex-col border-r border-gray-d9 bg-white px-3 py-5 transition-all md:min-w-40 lg:min-w-72 dark:border-dark-200 dark:bg-dark'>
@@ -104,16 +135,18 @@ export default function Sidebar() {
         <div className='m-2 border-b border-gray-d9 dark:border-dark-200' />
 
         {favoriteList.length > 0 && (
-          <div className='flex flex-col gap-2'>
-            <p className='px-3 text-xs font-bold text-gray-78 dark:text-dark-10'>즐겨찾기</p>
-            <ul className='flex flex-col gap-2'>
-              {favoriteList.map((favorite) => (
-                <DashboardItem key={favorite.id} dashboard={favorite} nowDashboard={Number(id)} />
-              ))}
-            </ul>
-          </div>
+          <>
+            <div className='flex flex-col gap-2'>
+              <p className='px-3 text-xs font-bold text-gray-78 dark:text-dark-10'>즐겨찾기</p>
+              <ul className='flex flex-col gap-2'>
+                {favoriteList.map((favorite) => (
+                  <DashboardItem key={favorite.id} dashboard={favorite} nowDashboard={Number(id)} />
+                ))}
+              </ul>
+            </div>
+            <div className='mx-2 mb-2 border-b border-gray-d9 dark:border-dark-200' />
+          </>
         )}
-        <div className='mx-2 mb-2 border-b border-gray-d9 dark:border-dark-200' />
 
         {isLoading ? (
           <ul className='flex h-min animate-pulse flex-col gap-2'>

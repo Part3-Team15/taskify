@@ -69,13 +69,15 @@ export const postComment = async (formData: CommentForm) => {
   return await instance.post(`/comments`, formData);
 };
 
-export const postFavorite = async (data: FavoriteDashboard) => {
-  try {
-    const res = await axios.post('/api/task', data);
+// 사용자 생성하기
+export const postFavoriteUser = async (userData: { userId: number }) => {
+  const response = await axios.post(`/api/users`, userData);
+  return response.data;
+};
 
-    console.log('즐겨찾기 추가 완료: ', res.data);
-  } catch (error) {
-    console.error('Failed to fetch favorite dashboards:');
-    throw error;
-  }
+// 즐겨찾기 항목 생성하기
+export const postFavorite = async (id: string, favoriteData: FavoriteDashboard) => {
+  console.log('favoriteData', favoriteData);
+  const response = await axios.post(`/api/favorites/${id}`, favoriteData);
+  return response.data;
 };
