@@ -39,7 +39,7 @@ export default function DashboardEdit() {
     router.replace('/mydashboard');
   }
 
-  const handleToggle = () => {
+  const handlePublicToggle = () => {
     setIsPublic((prevIsPublic) => !prevIsPublic);
   };
 
@@ -96,9 +96,9 @@ export default function DashboardEdit() {
       <div className='flex flex-col gap-4'>
         <DashboardModifySection
           isPublic={isPublic}
-          onToggleClick={handleToggle}
+          handlePublicToggle={handlePublicToggle}
           isFavorite={isFavorite}
-          handleToggleFavorite={handleToggleFavorite}
+          handleFavoriteToggle={handleToggleFavorite}
         />
         <MembersSection onDeleteMember={handleMemberDelete} />
         <InvitedMembersSection />

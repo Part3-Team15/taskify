@@ -19,16 +19,16 @@ import { addShareAccount, checkPublic, removeShareAccount } from '@/utils/shareA
 
 interface ModifySectionProps {
   isPublic: boolean;
-  onToggleClick: () => void;
+  handlePublicToggle: () => void;
   isFavorite: boolean;
-  handleToggleFavorite: () => void;
+  handleFavoriteToggle: () => void;
 }
 
 export default function DashboardModifySection({
   isPublic,
-  onToggleClick,
+  handlePublicToggle: onToggleClick,
   isFavorite,
-  handleToggleFavorite,
+  handleFavoriteToggle: handleFavoriteToggle,
 }: ModifySectionProps) {
   const router = useRouter();
   const { id } = router.query;
@@ -89,9 +89,12 @@ export default function DashboardModifySection({
       openNotificationModal({ text: '대시보드 정보가 수정되었습니다!' });
       queryClient.invalidateQueries({ queryKey: ['dashboard', id] });
       queryClient.invalidateQueries({ queryKey: ['sideDashboards'] });
+      queryClient.invalidateQueries({ queryKey: ['favoritesDashboards'] });
+
+      setIsButtonDisabled(true);
     } catch {
       if ((await limitCheckFavorite(Number(user?.id))) && isFavorite) {
-        handleToggleFavorite();
+        handleFavoriteToggle();
         if (isPublic) onToggleClick();
         openNotificationModal({ text: '즐겨찾기는 최대 3개까지 가능합니다.' });
       } else {
@@ -174,7 +177,7 @@ export default function DashboardModifySection({
           <span>공유</span>
           <Toggle isOn={isPublic} onToggleClick={onToggleClick} />
           <span>즐겨찾기</span>
-          <Toggle isOn={isFavorite} onToggleClick={handleToggleFavorite} />
+          <Toggle isOn={isFavorite} onToggleClick={handleFavoriteToggle} />
         </div>
       </header>
       <main>

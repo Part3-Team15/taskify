@@ -16,7 +16,6 @@ import { getDashboardsList, getFavorites, getFavoriteUsers } from '@/services/ge
 import { postFavoriteUser } from '@/services/postService';
 import { RootState } from '@/store/store';
 import { DashboardsResponse, FavoriteDashboard } from '@/types/Dashboard.interface';
-import { fetchFavorites } from '@/utils/favoriteDashboard';
 
 export default function Sidebar() {
   const { user } = useSelector((state: RootState) => state.user);
@@ -29,8 +28,14 @@ export default function Sidebar() {
   const totalPage = data ? Math.max(1, Math.ceil(data.totalCount / 10)) : 1;
   const activePath = router.pathname;
 
-  const [favoriteList, setFavoriteList] = useState<FavoriteDashboard[]>([]);
   const [userIdForFavorites, setUserIdForFavorites] = useState<string | null>(null);
+
+  const { data: favoriteList } = useFetchData<FavoriteDashboard[]>(
+    ['favoritesDashboards'],
+    () => getFavorites(userIdForFavorites || ''),
+    false,
+    !!userIdForFavorites,
+  );
 
   const { openNewDashboardModal } = useModal();
 
@@ -57,13 +62,7 @@ export default function Sidebar() {
         await postFavoriteUser({ userId: Number(user?.id) });
       } else {
         if (res.some((favoriteUser: { userId: number }) => favoriteUser.userId === user?.id)) {
-          const favoriteData = await getFavorites(
-            res.find((favoriteUser: { userId: number }) => favoriteUser.userId === user?.id)._id,
-          );
-          setUserIdForFavorites(res.find((favoriteUser: { userId: number }) => favoriteUser.userId === user?.id)._id);
-
-          if (!favoriteData) return;
-          setFavoriteList(favoriteData);
+          setUserIdForFavorites(res.find((favoriteUser: { userId: number }) => favoriteUser.userId === user?.id)?._id);
         } else {
           await postFavoriteUser({ userId: Number(user?.id) });
         }
@@ -73,26 +72,11 @@ export default function Sidebar() {
     }
   };
 
-  const loadFavorites = async (userId: string) => {
-    try {
-      const favorites = await fetchFavorites(userId);
-      setFavoriteList(favorites || []);
-    } catch (error) {
-      console.error('Failed to fetch favorites:', error);
-    }
-  };
-
   useEffect(() => {
     if (user?.id) {
       handleCheckUser();
     }
   }, [user?.id]);
-
-  useEffect(() => {
-    if (userIdForFavorites) {
-      loadFavorites(userIdForFavorites);
-    }
-  }, [userIdForFavorites]);
 
   return (
     <aside className='flex min-w-16 max-w-[300px] flex-col border-r border-gray-d9 bg-white px-3 py-5 transition-all md:min-w-40 lg:min-w-72 dark:border-dark-200 dark:bg-dark'>
@@ -142,7 +126,7 @@ export default function Sidebar() {
 
         <div className='m-2 border-b border-gray-d9 dark:border-dark-200' />
 
-        {favoriteList.length > 0 && (
+        {favoriteList && favoriteList.length > 0 && (
           <>
             <div className='flex flex-col gap-2'>
               <p className='px-3 text-xs font-bold text-gray-78 dark:text-dark-10'>즐겨찾기</p>

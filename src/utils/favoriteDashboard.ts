@@ -42,23 +42,13 @@ export const checkFavorite = async (userId: number, favoriteId: number) => {
   const id = await findUserById(userId);
 
   try {
-    const favorites = await getFavorites(id);
+    const favorites = (await getFavorites(id)).data;
     if (!favorites) return false;
 
     return favorites.some((favorite: { id: number }) => favorite.id === favoriteId);
   } catch (error) {
     console.error('Failed to check favorite:', error);
     return false;
-  }
-};
-
-export const fetchFavorites = async (id: string) => {
-  try {
-    const response = await getFavorites(id);
-    return response || [];
-  } catch (error) {
-    console.error('Failed to fetch favorites:', error);
-    return [];
   }
 };
 
@@ -74,7 +64,7 @@ export const limitCheckFavorite = async (userId: number) => {
   const id = await findUserById(userId);
 
   try {
-    const favorites = await getFavorites(id);
+    const favorites = (await getFavorites(id)).data;
 
     if (!favorites) return false;
 

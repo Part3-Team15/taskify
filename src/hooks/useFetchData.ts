@@ -4,6 +4,7 @@ const useFetchData = <T>(
   queryKey: QueryKey,
   getService: () => Promise<{ data: T }>,
   refetchInterval: false | number = false,
+  enabled: boolean = true,
 ): UseQueryResult<T, Error> => {
   return useQuery<T, Error>({
     queryKey: queryKey,
@@ -18,6 +19,7 @@ const useFetchData = <T>(
     },
     retry: 1,
     refetchInterval: refetchInterval,
+    enabled: enabled,
   });
 };
 

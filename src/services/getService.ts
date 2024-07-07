@@ -76,6 +76,5 @@ export const getFavoriteUsers = async () => {
 
 // 특정 사용자 ID의 즐겨찾기 항목 가져오기
 export const getFavorites = async (id: string) => {
-  const response = await axios.get(`/api/favorites/${id}/`);
-  return response.data;
+  return await axios.get(`/api/favorites/${id}/`);
 };
