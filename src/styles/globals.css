@@ -8,6 +8,11 @@
   }
 }
 
+.font-nanumgothic {
+  font-family: 'Nanum Gothic', sans-serif;
+  font-weight: 700;
+}
+
 @layer components {
   .btn-violet {
     @apply align-center rounded-[8px] bg-violet text-white transition-all hover:bg-violet-hover active:bg-violet-active disabled:bg-violet-disabled dark:bg-dark-purple dark:text-white dark:hover:bg-dark-purple-hover dark:active:bg-dark-purple-hover/50 dark:disabled:bg-dark-purple/50;
