@@ -26,11 +26,11 @@ export default function TodoCardModal({ card, column, onClick }: TodoCardModalPr
   const { id: dashboardId } = router.query;
   const queryClient = useQueryClient();
 
-  const handleModalClose = () => {
-    useEffect(() => {
-      refetch();
-    }, [refetch]);
+  useEffect(() => {
+    refetch();
+  }, [refetch]);
 
+  const handleModalClose = () => {
     if (onClick) onClick();
     closeModal();
   };
