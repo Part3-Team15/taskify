@@ -18,7 +18,7 @@ function Column({ column, index, cards, columns }: ColumnProps) {
   const { openModifyColumnModal, openEditCardModal, openTodoCardModal } = useModal();
 
   return (
-    <div className='block lg:flex'>
+    <div className='block h-full lg:flex'>
       <div className='flex flex-col bg-gray-fa p-5 transition-colors lg:w-[354px] dark:bg-dark-bg'>
         {/* Column Header */}
         <div className='mb-[6px] flex cursor-default items-center justify-between'>
@@ -52,7 +52,7 @@ function Column({ column, index, cards, columns }: ColumnProps) {
         </button>
 
         {/* Card List Section */}
-        <div className='scrollbar-hide lg:h-[700px] lg:overflow-y-auto'>
+        <div className='scrollbar-hide lg:overflow-y-auto'>
           <Droppable droppableId={`column-${column.id}`} key={`column-${column.id}`}>
             {(provided) => (
               <div ref={provided.innerRef} {...provided.droppableProps}>

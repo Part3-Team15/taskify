@@ -88,7 +88,7 @@ export default function ColumnsSection({ id }: ColumnsSectionProps) {
 
   return (
     <DragDropContext onDragEnd={onDragEnd}>
-      <section className='block h-full overflow-x-auto lg:flex lg:w-[calc(100dvw-300px)]'>
+      <section className='block h-full overflow-x-auto lg:flex lg:h-[calc(100dvh-70px)] lg:w-[calc(100dvw-300px)]'>
         <ul className='block lg:flex'>
           {columnList &&
             columnList.map((column, index) => (
