@@ -1,4 +1,6 @@
 import { getFavorites, getFavoriteUsers } from '@/services/getService';
+import { postFavorite } from '@/services/postService';
+import { FavoriteDashboard } from '@/types/Dashboard.interface';
 
 export const UserCheck = async (userId: number) => {
   const data = await getFavoriteUsers();
@@ -48,6 +50,14 @@ export const fetchFavorites = async (id: string) => {
   }
 };
 
+export const FavoriteCreate = async (id: string, favoriteData: FavoriteDashboard) => {
+  if (await FavoriteLimitCheck(favoriteData.userId)) {
+    throw new Error('즐겨찾기는 최대 3개까지 가능합니다.');
+  }
+
+  await postFavorite(id, favoriteData);
+};
+
 export const FavoriteLimitCheck = async (userId: number) => {
   const id = await findUserById(userId);
 
@@ -56,8 +66,8 @@ export const FavoriteLimitCheck = async (userId: number) => {
   if (!data) return false;
 
   if (data.length >= 3) {
-    return false;
-  } else {
     return true;
+  } else {
+    return false;
   }
 };

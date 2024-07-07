@@ -15,7 +15,7 @@ import { postFavorite } from '@/services/postService';
 import { putDashboardInfo } from '@/services/putService';
 import { RootState } from '@/store/store';
 import { DashboardColor, DashboardInfoState, Dashboard, FavoriteDashboard } from '@/types/Dashboard.interface';
-import { FavoriteCheck, FavoriteLimitCheck, findUserById, UserCheck } from '@/utils/favoriteDashboard';
+import { FavoriteCheck, FavoriteCreate, FavoriteLimitCheck, findUserById, UserCheck } from '@/utils/favoriteDashboard';
 import { addShareAccount, checkPublic, removeShareAccount } from '@/utils/shareAccount';
 
 interface ModifySectionProps {
@@ -77,7 +77,7 @@ export default function DashboardModifySection({
 
       const favoriteUser = await findUserById(Number(user?.id));
       if (isFavorite) {
-        await postFavorite(favoriteUser, dashboard as FavoriteDashboard);
+        await FavoriteCreate(favoriteUser, dashboard as FavoriteDashboard);
       } else {
         await deleteFavorite(Number(id), favoriteUser);
       }
