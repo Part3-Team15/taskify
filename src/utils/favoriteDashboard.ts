@@ -3,25 +3,37 @@ import { postFavorite } from '@/services/postService';
 import { FavoriteDashboard } from '@/types/Dashboard.interface';
 
 export const UserCheck = async (userId: number) => {
-  const data = await getFavoriteUsers();
+  try {
+    if (!userId) return false;
 
-  if (!data) return false;
+    const data = await getFavoriteUsers();
 
-  return data.some((user: { userId: number }) => user.userId === userId);
+    if (!data) return false;
+
+    return data.some((user: { userId: number }) => user.userId === userId);
+  } catch (error) {
+    console.error('Failed to check user:', error);
+    return false;
+  }
 };
 
 export const findUserById = async (userId: number) => {
-  if (!userId) return false;
+  try {
+    if (!userId) return;
 
-  const data = await getFavoriteUsers();
+    const data = await getFavoriteUsers();
 
-  if (!data) return false;
+    if (!data) return;
 
-  const selectedUser = data.find((user: { userId: number }) => user.userId === userId);
+    const selectedUser = data.find((user: { userId: number }) => user.userId === userId);
 
-  if (!selectedUser) return false;
+    if (!selectedUser) return;
 
-  return selectedUser._id;
+    return selectedUser._id;
+  } catch (error) {
+    console.error('Failed to find user:', error);
+    return false;
+  }
 };
 
 export const checkFavorite = async (userId: number, favoriteId: number) => {
@@ -46,6 +58,7 @@ export const fetchFavorites = async (id: string) => {
     return response || [];
   } catch (error) {
     console.error('Failed to fetch favorites:', error);
+    return [];
   }
 };
 

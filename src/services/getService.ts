@@ -2,8 +2,6 @@ import axios from 'axios';
 
 import instance from './axios';
 
-import { FavoriteDashboard } from '@/types/Dashboard.interface';
-
 // 컬럼 목록 조회
 export const getColumnsList = async (dashboardId: number) => {
   return await instance.get(`/columns?dashboardId=${dashboardId}`);
