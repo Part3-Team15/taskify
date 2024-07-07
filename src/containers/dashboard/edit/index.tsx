@@ -50,7 +50,7 @@ export default function DashboardEdit() {
   };
 
   // 즐겨찾기 토글
-  const handleToggleFavorite = () => {
+  const handleFavoriteToggle = () => {
     setIsFavorite((prevIsFavorite) => !prevIsFavorite);
   };
 
@@ -98,7 +98,7 @@ export default function DashboardEdit() {
           isPublic={isPublic}
           handlePublicToggle={handlePublicToggle}
           isFavorite={isFavorite}
-          handleFavoriteToggle={handleToggleFavorite}
+          handleFavoriteToggle={handleFavoriteToggle}
         />
         <MembersSection onDeleteMember={handleMemberDelete} />
         <InvitedMembersSection />
