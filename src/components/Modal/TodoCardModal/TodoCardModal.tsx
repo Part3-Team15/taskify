@@ -19,7 +19,7 @@ import formatDate from '@/utils/formatDate';
 export default function TodoCardModal({ card, column, onClick }: TodoCardModalProps) {
   const { data, refetch } = useFetchData<CommentsResponse>(['comments', card.id], () => getComments(card.id));
   const [newComment, setNewComment] = useState('');
-  const [errorMessage, setErrorMessage] = useState('');
+  const [isCommentEmpty, setIsCommentEmpty] = useState(true);
   const comments = data?.comments;
   const { closeModal } = useModal();
   const router = useRouter();
@@ -29,6 +29,10 @@ export default function TodoCardModal({ card, column, onClick }: TodoCardModalPr
   useEffect(() => {
     refetch();
   }, [refetch]);
+
+  useEffect(() => {
+    setIsCommentEmpty(newComment.trim().length === 0);
+  }, [newComment]);
 
   const handleModalClose = () => {
     if (onClick) onClick();
@@ -49,13 +53,10 @@ export default function TodoCardModal({ card, column, onClick }: TodoCardModalPr
       await postComment(commentData);
       queryClient.invalidateQueries({ queryKey: ['comments', card.id] });
       setNewComment('');
-      setErrorMessage(''); // 성공 시 에러 메시지 초기화
+      setIsCommentEmpty(true); // 성공 시 에러 메시지 초기화
     } catch (error) {
-      if (error) {
-        setErrorMessage('내용을 작성해주세요.');
-      } else {
-        setErrorMessage('댓글을 작성하는 데 실패했습니다.');
-      }
+      setIsCommentEmpty(true);
+      console.error(error);
     }
   };
 
@@ -112,13 +113,11 @@ export default function TodoCardModal({ card, column, onClick }: TodoCardModalPr
                   onChange={(e) => setNewComment(e.target.value)}
                   placeholder='댓글을 입력하세요.'
                 />
-                <span className='absolute right-20 block pt-1 text-[12px] text-red hover:cursor-default md:right-24'>
-                  {errorMessage}
-                </span>
 
                 <button
                   className='btn-violet-light dark:btn-white absolute right-1 h-[28px] w-[60px] rounded-[4px] text-[12px] text-violet md:h-[32px] md:w-[78px] lg:w-[84px] dark:rounded-[4px]'
                   type='submit'
+                  disabled={isCommentEmpty}
                 >
                   입력
                 </button>
