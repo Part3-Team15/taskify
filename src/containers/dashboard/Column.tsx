@@ -2,6 +2,7 @@ import Image from 'next/image';
 import { Draggable, Droppable } from 'react-beautiful-dnd';
 
 import Card from './Card';
+import ColumnSkeleton from './ColumnSkeleton';
 
 import useFetchData from '@/hooks/useFetchData';
 import useModal from '@/hooks/useModal';
@@ -23,7 +24,9 @@ function Column({ column, index, columns }: ColumnProps) {
 
   const cards = cardsData?.cards || [];
 
-  return (
+  return isLoading ? (
+    <ColumnSkeleton />
+  ) : (
     <div className='block lg:flex'>
       <div className='flex flex-col bg-gray-fa p-5 transition-colors lg:w-[354px] dark:bg-dark-bg'>
         {/* Column Header */}
@@ -35,6 +38,7 @@ function Column({ column, index, columns }: ColumnProps) {
               {cards.length}
             </span>
           </div>
+
           {/* Column Edit Button */}
           <button
             className='transition duration-300 ease-in-out hover:rotate-90'
@@ -61,7 +65,11 @@ function Column({ column, index, columns }: ColumnProps) {
         <div className='scrollbar-hide lg:h-[700px] lg:overflow-y-auto'>
           <Droppable droppableId={`column-${column.id}`} key={`column-${column.id}`}>
             {(provided) => (
-              <div ref={provided.innerRef} {...provided.droppableProps}>
+              <div
+                ref={provided.innerRef}
+                {...provided.droppableProps}
+                style={{ minHeight: '100px' }} // 최소 높이
+              >
                 {cards.map((card, index) => (
                   <Draggable key={`card-${card.id}`} draggableId={`card-${card.id}`} index={index}>
                     {(provided) => (
