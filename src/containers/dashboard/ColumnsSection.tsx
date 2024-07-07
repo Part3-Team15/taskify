@@ -103,7 +103,7 @@ export default function ColumnsSection({ dashboardId }: ColumnsSectionProps) {
   ) : (
     <DragDropContext onDragEnd={onDragEnd}>
       <section
-        className={`block h-full overflow-x-auto lg:flex ${isPublic && !user ? 'lg:w-screen' : 'lg:w-[calc(100dvw-300px)]'}`}
+        className={`block h-full overflow-x-auto lg:flex lg:h-[calc(100dvh-70px)] ${isPublic && !user ? 'lg:w-screen' : 'lg:w-[calc(100dvw-300px)]'}`}
       >
         <ul className='block lg:flex'>
           {columnList.map((column, index) => (
