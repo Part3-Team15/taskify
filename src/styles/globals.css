@@ -63,7 +63,7 @@
   }
 
   .modal {
-    @apply rounded-[8px] bg-white px-5 py-7 text-base text-black-33 md:px-7 md:text-lg dark:bg-dark-bg dark:text-dark-10;
+    @apply dark:bg-dark-450 rounded-[8px] bg-white px-5 py-7 text-base text-black-33 md:px-7 md:text-lg dark:text-dark-10;
   }
 
   .modal-basic {
