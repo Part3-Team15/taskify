@@ -28,7 +28,11 @@ export default function TodoCardModal({ card, column, onClick }: TodoCardModalPr
 
   useEffect(() => {
     refetch();
-  }, [refetch]);
+
+    return () => {
+      queryClient.cancelQueries({ queryKey: ['comments', card.id] });
+    };
+  }, [refetch, queryClient, card.id]);
 
   useEffect(() => {
     setIsCommentEmpty(newComment.trim().length === 0);
