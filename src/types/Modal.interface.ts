@@ -39,6 +39,7 @@ export interface EditCardModalProps extends ModalProps {
 export interface TodoCardModalProps extends ModalProps {
   card: Card;
   column: Column;
+  isMember: boolean;
   onClick?: () => void;
 }
 

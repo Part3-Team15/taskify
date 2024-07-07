@@ -8,7 +8,7 @@ import ModifyColumnModal from './ModifyColumnModal';
 import NewColumnModal from './NewColumnModal';
 import NewDashboardModal from './NewDashboardModal';
 import NotificationModal from './NotificationModal';
-import TodoCardModal from './TodoCardModal/TodoCardModal';
+import TodoCardModal from './TodoCardModal';
 
 import useModal from '@/hooks/useModal';
 import { modalSelector } from '@/store/reducers/modalSlice';
@@ -83,7 +83,7 @@ export default function Modal() {
       {/* 타입이 존재할 때만 모달이 열림 */}
       {type && (
         <div
-          className='fixed inset-0 z-50 flex items-center justify-center bg-black-17 bg-opacity-[0.3] backdrop-blur-[2px]'
+          className='fixed inset-0 z-40 flex items-center justify-center bg-black-17 bg-opacity-[0.3] backdrop-blur-[2px]'
           onClick={handleOutsideClick}
         >
           {renderModalContent()}

@@ -41,13 +41,13 @@ export default function EditDropdown({ card, column }: EditDropdownProps) {
   };
 
   return (
-    <div className='z-10 flex items-center transition-all' ref={dropdownRef}>
+    <div className='flex items-center transition-all' ref={dropdownRef}>
       <button type='button' onClick={handleDropdownClick}>
         <Image src='/icons/kebab.svg' alt='아이콘' width={32} height={32} className='dark:hidden' />
         <Image src='/icons/kebab-white.svg' alt='아이콘' width={32} height={32} className='hidden dark:block' />
       </button>
       {isOpen && (
-        <ul className='dd-container absolute right-3 top-8 w-[86px] bg-white text-sm shadow-md backdrop-blur-md hover:cursor-pointer md:text-base dark:bg-dark'>
+        <ul className='dd-container absolute right-3 top-8 z-50 w-[86px] bg-white text-sm shadow-md backdrop-blur-md hover:cursor-pointer md:text-base dark:bg-dark'>
           <li
             className='dd-menu h-[36px] text-[12px] hover:text-violet dark:bg-dark dark:hover:text-violet-f1'
             onClick={handleEditCard}

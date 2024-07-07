@@ -1,7 +1,8 @@
+import { set } from 'lodash';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 
 import NavButton from '../Button/NavButton';
@@ -11,9 +12,10 @@ import DashboardItem from './DashboardItem';
 
 import useFetchData from '@/hooks/useFetchData';
 import useModal from '@/hooks/useModal';
-import { getDashboardsList } from '@/services/getService';
+import { getDashboardsList, getFavorites, getFavoriteUsers } from '@/services/getService';
+import { postFavoriteUser } from '@/services/postService';
 import { RootState } from '@/store/store';
-import { DashboardsResponse } from '@/types/Dashboard.interface';
+import { DashboardsResponse, FavoriteDashboard } from '@/types/Dashboard.interface';
 
 export default function Sidebar() {
   const { user } = useSelector((state: RootState) => state.user);
@@ -25,6 +27,15 @@ export default function Sidebar() {
   );
   const totalPage = data ? Math.max(1, Math.ceil(data.totalCount / 10)) : 1;
   const activePath = router.pathname;
+
+  const [userIdForFavorites, setUserIdForFavorites] = useState<string | null>(null);
+
+  const { data: favoriteList } = useFetchData<FavoriteDashboard[]>(
+    ['favoritesDashboards'],
+    () => getFavorites(userIdForFavorites || ''),
+    false,
+    !!userIdForFavorites,
+  );
 
   const { openNewDashboardModal } = useModal();
 
@@ -43,6 +54,29 @@ export default function Sidebar() {
       setPage((prev) => prev - 1);
     }
   };
+
+  const handleCheckUser = async () => {
+    try {
+      const res = await getFavoriteUsers();
+      if (!res) {
+        await postFavoriteUser({ userId: Number(user?.id) });
+      } else {
+        if (res.some((favoriteUser: { userId: number }) => favoriteUser.userId === user?.id)) {
+          setUserIdForFavorites(res.find((favoriteUser: { userId: number }) => favoriteUser.userId === user?.id)?._id);
+        } else {
+          await postFavoriteUser({ userId: Number(user?.id) });
+        }
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  useEffect(() => {
+    if (user?.id) {
+      handleCheckUser();
+    }
+  }, [user?.id]);
 
   return (
     <aside className='flex min-w-16 max-w-[300px] flex-col border-r border-gray-d9 bg-white px-3 py-5 transition-all md:min-w-40 lg:min-w-72 dark:border-dark-200 dark:bg-dark'>
@@ -91,6 +125,20 @@ export default function Sidebar() {
         </div>
 
         <div className='m-2 border-b border-gray-d9 dark:border-dark-200' />
+
+        {favoriteList && favoriteList.length > 0 && (
+          <>
+            <div className='flex flex-col gap-2'>
+              <p className='px-3 text-xs font-bold text-gray-78 dark:text-dark-10'>즐겨찾기</p>
+              <ul className='flex flex-col gap-2'>
+                {favoriteList.map((favorite) => (
+                  <DashboardItem key={favorite.id} dashboard={favorite} nowDashboard={Number(id)} />
+                ))}
+              </ul>
+            </div>
+            <div className='mx-2 mb-2 border-b border-gray-d9 dark:border-dark-200' />
+          </>
+        )}
 
         {isLoading ? (
           <ul className='flex h-min animate-pulse flex-col gap-2'>

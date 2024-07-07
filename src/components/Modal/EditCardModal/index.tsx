@@ -268,7 +268,7 @@ export default function EditCardModal({ column, isEdit = false, card }: EditCard
         openNotificationModal({ text: '할 일 카드가 생성되었습니다!' });
       }
 
-      queryClient.resetQueries({ queryKey: ['columns', id] });
+      queryClient.invalidateQueries({ queryKey: ['cards', column.id] });
     } catch (error) {
       console.error('Error submitting form:', error);
     } finally {
@@ -300,12 +300,12 @@ export default function EditCardModal({ column, isEdit = false, card }: EditCard
                   ref={columnsToggleRef}
                 >
                   {selectedColumns ? (
-                    <div className='flex h-[22px] items-center gap-[6px] rounded-[12px] bg-violet-f1 p-[8px] text-[12px] text-violet'>
+                    <div className='flex h-[22px] items-center gap-[6px] rounded-[12px] bg-violet-f1 p-[8px] text-[12px] text-violet dark:bg-dark-purple-hover dark:text-dark-10'>
                       <p className='text-[10px]'>●</p>
                       <p className='w-max'>{selectedColumns.title}</p>
                     </div>
                   ) : (
-                    <div className='flex h-[22px] items-center gap-[6px] rounded-[12px] bg-violet-f1 p-[8px] text-[12px] text-violet'>
+                    <div className='flex h-[22px] items-center gap-[6px] rounded-[12px] bg-violet-f1 p-[8px] text-[12px] text-violet dark:bg-dark-purple-hover dark:text-dark-10'>
                       <p className='text-[10px]'>●</p>
                       <p className='w-max'>{'temp'}</p>
                     </div>
@@ -416,7 +416,7 @@ export default function EditCardModal({ column, isEdit = false, card }: EditCard
               placeholder='입력 후 Enter'
               onKeyDown={handleTagsEnterKeyDown}
             />
-            <Tags tags={formValues.tags} customClass='mt-[10px]' onClick={handleTagClick} />
+            <Tags tags={formValues.tags} customClass='mt-[10px] flex flex-wrap' onClick={handleTagClick} />
           </div>
           <div className='mb-[20px]'>
             <label htmlFor='card-profile' className='label mb-[15px] block text-[16px] md:text-[18px]'>

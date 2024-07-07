@@ -2,8 +2,11 @@ import Image from 'next/image';
 import { Draggable, Droppable } from 'react-beautiful-dnd';
 
 import Card from './Card';
+import ColumnSkeleton from './ColumnSkeleton';
 
+import useFetchData from '@/hooks/useFetchData';
 import useModal from '@/hooks/useModal';
+import { getCardsList } from '@/services/getService';
 import { Card as CardType } from '@/types/Card.interface';
 import { Column as ColumnType } from '@/types/Column.interface';
 
@@ -11,13 +14,20 @@ interface ColumnProps {
   column: ColumnType;
   columns: ColumnType[];
   index: number;
-  cards: CardType[];
+  isMember: boolean;
 }
 
-function Column({ column, index, cards, columns }: ColumnProps) {
+function Column({ column, columns, isMember }: ColumnProps) {
   const { openModifyColumnModal, openEditCardModal, openTodoCardModal } = useModal();
+  const { data: cardsData, isLoading } = useFetchData<{ cards: CardType[] }>(['cards', column.id], () =>
+    getCardsList(column.id),
+  );
 
-  return (
+  const cards = cardsData?.cards || [];
+
+  return isLoading ? (
+    <ColumnSkeleton />
+  ) : (
     <div className='block h-full lg:flex'>
       <div className='flex flex-col bg-gray-fa p-5 transition-colors lg:w-[354px] dark:bg-dark-bg'>
         {/* Column Header */}
@@ -29,9 +39,11 @@ function Column({ column, index, cards, columns }: ColumnProps) {
               {cards.length}
             </span>
           </div>
+
           {/* Column Edit Button */}
           <button
-            className='transition duration-300 ease-in-out hover:rotate-90'
+            className='transition duration-300 ease-in-out hover:rotate-90 disabled:rotate-0'
+            disabled={!isMember}
             onClick={() => {
               openModifyColumnModal({ columns, columnId: column.id, columnTitle: column.title });
             }}
@@ -43,6 +55,7 @@ function Column({ column, index, cards, columns }: ColumnProps) {
         {/* Add Card Button */}
         <button
           className='btn-violet-light dark:btn-violet-dark mb-[16px] h-[40px] rounded-[6px] border'
+          disabled={!isMember}
           onClick={() => {
             openEditCardModal({ column: column, isEdit: false });
           }}
@@ -53,22 +66,26 @@ function Column({ column, index, cards, columns }: ColumnProps) {
 
         {/* Card List Section */}
         <div className='scrollbar-hide lg:overflow-y-auto'>
-          <Droppable droppableId={`column-${column.id}`} key={`column-${column.id}`}>
+          <Droppable droppableId={`column-${column.id}`} key={`column-${column.id}`} isDropDisabled={!isMember}>
             {(provided) => (
-              <div ref={provided.innerRef} {...provided.droppableProps}>
+              <div
+                ref={provided.innerRef}
+                {...provided.droppableProps}
+                style={{ minHeight: '100px' }} // 최소 높이
+              >
                 {cards.map((card, index) => (
-                  <Draggable key={`card-${card.id}`} draggableId={`card-${card.id}`} index={index}>
+                  <Draggable
+                    key={`card-${card.id}`}
+                    draggableId={`card-${card.id}`}
+                    index={index}
+                    isDragDisabled={!isMember}
+                  >
                     {(provided) => (
                       <div
                         ref={provided.innerRef}
                         {...provided.draggableProps}
                         {...provided.dragHandleProps}
-                        onClick={() => {
-                          openTodoCardModal({
-                            card,
-                            column,
-                          });
-                        }}
+                        onClick={() => openTodoCardModal({ card, column, isMember })}
                       >
                         <Card key={`card-${card.id}`} card={card} />
                       </div>
