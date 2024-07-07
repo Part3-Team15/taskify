@@ -114,22 +114,8 @@ export default function ColumnsSection({ dashboardId }: ColumnsSectionProps) {
             onClick={handleNewColumnClick}
           >
             <div className='mr-[12px] text-lg font-bold text-black-33 dark:text-dark-10'>새로운 컬럼 추가하기</div>
-            <Image
-              src='/icons/plus-filled.svg'
-              width={22}
-              height={22}
-              alt='카드 추가 아이콘'
-              loading='lazy'
-              className='dark:hidden'
-            />
-            <Image
-              src='/icons/plus.svg'
-              width={24}
-              height={24}
-              alt='카드 추가 아이콘'
-              loading='lazy'
-              className='hidden dark:block'
-            />
+            <Image src='/icons/plus-filled.svg' width={22} height={22} alt='카드 추가 아이콘' className='dark:hidden' />
+            <Image src='/icons/plus.svg' width={24} height={24} alt='카드 추가 아이콘' className='hidden dark:block' />
           </button>
         </div>
       </section>

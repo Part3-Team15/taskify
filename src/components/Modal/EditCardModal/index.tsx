@@ -405,7 +405,7 @@ export default function EditCardModal({
               placeholder='입력 후 Enter'
               onKeyDown={handleTagsEnterKeyDown}
             />
-            <Tags tags={formValues.tags} customClass='mt-[10px]' onClick={handleTagClick} />
+            <Tags tags={formValues.tags} customClass='mt-[10px] flex flex-wrap' onClick={handleTagClick} />
           </div>
           <div className='mb-[20px]'>
             <label htmlFor='card-profile' className='label mb-[15px] block text-[16px] md:text-[18px]'>
