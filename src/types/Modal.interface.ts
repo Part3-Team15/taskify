@@ -31,10 +31,9 @@ export interface ModifyColumnModalProps extends ModalProps {
 }
 
 export interface EditCardModalProps extends ModalProps {
-  columnId: number;
+  column: Column;
   isEdit: boolean;
-  cardId?: number;
-  cardData?: postCardData;
+  card?: Card;
 }
 
 export interface TodoCardModalProps extends ModalProps {

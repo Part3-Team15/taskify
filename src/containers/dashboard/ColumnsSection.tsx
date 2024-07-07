@@ -70,7 +70,6 @@ export default function ColumnsSection({ id }: ColumnsSectionProps) {
           });
         } catch {
           setIsMember(false);
-          console.log('not a member');
         }
       }
     };

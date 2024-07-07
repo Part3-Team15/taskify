@@ -60,7 +60,7 @@ export default function TodoCardModal({ card, column, isMember, onClick }: TodoC
         <div className='flex'>
           {isMember && (
             <div className='relative'>
-              <EditDropdown card={card} />
+              <EditDropdown card={card} column={column} />
             </div>
           )}
           <button onClick={handleModalClose}>
