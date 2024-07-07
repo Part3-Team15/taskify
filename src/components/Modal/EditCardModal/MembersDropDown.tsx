@@ -12,11 +12,11 @@ export default function MembersDropDown({
   onSelectMember: (userId: number) => void;
 }) {
   return (
-    <ul className='absolute top-[110%] w-full rounded-[6px] border border-gray-d9 bg-white px-4 py-2'>
+    <ul className='absolute top-[110%] w-full rounded-[6px] border border-gray-d9 bg-white px-4 py-2 dark:border-dark-200 dark:bg-dark-300'>
       {members.map((member) => {
         return (
           <li
-            className='flex cursor-pointer items-center rounded-[6px] px-[6px] py-[5px] text-[14px] transition-all hover:bg-violet-light-hover md:text-[16px]'
+            className='flex cursor-pointer items-center rounded-[6px] px-[6px] py-[5px] text-[14px] transition-all hover:bg-violet-light-hover md:text-[16px] dark:text-dark-10 dark:hover:bg-dark-200'
             key={`member-${member.userId}`}
             onClick={() => {
               onSelectMember(member.userId);
@@ -27,7 +27,7 @@ export default function MembersDropDown({
         );
       })}
       <li
-        className='flex cursor-pointer items-center rounded-[6px] px-[6px] py-[5px] text-[14px] text-gray-9f transition-all hover:bg-violet-light-hover md:text-[16px]'
+        className='flex cursor-pointer items-center rounded-[6px] px-[6px] py-[5px] text-[14px] text-gray-9f transition-all hover:bg-violet-light-hover md:text-[16px] dark:text-dark-10 dark:hover:bg-dark-200'
         onClick={() => {
           onSelectMember(0);
         }}

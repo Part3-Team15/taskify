@@ -72,7 +72,7 @@ export default function TodoCardModal({ card, column, onClick }: TodoCardModalPr
         {/* Tags Section */}
         <section className='order-2 flex flex-col gap-[16px] md:order-1'>
           <div className='flex gap-[10px]'>
-            <div className='flex h-[22px] items-center gap-[6px] rounded-[12px] bg-violet-f1 p-[8px] text-[12px] text-violet hover:cursor-default'>
+            <div className='flex h-[22px] items-center gap-[6px] rounded-[12px] bg-violet-f1 p-[8px] text-[12px] text-violet hover:cursor-default dark:bg-dark-purple-hover dark:text-dark-10'>
               <p className='text-[10px]'>●</p>
               <p className='w-max'>{column.title}</p>
             </div>
