@@ -53,7 +53,7 @@ export default function Comment({ comment }: CommentProps) {
           <ProfileIcon
             user={comment.author}
             userId={comment.author.id}
-            imgClassName={`w-[40px] h-[34px] md:h-[36px]`}
+            imgClassName={`w-[44px] h-[36px] md:h-[40px]`}
             fontClassName='md:font-base font-sm text-[14px]'
           />
           {/* Comment Edit Section */}

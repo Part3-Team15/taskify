@@ -142,12 +142,12 @@ export default function TodoCardModal({ card, column, onClick }: TodoCardModalPr
           <div>
             <p className='font-[600] hover:cursor-default'>담당자</p>
             {card.assignee ? (
-              <div className='flex items-center gap-[8px]'>
+              <div className='flex items-center gap-[8px] hover:cursor-default'>
                 <ProfileIcon
                   user={card.assignee}
                   userId={card.assignee.id}
                   imgClassName={`size-[34px] md:size-[38px]`}
-                  fontClassName='md:font-base font-sm'
+                  fontClassName='md:font-base text-[14px]'
                 />
                 <p className='text-[12px] md:text-[14px]'>{card.assignee.nickname}</p>
               </div>
