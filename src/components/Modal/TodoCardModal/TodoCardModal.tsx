@@ -17,7 +17,7 @@ import { CommentsResponse, CommentForm } from '@/types/post/CommentForm.interfac
 import formatDate from '@/utils/formatDate';
 
 export default function TodoCardModal({ card, column, onClick }: TodoCardModalProps) {
-  const { data } = useFetchData<CommentsResponse>(['comments'], () => getComments(card.id));
+  const { data, refetch } = useFetchData<CommentsResponse>(['comments', card.id], () => getComments(card.id));
   const [newComment, setNewComment] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
   const comments = data?.comments;
@@ -27,6 +27,10 @@ export default function TodoCardModal({ card, column, onClick }: TodoCardModalPr
   const queryClient = useQueryClient();
 
   const handleModalClose = () => {
+    useEffect(() => {
+      refetch();
+    }, [refetch]);
+
     if (onClick) onClick();
     closeModal();
   };

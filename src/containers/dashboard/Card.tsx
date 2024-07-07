@@ -2,7 +2,10 @@ import Image from 'next/image';
 
 import ProfileIcon from '@/components/ProfileIcon';
 import Tags from '@/components/Tags';
+import useFetchData from '@/hooks/useFetchData';
+import { getComments } from '@/services/getService';
 import { Card as TCard } from '@/types/Card.interface';
+import { CommentsResponse } from '@/types/post/CommentForm.interface';
 import formatDate from '@/utils/formatDate';
 
 interface CardProps {
@@ -10,6 +13,8 @@ interface CardProps {
 }
 
 export default function Card({ card }: CardProps) {
+  const { data: comments } = useFetchData<CommentsResponse>(['comments', card.id], () => getComments(card.id));
+
   return (
     <div className='mb-[16px] mt-[4px] flex flex-col gap-[20px] rounded-[6px] border border-gray-d9 bg-white p-[20px] transition-transform duration-200 ease-in-out hover:-translate-y-1 hover:cursor-pointer hover:shadow-sm md:flex-row md:justify-between lg:flex-col dark:border-dark-200 dark:bg-dark'>
       {/* Card Image */}
