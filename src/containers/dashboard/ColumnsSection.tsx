@@ -8,6 +8,7 @@ import Column from './Column';
 import useFetchData from '@/hooks/useFetchData';
 import useModal from '@/hooks/useModal';
 import useRedirectIfNotMember from '@/hooks/useRedirectIfNotMember';
+import instance from '@/services/axios';
 import { getColumnsList, getCardsList, getDashboard } from '@/services/getService';
 import { moveToOtherColumn } from '@/services/putService';
 import { RootState } from '@/store/store';
@@ -23,6 +24,7 @@ export default function ColumnsSection({ id }: ColumnsSectionProps) {
   const { openNewColumnModal, openNotificationModal } = useModal();
   const redirectIfNotMember = useRedirectIfNotMember();
   const { user } = useSelector((state: RootState) => state.user);
+  const [isMember, setIsMember] = useState(true);
   const [isPublic, setIsPublic] = useState(false);
 
   const {
@@ -58,8 +60,24 @@ export default function ColumnsSection({ id }: ColumnsSectionProps) {
       }
     };
 
+    const handleCheckMember = async () => {
+      if (id) {
+        try {
+          await instance.get(`/dashboards/${id}`, {
+            headers: {
+              memberTest: true,
+            },
+          });
+        } catch {
+          setIsMember(false);
+          console.log('not a member');
+        }
+      }
+    };
+
     handleRedirect();
-  }, [id]);
+    handleCheckMember();
+  }, [id, user]);
 
   const handleNewColumnClick = () => {
     if (columns?.data && columns.data.length >= 10) {
@@ -126,6 +144,7 @@ export default function ColumnsSection({ id }: ColumnsSectionProps) {
                       columns={columns.data}
                       index={index}
                       cards={cardLists[column.id] || []}
+                      isMember={isMember}
                     />
                     {provided.placeholder}
                   </li>
@@ -138,7 +157,7 @@ export default function ColumnsSection({ id }: ColumnsSectionProps) {
           <button
             className='btn-violet-light dark:btn-violet-dark mb-4 h-[70px] w-full rounded-[6px] py-[24px] lg:mb-0 lg:w-[354px]'
             onClick={handleNewColumnClick}
-            disabled={!user}
+            disabled={!isMember}
           >
             <div className='mr-[12px] text-lg font-bold text-black-33 dark:text-dark-10'>새로운 컬럼 추가하기</div>
             <Image

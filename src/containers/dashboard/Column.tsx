@@ -1,11 +1,9 @@
 import Image from 'next/image';
 import { Draggable, Droppable } from 'react-beautiful-dnd';
-import { useSelector } from 'react-redux';
 
 import Card from './Card';
 
 import useModal from '@/hooks/useModal';
-import { RootState } from '@/store/store';
 import { Card as CardType } from '@/types/Card.interface';
 import { Column as ColumnType } from '@/types/Column.interface';
 
@@ -14,10 +12,10 @@ interface ColumnProps {
   columns: ColumnType[];
   index: number;
   cards: CardType[];
+  isMember: boolean;
 }
 
-function Column({ column, cards, columns }: ColumnProps) {
-  const { user } = useSelector((state: RootState) => state.user);
+function Column({ column, cards, columns, isMember }: ColumnProps) {
   const { openModifyColumnModal, openEditCardModal, openTodoCardModal } = useModal();
 
   return (
@@ -35,7 +33,7 @@ function Column({ column, cards, columns }: ColumnProps) {
           {/* Column Edit Button */}
           <button
             className='transition duration-300 ease-in-out hover:rotate-90 disabled:rotate-0'
-            disabled={!user}
+            disabled={!isMember}
             onClick={() => {
               openModifyColumnModal({ columns, columnId: column.id, columnTitle: column.title });
             }}
@@ -47,7 +45,7 @@ function Column({ column, cards, columns }: ColumnProps) {
         {/* Add Card Button */}
         <button
           className='btn-violet-light dark:btn-violet-dark mb-[16px] h-[40px] rounded-[6px] border'
-          disabled={!user}
+          disabled={!isMember}
           onClick={() => {
             openEditCardModal({ columnId: column.id, isEdit: false });
           }}
@@ -58,7 +56,7 @@ function Column({ column, cards, columns }: ColumnProps) {
 
         {/* Card List Section */}
         <div className='scrollbar-hide lg:h-[700px] lg:overflow-y-auto'>
-          <Droppable droppableId={`column-${column.id}`} key={`column-${column.id}`} isDropDisabled={!user}>
+          <Droppable droppableId={`column-${column.id}`} key={`column-${column.id}`} isDropDisabled={!isMember}>
             {(provided) => (
               <div ref={provided.innerRef} {...provided.droppableProps}>
                 {cards.map((card, index) => (
@@ -66,14 +64,14 @@ function Column({ column, cards, columns }: ColumnProps) {
                     key={`card-${card.id}`}
                     draggableId={`card-${card.id}`}
                     index={index}
-                    isDragDisabled={!user}
+                    isDragDisabled={!isMember}
                   >
                     {(provided) => (
                       <div
                         ref={provided.innerRef}
                         {...provided.draggableProps}
                         {...provided.dragHandleProps}
-                        onClick={() => openTodoCardModal({ card, column })}
+                        onClick={() => openTodoCardModal({ card, column, isMember })}
                       >
                         <Card key={`card-${card.id}`} card={card} />
                       </div>

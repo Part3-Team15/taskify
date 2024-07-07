@@ -22,10 +22,12 @@ instance.interceptors.response.use(
     const originalRequest = error.config;
     const checkMethodForPublic = (request: InternalAxiosRequestConfig) =>
       (request.method === 'get' &&
+        !request.headers.memberTest &&
         (request.url?.includes('/dashboards/') ||
           request.url?.includes('/columns') ||
           request.url?.includes('/members') ||
-          request.url?.includes('/cards'))) ||
+          request.url?.includes('/cards') ||
+          request.url?.includes('/comments'))) ||
       (request.method === 'put' && request.url?.includes('/invitations'));
 
     if (originalRequest && checkMethodForPublic(originalRequest) && !originalRequest.headers._retry) {

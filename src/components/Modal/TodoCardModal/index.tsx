@@ -2,7 +2,6 @@ import { useQueryClient } from '@tanstack/react-query';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
 import { useState } from 'react';
-import { useSelector } from 'react-redux';
 
 import Comment from './Comment';
 import EditDropdown from './EditDropdown';
@@ -13,13 +12,11 @@ import useFetchData from '@/hooks/useFetchData';
 import useModal from '@/hooks/useModal';
 import { getComments } from '@/services/getService';
 import { postComment } from '@/services/postService';
-import { RootState } from '@/store/store';
 import { TodoCardModalProps } from '@/types/Modal.interface';
 import { CommentsResponse, CommentForm } from '@/types/post/CommentForm.interface';
 import formatDate from '@/utils/formatDate';
 
-export default function TodoCardModal({ card, column, onClick }: TodoCardModalProps) {
-  const { user } = useSelector((state: RootState) => state.user);
+export default function TodoCardModal({ card, column, isMember, onClick }: TodoCardModalProps) {
   const { data } = useFetchData<CommentsResponse>(['comments'], () => getComments(card.id));
   const [newComment, setNewComment] = useState('');
   const comments = data?.comments;
@@ -61,7 +58,7 @@ export default function TodoCardModal({ card, column, onClick }: TodoCardModalPr
           {card.title}
         </div>
         <div className='flex'>
-          {user && (
+          {isMember && (
             <div className='relative'>
               <EditDropdown card={card} />
             </div>
@@ -106,13 +103,13 @@ export default function TodoCardModal({ card, column, onClick }: TodoCardModalPr
                 value={newComment}
                 onChange={(e) => setNewComment(e.target.value)}
                 placeholder='댓글 작성하기'
-                disabled={!user}
+                disabled={!isMember}
               />
 
               <button
                 className='btn-white dark:btn-white bottom-5 right-3 h-[28px] w-[60px] rounded-[4px] text-[12px] text-violet md:h-[32px] md:w-[78px] lg:w-[84px] dark:rounded-[4px]'
                 type='submit'
-                disabled={!user}
+                disabled={!isMember}
               >
                 입력
               </button>
