@@ -54,7 +54,7 @@ export default function Comment({ comment }: CommentProps) {
             user={comment.author}
             userId={comment.author.id}
             imgClassName={`w-[40px] h-[34px] md:h-[36px]`}
-            fontClassName='md:font-base font-sm text-[12px]'
+            fontClassName='md:font-base font-sm text-[14px]'
           />
           {/* Comment Edit Section */}
           <div className='w-full pr-[20px]'>
