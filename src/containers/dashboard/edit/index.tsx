@@ -17,7 +17,7 @@ import { getDashboard } from '@/services/getService';
 import { RootState } from '@/store/store';
 import { Dashboard } from '@/types/Dashboard.interface';
 import { DeleteDashboardInput } from '@/types/delete/DeleteDashboardInput.interface';
-import { FavoriteCheck } from '@/utils/favoriteDashboard';
+import { checkFavorite } from '@/utils/favoriteDashboard';
 import { checkPublic } from '@/utils/shareAccount';
 
 export default function DashboardEdit() {
@@ -75,7 +75,7 @@ export default function DashboardEdit() {
   useEffect(() => {
     const handleInitialLoad = async () => {
       setIsPublic(await checkPublic(Number(id)));
-      setIsFavorite(await FavoriteCheck(Number(user?.id), Number(id)));
+      setIsFavorite(await checkFavorite(Number(user?.id), Number(id)));
     };
 
     handleInitialLoad();

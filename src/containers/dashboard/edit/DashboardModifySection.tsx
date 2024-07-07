@@ -10,12 +10,11 @@ import { DASHBOARD_COLOR_OBJ } from '@/constants';
 import useFetchData from '@/hooks/useFetchData';
 import useModal from '@/hooks/useModal';
 import { deleteFavorite } from '@/services/deleteService';
-import { getDashboard, getFavoriteUsers } from '@/services/getService';
-import { postFavorite } from '@/services/postService';
+import { getDashboard } from '@/services/getService';
 import { putDashboardInfo } from '@/services/putService';
 import { RootState } from '@/store/store';
 import { DashboardColor, DashboardInfoState, Dashboard, FavoriteDashboard } from '@/types/Dashboard.interface';
-import { FavoriteCheck, FavoriteCreate, FavoriteLimitCheck, findUserById, UserCheck } from '@/utils/favoriteDashboard';
+import { checkFavorite, createFavorite, limitCheckFavorite, findUserById } from '@/utils/favoriteDashboard';
 import { addShareAccount, checkPublic, removeShareAccount } from '@/utils/shareAccount';
 
 interface ModifySectionProps {
@@ -72,12 +71,12 @@ export default function DashboardModifySection({
     };
 
     const handleFavoriteChange = async () => {
-      const initIsFavorite = await FavoriteCheck(Number(user?.id), Number(id));
+      const initIsFavorite = await checkFavorite(Number(user?.id), Number(id));
       if (isFavorite === initIsFavorite) return;
 
       const favoriteUser = await findUserById(Number(user?.id));
       if (isFavorite) {
-        await FavoriteCreate(favoriteUser, dashboard as FavoriteDashboard);
+        await createFavorite(favoriteUser, dashboard as FavoriteDashboard);
       } else {
         await deleteFavorite(Number(id), favoriteUser);
       }
@@ -91,7 +90,7 @@ export default function DashboardModifySection({
       queryClient.invalidateQueries({ queryKey: ['dashboard', id] });
       queryClient.invalidateQueries({ queryKey: ['sideDashboards'] });
     } catch {
-      if ((await FavoriteLimitCheck(Number(user?.id))) && isFavorite) {
+      if ((await limitCheckFavorite(Number(user?.id))) && isFavorite) {
         handleToggleFavorite();
         if (isPublic) onToggleClick();
         openNotificationModal({ text: '즐겨찾기는 최대 3개까지 가능합니다.' });
@@ -120,7 +119,7 @@ export default function DashboardModifySection({
     const handleButtonControl = async () => {
       const [initIsPublic, initIsFavorite] = await Promise.all([
         checkPublic(Number(id)),
-        FavoriteCheck(Number(user?.id), Number(id)),
+        checkFavorite(Number(user?.id), Number(id)),
       ]);
       setIsButtonDisabled(
         (value.title === fixedTitle &&

@@ -24,14 +24,13 @@ export const findUserById = async (userId: number) => {
   return selectedUser._id;
 };
 
-export const FavoriteCheck = async (userId: number, favoriteId: number) => {
+export const checkFavorite = async (userId: number, favoriteId: number) => {
   if (!userId || !favoriteId) return false;
 
   const id = await findUserById(userId);
 
   try {
     const favorites = await getFavorites(id);
-
     if (!favorites) return false;
 
     return favorites.some((favorite: { id: number }) => favorite.id === favoriteId);
@@ -50,24 +49,29 @@ export const fetchFavorites = async (id: string) => {
   }
 };
 
-export const FavoriteCreate = async (id: string, favoriteData: FavoriteDashboard) => {
-  if (await FavoriteLimitCheck(favoriteData.userId)) {
+export const createFavorite = async (id: string, favoriteData: FavoriteDashboard) => {
+  if (await limitCheckFavorite(favoriteData.userId)) {
     throw new Error('즐겨찾기는 최대 3개까지 가능합니다.');
   }
 
   await postFavorite(id, favoriteData);
 };
 
-export const FavoriteLimitCheck = async (userId: number) => {
+export const limitCheckFavorite = async (userId: number) => {
   const id = await findUserById(userId);
 
-  const data = await getFavorites(id);
+  try {
+    const favorites = await getFavorites(id);
 
-  if (!data) return false;
+    if (!favorites) return false;
 
-  if (data.length >= 3) {
-    return true;
-  } else {
+    if (favorites.length >= 3) {
+      return true;
+    } else {
+      return false;
+    }
+  } catch (error) {
+    console.error('Failed to check favorite limit:', error);
     return false;
   }
 };

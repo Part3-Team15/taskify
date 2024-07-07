@@ -22,11 +22,9 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         }
 
         const favorites = await Favorite.find({ userId: user.userId });
-        console.log('조회된 즐겨찾기 항목:', favorites);
 
         if (!favorites.length) {
-          console.log('즐겨찾기 항목이 없습니다.');
-          return;
+          return res.status(200).json([]);
         }
         res.status(200).json(favorites);
       } catch (error) {
