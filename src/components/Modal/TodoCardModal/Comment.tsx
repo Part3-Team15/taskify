@@ -31,8 +31,7 @@ export default function Comment({ comment }: CommentProps) {
       await deleteComment(commentId);
       queryClient.invalidateQueries({ queryKey: ['comments'] });
     } catch (error) {
-      // 에러 처리
-      console.log(error);
+      // console.log(error);
     }
   };
 
@@ -42,7 +41,7 @@ export default function Comment({ comment }: CommentProps) {
       queryClient.invalidateQueries({ queryKey: ['comments'] });
       setIsEditing(false);
     } catch (error) {
-      console.error(error);
+      // console.error(error);
     }
   };
 
@@ -54,10 +53,10 @@ export default function Comment({ comment }: CommentProps) {
           <ProfileIcon
             user={comment.author}
             userId={comment.author.id}
-            imgClassName={`size-[34px] md:size-[38px]`}
-            fontClassName='md:font-base font-sm'
+            imgClassName={`w-[44px] h-[36px] md:h-[40px]`}
+            fontClassName='md:font-base font-sm text-[14px]'
           />
-          {/* Comment Section */}
+          {/* Comment Edit Section */}
           <div className='w-full pr-[20px]'>
             <div className='flex gap-[8px] hover:cursor-default'>
               <p className='text-[12px] font-[600] text-black-33 md:text-[14px] dark:text-dark-10'>
@@ -67,7 +66,7 @@ export default function Comment({ comment }: CommentProps) {
             </div>
             {isEditing ? (
               <textarea
-                className='w-full resize-none rounded-[2px] border border-gray-d9 p-[12px] text-[12px] text-black-33 focus:outline-none md:text-[14px] dark:border-dark-200 dark:bg-dark-300 dark:text-dark-10'
+                className='w-full resize-none rounded-[6px] border border-gray-d9 px-[16px] py-[12px] text-[12px] text-black-33 focus:outline-none md:text-[14px] dark:border-dark-200 dark:bg-dark-300 dark:text-dark-10'
                 value={editedComment}
                 onChange={(e) => setEditedComment(e.target.value)}
               />
@@ -82,18 +81,29 @@ export default function Comment({ comment }: CommentProps) {
               <div className='flex gap-[12px] text-[12px] text-gray-9f dark:text-dark-10'>
                 {!isEditing ? (
                   <>
-                    <button className='underline' onClick={handleToggleEdit}>
+                    <button
+                      className='transition-all duration-100 hover:text-black hover:underline dark:hover:text-violet-light-hover'
+                      onClick={handleToggleEdit}
+                    >
                       수정
                     </button>
-                    <button className='underline' onClick={() => handleDeleteComment(comment.id)}>
+                    <button
+                      className='transition-all duration-100 hover:text-red-hover hover:underline'
+                      onClick={() => handleDeleteComment(comment.id)}
+                    >
                       삭제
                     </button>
                   </>
                 ) : (
                   <div className='flex gap-[12px] text-[12px] text-gray-9f'>
-                    <button onClick={handleToggleEdit}>취소</button>
                     <button
-                      className='text-black-33 hover:text-violet dark:text-dark-10 dark:hover:text-violet-light-hover'
+                      className='transition-all duration-100 hover:text-black hover:underline dark:hover:text-violet-light-hover'
+                      onClick={handleToggleEdit}
+                    >
+                      취소
+                    </button>
+                    <button
+                      className='text-black-33 transition-all duration-100 hover:text-violet hover:underline dark:text-dark-10 dark:hover:text-violet-light-hover'
                       onClick={handleSaveEdit}
                     >
                       저장

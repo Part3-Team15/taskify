@@ -20,7 +20,9 @@ export default function MemberProfile({
         {profileImageUrl ? (
           <Image src={profileImageUrl} alt='프로필' fill style={{ objectFit: 'cover' }} className='rounded-full' />
         ) : (
-          <p className={`font-montserrat font-semibold leading-6 text-white`}>{nickname.substring(0, 1)}</p>
+          <p className={`font-nanumgothic text-[14px] font-semibold leading-6 text-white`}>
+            {nickname.substring(0, 1)}
+          </p>
         )}
       </div>
       <p>{nickname}</p>

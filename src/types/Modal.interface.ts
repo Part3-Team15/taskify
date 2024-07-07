@@ -1,6 +1,8 @@
 import { Card } from './Card.interface';
 import { Column } from './Column.interface';
 
+import { postCardData } from '@/components/Modal/EditCardModal';
+
 export interface ModalState {
   type: ModalType | null;
   modalProps: ModalProps;
@@ -29,8 +31,9 @@ export interface ModifyColumnModalProps extends ModalProps {
 }
 
 export interface EditCardModalProps extends ModalProps {
-  columnId: number;
+  column: Column;
   isEdit: boolean;
+  card?: Card;
 }
 
 export interface TodoCardModalProps extends ModalProps {

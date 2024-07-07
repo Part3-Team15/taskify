@@ -1,35 +1,29 @@
 import { useQueryClient } from '@tanstack/react-query';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
-import { useEffect, useState, useRef } from 'react';
+import { useEffect, useState, useRef, useCallback } from 'react';
 
+import ColumnsDropDown from './ColumnsDropDown';
 import MemberProfile from './MemberProfile';
 import MembersDropDown from './MembersDropDown';
 
 import CARROT_DOWN from '@/../public/icons/carrot-down.svg';
+import SPINNER from '@/../public/icons/spinner.svg';
 import ModalActionButton from '@/components/Button/ModalActionButton';
 import ModalCancelButton from '@/components/Button/ModalCancelButton';
 import ImageInput from '@/components/Input/ImageInput';
 import Tags from '@/components/Tags';
 import useModal from '@/hooks/useModal';
-import { getMembersList } from '@/services/getService';
+import { getColumnsList, getMembersList } from '@/services/getService';
 import { postImageForCard, postCard } from '@/services/postService';
+import { putCard } from '@/services/putService';
+import { Column } from '@/types/Column.interface';
 import { Member } from '@/types/Member.interface';
 import { EditCardModalProps } from '@/types/Modal.interface';
-import { formatDateTime } from '@/utils/formatDateTime';
+import { PostCardData } from '@/types/post/EditModalPostData.interface';
+import { formatDateTime, revertFormattedDateTime } from '@/utils/formatDateTime';
 
-export interface postCardData {
-  assigneeUserId: number;
-  dashboardId: number;
-  columnId: number;
-  title: string;
-  description: string;
-  dueDate: string;
-  tags: string[];
-  imageUrl: string;
-}
-
-const formInitialState = {
+const formInitialState: PostCardData = {
   assigneeUserId: 0,
   dashboardId: 0,
   columnId: 0,
@@ -40,27 +34,58 @@ const formInitialState = {
   imageUrl: '',
 };
 
-export default function EditCardModal({ columnId, isEdit }: EditCardModalProps) {
+export default function EditCardModal({ column, isEdit = false, card }: EditCardModalProps) {
   const router = useRouter();
   const { id } = router.query;
   const queryClient = useQueryClient();
 
-  const { openNotificationModal, closeModal } = useModal();
+  const { closeModal, openTodoCardModal, openNotificationModal } = useModal();
 
-  const [isOpen, setIsOpen] = useState(false);
+  const [membersIsOpen, setMembersIsOpen] = useState(false);
+  const [columnsIsOpen, setColumnsIsOpen] = useState(false);
+
   const [members, setMembers] = useState<Member[]>([]);
-  const [formValues, setFormValues] = useState<postCardData>(formInitialState);
-  const [profileImageFile, setProfileImageFile] = useState<File | null>(null);
+  const [columns, setColumns] = useState<Column[]>([]);
 
-  const dropdownRef = useRef<HTMLDivElement>(null);
-  const toggleRef = useRef<HTMLDivElement>(null);
+  const initializeFormValues = useCallback((): PostCardData => {
+    if (card) {
+      return {
+        assigneeUserId: card.assignee?.id || 0,
+        dashboardId: Number(id),
+        columnId: card.columnId,
+        title: card.title,
+        description: card.description,
+        dueDate: card.dueDate ? revertFormattedDateTime(card.dueDate) : '',
+        tags: card.tags,
+        imageUrl: card.imageUrl || '',
+      };
+    } else {
+      return {
+        ...formInitialState,
+        dashboardId: Number(id),
+        columnId: column ? column.id : 0,
+      };
+    }
+  }, [card, column, id]);
+
+  const [formValues, setFormValues] = useState<PostCardData>(initializeFormValues);
+  const [profileImageFile, setProfileImageFile] = useState<File | null>(null);
+  const [initialFormValues, setInitialFormValues] = useState<PostCardData>(initializeFormValues);
+  const [isFormChanged, setIsFormChanged] = useState(false);
+
+  const [titleError, setTitleError] = useState<boolean>(false);
+
+  const [loading, setLoading] = useState(false);
+
+  const membersDropdownRef = useRef<HTMLDivElement>(null);
+  const membersToggleRef = useRef<HTMLDivElement>(null);
+  const columnsDropdownRef = useRef<HTMLDivElement>(null);
+  const columnsToggleRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    // 현재 대시보드에 해당하는 멤버들 GET
     const getMembers = async () => {
       try {
         const response = await getMembersList(Number(id), 1, 10);
-        // 필요한 데이터만 정제
         const filteredMembers = response.data.members.map((member: Member) => ({
           userId: member.userId,
           nickname: member.nickname,
@@ -71,30 +96,62 @@ export default function EditCardModal({ columnId, isEdit }: EditCardModalProps) 
         console.error('Error fetching members:', error);
       }
     };
+
+    const getColumns = async () => {
+      try {
+        const response = await getColumnsList(Number(id));
+        const filteredColumns = response.data.data.map((column: Column) => ({
+          id: column.id,
+          title: column.title,
+        }));
+        setColumns(filteredColumns);
+      } catch {}
+    };
+
     if (id) {
       getMembers();
-      // router query와 전달받은 columnId, state에 할당
-      setFormValues((prevValues) => ({
-        ...prevValues,
-        dashboardId: Number(id),
-        columnId: Number(columnId),
-      }));
+      getColumns();
+      setFormValues(initializeFormValues());
+      setInitialFormValues(initializeFormValues());
     }
-  }, [id]);
+  }, [id, initializeFormValues]);
 
-  // Members Dropdown 바깥 및 input 눌렀을 때 isOpen = false
+  const getTitleLength = (title: string) => {
+    let length = 0;
+    for (let i = 0; i < title.length; i++) {
+      if (escape(title.charAt(i)).length > 4) {
+        length += 2;
+      } else {
+        length += 1;
+      }
+    }
+    return length;
+  };
+
+  const checkFormChanged = (newFormValues: PostCardData) => {
+    const initialImageUrl = initialFormValues.imageUrl || '';
+    const currentImageUrl = profileImageFile ? 'new_image' : newFormValues.imageUrl || '';
+    const currentFormValues = { ...newFormValues, imageUrl: currentImageUrl };
+    const initialFormValuesForComparison = { ...initialFormValues, imageUrl: initialImageUrl };
+    setIsFormChanged(JSON.stringify(currentFormValues) !== JSON.stringify(initialFormValuesForComparison));
+  };
+
+  useEffect(() => {
+    checkFormChanged(formValues);
+  }, [formValues, profileImageFile]);
+
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (
-        dropdownRef.current &&
-        !dropdownRef.current.contains(event.target as Node) &&
-        toggleRef.current &&
-        !toggleRef.current.contains(event.target as Node)
+        membersDropdownRef.current &&
+        !membersDropdownRef.current.contains(event.target as Node) &&
+        membersToggleRef.current &&
+        !membersToggleRef.current.contains(event.target as Node)
       ) {
-        setIsOpen(false);
+        setMembersIsOpen(false);
       }
     };
-    if (isOpen) {
+    if (membersIsOpen) {
       document.addEventListener('mousedown', handleClickOutside);
     } else {
       document.removeEventListener('mousedown', handleClickOutside);
@@ -102,82 +159,125 @@ export default function EditCardModal({ columnId, isEdit }: EditCardModalProps) 
     return () => {
       document.removeEventListener('mousedown', handleClickOutside);
     };
-  }, [isOpen]);
+  }, [membersIsOpen]);
 
-  // 멤버 선택 핸들러
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (
+        columnsDropdownRef.current &&
+        !columnsDropdownRef.current.contains(event.target as Node) &&
+        columnsToggleRef.current &&
+        !columnsToggleRef.current.contains(event.target as Node)
+      ) {
+        setColumnsIsOpen(false);
+      }
+    };
+    if (columnsIsOpen) {
+      document.addEventListener('mousedown', handleClickOutside);
+    } else {
+      document.removeEventListener('mousedown', handleClickOutside);
+    }
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [columnsIsOpen]);
+
   const handleSelectMember = (userId: number) => {
-    setFormValues((prevValues) => ({
-      ...prevValues,
-      assigneeUserId: userId,
-    }));
-    setIsOpen(false);
+    const newFormValues = { ...formValues, assigneeUserId: userId };
+    setFormValues(newFormValues);
+    setMembersIsOpen(false);
   };
 
-  // 태그 입력 핸들러
+  const handleSelectColumn = (columnId: number) => {
+    const newFormValues = { ...formValues, columnId: columnId };
+    setFormValues(newFormValues);
+    setColumnsIsOpen(false);
+  };
+
   const handleTagsEnterKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
     if (event.key === 'Enter') {
       event.preventDefault();
       const value = event.currentTarget.value.trim();
       if (value && !formValues.tags.includes(value) && event.nativeEvent.isComposing === false) {
-        setFormValues((prevValues) => ({
-          ...prevValues,
-          tags: [...prevValues.tags, value],
-        }));
-        event.currentTarget.value = ''; // 입력 필드를 초기화합니다.
+        const newFormValues = { ...formValues, tags: [...formValues.tags, value] };
+        setFormValues(newFormValues);
+        event.currentTarget.value = '';
       }
     }
   };
 
-  // 태그 클릭 시 삭제 핸들러
   const handleTagClick = (tag: string) => {
-    setFormValues((prevValue) => ({ ...prevValue, tags: prevValue.tags.filter((t) => t !== tag) }));
+    const newFormValues = { ...formValues, tags: formValues.tags.filter((t) => t !== tag) };
+    setFormValues(newFormValues);
   };
 
-  // 이미지 수정 핸들러
   const handleImageChange = (image: File) => {
     setProfileImageFile(image);
+    checkFormChanged({ ...formValues, imageUrl: 'new_image' });
   };
 
-  // 이미지 삭제 핸들러
   const handleImageDelete = () => {
     setProfileImageFile(null);
+    const newFormValues = { ...formValues, imageUrl: null };
+    setFormValues(newFormValues);
+  };
+
+  const handleTitleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const newTitle = e.target.value;
+    const titleLength = getTitleLength(newTitle);
+    setTitleError(titleLength > 50);
+    const newFormValues = { ...formValues, title: newTitle };
+    setFormValues(newFormValues);
   };
 
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
+    setLoading(true);
     try {
-      let imgUrl = '';
-      // 이미지 존재 시 이미지 POST 요청하여 URL 값 받음
+      let imgUrl = formValues.imageUrl;
       if (profileImageFile) {
-        const response = await postImageForCard((columnId = columnId), { image: profileImageFile });
+        const response = await postImageForCard(formValues.columnId, { image: profileImageFile });
         imgUrl = response.imageUrl;
       }
 
       const formValuesToSend = {
         ...formValues,
+        dueDate: formValues.dueDate ? formatDateTime(formValues.dueDate) : '',
         imageUrl: imgUrl,
       };
 
-      // 데이터가 할당되지 않은 state는 POST 요청하기 전에 제거
-      const filteredFormValues: Partial<postCardData> = {
+      const filteredFormValues: Partial<PostCardData> = {
         ...formValuesToSend,
-        assigneeUserId: formValuesToSend.assigneeUserId || undefined,
-        imageUrl: formValuesToSend.imageUrl !== '' ? formValuesToSend.imageUrl : undefined,
-        dueDate: formValuesToSend.dueDate !== '' ? formValuesToSend.dueDate : undefined,
+        assigneeUserId: formValuesToSend.assigneeUserId || (isEdit ? null : undefined),
+        imageUrl: formValuesToSend.imageUrl !== '' ? formValuesToSend.imageUrl : isEdit ? null : undefined,
+        dueDate: formValuesToSend.dueDate !== '' ? formValuesToSend.dueDate : isEdit ? null : undefined,
       };
 
-      await postCard(filteredFormValues as postCardData);
-      // resetQueries 수정 필요
-      queryClient.resetQueries({ queryKey: ['columns', id] });
-      openNotificationModal({
-        text: '할 일 카드가 생성되었습니다!',
-      });
+      let responseCard;
+      if (isEdit && card) {
+        responseCard = await putCard(card.id, filteredFormValues as PostCardData);
+      } else {
+        responseCard = await postCard(filteredFormValues as PostCardData);
+      }
+
+      if (responseCard && isEdit) {
+        const columnToOpen = columns.find((col) => col.id === responseCard.columnId);
+        const cardToOpen = responseCard;
+        openTodoCardModal({ card: cardToOpen, column: columnToOpen as Column });
+      } else {
+        openNotificationModal({ text: '할 일 카드가 생성되었습니다!' });
+      }
+
+      queryClient.invalidateQueries({ queryKey: ['cards', column.id] });
     } catch (error) {
       console.error('Error submitting form:', error);
+    } finally {
+      setLoading(false);
     }
   };
 
   const selectedMember = members.find((member) => member.userId === formValues.assigneeUserId);
+  const selectedColumns = columns.find((column) => column.id === formValues.columnId);
 
   return (
     <div className='modal h-[90vh] w-[327px] md:h-[90vh] md:w-[506px]'>
@@ -186,38 +286,76 @@ export default function EditCardModal({ columnId, isEdit }: EditCardModalProps) 
           {isEdit ? '할일 수정' : '할일 생성'}
         </h2>
         <form className='flex h-full flex-col overflow-y-auto pr-5' onSubmit={handleSubmit}>
-          <div className='my-[20px]'>
-            <label htmlFor='memberSelect' className='label mb-[15px] block text-[16px] md:text-[18px]'>
-              담당자
-            </label>
-            <div className='relative md:w-[217px]'>
-              <div
-                className='input cursor-pointer text-[14px] md:text-[16px]'
-                onClick={() => {
-                  setIsOpen(!isOpen);
-                }}
-                ref={toggleRef}
-              >
-                {selectedMember ? (
-                  <MemberProfile
-                    userId={selectedMember.userId}
-                    nickname={selectedMember.nickname}
-                    profileImageUrl={selectedMember.profileImageUrl}
+          <div className='my-[20px] flex flex-col gap-[15px] md:flex-row'>
+            <div className='flex-1'>
+              <label htmlFor='memberSelect' className='label mb-[15px] block text-[16px] md:text-[18px]'>
+                컬럼
+              </label>
+              <div className='relative'>
+                <div
+                  className='input cursor-pointer text-[14px] md:text-[16px]'
+                  onClick={() => {
+                    setColumnsIsOpen(!columnsIsOpen);
+                  }}
+                  ref={columnsToggleRef}
+                >
+                  {selectedColumns ? (
+                    <div className='flex h-[22px] items-center gap-[6px] rounded-[12px] bg-violet-f1 p-[8px] text-[12px] text-violet dark:bg-dark-purple-hover dark:text-dark-10'>
+                      <p className='text-[10px]'>●</p>
+                      <p className='w-max'>{selectedColumns.title}</p>
+                    </div>
+                  ) : (
+                    <div className='flex h-[22px] items-center gap-[6px] rounded-[12px] bg-violet-f1 p-[8px] text-[12px] text-violet dark:bg-dark-purple-hover dark:text-dark-10'>
+                      <p className='text-[10px]'>●</p>
+                      <p className='w-max'>{'temp'}</p>
+                    </div>
+                  )}
+                  <Image
+                    className={`absolute right-[20px] top-[18px] md:top-[24px] ${columnsIsOpen ? 'rotate-180' : ''}`}
+                    src={CARROT_DOWN}
+                    alt='메뉴 내리기 버튼'
                   />
-                ) : (
-                  <p className='text-gray-9f'>담당자를 선택해 주세요</p>
-                )}
-                <Image
-                  className={`absolute right-[20px] top-[18px] md:top-[24px] ${isOpen ? 'rotate-180' : ''}`}
-                  src={CARROT_DOWN}
-                  alt='메뉴 내리기 버튼'
-                />
-              </div>
-              {isOpen && (
-                <div ref={dropdownRef}>
-                  <MembersDropDown members={members} onSelectMember={handleSelectMember} />
                 </div>
-              )}
+                {columnsIsOpen && (
+                  <div ref={columnsDropdownRef}>
+                    <ColumnsDropDown columns={columns} onSelectColumn={handleSelectColumn} />
+                  </div>
+                )}
+              </div>
+            </div>
+            <div className='flex-1'>
+              <label htmlFor='memberSelect' className='label mb-[15px] block text-[16px] md:text-[18px]'>
+                담당자
+              </label>
+              <div className='relative'>
+                <div
+                  className='input cursor-pointer text-[14px] md:text-[16px]'
+                  onClick={() => {
+                    setMembersIsOpen(!membersIsOpen);
+                  }}
+                  ref={membersToggleRef}
+                >
+                  {selectedMember ? (
+                    <MemberProfile
+                      userId={selectedMember.userId}
+                      nickname={selectedMember.nickname}
+                      profileImageUrl={selectedMember.profileImageUrl}
+                    />
+                  ) : (
+                    <p className='text-gray-9f'>담당자를 선택해 주세요</p>
+                  )}
+                  <Image
+                    className={`absolute right-[20px] top-[18px] md:top-[24px] ${membersIsOpen ? 'rotate-180' : ''}`}
+                    src={CARROT_DOWN}
+                    alt='메뉴 내리기 버튼'
+                  />
+                </div>
+                {membersIsOpen && (
+                  <div ref={membersDropdownRef}>
+                    <MembersDropDown members={members} onSelectMember={handleSelectMember} />
+                  </div>
+                )}
+              </div>
             </div>
           </div>
           <div className='mb-[20px]'>
@@ -225,15 +363,16 @@ export default function EditCardModal({ columnId, isEdit }: EditCardModalProps) 
               제목 <span className='text-violet'>(필수)*</span>
             </label>
             <input
-              className='input text-[14px] md:text-[16px]'
+              className={`input text-[14px] md:text-[16px] ${titleError ? 'border-red' : ''}`}
               id='title'
               type='text'
               placeholder='제목을 입력해 주세요'
               value={formValues.title}
-              onChange={(e) => {
-                setFormValues((prevValues) => ({ ...prevValues, title: e.target.value }));
-              }}
+              onChange={handleTitleChange}
             />
+            {titleError && (
+              <p className='mt-1 text-[14px] text-red'>제목은 한글 25자 이상, 영어 50자 이상 입력할 수 없습니다.</p>
+            )}
           </div>
           <div className='mb-[20px]'>
             <label htmlFor='description' className='label mb-[15px] block text-[16px] md:text-[18px]'>
@@ -245,7 +384,8 @@ export default function EditCardModal({ columnId, isEdit }: EditCardModalProps) 
               placeholder='설명을 입력해 주세요'
               value={formValues.description}
               onChange={(e) => {
-                setFormValues((prevValues) => ({ ...prevValues, description: e.target.value }));
+                const newFormValues = { ...formValues, description: e.target.value };
+                setFormValues(newFormValues);
               }}
             ></textarea>
           </div>
@@ -258,11 +398,10 @@ export default function EditCardModal({ columnId, isEdit }: EditCardModalProps) 
               id='dueDate'
               type='datetime-local'
               placeholder='날짜를 입력해 주세요'
+              value={formValues.dueDate ? formValues.dueDate : ''}
               onChange={(e) => {
-                setFormValues((prevValues) => ({
-                  ...prevValues,
-                  dueDate: e.target.value ? formatDateTime(e.target.value) : '',
-                }));
+                const newFormValues = { ...formValues, dueDate: e.target.value ? formatDateTime(e.target.value) : '' };
+                setFormValues(newFormValues);
               }}
             />
           </div>
@@ -277,7 +416,7 @@ export default function EditCardModal({ columnId, isEdit }: EditCardModalProps) 
               placeholder='입력 후 Enter'
               onKeyDown={handleTagsEnterKeyDown}
             />
-            <Tags tags={formValues.tags} customClass='mt-[10px]' onClick={handleTagClick} />
+            <Tags tags={formValues.tags} customClass='mt-[10px] flex flex-wrap' onClick={handleTagClick} />
           </div>
           <div className='mb-[20px]'>
             <label htmlFor='card-profile' className='label mb-[15px] block text-[16px] md:text-[18px]'>
@@ -294,15 +433,29 @@ export default function EditCardModal({ columnId, isEdit }: EditCardModalProps) 
           </div>
         </form>
         <div className='flex justify-end gap-[10px] border-t-2 border-gray-d9 pt-[20px] dark:border-dark-200'>
-          <ModalCancelButton type='button' onClick={closeModal}>
+          <ModalCancelButton
+            type='button'
+            onClick={() => {
+              if (isEdit && card) {
+                openTodoCardModal({ card: card, column: column });
+              } else {
+                closeModal();
+              }
+            }}
+          >
             취소
           </ModalCancelButton>
           <ModalActionButton
             type='submit'
             onClick={handleSubmit}
-            disabled={!(formValues.title.length > 0 && formValues.description.length > 0)}
+            disabled={
+              loading ||
+              !(formValues.title.length > 0 && formValues.description.length > 0) ||
+              !isFormChanged ||
+              titleError
+            }
           >
-            {isEdit ? '수정' : '생성'}
+            {loading ? <Image src={SPINNER} alt='로딩 중' /> : <>{isEdit ? '수정' : '생성'}</>}
           </ModalActionButton>
         </div>
       </div>

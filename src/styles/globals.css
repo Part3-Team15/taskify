@@ -8,6 +8,11 @@
   }
 }
 
+.font-nanumgothic {
+  font-family: 'Nanum Gothic', sans-serif;
+  font-weight: 700;
+}
+
 @layer components {
   .btn-violet {
     @apply align-center rounded-[8px] bg-violet text-white transition-all hover:bg-violet-hover active:bg-violet-active disabled:bg-violet-disabled dark:bg-dark-purple dark:text-white dark:hover:bg-dark-purple-hover dark:active:bg-dark-purple-hover/50 dark:disabled:bg-dark-purple/50;
@@ -58,7 +63,7 @@
   }
 
   .modal {
-    @apply rounded-[8px] bg-white px-5 py-7 text-base text-black-33 md:px-7 md:text-lg dark:bg-dark-bg dark:text-dark-10;
+    @apply dark:bg-dark-450 rounded-[8px] bg-white px-5 py-7 text-base text-black-33 md:px-7 md:text-lg dark:text-dark-10;
   }
 
   .modal-basic {
