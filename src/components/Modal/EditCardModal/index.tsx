@@ -263,7 +263,8 @@ export default function EditCardModal({ column, isEdit = false, card }: EditCard
       if (responseCard && isEdit) {
         const columnToOpen = columns.find((col) => col.id === responseCard.columnId);
         const cardToOpen = responseCard;
-        openTodoCardModal({ card: cardToOpen, column: columnToOpen as Column });
+        // NOTE: 여기 접근했다는 것부터 수정 권한이 있다는 뜻 -> isMember = true
+        openTodoCardModal({ card: cardToOpen, column: columnToOpen as Column, isMember: true });
       } else {
         openNotificationModal({ text: '할 일 카드가 생성되었습니다!' });
       }
@@ -437,7 +438,8 @@ export default function EditCardModal({ column, isEdit = false, card }: EditCard
             type='button'
             onClick={() => {
               if (isEdit && card) {
-                openTodoCardModal({ card: card, column: column });
+                // NOTE: 여기 접근했다는 것부터 수정 권한이 있다는 뜻 -> isMember = true
+                openTodoCardModal({ card: card, column: column, isMember: true });
               } else {
                 closeModal();
               }

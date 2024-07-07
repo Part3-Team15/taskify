@@ -2,10 +2,10 @@ import axios from 'axios';
 
 import instance from './axios';
 
-import { postCardData } from '@/components/Modal/EditCardModal';
 import { Dashboard, FavoriteDashboard } from '@/types/Dashboard.interface';
 import { Invitation } from '@/types/Invitation.interface';
 import { CommentForm } from '@/types/post/CommentForm.interface';
+import { PostCardData } from '@/types/post/EditModalPostData.interface';
 import { NewDashboardForm, NewColumnForm, InviteMemberForm } from '@/types/post/ModalForm.interface';
 import { SignInForm, SignInResponse } from '@/types/post/SignInForm.interface';
 import { SignUpForm } from '@/types/post/SignUpForm.interface';
@@ -50,7 +50,7 @@ export const postImage = async (formData: UploadImageForm) => {
 };
 
 // 카드 생성
-export const postCard = async (formData: postCardData) => {
+export const postCard = async (formData: PostCardData) => {
   const response = await instance.post(`/cards`, formData);
   return response.data;
 };
