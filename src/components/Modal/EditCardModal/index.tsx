@@ -270,6 +270,9 @@ export default function EditCardModal({ column, isEdit = false, card }: EditCard
       }
 
       queryClient.invalidateQueries({ queryKey: ['cards', column.id] });
+      if (formValues.columnId !== column.id) {
+        queryClient.invalidateQueries({ queryKey: ['cards', formValues.columnId] });
+      }
     } catch (error) {
       console.error('Error submitting form:', error);
     } finally {
