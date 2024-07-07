@@ -10,11 +10,11 @@ import { DASHBOARD_COLOR_OBJ } from '@/constants';
 import useFetchData from '@/hooks/useFetchData';
 import useModal from '@/hooks/useModal';
 import { deleteFavorite } from '@/services/deleteService';
-import { getDashboard } from '@/services/getService';
+import { getDashboard, getFavorites } from '@/services/getService';
 import { putDashboardInfo } from '@/services/putService';
 import { RootState } from '@/store/store';
 import { DashboardColor, DashboardInfoState, Dashboard, FavoriteDashboard } from '@/types/Dashboard.interface';
-import { checkFavorite, createFavorite, limitCheckFavorite, findUserById } from '@/utils/favoriteDashboard';
+import { checkFavorite, createFavorite, limitCheckFavorite } from '@/utils/favoriteDashboard';
 import { addShareAccount, checkPublic, removeShareAccount } from '@/utils/shareAccount';
 
 interface ModifySectionProps {
@@ -22,6 +22,7 @@ interface ModifySectionProps {
   handlePublicToggle: () => void;
   isFavorite: boolean;
   handleFavoriteToggle: () => void;
+  favorites: FavoriteDashboard[];
 }
 
 export default function DashboardModifySection({
@@ -29,6 +30,7 @@ export default function DashboardModifySection({
   handlePublicToggle: onToggleClick,
   isFavorite,
   handleFavoriteToggle: handleFavoriteToggle,
+  favorites,
 }: ModifySectionProps) {
   const router = useRouter();
   const { id } = router.query;
@@ -44,7 +46,7 @@ export default function DashboardModifySection({
   const [fixedTitle, setFixedTitle] = useState<string>('');
   const [fixedColor, setFixedColor] = useState<string>('');
   const [isButtonDisabled, setIsButtonDisabled] = useState<boolean>(true);
-  const { user } = useSelector((state: RootState) => state.user);
+  const { _id: favoriteUserId } = useSelector((state: RootState) => state.favoritesUser);
 
   const getColorString = (colorValue: string): string | undefined => {
     return (Object.keys(DASHBOARD_COLOR_OBJ) as (keyof typeof DASHBOARD_COLOR_OBJ)[]).find(
@@ -71,14 +73,17 @@ export default function DashboardModifySection({
     };
 
     const handleFavoriteChange = async () => {
-      const initIsFavorite = await checkFavorite(Number(user?.id), Number(id));
+      const favoriteList = favorites ?? [];
+      const initIsFavorite = await checkFavorite(favoriteList, Number(id));
       if (isFavorite === initIsFavorite) return;
 
-      const favoriteUser = await findUserById(Number(user?.id));
-      if (isFavorite) {
-        await createFavorite(favoriteUser, dashboard as FavoriteDashboard);
-      } else {
-        await deleteFavorite(Number(id), favoriteUser);
+      if (favoriteUserId) {
+        if (isFavorite) {
+          await createFavorite(favoriteUserId, dashboard as FavoriteDashboard, favoriteList);
+        } else {
+          await deleteFavorite(Number(id), favoriteUserId);
+        }
+        queryClient.invalidateQueries({ queryKey: ['favorites', favoriteUserId] });
       }
     };
 
@@ -89,11 +94,12 @@ export default function DashboardModifySection({
       openNotificationModal({ text: '대시보드 정보가 수정되었습니다!' });
       queryClient.invalidateQueries({ queryKey: ['dashboard', id] });
       queryClient.invalidateQueries({ queryKey: ['sideDashboards'] });
-      queryClient.invalidateQueries({ queryKey: ['favoritesDashboards'] });
+      queryClient.invalidateQueries({ queryKey: ['sideFavorites'] });
 
       setIsButtonDisabled(true);
     } catch {
-      if ((await limitCheckFavorite(Number(user?.id))) && isFavorite) {
+      const favoriteList = favorites ?? [];
+      if ((await limitCheckFavorite(favoriteList)) && isFavorite) {
         handleFavoriteToggle();
         if (isPublic) onToggleClick();
         openNotificationModal({ text: '즐겨찾기는 최대 3개까지 가능합니다.' });
@@ -120,9 +126,10 @@ export default function DashboardModifySection({
 
   useEffect(() => {
     const handleButtonControl = async () => {
+      const favoriteList = favorites ?? [];
       const [initIsPublic, initIsFavorite] = await Promise.all([
         checkPublic(Number(id)),
-        checkFavorite(Number(user?.id), Number(id)),
+        checkFavorite(favoriteList, Number(id)),
       ]);
       setIsButtonDisabled(
         (value.title === fixedTitle &&
@@ -133,7 +140,7 @@ export default function DashboardModifySection({
       );
     };
     handleButtonControl();
-  }, [value.title, value.color, fixedTitle, fixedColor, isPublic, isFavorite]);
+  }, [value.title, value.color, fixedTitle, fixedColor, isPublic, isFavorite, favorites]);
 
   const handleColorSelect = (color: DashboardColor) => {
     setSelectedColor(color);

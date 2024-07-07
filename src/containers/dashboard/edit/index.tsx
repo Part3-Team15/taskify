@@ -14,9 +14,9 @@ import useFetchData from '@/hooks/useFetchData';
 import useModal from '@/hooks/useModal';
 import useRedirectIfNoPermission from '@/hooks/useRedirectIfNoPermission';
 import { deleteDashboard } from '@/services/deleteService';
-import { getDashboard } from '@/services/getService';
+import { getDashboard, getFavorites } from '@/services/getService';
 import { RootState } from '@/store/store';
-import { Dashboard } from '@/types/Dashboard.interface';
+import { Dashboard, FavoriteDashboard } from '@/types/Dashboard.interface';
 import { DeleteDashboardInput } from '@/types/delete/DeleteDashboardInput.interface';
 import { checkFavorite } from '@/utils/favoriteDashboard';
 import { checkPublic } from '@/utils/shareAccount';
@@ -31,12 +31,24 @@ export default function DashboardEdit() {
   const { data: dashboard, error } = useFetchData<Dashboard>(['dashboard', id], () => getDashboard(id as string));
   const [isPublic, setIsPublic] = useState(false);
   const [isFavorite, setIsFavorite] = useState(false);
-  const { user } = useSelector((state: RootState) => state.user);
+  const { _id: favoriteUserId } = useSelector((state: RootState) => state.favoritesUser);
+
+  const [favorites, setFavorites] = useState<FavoriteDashboard[] | undefined>(undefined);
+
+  useEffect(() => {
+    const getFavoritesData = async () => {
+      const res = await getFavorites(favoriteUserId);
+      setFavorites(res.data);
+    };
+
+    getFavoritesData();
+  }, [favoriteUserId]);
 
   const handleSuccess = () => {
     queryClient.invalidateQueries({ queryKey: ['sideDashboards'] });
     router.replace('/mydashboard');
   };
+
   const { mutate } = useDeleteData<DeleteDashboardInput>({ mutationFn: deleteDashboard, handleSuccess });
 
   const handlePublicToggle = () => {
@@ -49,7 +61,6 @@ export default function DashboardEdit() {
     }
   };
 
-  // 즐겨찾기 토글
   const handleFavoriteToggle = () => {
     setIsFavorite((prevIsFavorite) => !prevIsFavorite);
   };
@@ -74,11 +85,11 @@ export default function DashboardEdit() {
         redirectIfNoPermission(-1);
       }
       setIsPublic(await checkPublic(Number(id)));
-      setIsFavorite(await checkFavorite(Number(user?.id), Number(id)));
+      setIsFavorite(await checkFavorite(favorites ?? [], Number(id)));
     };
 
     handleInitialLoad();
-  }, [id]);
+  }, [id, favorites]);
 
   useEffect(() => {
     if (dashboard) {
@@ -106,6 +117,7 @@ export default function DashboardEdit() {
           handlePublicToggle={handlePublicToggle}
           isFavorite={isFavorite}
           handleFavoriteToggle={handleFavoriteToggle}
+          favorites={favorites ?? []}
         />
         <MembersSection onDeleteMember={handleMemberDelete} />
         <InvitedMembersSection />
