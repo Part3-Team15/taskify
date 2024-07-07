@@ -1,4 +1,3 @@
-import { set } from 'lodash';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
@@ -93,7 +92,7 @@ export default function Sidebar() {
 
       <div className='flex grow flex-col gap-2'>
         <div className='flex items-center justify-center md:justify-between'>
-          <p className='hidden px-3 text-xs font-bold text-gray-78 md:block dark:text-dark-10'>Dashboards</p>
+          <p className='hidden px-3 text-xs font-bold text-gray-78 md:block dark:text-dark-10'>대시보드 목록</p>
           <button
             className='p-3'
             onClick={() => {
@@ -111,7 +110,7 @@ export default function Sidebar() {
             href='/mydashboard'
             className={`${activePath === '/mydashboard' ? 'bg-violet-f1 text-black-33/80 dark:bg-dark-purple' : 'text-gray-78'} btn-violet-light dark:btn-violet-dark flex items-center justify-center rounded-md border-none py-1 hover:bg-violet/20 md:justify-start md:px-3 md:py-2`}
           >
-            <p className='hidden pr-[6px] text-lg font-semibold md:block'>📋 My Dashboard</p>
+            <p className='hidden pr-[6px] text-lg font-semibold md:block'>📋 내 대시보드</p>
             <p className='flex items-center justify-center text-lg font-medium md:hidden'>📋</p>
           </Link>
 
@@ -119,7 +118,7 @@ export default function Sidebar() {
             href='/mypage'
             className={`${activePath === '/mypage' ? 'bg-violet-f1 text-black-33/80 dark:bg-dark-purple' : 'text-gray-78'} btn-violet-light dark:btn-violet-dark flex items-center justify-center rounded-md border-none py-1 hover:bg-violet/20 md:justify-start md:px-3 md:py-2`}
           >
-            <p className='hidden pr-[6px] text-lg font-semibold md:block'>😺 My Page</p>
+            <p className='hidden pr-[6px] text-lg font-semibold md:block'>😺 내 계정</p>
             <p className='flex items-center justify-center text-lg font-medium md:hidden'>😺</p>
           </Link>
         </div>
@@ -128,8 +127,14 @@ export default function Sidebar() {
 
         {favoriteList && favoriteList.length > 0 && (
           <>
-            <div className='flex flex-col gap-2'>
-              <p className='px-3 text-xs font-bold text-gray-78 dark:text-dark-10'>즐겨찾기</p>
+            <div className='flex flex-col items-center gap-2 md:items-stretch'>
+              <p className='flex items-center text-lg text-gray-78 md:px-3 dark:text-dark-10'>
+                ⭐
+                <span className='hidden px-2 text-[14px] font-extrabold text-gray-78 md:block dark:text-dark-10'>
+                  즐겨찾기
+                </span>
+              </p>
+
               <ul className='flex flex-col gap-2'>
                 {favoriteList.map((favorite) => (
                   <DashboardItem key={favorite.id} dashboard={favorite} nowDashboard={Number(id)} />
