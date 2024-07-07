@@ -1,3 +1,4 @@
+import { deleteCookie } from 'cookies-next';
 import { useRouter } from 'next/router';
 import { MouseEventHandler, useEffect, useRef, useState } from 'react';
 import { useDispatch } from 'react-redux';
@@ -29,6 +30,7 @@ const useUserDropdown = () => {
   const handleLogoutClick: MouseEventHandler<HTMLButtonElement> = (e) => {
     e.stopPropagation();
     dispatch(clearUser());
+    deleteCookie('token');
     setIsOpen(false);
     router.push('/');
   };
