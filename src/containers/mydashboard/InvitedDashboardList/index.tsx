@@ -77,7 +77,7 @@ export default function InvitedDashboardList({ initialInvitedDashboard }: Invite
     };
   }, [observerRef, handleObserver]);
 
-  const handleAcceptInvitation = async (invitationId: number, inviteAccepted: boolean, dashboardId: number) => 
+  const handleAcceptInvitation = async (invitationId: number, inviteAccepted: boolean, dashboardId: number) => {
     try {
       // 거절할 초대들을 필터링
       const invitationsToReject = invitations.filter(
