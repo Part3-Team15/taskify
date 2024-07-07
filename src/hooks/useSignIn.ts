@@ -1,5 +1,6 @@
 import { useMutation } from '@tanstack/react-query';
 import { AxiosError } from 'axios';
+import { setCookie } from 'cookies-next';
 import { useDispatch } from 'react-redux';
 
 import { postSignIn } from '@/services/postService';
@@ -22,6 +23,7 @@ export const useSignIn = () => {
     onSuccess: (data) => {
       dispatch(setUser(data));
       dispatch(isLoading(false));
+      setCookie('token', data.accessToken);
     },
     onMutate: async () => {
       dispatch(isLoading(true));

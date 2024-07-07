@@ -8,6 +8,7 @@ export default function DashboardEditPage() {
       <Head>
         <title>Taskify | 대시보드 수정</title>
       </Head>
+
       <DashboardEdit />
     </>
   );

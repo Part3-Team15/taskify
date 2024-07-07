@@ -3,6 +3,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
+import { useSelector } from 'react-redux';
 
 import DashboardModifySection from './DashboardModifySection';
 import InvitedMembersSection from './InvitedMembersSection';
@@ -14,8 +15,10 @@ import useModal from '@/hooks/useModal';
 import useRedirectIfNoPermission from '@/hooks/useRedirectIfNoPermission';
 import { deleteDashboard } from '@/services/deleteService';
 import { getDashboard } from '@/services/getService';
+import { RootState } from '@/store/store';
 import { Dashboard } from '@/types/Dashboard.interface';
 import { DeleteDashboardInput } from '@/types/delete/DeleteDashboardInput.interface';
+import { checkFavorite } from '@/utils/favoriteDashboard';
 import { checkPublic } from '@/utils/shareAccount';
 
 export default function DashboardEdit() {
@@ -27,6 +30,8 @@ export default function DashboardEdit() {
 
   const { data: dashboard, error } = useFetchData<Dashboard>(['dashboard', id], () => getDashboard(id as string));
   const [isPublic, setIsPublic] = useState(false);
+  const [isFavorite, setIsFavorite] = useState(false);
+  const { user } = useSelector((state: RootState) => state.user);
 
   const handleSuccess = () => {
     queryClient.invalidateQueries({ queryKey: ['sideDashboards'] });
@@ -34,7 +39,7 @@ export default function DashboardEdit() {
   };
   const { mutate } = useDeleteData<DeleteDashboardInput>({ mutationFn: deleteDashboard, handleSuccess });
 
-  const handleToggle = () => {
+  const handlePublicToggle = () => {
     setIsPublic((prevIsPublic) => !prevIsPublic);
   };
 
@@ -42,6 +47,11 @@ export default function DashboardEdit() {
     if (email === process.env.NEXT_PUBLIC_SHARE_ACCOUNT_EMAIL) {
       setIsPublic(false);
     }
+  };
+
+  // 즐겨찾기 토글
+  const handleFavoriteToggle = () => {
+    setIsFavorite((prevIsFavorite) => !prevIsFavorite);
   };
 
   const handleDeleteClick = () => {
@@ -63,6 +73,8 @@ export default function DashboardEdit() {
       } catch {
         redirectIfNoPermission(-1);
       }
+      setIsPublic(await checkPublic(Number(id)));
+      setIsFavorite(await checkFavorite(Number(user?.id), Number(id)));
     };
 
     handleInitialLoad();
@@ -89,7 +101,12 @@ export default function DashboardEdit() {
         돌아가기
       </Link>
       <div className='flex flex-col gap-4'>
-        <DashboardModifySection isPublic={isPublic} onToggleClick={handleToggle} />
+        <DashboardModifySection
+          isPublic={isPublic}
+          handlePublicToggle={handlePublicToggle}
+          isFavorite={isFavorite}
+          handleFavoriteToggle={handleFavoriteToggle}
+        />
         <MembersSection onDeleteMember={handleMemberDelete} />
         <InvitedMembersSection />
       </div>
