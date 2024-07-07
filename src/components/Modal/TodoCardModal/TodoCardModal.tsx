@@ -68,7 +68,7 @@ export default function TodoCardModal({ card, column, onClick }: TodoCardModalPr
         </div>
         <div className='flex'>
           <div className='relative'>
-            <EditDropdown card={card} />
+            <EditDropdown card={card} column={column} />
           </div>
           <button onClick={handleModalClose} className='transition-all duration-200 hover:opacity-50'>
             <Image src='/icons/x.svg' alt='X 아이콘' width={32} height={32} className='dark:hidden' />

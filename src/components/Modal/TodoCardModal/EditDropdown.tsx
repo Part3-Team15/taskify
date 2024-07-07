@@ -7,13 +7,14 @@ import useModal from '@/hooks/useModal';
 import useUserDropdown from '@/hooks/useUserDropdown';
 import { deleteCard } from '@/services/deleteService';
 import { Card } from '@/types/Card.interface';
-import { revertFormattedDateTime } from '@/utils/formatDateTime';
+import { Column } from '@/types/Column.interface';
 
 interface EditDropdownProps {
   card: Card;
+  column: Column;
 }
 
-export default function EditDropdown({ card }: EditDropdownProps) {
+export default function EditDropdown({ card, column }: EditDropdownProps) {
   const { isOpen, dropdownRef, handleDropdownClick, handleMenuClick } = useUserDropdown();
   const queryClient = useQueryClient();
   const router = useRouter();
@@ -33,19 +34,9 @@ export default function EditDropdown({ card }: EditDropdownProps) {
   const handleEditCard: MouseEventHandler<HTMLLIElement> = (e: MouseEvent<HTMLLIElement>) => {
     handleMenuClick(e);
     openEditCardModal({
-      columnId: card.columnId,
+      column: column,
       isEdit: true,
-      cardId: card.id,
-      cardData: {
-        assigneeUserId: card.assignee?.id || 0,
-        dashboardId: Number(dashboardId),
-        columnId: card.columnId,
-        title: card.title,
-        description: card.description,
-        dueDate: card.dueDate ? revertFormattedDateTime(card.dueDate) : '',
-        tags: card.tags,
-        imageUrl: card.imageUrl || '',
-      },
+      card: card,
     });
   };
 
