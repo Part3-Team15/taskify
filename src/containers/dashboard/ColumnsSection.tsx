@@ -1,14 +1,13 @@
+import { useQueryClient } from '@tanstack/react-query';
 import Image from 'next/image';
-import React, { useState, useEffect } from 'react';
 import { DragDropContext, Droppable, DropResult } from 'react-beautiful-dnd';
 
 import Column from './Column';
 
 import useFetchData from '@/hooks/useFetchData';
 import useModal from '@/hooks/useModal';
-import { getColumnsList, getCardsList } from '@/services/getService';
+import { getColumnsList } from '@/services/getService';
 import { moveToOtherColumn } from '@/services/putService';
-import { Card as CardType } from '@/types/Card.interface';
 import { ColumnsResponse } from '@/types/Column.interface';
 
 interface ColumnsSectionProps {

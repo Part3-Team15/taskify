@@ -254,7 +254,7 @@ export default function EditCardModal({
         await postCard(filteredFormValues as postCardData);
       }
 
-      queryClient.resetQueries({ queryKey: ['columns', id] });
+      queryClient.invalidateQueries({ queryKey: ['cards', columnId] });
       openNotificationModal({
         text: `할 일 카드가 ${isEdit ? '수정 ' : '생성 '}되었습니다!`,
       });

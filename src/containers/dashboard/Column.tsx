@@ -3,7 +3,9 @@ import { Draggable, Droppable } from 'react-beautiful-dnd';
 
 import Card from './Card';
 
+import useFetchData from '@/hooks/useFetchData';
 import useModal from '@/hooks/useModal';
+import { getCardsList } from '@/services/getService';
 import { Card as CardType } from '@/types/Card.interface';
 import { Column as ColumnType } from '@/types/Column.interface';
 
@@ -11,11 +13,15 @@ interface ColumnProps {
   column: ColumnType;
   columns: ColumnType[];
   index: number;
-  cards: CardType[];
 }
 
-function Column({ column, index, cards, columns }: ColumnProps) {
+function Column({ column, index, columns }: ColumnProps) {
   const { openModifyColumnModal, openEditCardModal, openTodoCardModal } = useModal();
+  const { data: cardsData, isLoading } = useFetchData<{ cards: CardType[] }>(['cards', column.id], () =>
+    getCardsList(column.id),
+  );
+
+  const cards = cardsData?.cards || [];
 
   return (
     <div className='block lg:flex'>

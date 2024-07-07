@@ -42,7 +42,7 @@ export default function TodoCardModal({ card, column, onClick }: TodoCardModalPr
 
     try {
       await postComment(commentData);
-      queryClient.invalidateQueries({ queryKey: ['comments'] });
+      queryClient.invalidateQueries({ queryKey: ['comments', card.id] });
       setNewComment('');
     } catch (error) {
       console.error('댓글 추가 중 에러 발생:', error);
