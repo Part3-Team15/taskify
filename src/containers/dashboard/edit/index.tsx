@@ -88,7 +88,7 @@ export default function DashboardEdit() {
       </div>
       <button
         type='button'
-        className='gray-border flex size-fit min-w-[235px] items-center justify-center rounded-lg bg-violet/70 py-4 text-xl font-bold text-white md:my-12 md:px-20 md:py-5 md:text-lg dark:bg-violet-hover/60'
+        className='btn-gray gray-border my-8 size-fit rounded-lg px-[84px] py-4 text-base font-medium md:my-12 md:px-[95px] md:py-5 md:text-lg dark:bg-violet/40 dark:text-white dark:hover:bg-violet-hover/60 dark:active:bg-violet-hover/70'
         onClick={handleDeleteClick}
       >
         대시보드 삭제하기
