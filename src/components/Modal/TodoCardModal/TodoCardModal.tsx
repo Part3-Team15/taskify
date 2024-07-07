@@ -112,7 +112,7 @@ export default function TodoCardModal({ card, column, onClick }: TodoCardModalPr
                   onChange={(e) => setNewComment(e.target.value)}
                   placeholder='댓글을 입력하세요.'
                 />
-                <span className='absolute right-24 block text-[12px] text-red hover:cursor-default'>
+                <span className='absolute right-20 block pt-1 text-[12px] text-red hover:cursor-default md:right-24'>
                   {errorMessage}
                 </span>
 
