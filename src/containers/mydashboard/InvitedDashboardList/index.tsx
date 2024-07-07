@@ -137,7 +137,7 @@ export default function InvitedDashboardList({ initialInvitedDashboard }: Invite
           ) : (
             <div className='flex flex-col items-center justify-center py-[100px]'>
               <div className='relative size-[60px] md:size-[150px]'>
-                <Image src={'/icons/invitations.svg'} alt='invitations' fill />
+                <Image src={'/icons/invitations.svg'} alt='invitations' fill priority />
               </div>
               <p className='px-7 py-5 text-sm text-gray-78 md:text-base'>초대된 대시보드가 없습니다.</p>
             </div>

@@ -17,7 +17,6 @@ export default function DashboardList({ initialDashboard }: DashboardListProps) 
   const { openNewDashboardModal } = useModal();
   const [dashboardData, setDashboards] = useState<DashboardsResponse>(initialDashboard);
 
-  // 대시보드 데이터를 가져오는 커스텀 훅 사용
   const {
     data: dashboardResponse,
     error,
