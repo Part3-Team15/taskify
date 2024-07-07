@@ -111,8 +111,8 @@ export default function SignUpForm() {
           onChange={() => {
             setCheckTerms(!checkTerms);
           }}
-        />{' '}
-        <label htmlFor='terms' className='text-[16px] text-black-33'>
+        />
+        <label htmlFor='terms' className='text-[16px] text-black-33 dark:text-dark-10'>
           이용약관에 동의합니다.
         </label>
       </div>

@@ -6,7 +6,7 @@ import Footer from '@/components/Footer';
 
 function Home() {
   return (
-    <main className='h-dvh max-h-[calc(100dvh-70px)] overflow-y-scroll bg-dark-500 text-white'>
+    <main className='scrollbar-black h-dvh max-h-[calc(100dvh-70px)] overflow-y-auto bg-dark-500 text-white'>
       <Head>
         <title>Taskify</title>
       </Head>
@@ -26,7 +26,7 @@ function Home() {
           </Link>
         </section>
 
-        <section className='mb-[90px] flex h-min w-[343px] flex-col justify-between gap-48 rounded-lg bg-dark-400 md:w-[664px] md:gap-[220px] md:pt-[63px] lg:w-[1200px] lg:max-w-[1200px] lg:flex-row lg:pt-[100px]'>
+        <section className='mb-[90px] flex h-min w-[343px] flex-col justify-between gap-[120px] rounded-lg bg-dark-400 md:w-[664px] md:gap-[220px] md:pt-[63px] lg:w-[1200px] lg:max-w-[1200px] lg:flex-row lg:gap-0 lg:pt-[100px]'>
           <div className='flex flex-col gap-[60px] md:gap-[100px] md:pl-[60px]'>
             <p className='pt-[60px] text-center text-[22px] font-medium text-gray-9f md:pt-6 md:text-start'>Point 1</p>
             <p className='text-center text-4xl font-bold leading-[64px] md:text-start md:text-5xl'>
@@ -37,12 +37,12 @@ function Home() {
 
           <div className='flex justify-end'>
             <div className='relative row-span-2 h-[248px] w-[296px] md:h-[435px] md:w-[520px] lg:h-[500px] lg:w-[594px]'>
-              <Image src={'/images/landing1.svg'} alt='priority' fill />
+              <Image src={'/images/landing1.png'} alt='priority' fill />
             </div>
           </div>
         </section>
 
-        <section className='mb-[90px] flex h-min w-[343px] max-w-[1200px] flex-col gap-[190px] rounded-lg bg-dark-400 pt-[60px] md:w-[664px] md:gap-[240px] md:pt-[63px] lg:w-[1200px] lg:flex-row-reverse lg:justify-end lg:gap-[100px] lg:pl-[100px]'>
+        <section className='mb-[90px] flex h-min w-[343px] max-w-[1200px] flex-col gap-[120px] rounded-lg bg-dark-400 pt-[60px] md:w-[664px] md:gap-[150px] md:pt-[63px] lg:w-[1200px] lg:flex-row-reverse lg:justify-end lg:gap-[100px] lg:pl-[100px]'>
           <div className='flex flex-col gap-[60px] md:gap-[100px] md:pl-[60px] lg:p-0'>
             <p className='text-center text-[22px] font-medium text-gray-9f md:pt-6 md:text-start'>Point 2</p>
             <p className='text-center text-4xl font-bold leading-[50px] md:text-start md:text-5xl'>
@@ -52,8 +52,8 @@ function Home() {
           </div>
 
           <div className='flex justify-center'>
-            <div className='relative row-span-2 h-[250px] w-[217px] md:h-[360px] md:w-[415px] lg:h-[500px] lg:w-[436px]'>
-              <Image src={'/images/landing2.svg'} alt='priority' fill />
+            <div className='relative row-span-2 h-[300px] w-[250px] md:h-[500px] md:w-[415px] lg:h-[500px] lg:w-[436px]'>
+              <Image src={'/images/landing2.png'} alt='priority' fill objectFit='contain' />
             </div>
           </div>
         </section>
@@ -67,13 +67,16 @@ function Home() {
             <div className='max-h-96 max-w-min'>
               <div className='flex h-[235px] w-[343px] items-center justify-center rounded-t-lg bg-black-4b md:h-[260px] md:w-[380px]'>
                 <div className='relative h-[120px] w-[300px]'>
-                  <Image src={'/images/landing3.svg'} alt='settings' fill />
+                  <Image src={'/images/landing3.png'} alt='settings' fill />
                 </div>
               </div>
 
               <div className='flex flex-col gap-4 rounded-b-lg bg-dark-400 p-4 py-8 md:p-8'>
                 <p className='text-lg font-bold'>대시보드 설정</p>
-                <p className='font-medium'>대시보드 사진과 이름을 변경할 수 있어요.</p>
+                <p className='font-medium'>
+                  대시보드 사진과 이름을 변경하고
+                  <br /> 공유할 수 있어요.
+                </p>
               </div>
             </div>
 

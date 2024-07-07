@@ -8,17 +8,26 @@
   }
 }
 
+.font-nanumgothic {
+  font-family: 'Nanum Gothic', sans-serif;
+  font-weight: 700;
+}
+
 @layer components {
   .btn-violet {
-    @apply align-center rounded-[8px] bg-violet text-white transition-all hover:bg-violet-hover active:bg-violet-active disabled:bg-violet-disabled;
+    @apply align-center rounded-[8px] bg-violet text-white transition-all hover:bg-violet-hover active:bg-violet-active disabled:bg-violet-disabled dark:bg-dark-purple dark:text-white dark:hover:bg-dark-purple-hover dark:active:bg-dark-purple-hover/50 dark:disabled:bg-dark-purple/50;
   }
 
   .btn-violet-light {
-    @apply align-center gray-border rounded-[8px] bg-white transition-all hover:bg-violet-light-hover active:bg-violet-light-active disabled:bg-violet-light-disabled;
+    @apply align-center gray-border rounded-[8px] bg-white transition-all hover:bg-violet-light-hover active:bg-violet-light-active disabled:bg-violet-light-disabled disabled:text-gray-78;
+  }
+
+  .btn-violet-dark {
+    @apply align-center rounded-[8px] bg-dark text-dark-10 transition-all hover:bg-dark-purple-hover active:bg-dark-purple disabled:bg-dark-200;
   }
 
   .btn-white {
-    @apply align-center gray-border rounded-[8px] bg-white text-gray-78 transition-all hover:bg-white-hover active:bg-white-active disabled:bg-white-disabled;
+    @apply align-center gray-border rounded-[8px] bg-white text-gray-78 transition-all hover:bg-white-hover active:bg-white-active disabled:bg-white-disabled dark:bg-dark-300 dark:text-dark-10 dark:hover:bg-dark-200 dark:active:bg-dark-200/50 dark:disabled:bg-dark-400;
   }
 
   .btn-gray {
@@ -26,7 +35,7 @@
   }
 
   .btn-red {
-    @apply align-center active:bg-red-active rounded-[8px] bg-red text-white transition-all hover:bg-red-hover disabled:bg-violet-disabled;
+    @apply align-center rounded-[8px] bg-red text-white transition-all hover:bg-red-hover active:bg-red-active disabled:bg-violet-disabled;
   }
 
   .section {
@@ -42,7 +51,7 @@
   }
 
   .input {
-    @apply gray-border flex h-[42px] w-full items-center rounded-md bg-white px-4 text-sm outline-none placeholder:text-gray-9f invalid:border-2 invalid:border-red focus:border-2 focus:border-violet disabled:text-gray-9f md:h-12 md:text-base;
+    @apply gray-border flex h-[42px] w-full items-center rounded-md bg-white px-4 text-sm outline-none placeholder:text-gray-9f invalid:border-2 invalid:border-red focus:border-2 focus:border-violet disabled:text-gray-9f md:h-12 md:text-base dark:bg-dark-300;
   }
 
   .dd-container {
@@ -50,15 +59,122 @@
   }
 
   .dd-menu {
-    @apply align-center h-[30px] w-full rounded-md hover:bg-violet-f1 active:bg-violet-e8 md:h-8;
+    @apply align-center h-[30px] w-full rounded-md hover:bg-violet-f1 active:bg-violet-e8 md:h-8 dark:text-dark-10 dark:hover:bg-dark-200/50 dark:active:bg-dark-200;
   }
 
   .modal {
-    @apply rounded-[8px] bg-white px-5 py-7 text-base text-black-33 md:px-7 md:text-lg;
+    @apply dark:bg-dark-450 rounded-[8px] bg-white px-5 py-7 text-base text-black-33 md:px-7 md:text-lg dark:text-dark-10;
   }
 
   .modal-basic {
     @apply h-[220px] w-[327px] md:h-[250px] md:w-[540px];
+  }
+
+  .scrollbar-white {
+    /* 스크롤바 전체 */
+    &::-webkit-scrollbar {
+      width: 10px;
+    }
+    /* 스크롤바 손잡이 */
+    &::-webkit-scrollbar-thumb {
+      background-color: #a0aec0;
+      border-radius: 6px;
+      border: 3px solid #f7fafc;
+    }
+    /* 스크롤바 손잡이 호버 */
+    &::-webkit-scrollbar-thumb:hover {
+      background-color: #718096;
+    }
+    /* 스크롤바 손잡이 클릭 */
+    &::-webkit-scrollbar-thumb:active {
+      background-color: #4a5568;
+    }
+    /* 스크롤바 배경 */
+    &::-webkit-scrollbar-track {
+      background-color: #f7fafc;
+    }
+  }
+
+  .scrollbar-black {
+    /* 스크롤바 전체 */
+    &::-webkit-scrollbar {
+      width: 10px;
+    }
+    /* 스크롤바 손잡이 */
+    &::-webkit-scrollbar-thumb {
+      background-color: #414141;
+      border-radius: 6px;
+      border: 3px solid #212121;
+    }
+    /* 스크롤바 손잡이 호버 */
+    &::-webkit-scrollbar-thumb:hover {
+      background-color: #505050;
+    }
+    /* 스크롤바 손잡이 클릭 */
+    &::-webkit-scrollbar-thumb:active {
+      background-color: #313131;
+    }
+    /* 스크롤바 배경 */
+    &::-webkit-scrollbar-track {
+      background-color: #212121;
+    }
+  }
+
+  .scrollbar-violet {
+    /* 스크롤바 전체 */
+    &::-webkit-scrollbar {
+      width: 10px;
+    }
+    /* 스크롤바 손잡이 */
+    &::-webkit-scrollbar-thumb {
+      background-color: #5534da;
+      border-radius: 6px;
+      border: 3px solid #f1effd;
+    }
+    /* 스크롤바 손잡이 호버 */
+    &::-webkit-scrollbar-thumb:hover {
+      background-color: #3925a8;
+    }
+    /* 스크롤바 손잡이 클릭 */
+    &::-webkit-scrollbar-thumb:active {
+      background-color: #261680;
+    }
+    /* 스크롤바 배경 */
+    &::-webkit-scrollbar-track {
+      background-color: #f1effd;
+    }
+  }
+
+  .scrollbar-violet-dark {
+    /* 스크롤바 전체 */
+    &::-webkit-scrollbar {
+      width: 10px;
+    }
+    /* 스크롤바 손잡이 */
+    &::-webkit-scrollbar-thumb {
+      background-color: #5534da;
+      border-radius: 6px;
+      border: 3px solid #212121;
+    }
+    /* 스크롤바 손잡이 호버 */
+    &::-webkit-scrollbar-thumb:hover {
+      background-color: #3925a8;
+    }
+    /* 스크롤바 손잡이 클릭 */
+    &::-webkit-scrollbar-thumb:active {
+      background-color: #261680;
+    }
+    /* 스크롤바 배경 */
+    &::-webkit-scrollbar-track {
+      background-color: #212121;
+    }
+  }
+
+  .scrollbar-none {
+    /* 스크롤바 전체 */
+    &::-webkit-scrollbar {
+      display: none;
+    }
   }
 }
 
@@ -68,6 +184,6 @@
   }
 
   .gray-border {
-    @apply border border-gray-d9;
+    @apply border border-gray-d9 dark:border-dark-200;
   }
 }
