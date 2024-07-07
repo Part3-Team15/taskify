@@ -128,8 +128,9 @@ export default function Sidebar() {
 
         {favoriteList && favoriteList.length > 0 && (
           <>
-            <div className='flex flex-col gap-2'>
-              <p className='px-3 text-xs font-bold text-gray-78 dark:text-dark-10'>즐겨찾기</p>
+            <div className='flex flex-col items-center gap-2 md:items-start'>
+              <p className='hidden px-3 text-xs font-bold text-gray-78 md:block dark:text-dark-10'>즐겨찾기</p>
+              <p className='text-lg font-bold text-gray-78 md:hidden dark:text-dark-10'>⭐</p>
               <ul className='flex flex-col gap-2'>
                 {favoriteList.map((favorite) => (
                   <DashboardItem key={favorite.id} dashboard={favorite} nowDashboard={Number(id)} />
