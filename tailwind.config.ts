@@ -14,8 +14,8 @@ const config: Config = {
       lg: '1280px',
     },
     fontFamily: {
-      pretendard: ['Pretendard'],
-      montserrat: ['Montserrat'],
+      pretendard: ['Pretendard', 'sans-serif'],
+      nanumgothic: ['"Nanum Gothic"', 'sans-serif'],
     },
     colors: {
       black: {
@@ -28,15 +28,15 @@ const config: Config = {
         DEFAULT: '#212121',
         bg: '#1e1e1e',
         10: 'hsl(0, 0%, 90%)',
-				100: 'hsl(0, 0%, 60%)',
+        100: 'hsl(0, 0%, 60%)',
         200: 'hsl(0, 0%, 30%)',
         300: 'hsl(0, 0%, 15%)',
-				400: 'hsl(0, 0%, 10%)',
+        400: 'hsl(0, 0%, 10%)',
         500: 'hsl(0, 0%, 6%)',
         purple: {
           DEFAULT: '#2C283A',
-          hover: "#3D3A4F",
-        }
+          hover: '#3D3A4F',
+        },
       },
       gray: {
         78: '#787486',
@@ -102,9 +102,7 @@ const config: Config = {
       },
     },
   },
-  plugins: [
-    require("tailwind-scrollbar-hide"),
-  ],
+  plugins: [require('tailwind-scrollbar-hide')],
   darkMode: 'selector',
 };
 

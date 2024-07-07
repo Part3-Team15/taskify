@@ -4,8 +4,13 @@
 
 @layer base {
   body {
-    @apply font-pretendard font-normal;
+    @apply font-pretendard;
   }
+}
+
+.font-nanumgothic {
+  font-family: 'Nanum Gothic', sans-serif;
+  font-weight: 700;
 }
 
 @layer components {
