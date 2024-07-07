@@ -77,7 +77,6 @@ export const postFavoriteUser = async (userData: { userId: number }) => {
 
 // 즐겨찾기 항목 생성하기
 export const postFavorite = async (id: string, favoriteData: FavoriteDashboard) => {
-  console.log('favoriteData', favoriteData);
   const response = await axios.post(`/api/favorites/${id}`, favoriteData);
   return response.data;
 };

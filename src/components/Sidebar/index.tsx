@@ -16,7 +16,7 @@ import { getDashboardsList, getFavorites, getFavoriteUsers } from '@/services/ge
 import { postFavoriteUser } from '@/services/postService';
 import { RootState } from '@/store/store';
 import { DashboardsResponse, FavoriteDashboard } from '@/types/Dashboard.interface';
-import { fetchFavorites, findUserById, UserCheck } from '@/utils/favoriteDashboard';
+import { fetchFavorites } from '@/utils/favoriteDashboard';
 
 export default function Sidebar() {
   const { user } = useSelector((state: RootState) => state.user);
@@ -30,7 +30,7 @@ export default function Sidebar() {
   const activePath = router.pathname;
 
   const [favoriteList, setFavoriteList] = useState<FavoriteDashboard[]>([]);
-  const [userIdForFavorites, setUserIdForFavorites] = useState<string>('');
+  const [userIdForFavorites, setUserIdForFavorites] = useState<string | null>(null);
 
   const { openNewDashboardModal } = useModal();
 
@@ -52,13 +52,21 @@ export default function Sidebar() {
 
   const handleCheckUser = async () => {
     try {
-      const isUserExists = await UserCheck(Number(user?.id));
-      if (!isUserExists) {
-        const createdUser = await postFavoriteUser({ userId: Number(user?.id) });
-        setUserIdForFavorites(createdUser._id); // 생성된 유저의 _id 저장
+      const res = await getFavoriteUsers();
+      if (!res) {
+        await postFavoriteUser({ userId: Number(user?.id) });
       } else {
-        const userId = await findUserById(Number(user?.id));
-        setUserIdForFavorites(userId); // 기존 유저의 _id 저장
+        if (res.some((favoriteUser: { userId: number }) => favoriteUser.userId === user?.id)) {
+          const favoriteData = await getFavorites(
+            res.find((favoriteUser: { userId: number }) => favoriteUser.userId === user?.id)._id,
+          );
+          setUserIdForFavorites(res.find((favoriteUser: { userId: number }) => favoriteUser.userId === user?.id)._id);
+
+          if (!favoriteData) return;
+          setFavoriteList(favoriteData);
+        } else {
+          await postFavoriteUser({ userId: Number(user?.id) });
+        }
       }
     } catch (error) {
       console.error(error);

@@ -25,13 +25,18 @@ export const findUserById = async (userId: number) => {
 export const FavoriteCheck = async (userId: number, favoriteId: number) => {
   if (!userId || !favoriteId) return false;
 
-  const data = await getFavoriteUsers();
+  const id = await findUserById(userId);
 
-  if (!data) return false;
+  try {
+    const favorites = await getFavorites(id);
 
-  return data.some(
-    (user: { userId: number; favoriteId: number }) => user.userId === userId && user.favoriteId === favoriteId,
-  );
+    if (!favorites) return false;
+
+    return favorites.some((favorite: { id: number }) => favorite.id === favoriteId);
+  } catch (error) {
+    console.error('Failed to check favorite:', error);
+    return false;
+  }
 };
 
 export const fetchFavorites = async (id: string) => {
@@ -44,7 +49,9 @@ export const fetchFavorites = async (id: string) => {
 };
 
 export const FavoriteLimitCheck = async (userId: number) => {
-  const data = await getFavoriteUsers();
+  const id = await findUserById(userId);
+
+  const data = await getFavorites(id);
 
   if (!data) return false;
 

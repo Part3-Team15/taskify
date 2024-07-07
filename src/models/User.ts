@@ -1,10 +1,10 @@
 import mongoose, { Schema, Model, Document } from 'mongoose';
 
-interface User extends Document {
+interface IUser extends Document {
   userId: number;
 }
 
-const UserSchema: Schema<User> = new Schema({
+const UserSchema: Schema<IUser> = new Schema({
   userId: {
     type: Number,
     required: true,
@@ -12,6 +12,6 @@ const UserSchema: Schema<User> = new Schema({
   },
 });
 
-const UserModel: Model<User> = mongoose.models.User || mongoose.model<User>('User', UserSchema);
+const UserModel: Model<IUser> = mongoose.models.User || mongoose.model<IUser>('User', UserSchema);
 
 export default UserModel;

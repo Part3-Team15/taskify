@@ -18,10 +18,12 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
     case 'POST':
       try {
+        console.log('POST /api/users 호출됨 ', req.body);
         const createUser = await User.create(req.body);
         res.status(201).json(createUser);
       } catch (error) {
-        res.status(400).json({ error: 'Failed to create task' });
+        console.error('Failed to create user:', error);
+        res.status(400).json({ error: 'Failed to create task', message: error });
       }
       break;
 

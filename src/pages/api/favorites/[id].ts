@@ -16,8 +16,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   switch (req.method) {
     case 'GET':
       try {
-        console.log('GET /api/favorites/[id]', id, '호출됨');
-
         const user = await User.findById(id);
         if (!user) {
           return res.status(404).json({ error: 'User not found' });
@@ -28,7 +26,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
         if (!favorites.length) {
           console.log('즐겨찾기 항목이 없습니다.');
-          return res.status(404).json({ error: 'Favorites not found' });
+          return;
         }
         res.status(200).json(favorites);
       } catch (error) {
@@ -40,8 +38,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     case 'POST':
       try {
         const { id: favoriteId, title, color, createdAt, updatedAt, createdByMe, userId } = req.body;
-
-        console.log('POST 요청 본문:', req.body); // 디버깅 로그 추가
 
         if (!favoriteId || !title || !color || !createdAt || !updatedAt || createdByMe === undefined || !userId) {
           return res.status(400).json({ error: 'All fields are required' });
@@ -82,7 +78,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
           return res.status(404).json({ error: 'User not found' });
         }
 
-        const favorite = await Favorite.findOneAndDelete({ _id: favoriteId, userId: user.userId });
+        const favorite = await Favorite.findOneAndDelete({ id: favoriteId, userId: user.userId });
         if (!favorite) {
           return res.status(404).json({ error: 'Favorite not found' });
         }

@@ -79,7 +79,7 @@ export default function DashboardModifySection({
       if (isFavorite) {
         await postFavorite(favoriteUser, dashboard as FavoriteDashboard);
       } else {
-        await deleteFavorite(Number(id), Number(user?.id));
+        await deleteFavorite(Number(id), favoriteUser);
       }
     };
 
