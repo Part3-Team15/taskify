@@ -3,7 +3,6 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
-import { useSelector } from 'react-redux';
 
 import DashboardModifySection from './DashboardModifySection';
 import InvitedMembersSection from './InvitedMembersSection';
@@ -14,11 +13,9 @@ import useFetchData from '@/hooks/useFetchData';
 import useModal from '@/hooks/useModal';
 import useRedirectIfNoPermission from '@/hooks/useRedirectIfNoPermission';
 import { deleteDashboard } from '@/services/deleteService';
-import { getDashboard, getFavorites } from '@/services/getService';
-import { RootState } from '@/store/store';
-import { Dashboard, FavoriteDashboard } from '@/types/Dashboard.interface';
+import { getDashboard } from '@/services/getService';
+import { Dashboard } from '@/types/Dashboard.interface';
 import { DeleteDashboardInput } from '@/types/delete/DeleteDashboardInput.interface';
-import { checkFavorite } from '@/utils/favoriteDashboard';
 import { checkPublic } from '@/utils/shareAccount';
 
 export default function DashboardEdit() {
@@ -30,39 +27,21 @@ export default function DashboardEdit() {
 
   const { data: dashboard, error } = useFetchData<Dashboard>(['dashboard', id], () => getDashboard(id as string));
   const [isPublic, setIsPublic] = useState(false);
-  const [isFavorite, setIsFavorite] = useState(false);
-  const { _id: favoriteUserId } = useSelector((state: RootState) => state.favoritesUser);
-
-  const [favorites, setFavorites] = useState<FavoriteDashboard[] | undefined>(undefined);
-
-  useEffect(() => {
-    const getFavoritesData = async () => {
-      const res = await getFavorites(favoriteUserId);
-      setFavorites(res.data);
-    };
-
-    getFavoritesData();
-  }, [favoriteUserId]);
 
   const handleSuccess = () => {
     queryClient.invalidateQueries({ queryKey: ['sideDashboards'] });
     router.replace('/mydashboard');
   };
-
   const { mutate } = useDeleteData<DeleteDashboardInput>({ mutationFn: deleteDashboard, handleSuccess });
 
-  const handlePublicToggle = () => {
-    setIsPublic((prevIsPublic) => !prevIsPublic);
+  const handleIsPublicChange = (newIsPublic: boolean) => {
+    setIsPublic(newIsPublic);
   };
 
   const handleMemberDelete = (email: string) => {
     if (email === process.env.NEXT_PUBLIC_SHARE_ACCOUNT_EMAIL) {
       setIsPublic(false);
     }
-  };
-
-  const handleFavoriteToggle = () => {
-    setIsFavorite((prevIsFavorite) => !prevIsFavorite);
   };
 
   const handleDeleteClick = () => {
@@ -78,18 +57,18 @@ export default function DashboardEdit() {
   };
 
   useEffect(() => {
-    const handleInitialLoad = async () => {
+    const handleInitIsPublic = async () => {
       try {
         setIsPublic(await checkPublic(Number(id)));
       } catch {
         redirectIfNoPermission(-1);
       }
-      setIsPublic(await checkPublic(Number(id)));
-      setIsFavorite(await checkFavorite(favorites ?? [], Number(id)));
     };
 
-    handleInitialLoad();
-  }, [id, favorites]);
+    if (id) {
+      handleInitIsPublic();
+    }
+  }, [id]);
 
   useEffect(() => {
     if (dashboard) {
@@ -112,13 +91,7 @@ export default function DashboardEdit() {
         돌아가기
       </Link>
       <div className='flex flex-col gap-4'>
-        <DashboardModifySection
-          isPublic={isPublic}
-          handlePublicToggle={handlePublicToggle}
-          isFavorite={isFavorite}
-          handleFavoriteToggle={handleFavoriteToggle}
-          favorites={favorites ?? []}
-        />
+        <DashboardModifySection initIsPublic={isPublic} onPublicChange={handleIsPublicChange} />
         <MembersSection onDeleteMember={handleMemberDelete} />
         <InvitedMembersSection />
       </div>

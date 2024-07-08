@@ -15,23 +15,14 @@ import { putDashboardInfo } from '@/services/putService';
 import { RootState } from '@/store/store';
 import { DashboardColor, DashboardInfoState, Dashboard, FavoriteDashboard } from '@/types/Dashboard.interface';
 import { checkFavorite, createFavorite, limitCheckFavorite } from '@/utils/favoriteDashboard';
-import { addShareAccount, checkPublic, removeShareAccount } from '@/utils/shareAccount';
+import { addShareAccount, removeShareAccount } from '@/utils/shareAccount';
 
 interface ModifySectionProps {
-  isPublic: boolean;
-  handlePublicToggle: () => void;
-  isFavorite: boolean;
-  handleFavoriteToggle: () => void;
-  favorites: FavoriteDashboard[];
+  initIsPublic: boolean;
+  onPublicChange: (isPublic: boolean) => void;
 }
 
-export default function DashboardModifySection({
-  isPublic,
-  handlePublicToggle: onToggleClick,
-  isFavorite,
-  handleFavoriteToggle: handleFavoriteToggle,
-  favorites,
-}: ModifySectionProps) {
+export default function DashboardModifySection({ initIsPublic, onPublicChange }: ModifySectionProps) {
   const router = useRouter();
   const { id } = router.query;
   const { openNotificationModal } = useModal();
@@ -45,6 +36,9 @@ export default function DashboardModifySection({
   const [selectedColor, setSelectedColor] = useState<DashboardColor>('green');
   const [fixedTitle, setFixedTitle] = useState<string>('');
   const [fixedColor, setFixedColor] = useState<string>('');
+  const [isPublic, setIsPublic] = useState<boolean>(initIsPublic);
+  const [isFavorite, setIsFavorite] = useState<boolean>(false);
+  const [initIsFavorite, setInitIsFavorite] = useState<boolean>(false);
   const [isButtonDisabled, setIsButtonDisabled] = useState<boolean>(true);
   const { _id: favoriteUserId } = useSelector((state: RootState) => state.favoritesUser);
 
@@ -54,15 +48,47 @@ export default function DashboardModifySection({
     );
   };
 
+  const handleColorSelect = (color: DashboardColor) => {
+    setSelectedColor(color);
+    setValue((prevValue) => ({
+      ...prevValue,
+      color: DASHBOARD_COLOR_OBJ[color],
+    }));
+  };
+
+  const handleValidCheck = () => {
+    if (!value.title) {
+      setErrorMessage('이름을 입력해주세요.');
+    } else if (value.title.length > 15) {
+      setErrorMessage('15자 이내로 입력해주세요');
+    } else {
+      setErrorMessage('');
+    }
+  };
+
   const {
     data: dashboard,
     isLoading,
     error,
   } = useFetchData<Dashboard>(['dashboard', id], () => getDashboard(id as string));
 
+  const { data: favoriteList } = useFetchData<FavoriteDashboard[]>(
+    ['favorites', favoriteUserId],
+    () => getFavorites(favoriteUserId || ''),
+    false,
+    !!favoriteUserId,
+  );
+
+  const handlePublicToggle = () => {
+    setIsPublic((prevIsPublic) => !prevIsPublic);
+  };
+
+  const handleFavoriteToggle = () => {
+    setIsFavorite((prevIsFavorite) => !prevIsFavorite);
+  };
+
   const handleModifyButton = async () => {
     const handleIsPublicChange = async () => {
-      const initIsPublic = await checkPublic(Number(id));
       if (isPublic === initIsPublic) return;
       if (isPublic) {
         await addShareAccount(Number(id));
@@ -70,22 +96,29 @@ export default function DashboardModifySection({
         await removeShareAccount(Number(id));
       }
       queryClient.invalidateQueries({ queryKey: ['members', id] });
+      onPublicChange(isPublic);
     };
 
     const handleFavoriteChange = async () => {
-      const favoriteList = favorites ?? [];
-      const initIsFavorite = await checkFavorite(favoriteList, Number(id));
       if (isFavorite === initIsFavorite) return;
 
       if (favoriteUserId) {
         if (isFavorite) {
-          await createFavorite(favoriteUserId, dashboard as FavoriteDashboard, favoriteList);
+          await createFavorite(favoriteUserId, dashboard as FavoriteDashboard, favoriteList || []);
         } else {
           await deleteFavorite(Number(id), favoriteUserId);
         }
         queryClient.invalidateQueries({ queryKey: ['favorites', favoriteUserId] });
+        setInitIsFavorite(isFavorite);
       }
     };
+
+    if (favoriteList && limitCheckFavorite(favoriteList) && isFavorite && !initIsFavorite) {
+      // NOTE: 즐겨찾기 최대 개수 도달 -> 알림과 함께 즐겨찾기 취소
+      setIsFavorite(false);
+      openNotificationModal({ text: '즐겨찾기는 최대 3개까지 가능합니다.' });
+      return;
+    }
 
     try {
       await putDashboardInfo(Number(id), value);
@@ -98,14 +131,7 @@ export default function DashboardModifySection({
 
       setIsButtonDisabled(true);
     } catch {
-      const favoriteList = favorites ?? [];
-      if ((await limitCheckFavorite(favoriteList)) && isFavorite) {
-        handleFavoriteToggle();
-        if (isPublic) onToggleClick();
-        openNotificationModal({ text: '즐겨찾기는 최대 3개까지 가능합니다.' });
-      } else {
-        openNotificationModal({ text: '대시보드 정보 수정을 실패하였습니다.' });
-      }
+      openNotificationModal({ text: '대시보드 정보 수정을 실패하였습니다.' });
     }
   };
 
@@ -125,40 +151,26 @@ export default function DashboardModifySection({
   }, [dashboard]);
 
   useEffect(() => {
-    const handleButtonControl = async () => {
-      const favoriteList = favorites ?? [];
-      const [initIsPublic, initIsFavorite] = await Promise.all([
-        checkPublic(Number(id)),
-        checkFavorite(favoriteList, Number(id)),
-      ]);
-      setIsButtonDisabled(
-        (value.title === fixedTitle &&
-          value.color === fixedColor &&
-          isPublic === initIsPublic &&
-          isFavorite === initIsFavorite) ||
-          value.title.trim() === '',
-      );
-    };
-    handleButtonControl();
-  }, [value.title, value.color, fixedTitle, fixedColor, isPublic, isFavorite, favorites]);
+    setIsPublic(initIsPublic);
+  }, [initIsPublic]);
 
-  const handleColorSelect = (color: DashboardColor) => {
-    setSelectedColor(color);
-    setValue((prevValue) => ({
-      ...prevValue,
-      color: DASHBOARD_COLOR_OBJ[color],
-    }));
-  };
-
-  const handleValidCheck = () => {
-    if (!value.title) {
-      setErrorMessage('이름을 입력해주세요.');
-    } else if (value.title.length > 15) {
-      setErrorMessage('15자 이내로 입력해주세요');
-    } else {
-      setErrorMessage('');
+  useEffect(() => {
+    if (id) {
+      const newIsFavorite = checkFavorite(favoriteList || [], Number(id));
+      setInitIsFavorite(newIsFavorite);
+      setIsFavorite(newIsFavorite);
     }
-  };
+  }, [id, favoriteList]);
+
+  useEffect(() => {
+    setIsButtonDisabled(
+      (value.title === fixedTitle &&
+        value.color === fixedColor &&
+        isPublic === initIsPublic &&
+        isFavorite === initIsFavorite) ||
+        value.title.trim() === '',
+    );
+  }, [value.title, value.color, fixedTitle, fixedColor, isPublic, isFavorite, favoriteList]);
 
   if (isLoading) {
     return (
@@ -182,7 +194,7 @@ export default function DashboardModifySection({
         <h2 className='text-[20px] font-bold text-black-33 dark:text-dark-10'>{fixedTitle}</h2>
         <div className='align-center gap-2 md:gap-3'>
           <span>공유</span>
-          <Toggle isOn={isPublic} onToggleClick={onToggleClick} />
+          <Toggle isOn={isPublic} onToggleClick={handlePublicToggle} />
           <span>즐겨찾기</span>
           <Toggle isOn={isFavorite} onToggleClick={handleFavoriteToggle} />
         </div>

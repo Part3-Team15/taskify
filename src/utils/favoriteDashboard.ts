@@ -1,7 +1,7 @@
 import { postFavorite } from '@/services/postService';
 import { FavoriteDashboard } from '@/types/Dashboard.interface';
 
-export const checkFavorite = async (favorites: FavoriteDashboard[], favoriteId: number) => {
+export const checkFavorite = (favorites: FavoriteDashboard[], favoriteId: number) => {
   if (!favorites || !favoriteId) return false;
 
   try {
@@ -24,7 +24,8 @@ export const createFavorite = async (id: string, favoriteData: FavoriteDashboard
 
   await postFavorite(id, favoriteData);
 };
-export const limitCheckFavorite = async (favorites: FavoriteDashboard[]) => {
+
+export const limitCheckFavorite = (favorites: FavoriteDashboard[]) => {
   try {
     if (!favorites) return false;
 

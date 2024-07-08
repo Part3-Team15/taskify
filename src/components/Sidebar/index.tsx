@@ -32,7 +32,7 @@ export default function Sidebar() {
   const activePath = router.pathname;
 
   const { data: favoriteList } = useFetchData<FavoriteDashboard[]>(
-    ['sideFavorites', favoriteUser._id],
+    ['favorites', favoriteUser._id],
     () => getFavorites(favoriteUser._id || ''),
     false,
     !!favoriteUser._id,
