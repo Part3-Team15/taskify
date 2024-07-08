@@ -10,26 +10,19 @@ import { DASHBOARD_COLOR_OBJ } from '@/constants';
 import useFetchData from '@/hooks/useFetchData';
 import useModal from '@/hooks/useModal';
 import { deleteFavorite } from '@/services/deleteService';
-import { getDashboard } from '@/services/getService';
+import { getDashboard, getFavorites } from '@/services/getService';
 import { putDashboardInfo } from '@/services/putService';
 import { RootState } from '@/store/store';
 import { DashboardColor, DashboardInfoState, Dashboard, FavoriteDashboard } from '@/types/Dashboard.interface';
-import { checkFavorite, createFavorite, limitCheckFavorite, findUserById } from '@/utils/favoriteDashboard';
-import { addShareAccount, checkPublic, removeShareAccount } from '@/utils/shareAccount';
+import { checkFavorite, createFavorite, limitCheckFavorite } from '@/utils/favoriteDashboard';
+import { addShareAccount, removeShareAccount } from '@/utils/shareAccount';
 
 interface ModifySectionProps {
-  isPublic: boolean;
-  handlePublicToggle: () => void;
-  isFavorite: boolean;
-  handleFavoriteToggle: () => void;
+  initIsPublic: boolean;
+  onPublicChange: (isPublic: boolean) => void;
 }
 
-export default function DashboardModifySection({
-  isPublic,
-  handlePublicToggle: onToggleClick,
-  isFavorite,
-  handleFavoriteToggle: handleFavoriteToggle,
-}: ModifySectionProps) {
+export default function DashboardModifySection({ initIsPublic, onPublicChange }: ModifySectionProps) {
   const router = useRouter();
   const { id } = router.query;
   const { openNotificationModal } = useModal();
@@ -43,13 +36,34 @@ export default function DashboardModifySection({
   const [selectedColor, setSelectedColor] = useState<DashboardColor>('green');
   const [fixedTitle, setFixedTitle] = useState<string>('');
   const [fixedColor, setFixedColor] = useState<string>('');
+  const [isPublic, setIsPublic] = useState<boolean>(initIsPublic);
+  const [isFavorite, setIsFavorite] = useState<boolean>(false);
+  const [initIsFavorite, setInitIsFavorite] = useState<boolean>(false);
   const [isButtonDisabled, setIsButtonDisabled] = useState<boolean>(true);
-  const { user } = useSelector((state: RootState) => state.user);
+  const { _id: favoriteUserId } = useSelector((state: RootState) => state.favoritesUser);
 
   const getColorString = (colorValue: string): string | undefined => {
     return (Object.keys(DASHBOARD_COLOR_OBJ) as (keyof typeof DASHBOARD_COLOR_OBJ)[]).find(
       (key: keyof typeof DASHBOARD_COLOR_OBJ) => DASHBOARD_COLOR_OBJ[key] === colorValue,
     );
+  };
+
+  const handleColorSelect = (color: DashboardColor) => {
+    setSelectedColor(color);
+    setValue((prevValue) => ({
+      ...prevValue,
+      color: DASHBOARD_COLOR_OBJ[color],
+    }));
+  };
+
+  const handleValidCheck = () => {
+    if (!value.title) {
+      setErrorMessage('이름을 입력해주세요.');
+    } else if (value.title.length > 15) {
+      setErrorMessage('15자 이내로 입력해주세요');
+    } else {
+      setErrorMessage('');
+    }
   };
 
   const {
@@ -58,9 +72,23 @@ export default function DashboardModifySection({
     error,
   } = useFetchData<Dashboard>(['dashboard', id], () => getDashboard(id as string));
 
+  const { data: favoriteList } = useFetchData<FavoriteDashboard[]>(
+    ['favorites', favoriteUserId],
+    () => getFavorites(favoriteUserId || ''),
+    false,
+    !!favoriteUserId,
+  );
+
+  const handlePublicToggle = () => {
+    setIsPublic((prevIsPublic) => !prevIsPublic);
+  };
+
+  const handleFavoriteToggle = () => {
+    setIsFavorite((prevIsFavorite) => !prevIsFavorite);
+  };
+
   const handleModifyButton = async () => {
     const handleIsPublicChange = async () => {
-      const initIsPublic = await checkPublic(Number(id));
       if (isPublic === initIsPublic) return;
       if (isPublic) {
         await addShareAccount(Number(id));
@@ -68,19 +96,29 @@ export default function DashboardModifySection({
         await removeShareAccount(Number(id));
       }
       queryClient.invalidateQueries({ queryKey: ['members', id] });
+      onPublicChange(isPublic);
     };
 
     const handleFavoriteChange = async () => {
-      const initIsFavorite = await checkFavorite(Number(user?.id), Number(id));
       if (isFavorite === initIsFavorite) return;
 
-      const favoriteUser = await findUserById(Number(user?.id));
-      if (isFavorite) {
-        await createFavorite(favoriteUser, dashboard as FavoriteDashboard);
-      } else {
-        await deleteFavorite(Number(id), favoriteUser);
+      if (favoriteUserId) {
+        if (isFavorite) {
+          await createFavorite(favoriteUserId, dashboard as FavoriteDashboard, favoriteList || []);
+        } else {
+          await deleteFavorite(Number(id), favoriteUserId);
+        }
+        queryClient.invalidateQueries({ queryKey: ['favorites', favoriteUserId] });
+        setInitIsFavorite(isFavorite);
       }
     };
+
+    if (favoriteList && limitCheckFavorite(favoriteList) && isFavorite && !initIsFavorite) {
+      // NOTE: 즐겨찾기 최대 개수 도달 -> 알림과 함께 즐겨찾기 취소
+      setIsFavorite(false);
+      openNotificationModal({ text: '즐겨찾기는 최대 3개까지 가능합니다.' });
+      return;
+    }
 
     try {
       await putDashboardInfo(Number(id), value);
@@ -89,17 +127,11 @@ export default function DashboardModifySection({
       openNotificationModal({ text: '대시보드 정보가 수정되었습니다!' });
       queryClient.invalidateQueries({ queryKey: ['dashboard', id] });
       queryClient.invalidateQueries({ queryKey: ['sideDashboards'] });
-      queryClient.invalidateQueries({ queryKey: ['favoritesDashboards'] });
+      queryClient.invalidateQueries({ queryKey: ['sideFavorites'] });
 
       setIsButtonDisabled(true);
     } catch {
-      if ((await limitCheckFavorite(Number(user?.id))) && isFavorite) {
-        handleFavoriteToggle();
-        if (isPublic) onToggleClick();
-        openNotificationModal({ text: '즐겨찾기는 최대 3개까지 가능합니다.' });
-      } else {
-        openNotificationModal({ text: '대시보드 정보 수정을 실패하였습니다.' });
-      }
+      openNotificationModal({ text: '대시보드 정보 수정을 실패하였습니다.' });
     }
   };
 
@@ -119,39 +151,26 @@ export default function DashboardModifySection({
   }, [dashboard]);
 
   useEffect(() => {
-    const handleButtonControl = async () => {
-      const [initIsPublic, initIsFavorite] = await Promise.all([
-        checkPublic(Number(id)),
-        checkFavorite(Number(user?.id), Number(id)),
-      ]);
-      setIsButtonDisabled(
-        (value.title === fixedTitle &&
-          value.color === fixedColor &&
-          isPublic === initIsPublic &&
-          isFavorite === initIsFavorite) ||
-          value.title.trim() === '',
-      );
-    };
-    handleButtonControl();
-  }, [value.title, value.color, fixedTitle, fixedColor, isPublic, isFavorite]);
+    setIsPublic(initIsPublic);
+  }, [initIsPublic]);
 
-  const handleColorSelect = (color: DashboardColor) => {
-    setSelectedColor(color);
-    setValue((prevValue) => ({
-      ...prevValue,
-      color: DASHBOARD_COLOR_OBJ[color],
-    }));
-  };
-
-  const handleValidCheck = () => {
-    if (!value.title) {
-      setErrorMessage('이름을 입력해주세요.');
-    } else if (value.title.length > 15) {
-      setErrorMessage('15자 이내로 입력해주세요');
-    } else {
-      setErrorMessage('');
+  useEffect(() => {
+    if (id) {
+      const newIsFavorite = checkFavorite(favoriteList || [], Number(id));
+      setInitIsFavorite(newIsFavorite);
+      setIsFavorite(newIsFavorite);
     }
-  };
+  }, [id, favoriteList]);
+
+  useEffect(() => {
+    setIsButtonDisabled(
+      (value.title === fixedTitle &&
+        value.color === fixedColor &&
+        isPublic === initIsPublic &&
+        isFavorite === initIsFavorite) ||
+        value.title.trim() === '',
+    );
+  }, [value.title, value.color, fixedTitle, fixedColor, isPublic, isFavorite, favoriteList]);
 
   if (isLoading) {
     return (
@@ -176,7 +195,7 @@ export default function DashboardModifySection({
         <div className='flex flex-col gap-2 md:flex-row'>
           <div className='flex justify-end gap-2'>
             <span>공유</span>
-            <Toggle isOn={isPublic} onToggleClick={onToggleClick} />
+            <Toggle isOn={isPublic} onToggleClick={handlePublicToggle} />
           </div>
           <div className='flex justify-end gap-2'>
             <span>즐겨찾기</span>

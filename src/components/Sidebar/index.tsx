@@ -5,77 +5,49 @@ import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 
 import NavButton from '../Button/NavButton';
-import ThemeChangeButton from '../Button/ThemeChangeButton';
 
 import DashboardItem from './DashboardItem';
 
+import { useFavoriteUser } from '@/hooks/useFavoriteUser';
 import useFetchData from '@/hooks/useFetchData';
 import useModal from '@/hooks/useModal';
-import { getDashboardsList, getFavorites, getFavoriteUsers } from '@/services/getService';
-import { postFavoriteUser } from '@/services/postService';
+import { getDashboardsList, getFavorites } from '@/services/getService';
 import { RootState } from '@/store/store';
 import { DashboardsResponse, FavoriteDashboard } from '@/types/Dashboard.interface';
 
 export default function Sidebar() {
   const { user } = useSelector((state: RootState) => state.user);
+  const favoriteUser = useSelector((state: RootState) => state.favoritesUser);
   const router = useRouter();
   const { id } = router.query;
   const [page, setPage] = useState<number>(1);
-  const { data, isLoading } = useFetchData<DashboardsResponse>(['sideDashboards', page], () =>
-    getDashboardsList('pagination', page, 10),
-  );
-  const totalPage = data ? Math.max(1, Math.ceil(data.totalCount / 10)) : 1;
-  const activePath = router.pathname;
-
-  const [userIdForFavorites, setUserIdForFavorites] = useState<string | null>(null);
-
-  const { data: favoriteList } = useFetchData<FavoriteDashboard[]>(
-    ['favoritesDashboards'],
-    () => getFavorites(userIdForFavorites || ''),
-    false,
-    !!userIdForFavorites,
-  );
-
   const { openNewDashboardModal } = useModal();
 
-  const handleNext = () => {
-    const nextChunk = page + 1;
+  const { data: dashboardsData, isLoading: isDashboardsLoading } = useFetchData<DashboardsResponse>(
+    ['sideDashboards', page],
+    () => getDashboardsList('pagination', page, 10),
+  );
+  const totalPage = dashboardsData ? Math.ceil(dashboardsData.totalCount / 10) : 1;
+  const activePath = router.pathname;
 
-    if (nextChunk <= totalPage) {
-      setPage((prev) => prev + 1);
-    }
-  };
+  const { data: favoriteList } = useFetchData<FavoriteDashboard[]>(
+    ['favorites', favoriteUser._id],
+    () => getFavorites(favoriteUser._id || ''),
+    false,
+    !!favoriteUser._id,
+  );
 
-  const handlePrev = () => {
-    const prevChunk = page - 1;
-
-    if (prevChunk >= 1) {
-      setPage((prev) => prev - 1);
-    }
-  };
-
-  const handleCheckUser = async () => {
-    try {
-      const res = await getFavoriteUsers();
-      if (!res) {
-        await postFavoriteUser({ userId: Number(user?.id) });
-      } else {
-        if (res.some((favoriteUser: { userId: number }) => favoriteUser.userId === user?.id)) {
-          setUserIdForFavorites(res.find((favoriteUser: { userId: number }) => favoriteUser.userId === user?.id)?._id);
-        } else {
-          await postFavoriteUser({ userId: Number(user?.id) });
-        }
-      }
-    } catch (error) {
-      console.error(error);
-    }
-  };
+  const { mutate: checkFavoriteUser } = useFavoriteUser();
 
   useEffect(() => {
-    if (user?.id) {
-      handleCheckUser();
+    if (user?.id && !favoriteUser.userId) {
+      checkFavoriteUser();
     }
-  }, [user?.id]);
+  }, [user?.id, favoriteUser.userId]);
+
+  const handlePageChange = (direction: 'next' | 'prev') => {
+    setPage((prev) => (direction === 'next' ? prev + 1 : prev - 1));
+  };
 
   return (
     <aside className='flex min-w-16 max-w-[300px] flex-col border-r border-gray-d9 bg-white px-3 py-5 transition-all md:min-w-40 lg:min-w-72 dark:border-dark-200 dark:bg-dark'>
@@ -169,7 +141,7 @@ export default function Sidebar() {
           </>
         )}
 
-        {isLoading ? (
+        {isDashboardsLoading ? (
           <ul className='flex h-min animate-pulse flex-col gap-2'>
             {[...Array(10)].map((_, i) => (
               <li
@@ -181,18 +153,16 @@ export default function Sidebar() {
         ) : (
           <>
             <ul className='flex h-min flex-col gap-2'>
-              {data?.dashboards.map((dashboard) => (
+              {dashboardsData?.dashboards.map((dashboard) => (
                 <DashboardItem key={dashboard.id} dashboard={dashboard} nowDashboard={Number(id)} />
               ))}
             </ul>
 
-            {totalPage > 1 ? (
+            {totalPage > 1 && (
               <div className='flex flex-col items-center pt-3 md:flex-row'>
-                <NavButton direction='left' onClick={handlePrev} isDisable={page === 1} />
-                <NavButton direction='right' onClick={handleNext} isDisable={page === totalPage} />
+                <NavButton direction='left' onClick={() => handlePageChange('prev')} isDisable={page === 1} />
+                <NavButton direction='right' onClick={() => handlePageChange('next')} isDisable={page === totalPage} />
               </div>
-            ) : (
-              <></>
             )}
           </>
         )}
