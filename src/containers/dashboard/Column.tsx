@@ -109,7 +109,7 @@ function Column({ column, columns, isMember }: ColumnProps) {
 
         {/* Add Card Button */}
         <button
-          className='btn-violet-light dark:btn-violet-dark mb-[16px] h-[40px] rounded-[6px] border'
+          className='btn-violet-light dark:btn-violet-dark mb-[16px] min-h-[40px] rounded-[6px] border'
           disabled={!isMember}
           onClick={() => {
             openEditCardModal({ column: column, isEdit: false });
