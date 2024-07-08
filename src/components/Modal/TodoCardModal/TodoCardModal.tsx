@@ -28,7 +28,7 @@ export default function TodoCardModal({ card, column, onClick }: TodoCardModalPr
   const { id: dashboardId } = router.query;
   const queryClient = useQueryClient();
 
-  const { data, refetch } = useFetchData<CommentsResponse>(['comments', card.id], () => getComments(card.id, 10));
+  const { data } = useFetchData<CommentsResponse>(['comments', card.id], () => getComments(card.id, 10));
 
   useEffect(() => {
     if (data) {
