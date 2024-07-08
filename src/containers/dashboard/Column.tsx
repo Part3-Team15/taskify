@@ -149,7 +149,7 @@ function Column({ column, index, columns }: ColumnProps) {
                 ))}
                 {isFetching &&
                   Array.from({ length: 1 }).map((card, index) => (
-                    <div key={index} className='align-center py-3 opacity-50'>
+                    <div key={index} className='align-center py-3 invert dark:opacity-50 dark:invert-0'>
                       <Image src='/icons/spinner.svg' alt='스피너 아이콘' width={20} height={20} />
                     </div>
                   ))}
