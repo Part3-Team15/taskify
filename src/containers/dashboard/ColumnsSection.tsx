@@ -5,7 +5,6 @@ import { DragDropContext, Droppable, DropResult } from 'react-beautiful-dnd';
 import { useSelector } from 'react-redux';
 
 import Column from './Column';
-import ColumnSkeleton from './ColumnSkeleton';
 
 import useFetchData from '@/hooks/useFetchData';
 import useModal from '@/hooks/useModal';
@@ -99,7 +98,11 @@ export default function ColumnsSection({ dashboardId }: ColumnsSectionProps) {
   }
 
   return isLoading ? (
-    <ColumnSkeleton />
+    <div className='flex h-screen items-center justify-center'>
+      <div className='align-center opacity-50 invert dark:invert-0'>
+        <Image src='/icons/spinner.svg' alt='스피너 아이콘' width={50} height={50} />
+      </div>
+    </div>
   ) : (
     <DragDropContext onDragEnd={onDragEnd}>
       <section

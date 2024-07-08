@@ -1,7 +1,7 @@
 import { useQueryClient } from '@tanstack/react-query';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
-import { FormEvent, useEffect, useState } from 'react';
+import { FormEvent, useEffect, useState, useRef, useCallback } from 'react';
 
 import Comment from './Comment';
 import EditDropdown from './EditDropdown';
@@ -13,22 +13,72 @@ import useModal from '@/hooks/useModal';
 import { getComments } from '@/services/getService';
 import { postComment } from '@/services/postService';
 import { TodoCardModalProps } from '@/types/Modal.interface';
-import { CommentsResponse, CommentForm } from '@/types/post/CommentForm.interface';
+import { CommentsResponse, CommentForm, Comment as CommentType } from '@/types/post/CommentForm.interface';
 import formatDate from '@/utils/formatDate';
 
-export default function TodoCardModal({ card, column, isMember, onClick }: TodoCardModalProps) {
-  const { data, refetch } = useFetchData<CommentsResponse>(['comments', card.id], () => getComments(card.id));
+export default function TodoCardModal({ card, column, onClick }: TodoCardModalProps) {
+  const [comments, setComments] = useState<CommentType[]>([]);
+  const [cursorId, setCursorId] = useState<number | null>(null);
+  const [isFetching, setIsFetching] = useState(false);
+  const observerRef = useRef<HTMLDivElement | null>(null);
   const [newComment, setNewComment] = useState('');
   const [isCommentEmpty, setIsCommentEmpty] = useState(true);
-  const comments = data?.comments;
   const { closeModal } = useModal();
   const router = useRouter();
   const { id: dashboardId } = router.query;
   const queryClient = useQueryClient();
 
+  const { data, refetch } = useFetchData<CommentsResponse>(['comments', card.id], () => getComments(card.id, 10));
+
   useEffect(() => {
-    refetch();
-  }, [refetch]);
+    if (data) {
+      setComments(data.comments);
+      setCursorId(data.comments.length > 0 ? data.comments[data.comments.length - 1].id : null);
+    }
+  }, [data]);
+
+  const fetchComments = async (size: number, cursor?: number | null) => {
+    setIsFetching(true);
+    try {
+      const response = await getComments(card.id, size, cursor || undefined);
+      const newComments = response.data.comments;
+      setComments((prevComments) => [...prevComments, ...newComments]);
+      if (newComments.length < size) {
+        setCursorId(null);
+      } else {
+        setCursorId(newComments[newComments.length - 1].id);
+      }
+    } catch (error) {
+      console.error('Error fetching comments:', error);
+    } finally {
+      setIsFetching(false);
+    }
+  };
+
+  const handleObserver = useCallback(
+    (entries: IntersectionObserverEntry[]) => {
+      const target = entries[0];
+      if (target.isIntersecting && cursorId !== null && !isFetching) {
+        fetchComments(5, cursorId);
+      }
+    },
+    [cursorId, isFetching],
+  );
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(handleObserver, {
+      threshold: 1.0,
+    });
+    if (observerRef.current) observer.observe(observerRef.current);
+
+    return () => {
+      if (observerRef.current) observer.unobserve(observerRef.current);
+    };
+  }, [handleObserver]);
+
+  useEffect(() => {
+    queryClient.invalidateQueries({ queryKey: ['comments', card.id] });
+  }, [queryClient, card.id]);
 
   useEffect(() => {
     setIsCommentEmpty(newComment.trim().length === 0);
@@ -68,11 +118,9 @@ export default function TodoCardModal({ card, column, isMember, onClick }: TodoC
           {card.title}
         </div>
         <div className='flex'>
-          {isMember && (
-            <div className='relative'>
-              <EditDropdown card={card} column={column} />
-            </div>
-          )}
+          <div className='relative'>
+            <EditDropdown card={card} column={column} />
+          </div>
           <button onClick={handleModalClose} className='transition-all duration-200 hover:opacity-50'>
             <Image src='/icons/x.svg' alt='X 아이콘' width={32} height={32} className='dark:hidden' />
             <Image src='/icons/x-white.svg' alt='X 아이콘' width={32} height={32} className='hidden dark:block' />
@@ -114,13 +162,12 @@ export default function TodoCardModal({ card, column, isMember, onClick }: TodoC
                   value={newComment}
                   onChange={(e) => setNewComment(e.target.value)}
                   placeholder='댓글을 입력하세요.'
-                  disabled={!isMember}
                 />
 
                 <button
                   className='btn-violet-light dark:btn-white absolute right-1 h-[28px] w-[60px] rounded-[4px] text-[12px] text-violet md:h-[32px] md:w-[78px] lg:w-[84px] dark:rounded-[4px]'
                   type='submit'
-                  disabled={isCommentEmpty || !isMember}
+                  disabled={isCommentEmpty}
                 >
                   입력
                 </button>
@@ -128,13 +175,20 @@ export default function TodoCardModal({ card, column, isMember, onClick }: TodoC
             </form>
 
             {comments && comments.length > 0 ? (
-              comments.map((comment) => (
-                <Comment key={comment.id} comment={comment} columnId={column.id} cardId={card.id} />
+              comments.map((comment, index) => (
+                <div key={comment.id} ref={index === comments.length - 1 ? observerRef : null}>
+                  <Comment comment={comment} columnId={column.id} cardId={card.id} />
+                </div>
               ))
             ) : (
-              <div className='flex flex-col items-center text-[14px] text-gray-9f hover:cursor-default'>
+              <div className='flex flex-col items-center text-[14px] text-gray-9f hover:cursor-default dark:opacity-30'>
                 <Image src='/icons/comment-empty.svg' width={150} height={150} alt='빈 댓글창' />
                 작성된 댓글이 없습니다.
+              </div>
+            )}
+            {isFetching && (
+              <div className='align-center py-3 opacity-50 invert dark:invert-0'>
+                <Image src='/icons/spinner.svg' alt='스피너 아이콘' width={20} height={20} />
               </div>
             )}
           </div>

@@ -62,7 +62,7 @@ export default function Comment({ comment }: CommentProps) {
               <p className='text-[12px] font-[600] text-black-33 md:text-[14px] dark:text-dark-10'>
                 {comment.author.nickname}
               </p>
-              <p className='text-[10px] text-gray-9f md:text-[12px]'>{formatDate(comment.createdAt, true)}</p>
+              <p className='text-[10px] text-gray-9f md:text-[12px]'>{formatDate(comment.createdAt, true, true)}</p>
             </div>
             {isEditing ? (
               <textarea

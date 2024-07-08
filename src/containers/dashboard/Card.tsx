@@ -15,6 +15,8 @@ interface CardProps {
 export default function Card({ card }: CardProps) {
   const { data: comments } = useFetchData<CommentsResponse>(['comments', card.id], () => getComments(card.id));
 
+  const commentsCount = comments?.comments.length ?? 0;
+
   return (
     <div className='mb-[16px] mt-[4px] flex flex-col gap-[20px] rounded-[6px] border border-gray-d9 bg-white p-[20px] transition-transform duration-200 ease-in-out hover:-translate-y-1 hover:cursor-pointer hover:shadow-sm md:flex-row md:justify-between lg:flex-col dark:border-dark-200 dark:bg-dark'>
       {/* Card Image */}
@@ -49,13 +51,13 @@ export default function Card({ card }: CardProps) {
               <span className='pt-[2px] text-[12px] font-[500] text-gray-78 dark:text-dark-10'>
                 {card.dueDate ? formatDate(card.dueDate) : '미정'}
               </span>
-              {comments && comments.comments.length > 0 && (
+              {commentsCount > 0 && (
                 <>
                   <span className='relative text-[12px] font-[500] text-gray-78 opacity-50 dark:text-dark-10'>
                     <Image src='/icons/comment.svg' alt='말풍선 아이콘' width={20} height={20} />
                   </span>
                   <span className='relative pt-1 text-[12px] font-[500] text-gray-78 dark:text-dark-10'>
-                    {comments.comments.length}
+                    {commentsCount >= 10 ? '10⁺' : commentsCount}
                   </span>
                 </>
               )}

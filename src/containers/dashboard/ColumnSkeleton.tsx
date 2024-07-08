@@ -15,7 +15,7 @@ export default function ColumnSkeleton() {
 
         {/* Card List Section */}
         <div className='lg:h-[700px] lg:overflow-y-auto'>
-          <div className='h-[200px] rounded-[6px] bg-white lg:h-[500px] dark:bg-dark-bg'></div>
+          <div className='h-[200px] rounded-[6px] bg-white lg:h-[500px] dark:bg-dark'></div>
         </div>
       </div>
     </div>

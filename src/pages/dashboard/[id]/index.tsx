@@ -1,3 +1,4 @@
+import Image from 'next/image';
 import { useRouter } from 'next/router';
 
 import ColumnsSection from '@/containers/dashboard/ColumnsSection';
@@ -7,7 +8,13 @@ function DashboardIdPage() {
   const { id } = router.query;
 
   if (typeof id !== 'string') {
-    return <div>Loading...</div>; // id가 없는 경우 또는 id가 string이 아닌 경우 로딩 상태를 표시합니다.
+    return (
+      <div className='flex h-screen items-center justify-center'>
+        <div className='align-center opacity-50 invert dark:invert-0'>
+          <Image src='/icons/spinner.svg' alt='스피너 아이콘' width={50} height={50} />
+        </div>
+      </div>
+    );
   }
 
   return <ColumnsSection dashboardId={id} />;

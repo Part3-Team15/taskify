@@ -1,4 +1,5 @@
 import Image from 'next/image';
+import { useEffect, useRef, useCallback, useState } from 'react';
 import { Draggable, Droppable } from 'react-beautiful-dnd';
 
 import Card from './Card';
@@ -7,7 +8,7 @@ import ColumnSkeleton from './ColumnSkeleton';
 import useFetchData from '@/hooks/useFetchData';
 import useModal from '@/hooks/useModal';
 import { getCardsList } from '@/services/getService';
-import { Card as CardType } from '@/types/Card.interface';
+import { Card as CardType, CardsListResponse } from '@/types/Card.interface';
 import { Column as ColumnType } from '@/types/Column.interface';
 
 interface ColumnProps {
@@ -19,15 +20,69 @@ interface ColumnProps {
 
 function Column({ column, columns, isMember }: ColumnProps) {
   const { openModifyColumnModal, openEditCardModal, openTodoCardModal } = useModal();
-  const { data: cardsData, isLoading } = useFetchData<{ cards: CardType[] }>(['cards', column.id], () =>
-    getCardsList(column.id),
+  const [cards, setCards] = useState<CardType[]>([]);
+  const [totalCount, setTotalCount] = useState<number>(0);
+  const [cursorId, setCursorId] = useState<number | 0>(0);
+  const [isFetching, setIsFetching] = useState(false);
+  const observer = useRef<IntersectionObserver | null>(null);
+
+  const {
+    data: initialData,
+    isLoading,
+    error,
+  } = useFetchData<CardsListResponse>(['cards', column.id], () => getCardsList(column.id, 10));
+
+  useEffect(() => {
+    if (initialData) {
+      setCards(initialData.cards);
+      setTotalCount(initialData.totalCount);
+      setCursorId(initialData.cursorId || 0);
+    }
+  }, [initialData]);
+
+  const fetchCards = useCallback(
+    async (size: number, cursorId?: number) => {
+      setIsFetching(true);
+      try {
+        const response = await getCardsList(column.id, size, cursorId);
+        if (response.data.cards.length > 0) {
+          setCards((prevCards) => [...prevCards, ...response.data.cards]);
+          setCursorId(response.data.cursorId || 0);
+        } else {
+          setCursorId(0);
+        }
+      } catch (error) {
+        console.error('Error fetching cards:', error);
+      } finally {
+        setIsFetching(false);
+      }
+    },
+    [column.id],
   );
 
-  const cards = cardsData?.cards || [];
+  const lastCardRef = useCallback(
+    (node: HTMLDivElement | null) => {
+      if (isFetching) return;
+      if (observer.current) observer.current.disconnect();
+      observer.current = new IntersectionObserver((entries) => {
+        if (entries[0].isIntersecting && cursorId !== 0) {
+          fetchCards(5, cursorId);
+        }
+      });
+      if (node) observer.current.observe(node);
+    },
+    [isFetching, cursorId, fetchCards],
+  );
 
-  return isLoading ? (
-    <ColumnSkeleton />
-  ) : (
+  if (isLoading) {
+    return <ColumnSkeleton />;
+  }
+
+  if (error) {
+    return <div>Error loading cards: {error.message}</div>;
+  }
+
+  return (
     <div className='block h-full lg:flex'>
       <div className='flex flex-col bg-gray-fa p-5 transition-colors lg:w-[354px] dark:bg-dark-bg'>
         {/* Column Header */}
@@ -36,7 +91,7 @@ function Column({ column, columns, isMember }: ColumnProps) {
             <span className='mr-[8px] text-xs text-violet'>𒊹</span>
             <h2 className='mr-[12px] text-lg font-bold text-black-33 dark:text-dark-10'>{column.title}</h2>
             <span className='flex size-[20px] items-center justify-center rounded-[6px] bg-gray-ee text-xs text-gray-78 dark:bg-dark-200 dark:text-dark-10'>
-              {cards.length}
+              {totalCount}
             </span>
           </div>
 
@@ -54,7 +109,7 @@ function Column({ column, columns, isMember }: ColumnProps) {
 
         {/* Add Card Button */}
         <button
-          className='btn-violet-light dark:btn-violet-dark mb-[16px] h-[40px] rounded-[6px] border'
+          className='btn-violet-light dark:btn-violet-dark mb-[16px] min-h-[40px] rounded-[6px] border'
           disabled={!isMember}
           onClick={() => {
             openEditCardModal({ column: column, isEdit: false });
@@ -82,7 +137,10 @@ function Column({ column, columns, isMember }: ColumnProps) {
                   >
                     {(provided) => (
                       <div
-                        ref={provided.innerRef}
+                        ref={(cardRef) => {
+                          provided.innerRef(cardRef);
+                          if (index === cards.length - 1) lastCardRef(cardRef);
+                        }}
                         {...provided.draggableProps}
                         {...provided.dragHandleProps}
                         onClick={() => openTodoCardModal({ card, column, isMember })}
@@ -92,6 +150,12 @@ function Column({ column, columns, isMember }: ColumnProps) {
                     )}
                   </Draggable>
                 ))}
+                {isFetching &&
+                  Array.from({ length: 1 }).map((card, index) => (
+                    <div key={index} className='align-center py-3 opacity-50 invert dark:invert-0'>
+                      <Image src='/icons/spinner.svg' alt='스피너 아이콘' width={20} height={20} />
+                    </div>
+                  ))}
                 {provided.placeholder}
               </div>
             )}
