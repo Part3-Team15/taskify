@@ -68,6 +68,18 @@ export const getCard = async (cardId: number) => {
 };
 
 // 댓글 목록 조회
-export const getComments = async (cardId: number) => {
-  return await instance.get(`/comments?size=10&cardId=${cardId}`);
+export const getComments = async (cardId: number, size?: number, cursorId?: number) => {
+  const params = new URLSearchParams();
+
+  params.append('cardId', cardId.toString());
+
+  if (size !== undefined) {
+    params.append('size', size.toString());
+  }
+
+  if (cursorId !== undefined) {
+    params.append('cursorId', cursorId.toString());
+  }
+
+  return await instance.get(`/comments`, { params });
 };
