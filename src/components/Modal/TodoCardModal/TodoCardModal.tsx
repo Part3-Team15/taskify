@@ -1,7 +1,7 @@
 import { useQueryClient } from '@tanstack/react-query';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
-import { FormEvent, useEffect, useState } from 'react';
+import { FormEvent, useEffect, useState, useRef, useCallback } from 'react';
 
 import Comment from './Comment';
 import EditDropdown from './EditDropdown';
@@ -129,13 +129,20 @@ export default function TodoCardModal({ card, column, onClick }: TodoCardModalPr
             </form>
 
             {comments && comments.length > 0 ? (
-              comments.map((comment) => (
-                <Comment key={comment.id} comment={comment} columnId={column.id} cardId={card.id} />
+              comments.map((comment, index) => (
+                <div key={comment.id} ref={index === comments.length - 1 ? observerRef : null}>
+                  <Comment comment={comment} columnId={column.id} cardId={card.id} />
+                </div>
               ))
             ) : (
               <div className='flex flex-col items-center text-[14px] text-gray-9f hover:cursor-default dark:opacity-30'>
                 <Image src='/icons/comment-empty.svg' width={150} height={150} alt='빈 댓글창' />
                 작성된 댓글이 없습니다.
+              </div>
+            )}
+            {isFetching && (
+              <div className='align-center py-3 opacity-50 invert dark:invert-0'>
+                <Image src='/icons/spinner.svg' alt='스피너 아이콘' width={20} height={20} />
               </div>
             )}
           </div>
