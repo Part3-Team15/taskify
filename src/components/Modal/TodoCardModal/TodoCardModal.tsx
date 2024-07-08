@@ -13,26 +13,70 @@ import useModal from '@/hooks/useModal';
 import { getComments } from '@/services/getService';
 import { postComment } from '@/services/postService';
 import { TodoCardModalProps } from '@/types/Modal.interface';
-import { CommentsResponse, CommentForm } from '@/types/post/CommentForm.interface';
+import { CommentsResponse, CommentForm, Comment as CommentType } from '@/types/post/CommentForm.interface';
 import formatDate from '@/utils/formatDate';
 
 export default function TodoCardModal({ card, column, onClick }: TodoCardModalProps) {
-  const { data, refetch } = useFetchData<CommentsResponse>(['comments', card.id], () => getComments(card.id));
+  const [comments, setComments] = useState<CommentType[]>([]);
+  const [cursorId, setCursorId] = useState<number | null>(null);
+  const [isFetching, setIsFetching] = useState(false);
+  const observerRef = useRef<HTMLDivElement | null>(null);
   const [newComment, setNewComment] = useState('');
   const [isCommentEmpty, setIsCommentEmpty] = useState(true);
-  const comments = data?.comments;
   const { closeModal } = useModal();
   const router = useRouter();
   const { id: dashboardId } = router.query;
   const queryClient = useQueryClient();
 
+  const { data, refetch } = useFetchData<CommentsResponse>(['comments', card.id], () => getComments(card.id, 10));
+
   useEffect(() => {
-    refetch();
+    if (data) {
+      setComments(data.comments);
+      setCursorId(data.comments.length > 0 ? data.comments[data.comments.length - 1].id : null);
+    }
+  }, [data]);
+
+  const fetchComments = async (size: number, cursor?: number | null) => {
+    setIsFetching(true);
+    try {
+      const response = await getComments(card.id, size, cursor || undefined);
+      const newComments = response.data.comments;
+      setComments((prevComments) => [...prevComments, ...newComments]);
+      if (newComments.length < size) {
+        setCursorId(null);
+      } else {
+        setCursorId(newComments[newComments.length - 1].id);
+      }
+    } catch (error) {
+      console.error('Error fetching comments:', error);
+    } finally {
+      setIsFetching(false);
+    }
+  };
+
+  const handleObserver = useCallback(
+    (entries: IntersectionObserverEntry[]) => {
+      const target = entries[0];
+      if (target.isIntersecting && cursorId !== null && !isFetching) {
+        fetchComments(5, cursorId);
+      }
+    },
+    [cursorId, isFetching],
+  );
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(handleObserver, { threshold: 1.0 });
+    if (observerRef.current) observer.observe(observerRef.current);
 
     return () => {
-      queryClient.cancelQueries({ queryKey: ['comments', card.id] });
+      if (observerRef.current) observer.unobserve(observerRef.current);
     };
-  }, [refetch, queryClient, card.id]);
+  }, [handleObserver]);
+
+  useEffect(() => {
+    queryClient.invalidateQueries({ queryKey: ['comments', card.id] });
+  }, [queryClient, card.id]);
 
   useEffect(() => {
     setIsCommentEmpty(newComment.trim().length === 0);
