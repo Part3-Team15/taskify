@@ -133,7 +133,7 @@ export default function TodoCardModal({ card, column, onClick }: TodoCardModalPr
                 <Comment key={comment.id} comment={comment} columnId={column.id} cardId={card.id} />
               ))
             ) : (
-              <div className='flex flex-col items-center text-[14px] text-gray-9f hover:cursor-default'>
+              <div className='flex flex-col items-center text-[14px] text-gray-9f hover:cursor-default dark:opacity-30'>
                 <Image src='/icons/comment-empty.svg' width={150} height={150} alt='빈 댓글창' />
                 작성된 댓글이 없습니다.
               </div>
