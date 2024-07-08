@@ -71,7 +71,8 @@ export default function DashboardList({ initialDashboard }: DashboardListProps) 
             onClick={() => openNewDashboardModal()}
           >
             새로운 대시보드
-            <Image src={'/icons/plus-filled.svg'} alt='plus' width={22} height={22} />
+            <Image src={'/icons/plus-filled.svg'} alt='plus' width={22} height={22} className='dark:hidden' />
+            <Image src={'/icons/plus.svg'} alt='plus' width={24} height={24} className='hidden dark:block' />
           </button>
         </li>
         {/* 대시보드 목록 표시 */}
@@ -100,7 +101,14 @@ export default function DashboardList({ initialDashboard }: DashboardListProps) 
                       <Image src={'/icons/crown.svg'} className='mr-3' alt='my' width={20} height={16} />
                     )}
                   </div>
-                  <Image src={'/icons/arrow-black.svg'} alt='arrow' width={14} height={14} />
+                  <Image src={'/icons/arrow-black.svg'} alt='arrow' width={14} height={14} className='dark:hidden' />
+                  <Image
+                    src={'/icons/arrow-white.svg'}
+                    alt='arrow'
+                    width={7}
+                    height={7}
+                    className='hidden dark:block'
+                  />
                 </Link>
               </li>
             ))}

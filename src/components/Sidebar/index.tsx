@@ -80,14 +80,38 @@ export default function Sidebar() {
   return (
     <aside className='flex min-w-16 max-w-[300px] flex-col border-r border-gray-d9 bg-white px-3 py-5 transition-all md:min-w-40 lg:min-w-72 dark:border-dark-200 dark:bg-dark'>
       <Link href={user ? '/mydashboard' : '/'} className='flex items-center justify-center pb-14 md:block md:px-3'>
-        <div className='relative hidden h-[33px] w-[110px] md:block'>
-          <Image src={'/icons/logo.svg'} alt='logo' priority className='dark:hidden' fill />
-          <Image src={'/icons/logo-white.svg'} alt='logo' priority className='hidden dark:block' fill />
-        </div>
-        <div className='relative block size-[27px] md:hidden'>
-          <Image src={'/icons/logo-small.svg'} alt='logo' priority className='' fill />
-          <Image src={'/icons/logo-white-s.svg'} alt='logo' priority className='' fill />
-        </div>
+        <Image
+          src={'/icons/logo.svg'}
+          alt='logo'
+          width={110}
+          height={33}
+          priority
+          className='hidden md:block dark:hidden'
+        />
+        <Image
+          src={'/icons/logo-white.svg'}
+          alt='logo'
+          width={110}
+          height={33}
+          priority
+          className='hidden dark:md:block'
+        />
+        <Image
+          src={'/icons/logo-s.svg'}
+          alt='logo'
+          width={27}
+          height={27}
+          priority
+          className='block size-[27px] md:hidden dark:hidden'
+        />
+        <Image
+          src={'/icons/logo-white-s.svg'}
+          alt='logo'
+          width={27}
+          height={27}
+          priority
+          className='hidden size-[27px] dark:block dark:md:hidden'
+        />
       </Link>
 
       <div className='flex grow flex-col gap-2'>
@@ -172,7 +196,6 @@ export default function Sidebar() {
             )}
           </>
         )}
-        <ThemeChangeButton className='justify-center rounded-md py-2' />
       </div>
     </aside>
   );

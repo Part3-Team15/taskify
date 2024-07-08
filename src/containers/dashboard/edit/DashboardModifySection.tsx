@@ -173,11 +173,15 @@ export default function DashboardModifySection({
     <section className='section relative flex h-[211px] flex-col justify-between px-[18px] py-[22px] transition-colors md:h-[256px] md:py-[26px] dark:bg-dark'>
       <header className='flex justify-between'>
         <h2 className='text-[20px] font-bold text-black-33 dark:text-dark-10'>{fixedTitle}</h2>
-        <div className='align-center gap-2 md:gap-3'>
-          <span>공유</span>
-          <Toggle isOn={isPublic} onToggleClick={onToggleClick} />
-          <span>즐겨찾기</span>
-          <Toggle isOn={isFavorite} onToggleClick={handleFavoriteToggle} />
+        <div className='flex flex-col gap-2 md:flex-row'>
+          <div className='flex justify-end gap-2'>
+            <span>공유</span>
+            <Toggle isOn={isPublic} onToggleClick={onToggleClick} />
+          </div>
+          <div className='flex justify-end gap-2'>
+            <span>즐겨찾기</span>
+            <Toggle isOn={isFavorite} onToggleClick={handleFavoriteToggle} />
+          </div>
         </div>
       </header>
       <main>
