@@ -52,8 +52,14 @@ export const getInvitationsList = async (size: number = 10, cursorId?: number, t
 };
 
 // 카드 목록 조회
-export const getCardsList = async (columnId: number) => {
-  return await instance.get(`/cards?columnId=${columnId}`);
+export const getCardsList = async (columnId: number, size: number = 10, cursorId?: number) => {
+  const params = new URLSearchParams();
+  params.append('columnId', columnId.toString());
+  params.append('size', size.toString());
+  if (cursorId) {
+    params.append('cursorId', cursorId.toString());
+  }
+  return await instance.get(`/cards`, { params });
 };
 
 // 상세 카드 조회
