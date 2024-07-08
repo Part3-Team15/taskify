@@ -24,7 +24,7 @@ export default function MembersSection({ onDeleteMember }: MemberSectionProps) {
   const { id } = router.query;
   const [currentChunk, setCurrentChunk] = useState(1);
 
-  const { data, error } = useFetchData<MembersResponse>(['members', id, currentChunk], () =>
+  const { data, isLoading, error } = useFetchData<MembersResponse>(['members', id, currentChunk], () =>
     getMembersList(Number(id), currentChunk, 4),
   );
   const totalPage = data ? Math.max(1, Math.ceil(data.totalCount / 4)) : 1;
@@ -59,6 +59,20 @@ export default function MembersSection({ onDeleteMember }: MemberSectionProps) {
     openConfirmModal({ text: '정말 구성원을 삭제하시겠습니까?', onActionClick: handleDelete });
   };
 
+  if (isLoading) {
+    return <section className='section align-center h-[341px] animate-pulse bg-gray-f5 md:h-[408px]'></section>;
+  }
+
+  if (error || !data) {
+    return (
+      <section className='section align-center h-[341px] md:h-[408px]'>
+        <p role='alert' className='text-[22px] font-bold text-black-33'>
+          구성원 정보가 없습니다!
+        </p>
+      </section>
+    );
+  }
+
   return (
     <section className='section h-[341px] pb-4 transition-colors md:h-[408px] md:pb-5 dark:bg-dark'>
       <header className='mb-[18px] mt-[22px] flex items-center justify-between md:mb-[27px] md:mt-[26px]'>
@@ -72,13 +86,7 @@ export default function MembersSection({ onDeleteMember }: MemberSectionProps) {
       </header>
       <main className='text-sm md:text-base'>
         <h3 className='mb-5 h-[17px] text-gray-9f md:mb-6 md:h-[19px]'>이름</h3>
-        {data ? (
-          <MemberList members={data.members} onDeleteClick={handleDeleteMember} />
-        ) : error ? (
-          <p>{`에러가 발생했습니다. \n${error.message}`}</p>
-        ) : (
-          <p>로딩중...</p>
-        )}
+        <MemberList members={data.members} onDeleteClick={handleDeleteMember} />
       </main>
     </section>
   );

@@ -30,7 +30,7 @@ export default function InvitedMembersSection() {
   const { mutate } = useDeleteData<CancelInvitationInput>({ mutationFn: deleteInvitation, handleSuccess });
   const queryClient = useQueryClient();
 
-  const { data, error } = useFetchData<DashboardInvitationsResponse>(['invitations', id, currentChunk], () =>
+  const { data, isLoading, error } = useFetchData<DashboardInvitationsResponse>(['invitations', id, currentChunk], () =>
     getDashboardInvitations(Number(id), currentChunk, 5),
   );
   const totalPage = data ? Math.max(1, Math.ceil(data.totalCount / 5)) : 1;
@@ -54,6 +54,20 @@ export default function InvitedMembersSection() {
 
     handleDelete();
   };
+
+  if (isLoading) {
+    return <section className='section align-center h-[395px] animate-pulse bg-gray-f5 md:h-[477px]'></section>;
+  }
+
+  if (error || !data) {
+    return (
+      <section className='section align-center h-[395px] md:h-[477px]'>
+        <p role='alert' className='text-[22px] font-bold text-black-33'>
+          초대내역 정보가 없습니다!
+        </p>
+      </section>
+    );
+  }
 
   return (
     <section className='section h-[395px] pb-4 transition-colors md:h-[477px] md:pb-5 dark:bg-dark'>
@@ -80,13 +94,7 @@ export default function InvitedMembersSection() {
       </header>
       <main className='text-sm md:text-base'>
         <h3 className='mb-[29px] text-gray-9f md:mb-6'>이메일</h3>
-        {data ? (
-          <InvitedMemberList invitations={data.invitations} onCancelClick={handleCancelInvitation} />
-        ) : error ? (
-          <p>{`에러가 발생했습니다. \n${error.message}`}</p>
-        ) : (
-          <p>로딩중...</p>
-        )}
+        <InvitedMemberList invitations={data.invitations} onCancelClick={handleCancelInvitation} />
       </main>
     </section>
   );

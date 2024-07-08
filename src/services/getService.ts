@@ -1,3 +1,5 @@
+import axios from 'axios';
+
 import instance from './axios';
 
 // 컬럼 목록 조회
@@ -82,4 +84,17 @@ export const getComments = async (cardId: number, size?: number, cursorId?: numb
   }
 
   return await instance.get(`/comments`, { params });
+};
+
+// 모든 사용자 목록 조회
+export const getFavoriteUsers = async () => {
+  return await axios.get(`/api/users/`);
+};
+
+// 특정 사용자 ID의 즐겨찾기 항목 가져오기
+export const getFavorites = async (id: string | null) => {
+  if (!id) {
+    return { data: [] };
+  }
+  return await axios.get(`/api/favorites/${id}/`);
 };

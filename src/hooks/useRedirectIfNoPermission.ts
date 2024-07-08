@@ -5,26 +5,29 @@ import { useSelector } from 'react-redux';
 import useModal from '@/hooks/useModal';
 import { RootState } from '@/store/store';
 
-const useRedirectIfNotAuth = () => {
+const useRedirectIfNoPermission = () => {
   const { user } = useSelector((state: RootState) => state.user);
   const { openNotificationModal } = useModal();
   const router = useRouter();
   const [isRedirecting, setIsRedirecting] = useState(false);
   const [initialCheck, setInitialCheck] = useState(true);
 
-  return () => {
+  return (creatorId: number) => {
     if (initialCheck) {
-      if (!user) {
-        openNotificationModal({ text: '로그인이 필요합니다.' });
+      if (creatorId !== user?.id) {
+        openNotificationModal({ text: '접근 권한이 없습니다.' });
         setIsRedirecting(true);
-        router.replace('/signin');
+        if (user) {
+          router.replace('/mydashboard');
+        } else {
+          router.replace('/signin');
+        }
       }
       setIsRedirecting(false);
       setInitialCheck(false);
     }
-
     return isRedirecting;
   };
 };
 
-export default useRedirectIfNotAuth;
+export default useRedirectIfNoPermission;

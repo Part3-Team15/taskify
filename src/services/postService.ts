@@ -1,9 +1,11 @@
+import axios from 'axios';
+
 import instance from './axios';
 
-import { postCardData } from '@/components/Modal/EditCardModal';
-import { Dashboard } from '@/types/Dashboard.interface';
+import { Dashboard, FavoriteDashboard } from '@/types/Dashboard.interface';
 import { Invitation } from '@/types/Invitation.interface';
 import { CommentForm } from '@/types/post/CommentForm.interface';
+import { PostCardData } from '@/types/post/EditModalPostData.interface';
 import { NewDashboardForm, NewColumnForm, InviteMemberForm } from '@/types/post/ModalForm.interface';
 import { SignInForm, SignInResponse } from '@/types/post/SignInForm.interface';
 import { SignUpForm } from '@/types/post/SignUpForm.interface';
@@ -48,7 +50,7 @@ export const postImage = async (formData: UploadImageForm) => {
 };
 
 // 카드 생성
-export const postCard = async (formData: postCardData) => {
+export const postCard = async (formData: PostCardData) => {
   const response = await instance.post(`/cards`, formData);
   return response.data;
 };
@@ -66,4 +68,16 @@ export const postImageForCard = async (columnId: number, formData: UploadImageFo
 // 댓글 생성
 export const postComment = async (formData: CommentForm) => {
   return await instance.post(`/comments`, formData);
+};
+
+// 사용자 생성하기
+export const postFavoriteUser = async (userData: { userId: number }) => {
+  const response = await axios.post(`/api/users`, userData);
+  return response.data;
+};
+
+// 즐겨찾기 항목 생성하기
+export const postFavorite = async (id: string, favoriteData: FavoriteDashboard) => {
+  const response = await axios.post(`/api/favorites/${id}`, favoriteData);
+  return response.data;
 };

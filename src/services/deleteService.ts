@@ -1,3 +1,5 @@
+import axios from 'axios';
+
 import instance from './axios';
 
 import { CancelInvitationInput } from '@/types/delete/CancelInvitation.interface';
@@ -32,4 +34,24 @@ export const deleteComment = async (commentId: number) => {
 // 카드 삭제
 export const deleteCard = async (cardId: number) => {
   return await instance.delete(`/cards/${cardId}`);
+};
+
+// 사용자 삭제하기
+export const deleteFavoriteUser = async (userId: number) => {
+  try {
+    await axios.delete(`/api/users/${userId}`);
+  } catch (error) {
+    throw new Error('Failed to delete user');
+  }
+};
+
+// 즐겨찾기 항목 삭제하기
+export const deleteFavorite = async (favoriteId: number, userId: string) => {
+  try {
+    await axios.delete(`/api/favorites/${userId}`, {
+      data: { favoriteId },
+    });
+  } catch (error) {
+    throw new Error('Failed to delete favorite');
+  }
 };

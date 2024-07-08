@@ -11,6 +11,7 @@ import MembersSection from './MembersSection';
 import useDeleteData from '@/hooks/useDeleteData';
 import useFetchData from '@/hooks/useFetchData';
 import useModal from '@/hooks/useModal';
+import useRedirectIfNoPermission from '@/hooks/useRedirectIfNoPermission';
 import { deleteDashboard } from '@/services/deleteService';
 import { getDashboard } from '@/services/getService';
 import { Dashboard } from '@/types/Dashboard.interface';
@@ -18,23 +19,23 @@ import { DeleteDashboardInput } from '@/types/delete/DeleteDashboardInput.interf
 import { checkPublic } from '@/utils/shareAccount';
 
 export default function DashboardEdit() {
-  const { openConfirmModal, openNotificationModal } = useModal();
+  const redirectIfNoPermission = useRedirectIfNoPermission();
+  const { openConfirmModal } = useModal();
   const queryClient = useQueryClient();
   const router = useRouter();
   const { id } = router.query;
 
+  const { data: dashboard, error } = useFetchData<Dashboard>(['dashboard', id], () => getDashboard(id as string));
   const [isPublic, setIsPublic] = useState(false);
 
-  const { data: dashboard } = useFetchData<Dashboard>(['dashboard', id], () => getDashboard(id as string));
-  if (dashboard && !dashboard.createdByMe) {
-    openNotificationModal({
-      text: '해당 페이지에 접근 권한이 없습니다.',
-    });
+  const handleSuccess = () => {
+    queryClient.invalidateQueries({ queryKey: ['sideDashboards'] });
     router.replace('/mydashboard');
-  }
+  };
+  const { mutate } = useDeleteData<DeleteDashboardInput>({ mutationFn: deleteDashboard, handleSuccess });
 
-  const handleToggle = () => {
-    setIsPublic((prevIsPublic) => !prevIsPublic);
+  const handleIsPublicChange = (newIsPublic: boolean) => {
+    setIsPublic(newIsPublic);
   };
 
   const handleMemberDelete = (email: string) => {
@@ -42,12 +43,6 @@ export default function DashboardEdit() {
       setIsPublic(false);
     }
   };
-
-  const handleSuccess = () => {
-    queryClient.invalidateQueries({ queryKey: ['sideDashboards'] });
-    router.replace('/mydashboard');
-  };
-  const { mutate } = useDeleteData<DeleteDashboardInput>({ mutationFn: deleteDashboard, handleSuccess });
 
   const handleDeleteClick = () => {
     const handleDelete = async () => {
@@ -62,12 +57,26 @@ export default function DashboardEdit() {
   };
 
   useEffect(() => {
-    const handleInitialLoad = async () => {
-      setIsPublic(await checkPublic(Number(id)));
+    const handleInitIsPublic = async () => {
+      try {
+        setIsPublic(await checkPublic(Number(id)));
+      } catch {
+        redirectIfNoPermission(-1);
+      }
     };
 
-    handleInitialLoad();
+    if (id) {
+      handleInitIsPublic();
+    }
   }, [id]);
+
+  useEffect(() => {
+    if (dashboard) {
+      redirectIfNoPermission(dashboard.userId);
+    } else if (error) {
+      redirectIfNoPermission(-1);
+    }
+  }, [dashboard, error]);
 
   return (
     <div className='h-full px-3 py-4 text-black-33 md:p-5 dark:text-dark-10'>
@@ -82,7 +91,7 @@ export default function DashboardEdit() {
         돌아가기
       </Link>
       <div className='flex flex-col gap-4'>
-        <DashboardModifySection isPublic={isPublic} onToggleClick={handleToggle} />
+        <DashboardModifySection initIsPublic={isPublic} onPublicChange={handleIsPublicChange} />
         <MembersSection onDeleteMember={handleMemberDelete} />
         <InvitedMembersSection />
       </div>

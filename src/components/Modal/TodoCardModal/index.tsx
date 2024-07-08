@@ -28,7 +28,7 @@ export default function TodoCardModal({ card, column, onClick }: TodoCardModalPr
   const { id: dashboardId } = router.query;
   const queryClient = useQueryClient();
 
-  const { data } = useFetchData<CommentsResponse>(['comments', card.id], () => getComments(card.id, 10));
+  const { data, refetch } = useFetchData<CommentsResponse>(['comments', card.id], () => getComments(card.id, 10));
 
   useEffect(() => {
     if (data) {
@@ -66,7 +66,9 @@ export default function TodoCardModal({ card, column, onClick }: TodoCardModalPr
   );
 
   useEffect(() => {
-    const observer = new IntersectionObserver(handleObserver, { threshold: 1.0 });
+    const observer = new IntersectionObserver(handleObserver, {
+      threshold: 1.0,
+    });
     if (observerRef.current) observer.observe(observerRef.current);
 
     return () => {

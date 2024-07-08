@@ -92,7 +92,11 @@ export default function ModifyColumnModal({ columnId, columnTitle = '', columns 
           <ModalCancelButton type='button' onClick={closeModal}>
             취소
           </ModalCancelButton>
-          <ModalActionButton type='button' onClick={handleModifyClick} disabled={!!errorMessage}>
+          <ModalActionButton
+            type='button'
+            onClick={handleModifyClick}
+            disabled={!!errorMessage || columnTitle === title}
+          >
             변경
           </ModalActionButton>
         </div>

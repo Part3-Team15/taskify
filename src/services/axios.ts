@@ -1,4 +1,4 @@
-import axios, { AxiosError } from 'axios';
+import axios, { AxiosError, InternalAxiosRequestConfig } from 'axios';
 
 import { store } from '@/store/store';
 
@@ -20,7 +20,17 @@ instance.interceptors.response.use(
   (res) => res,
   async (error: AxiosError) => {
     const originalRequest = error.config;
-    if (originalRequest && !originalRequest.headers._retry) {
+    const checkMethodForPublic = (request: InternalAxiosRequestConfig) =>
+      (request.method === 'get' &&
+        !request.headers.memberTest &&
+        (request.url?.includes('/dashboards/') ||
+          request.url?.includes('/columns') ||
+          request.url?.includes('/members') ||
+          request.url?.includes('/cards') ||
+          request.url?.includes('/comments'))) ||
+      (request.method === 'put' && request.url?.includes('/invitations'));
+
+    if (originalRequest && checkMethodForPublic(originalRequest) && !originalRequest.headers._retry) {
       originalRequest.headers._retry = true;
       originalRequest.headers.Authorization = `Bearer ${process.env.NEXT_PUBLIC_SHARE_ACCOUNT_TOKEN}`;
       return instance(originalRequest);
