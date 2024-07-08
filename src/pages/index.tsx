@@ -1,10 +1,25 @@
 import Head from 'next/head';
 import Image from 'next/image';
 import Link from 'next/link';
+import { useTheme } from 'next-themes';
+import { useEffect } from 'react';
 
 import Footer from '@/components/Footer';
 
 function Home() {
+  const { theme, setTheme } = useTheme();
+  const prevTheme = theme;
+
+  useEffect(() => {
+    setTheme('light');
+
+    return () => {
+      if (!prevTheme) return;
+
+      setTheme(prevTheme);
+    };
+  }, [setTheme]);
+
   return (
     <main className='scrollbar-black h-dvh max-h-[calc(100dvh-70px)] overflow-y-auto bg-dark-500 text-white'>
       <Head>
