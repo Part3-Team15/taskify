@@ -1,3 +1,4 @@
+
 # Taskify
 
 // TODO: 목업 이미지 추가
@@ -27,6 +28,8 @@ pnpm run dev  # 개발 서버 실행
 - [서비스 상세설명](#서비스-상세설명)
 - [서비스 개선 사항](#서비스-개선-사항)
 - [팀원 소개 및 프로젝트 후기](#팀원-소개-및-프로젝트-후기)
+
+<br />
 
 ## 기술 스택
 
@@ -72,6 +75,8 @@ pnpm run dev  # 개발 서버 실행
 <img src="https://img.shields.io/badge/figma-F24E1E?style=for-the-badge&logo=figma&logoColor=white" />
 </div>
 
+<br />
+
 ## [개발 환경](https://github.com/Part3-Team15/taskify/discussions/60)
 
 ### 브랜치 전략
@@ -116,6 +121,8 @@ Github Flow에 백업용 브랜치를 추가한 형태로, main, develop, featur
 - 주석은 Comment Anchors를 사용해 확인하기 쉽게 합니다.
 - 컴포넌트 함수는 선언문으로 (function 키워드), 이외 모든 함수는 표현식으로 작성합니다.
 
+<br />
+
 ## 개발 기간 (2024.06.22 ~ 2024.07.07)
 
 #### 프로젝트 준비: 2024.06.17 ~ 2024.06.21
@@ -142,6 +149,8 @@ Github Flow에 백업용 브랜치를 추가한 형태로, main, develop, featur
 - 리팩토링 (간결한 코드, 성능 개선)
 - 리드미 완성
 
+<br />
+
 ## 개발 문화
 
 ### 팀 규칙
@@ -167,6 +176,8 @@ Github Flow에 백업용 브랜치를 추가한 형태로, main, develop, featur
   <img width="1377" alt="image" src="https://github.com/Part3-Team15/taskify/assets/24778465/76e9de52-c604-4397-97b6-59fad81a4965">
 - 우선순위 기준 작업분배  
   <img width="1423" alt="image" src="https://github.com/Part3-Team15/taskify/assets/24778465/baca203e-c450-441b-a627-a31c4690ea8d">
+
+<br />
 
 ## [프로젝트 폴더 구조](https://github.com/Part3-Team15/taskify/discussions/61)
 
@@ -246,9 +257,9 @@ Github Flow에 백업용 브랜치를 추가한 형태로, main, develop, featur
     </div>
   </details>
 
-## 서비스 상세설명
+<br />
 
-// TODO: 이미지 & GIF 추가
+## 서비스 상세설명
 
 | 랜딩페이지 | 회원가입 | 로그인 |
 | :-: | :-: | :-: |
@@ -261,25 +272,38 @@ Github Flow에 백업용 브랜치를 추가한 형태로, main, develop, featur
 
 | 대시보드 | 대시보드 관리 |
 | :-: | :-: |
-| <img width="525" alt="image" src="https://github.com/Part3-Team15/taskify/assets/24778465/f22bad5e-6136-41cc-a226-59ea249495d5"> | <img width="400" alt="image" src="https://github.com/Part3-Team15/taskify/assets/24778465/f1c0f8e5-557e-4653-9c3b-e058585b80ca"> |
+| <img height="400" alt="image" src="https://github.com/Part3-Team15/taskify/assets/24778465/f22bad5e-6136-41cc-a226-59ea249495d5"> | <img height="400" alt="image" src="https://github.com/Part3-Team15/taskify/assets/24778465/f1c0f8e5-557e-4653-9c3b-e058585b80ca"> |
 
-### 1. 랜딩페이지
+### 계정관리
+
+https://github.com/Part3-Team15/taskify/assets/24778465/de7cea41-95f4-4a87-b717-1d80a2e9c43c
+
+#### 1. 랜딩페이지
 
 - 서비스에서 제공하는 기능 소개합니다.
 - 로그인 / 회원가입 페이지로 이동할 수 있습니다.
 
-### 2. 회원가입 페이지
+#### 2. 회원가입 페이지
 
 - 정보를 입력하여 새로운 계정을 생성합니다.
 - 가입 완료 시 안내와 함께 로그인 페이지로 이동합니다.
 
-### 3. 로그인 페이지
+#### 3. 로그인 페이지
 
 - 생성한 계정으로 로그인할 수 있습니다.
   - 로그인한 유저 정보는 Redux를 이용해 전역으로 관리합니다.
 - 로그인 성공 시 나의 대시보드 페이지로 이동합니다.
 
-### 4. 나의 대시보드
+#### 4. 계정 관리
+
+- 프로필 이미지 / 닉네임을 변경할 수 있습니다.
+- 비밀번호 변경를 변경할 수 있습니다.
+
+### 대시보드
+
+https://github.com/Part3-Team15/taskify/assets/24778465/8250bbb1-cdd4-4f77-b5d9-b3220c04b430
+
+#### 5. 나의 대시보드
 
 - 내 대시보드 목록을 볼 수 있고, 새로운 대시보드를 생성할 수 있습니다.
   - 대시보드 목록은 페이지네이션을 이용해 정보를 불러옵니다.
@@ -288,12 +312,7 @@ Github Flow에 백업용 브랜치를 추가한 형태로, main, develop, featur
 - 좌측의 사이드바를 통해 계정 관리나 다른 대시보드로 이동할 수 있습니다.
 - 우상단의 프로필을 클릭하면 나의 대시보드 / 계정 관리로 이동하거나 로그아웃할 수 있습니다.
 
-### 5. 계정 관리
-
-- 프로필 이미지 / 닉네임을 변경할 수 있습니다.
-- 비밀번호 변경를 변경할 수 있습니다.
-
-### 6. 대시보드
+#### 6. 대시보드
 
 - 페이지 끝 (PC: 우측, 태블릿/모바일: 하단) `새로운 컬럼 추가하기` 버튼으로 컬럼을 추가할 수 있습니다.
 - 컬럼 이름 옆 관리 버튼으로 컬럼 이름 변경 및 컬럼 삭제가 가능합니다.
@@ -308,7 +327,11 @@ Github Flow에 백업용 브랜치를 추가한 형태로, main, develop, featur
   - 관리: 대시보드 관리로 이동합니다.
   - 초대하기: 서비스에 가입한 팀원의 이메일을 입력해 초대할 수 있습니다.
 
-### 7. 대시보드 관리
+#### 대시보드 관리 및 추가기능
+
+https://github.com/Part3-Team15/taskify/assets/24778465/74e6a1b0-806a-4c7f-845c-2ff633d04344
+
+#### 7. 대시보드 관리
 
 - 대시보드 이름 / 색상 / 공유 여부 / 즐겨찾기 여부를 변경할 수 있습니다.
   - 공유 시 url을 이용해 멤버가 아닌 사람도 대시보드를 열람할 수 있습니다.
