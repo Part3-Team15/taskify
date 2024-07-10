@@ -26,6 +26,9 @@ export default function Redirect({ children }: { children: React.ReactNode }) {
           case 404:
             if (user) redirect('/mydashboard', '접근 권한이 없습니다');
             else redirect('/signin', '접근 권한이 없습니다');
+            break;
+          default:
+            throw error;
         }
       }
     },
