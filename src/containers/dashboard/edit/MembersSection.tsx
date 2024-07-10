@@ -27,7 +27,6 @@ export default function MembersSection({ onDeleteMember }: MemberSectionProps) {
   const { data, isLoading, error } = useFetchData<MembersResponse>(
     ['members', id, currentChunk],
     () => getMembersList(Number(id), currentChunk, 4),
-    false,
     !!id,
   );
   const totalPage = data ? Math.max(1, Math.ceil(data.totalCount / 4)) : 1;

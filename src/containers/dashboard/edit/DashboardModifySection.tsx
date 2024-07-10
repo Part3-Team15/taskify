@@ -70,12 +70,11 @@ export default function DashboardModifySection({ initIsPublic, onPublicChange }:
     data: dashboard,
     isLoading,
     error,
-  } = useFetchData<Dashboard>(['dashboard', id], () => getDashboard(id as string), false, !!id);
+  } = useFetchData<Dashboard>(['dashboard', id], () => getDashboard(id as string), !!id);
 
   const { data: favoriteList } = useFetchData<FavoriteDashboard[]>(
     ['favorites', favoriteUserId],
     () => getFavorites(favoriteUserId || ''),
-    false,
     !!favoriteUserId,
   );
 

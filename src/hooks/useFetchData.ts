@@ -4,8 +4,8 @@ import { useQuery, QueryKey, UseQueryResult } from '@tanstack/react-query';
 const useFetchData = <T>(
   queryKey: QueryKey,
   getService: () => Promise<{ data: T }>,
-  refetchInterval: false | number = false,
   enabled: boolean = true,
+  refetchInterval: false | number = false,
 ): UseQueryResult<T, Error> => {
   return useQuery<T, Error>({
     queryKey: queryKey,
@@ -17,8 +17,8 @@ const useFetchData = <T>(
         throw error;
       }
     },
-    refetchInterval: refetchInterval, // NOTE: 주기적인 초대내역 수신을 위해 설정
     enabled: enabled,
+    refetchInterval: refetchInterval, // NOTE: 주기적인 초대내역 수신을 위해 설정
   });
 };
 

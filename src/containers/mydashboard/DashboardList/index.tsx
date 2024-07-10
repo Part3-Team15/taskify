@@ -13,16 +13,20 @@ interface DashboardListProps {
 }
 
 export default function DashboardList({ initialDashboard }: DashboardListProps) {
-  const [currentChunk, setCurrentChunk] = useState<number>(1);
   const { openNewDashboardModal } = useModal();
+
+  // 현재 페이지 상태와 대시보드 데이터 상태 초기화
+  const [currentChunk, setCurrentChunk] = useState<number>(1);
   const [dashboardData, setDashboards] = useState<DashboardsResponse>(initialDashboard);
 
   const {
     data: dashboardResponse,
     error,
     isLoading,
-  } = useFetchData<DashboardsResponse>(['dashboards', currentChunk], () =>
-    getDashboardsList('pagination', currentChunk, 5),
+  } = useFetchData<DashboardsResponse>(
+    ['dashboards', currentChunk],
+    () => getDashboardsList('pagination', currentChunk, 5),
+    !initialDashboard || currentChunk != 1,
   );
 
   // 총 페이지 수 계산
@@ -37,25 +41,16 @@ export default function DashboardList({ initialDashboard }: DashboardListProps) 
 
   if (error) {
     return (
-      <div>
+      <section className='flex-col justify-between'>
         <div>Error fetching data</div>
         <div>{error.message}</div>
-      </div>
+      </section>
     );
   }
 
-  // 다음 페이지로 이동하는 함수
-  const handleNext = () => {
-    if (currentChunk < totalPage) {
-      setCurrentChunk((prev) => prev + 1);
-    }
-  };
-
-  // 이전 페이지로 이동하는 함수
-  const handlePrev = () => {
-    if (currentChunk > 1) {
-      setCurrentChunk((prev) => prev - 1);
-    }
+  // 페이지 이동 함수
+  const handlePageChange = (isNext: boolean) => {
+    setCurrentChunk((prev) => (isNext ? prev + 1 : prev - 1));
   };
 
   if (!dashboardData) return null;
@@ -117,8 +112,8 @@ export default function DashboardList({ initialDashboard }: DashboardListProps) 
           <Pagination
             currentChunk={currentChunk}
             totalPage={totalPage}
-            onNextClick={handleNext}
-            onPrevClick={handlePrev}
+            onNextClick={() => handlePageChange(true)}
+            onPrevClick={() => handlePageChange(false)}
           />
         </div>
       </ul>

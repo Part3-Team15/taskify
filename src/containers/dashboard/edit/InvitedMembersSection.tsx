@@ -24,7 +24,6 @@ export default function InvitedMembersSection() {
   const { data, isLoading, error } = useFetchData<DashboardInvitationsResponse>(
     ['invitations', id, currentChunk],
     () => getDashboardInvitations(Number(id), currentChunk, 5),
-    false,
     !!id,
   );
   const totalPage = data ? Math.max(1, Math.ceil(data.totalCount / 5)) : 1;

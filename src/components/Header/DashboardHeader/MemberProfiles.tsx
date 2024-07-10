@@ -29,7 +29,6 @@ export default function MemberProfiles({ id }: MemberProfilesProps) {
   const { data, isLoading, error } = useFetchData<MembersResponse>(
     ['members', id, 1],
     () => getMembersList(Number(id)),
-    false,
     !!id,
   );
 

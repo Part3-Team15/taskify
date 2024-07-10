@@ -33,7 +33,6 @@ export default function Sidebar() {
   const { data: favoriteList } = useFetchData<FavoriteDashboard[]>(
     ['favorites', favoriteUser._id],
     () => getFavorites(favoriteUser._id || ''),
-    false,
     !!favoriteUser._id,
   );
 
@@ -45,45 +44,29 @@ export default function Sidebar() {
     }
   }, [user?.id, favoriteUser.userId]);
 
-  const handlePageChange = (direction: 'next' | 'prev') => {
-    setPage((prev) => (direction === 'next' ? prev + 1 : prev - 1));
+  const handlePageChange = (isNext: boolean) => {
+    setPage((prev) => (isNext ? prev + 1 : prev - 1));
   };
 
   return (
     <aside className='flex min-w-16 max-w-[300px] flex-col border-r border-gray-d9 bg-white px-3 py-5 transition-all md:min-w-40 lg:min-w-72 dark:border-dark-200 dark:bg-dark'>
       <Link href={user ? '/mydashboard' : '/'} className='flex items-center justify-center pb-14 md:block md:px-3'>
-        <Image
-          src={'/icons/logo.svg'}
-          alt='logo'
-          width={110}
-          height={33}
-          priority
-          className='hidden md:block dark:hidden'
-        />
-        <Image
-          src={'/icons/logo-white.svg'}
-          alt='logo'
-          width={110}
-          height={33}
-          priority
-          className='hidden dark:md:block'
-        />
-        <Image
-          src={'/icons/logo-s.svg'}
-          alt='logo'
-          width={27}
-          height={27}
-          priority
-          className='block size-[27px] md:hidden dark:hidden'
-        />
-        <Image
-          src={'/icons/logo-white-s.svg'}
-          alt='logo'
-          width={27}
-          height={27}
-          priority
-          className='hidden size-[27px] dark:block dark:md:hidden'
-        />
+        <div>
+          <div className='relative hidden h-[33px] w-[110px] md:block'>
+            <Image src={'/icons/logo.svg'} alt='logo' fill priority className='hidden md:block dark:hidden' />
+            <Image src={'/icons/logo-white.svg'} alt='logo' fill priority className='hidden dark:md:block' />
+          </div>
+          <div className='relative size-[27px] md:hidden'>
+            <Image src={'/icons/logo-s.svg'} alt='logo' fill priority className='block md:hidden dark:hidden' />
+            <Image
+              src={'/icons/logo-white-s.svg'}
+              alt='logo'
+              fill
+              priority
+              className='hidden dark:block dark:md:hidden'
+            />
+          </div>
+        </div>
       </Link>
 
       <div className='flex grow flex-col gap-2'>
@@ -124,7 +107,7 @@ export default function Sidebar() {
         {favoriteList && favoriteList.length > 0 && (
           <>
             <div className='flex flex-col items-stretch gap-2'>
-              <p className='align-center text-lg text-gray-78 md:px-3 dark:text-dark-10'>
+              <p className='align-center text-lg text-gray-78 md:justify-start md:px-3 dark:text-dark-10'>
                 ⭐
                 <span className='hidden px-2 text-[14px] font-extrabold text-gray-78 md:block dark:text-dark-10'>
                   즐겨찾기
@@ -147,7 +130,7 @@ export default function Sidebar() {
               <li
                 key={i}
                 className='flex min-h-[32px] items-center justify-center rounded-md bg-gray-fa py-3 md:min-h-[52px] md:justify-start md:px-3 dark:bg-dark-300'
-              ></li>
+              />
             ))}
           </ul>
         ) : (
@@ -160,8 +143,8 @@ export default function Sidebar() {
 
             {totalPage > 1 && (
               <div className='flex flex-col items-center pt-3 md:flex-row'>
-                <NavButton direction='left' onClick={() => handlePageChange('prev')} isDisable={page === 1} />
-                <NavButton direction='right' onClick={() => handlePageChange('next')} isDisable={page === totalPage} />
+                <NavButton direction='left' onClick={() => handlePageChange(false)} isDisable={page === 1} />
+                <NavButton direction='right' onClick={() => handlePageChange(true)} isDisable={page === totalPage} />
               </div>
             )}
           </>

@@ -1,3 +1,4 @@
+import { useQueryClient } from '@tanstack/react-query';
 import { useEffect, useState } from 'react';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -12,9 +13,12 @@ export default function InvitationNotice() {
   const { data, isSuccess } = useFetchData<InvitationsResponse>(
     ['invitations', 'notice'],
     () => getInvitationsList(),
+    true,
     5000, // NOTE: 5초마다 refetch 하도록 설정
   );
   const [savedInvitations, setSavedInvitations] = useState<Invitation[] | null>(data?.invitations || null);
+
+  const queryClient = useQueryClient();
 
   useEffect(() => {
     if (data && data.invitations[0] && savedInvitations) {
@@ -26,6 +30,9 @@ export default function InvitationNotice() {
             TOAST_DEFAULT_SETTING,
           ),
         );
+        // 쿼리 무효화
+        queryClient.invalidateQueries({ queryKey: ['myInvitations'] });
+        
         // NOTE: 이전 초대내역이 있다면, 그중 가장 최신 것보다 나중에 온 것만 알림
       } else if (savedInvitations[0] && data.invitations[0].createdAt >= savedInvitations[0].createdAt) {
         for (let i = 0; i < data.invitations.length; i += 1) {
@@ -36,6 +43,9 @@ export default function InvitationNotice() {
             TOAST_DEFAULT_SETTING,
           );
         }
+
+        // 쿼리 무효화
+        queryClient.invalidateQueries({ queryKey: ['myInvitations'] });
       }
     }
     // NOTE: 초대내역 조회 요청 성공 시 저장

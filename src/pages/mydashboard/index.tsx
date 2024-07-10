@@ -28,13 +28,13 @@ export default function MyDashboardPage({ initialDashboard, initialInvitedDashbo
 
 export const getServerSideProps: GetServerSideProps = async ({ req, res }) => {
   const cookies = getCookies({ req, res });
-  const token = cookies['token'];
+  const accessToken = cookies['accessToken'];
 
   let initialDashboard: DashboardsResponse | null = null;
   let initialInvitedDashboard: InvitationsResponse | null = null;
 
-  if (token) {
-    const authHeaders = createAuthHeaders(token);
+  if (accessToken) {
+    const authHeaders = createAuthHeaders(accessToken);
 
     try {
       const [dashboardResponse, invitationsResponse] = await Promise.all([
