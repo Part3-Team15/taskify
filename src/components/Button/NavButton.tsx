@@ -6,6 +6,7 @@ interface NavButtonProps {
   isDisable?: boolean;
 }
 
+// NOTE: 페이지네이션에서 쓰이는 흰색 버튼
 export default function NavButton({ direction, onClick, isDisable }: NavButtonProps) {
   return (
     <button
