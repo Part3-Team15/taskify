@@ -56,26 +56,7 @@ export default function TodoCardModal({ card, column, onClick }: TodoCardModalPr
     }
   };
 
-  const handleObserver = useCallback(
-    (entries: IntersectionObserverEntry[]) => {
-      const target = entries[0];
-      if (target.isIntersecting && cursorId !== null && !isFetching) {
-        fetchComments(5, cursorId);
-      }
-    },
-    [cursorId, isFetching],
-  );
-
-  useEffect(() => {
-    const observer = new IntersectionObserver(handleObserver, {
-      threshold: 1.0,
-    });
-    if (observerRef.current) observer.observe(observerRef.current);
-
-    return () => {
-      if (observerRef.current) observer.unobserve(observerRef.current);
-    };
-  }, [handleObserver]);
+  const { observerRef } = useInfiniteScroll(fetchComments, cursorId, isFetching); // 무한 스크롤 옵저버 참조
 
   useEffect(() => {
     queryClient.invalidateQueries({ queryKey: ['comments', card.id] });
