@@ -1,6 +1,7 @@
 import Image from 'next/image';
 import Link from 'next/link';
 
+// NOTE: 랜딩 페이지 헤더 컴포넌트
 export default function LandingHeader() {
   return (
     <header className='flex h-[60px] w-full items-center justify-between bg-dark-500 px-[24px] md:h-[70px]'>

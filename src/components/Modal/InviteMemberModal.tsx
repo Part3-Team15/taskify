@@ -9,6 +9,7 @@ import { EMAIL_REGEX } from '@/constants';
 import useModal from '@/hooks/useModal';
 import { postInviteMember } from '@/services/postService';
 
+// NOTE: 구성원 초대 모달
 export default function InviteMemberModal() {
   const { openNotificationModal, closeModal } = useModal();
   const queryClient = useQueryClient();
@@ -45,6 +46,8 @@ export default function InviteMemberModal() {
   return (
     <div className='modal w-[327px] md:w-[540px]'>
       <h2 className='section-title'>초대하기</h2>
+
+      {/* 이메일 입력 */}
       <div className='my-6 md:mb-7 md:mt-8'>
         <label className='label'>이메일</label>
         <input
@@ -57,6 +60,8 @@ export default function InviteMemberModal() {
         />
         {errorMessage && <p className='mt-2 text-sm text-red'>{errorMessage}</p>}
       </div>
+
+      {/* 버튼 */}
       <div className='flex justify-between md:justify-end md:gap-3'>
         <ModalCancelButton type='button' onClick={closeModal}>
           취소

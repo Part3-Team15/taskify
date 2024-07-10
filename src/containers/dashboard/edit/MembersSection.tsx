@@ -29,6 +29,7 @@ export default function MembersSection({ onDeleteMember }: MemberSectionProps) {
   );
   const totalPage = data ? Math.max(1, Math.ceil(data.totalCount / 4)) : 1;
 
+  // NOTE: 페이지네이션
   const handleNext = () => {
     if (currentChunk < totalPage) {
       setCurrentChunk((prev) => prev + 1);
@@ -40,13 +41,13 @@ export default function MembersSection({ onDeleteMember }: MemberSectionProps) {
     }
   };
 
+  // NOTE: 구성원 삭제
   const handleSuccess = () => {
     if (data?.members.length === 1 && currentChunk > 1) {
       setCurrentChunk((prev) => prev - 1);
     }
     queryClient.invalidateQueries({ queryKey: ['members', id] });
   };
-
   const { mutate } = useDeleteData<DeleteMemberInput>({ mutationFn: deleteMember, handleSuccess });
 
   const handleDeleteMember = (member: Member) => {

@@ -11,9 +11,11 @@ import {
   TodoCardModalProps,
 } from '@/types/Modal.interface';
 
+// NOTE: 쉽게 모달을 관리할 수 있도록 돕는 훅
 const useModal = () => {
   const dispatch = useDispatch();
 
+  // NOTE: open{...}Modal 함수에 정해진 타입의 인자를 넣어 각 모달을 열 수 있도록 함
   const openNotificationModal = (modalProps: NotificationModalProps) => {
     dispatch(openModal({ type: MODAL.NOTIFICATION, modalProps }));
   };
@@ -35,10 +37,10 @@ const useModal = () => {
   const openTodoCardModal = (modalProps: TodoCardModalProps) => {
     dispatch(openModal({ type: MODAL.TODO_CARD, modalProps }));
   };
-
   const openEditCardModal = (modalProps: EditCardModalProps) => {
     dispatch(openModal({ type: MODAL.EDIT_CARD, modalProps }));
   };
+
   const handleCloseModal = () => {
     dispatch(closeModal());
   };

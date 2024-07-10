@@ -6,6 +6,7 @@ interface DefaultHeaderProps {
   title: string;
 }
 
+// NOTE: title과 유저 메뉴를 보여주는 범용 헤더 컴포넌트
 export default function DefaultHeader({ title }: DefaultHeaderProps) {
   return (
     <header className='relative flex h-[60px] w-full items-center justify-between border-b border-gray-d9 bg-white px-[24px] text-black-33 transition-colors md:h-[70px] md:px-[40px] dark:border-dark-200 dark:bg-dark dark:text-dark-10'>

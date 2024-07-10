@@ -3,6 +3,7 @@ interface toggleProps {
   onToggleClick: () => void;
 }
 
+// NOTE: on/off 토글 컴포넌트
 export default function Toggle({ isOn, onToggleClick }: toggleProps) {
   return (
     <button type='button' onClick={onToggleClick} className='relative h-fit'>

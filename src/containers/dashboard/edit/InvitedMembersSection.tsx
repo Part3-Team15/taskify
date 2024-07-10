@@ -16,25 +16,17 @@ import { DashboardInvitationsResponse } from '@/types/Invitation.interface';
 
 export default function InvitedMembersSection() {
   const { openInviteMemberModal } = useModal();
+  const queryClient = useQueryClient();
   const router = useRouter();
   const { id } = router.query;
   const [currentChunk, setCurrentChunk] = useState(1);
-
-  const handleSuccess = () => {
-    if (data?.invitations.length === 1 && currentChunk > 1) {
-      setCurrentChunk((prev) => prev - 1);
-    }
-    queryClient.invalidateQueries({ queryKey: ['invitations', id] });
-  };
-
-  const { mutate } = useDeleteData<CancelInvitationInput>({ mutationFn: deleteInvitation, handleSuccess });
-  const queryClient = useQueryClient();
 
   const { data, isLoading, error } = useFetchData<DashboardInvitationsResponse>(['invitations', id, currentChunk], () =>
     getDashboardInvitations(Number(id), currentChunk, 5),
   );
   const totalPage = data ? Math.max(1, Math.ceil(data.totalCount / 5)) : 1;
 
+  // NOTE: 페이지네이션
   const handleNext = () => {
     if (currentChunk < totalPage) {
       setCurrentChunk((prev) => prev + 1);
@@ -45,6 +37,15 @@ export default function InvitedMembersSection() {
       setCurrentChunk((prev) => prev - 1);
     }
   };
+
+  // NOTE: 초대 취소
+  const handleSuccess = () => {
+    if (data?.invitations.length === 1 && currentChunk > 1) {
+      setCurrentChunk((prev) => prev - 1);
+    }
+    queryClient.invalidateQueries({ queryKey: ['invitations', id] });
+  };
+  const { mutate } = useDeleteData<CancelInvitationInput>({ mutationFn: deleteInvitation, handleSuccess });
 
   const handleCancelInvitation = (invitationId: number) => {
     const handleDelete = async () => {
