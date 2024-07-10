@@ -28,7 +28,7 @@ export default function MyDashboardPage({ initialDashboard, initialInvitedDashbo
 
 export const getServerSideProps: GetServerSideProps = async ({ req, res }) => {
   const cookies = getCookies({ req, res });
-  const token = cookies['token'];
+  const token = cookies['accessToken'];
 
   let initialDashboard: DashboardsResponse | null = null;
   let initialInvitedDashboard: InvitationsResponse | null = null;

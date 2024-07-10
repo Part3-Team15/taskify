@@ -35,7 +35,7 @@ const useUserDropdown = () => {
     dispatch(clearUser());
     dispatch(clearFavoritesUser());
     queryClient.cancelQueries({ queryKey: ['favorites'] });
-    deleteCookie('token');
+    deleteCookie('accessToken');
     setIsOpen(false);
     router.push('/');
   };
