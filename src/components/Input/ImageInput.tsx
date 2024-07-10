@@ -8,16 +8,19 @@ interface ImageInputProps {
   onDeleteClick: () => void;
 }
 
+/* NOTE: 이미지 인풋을 입력받고, 수정/제거할 수 있는 컴포넌트
+ * onChange, onDeleteClick: 실제 폼에 입력 변화를 반영하기 위한 함수
+ */
 export default function ImageInput({ name, value, onChange, onDeleteClick }: ImageInputProps) {
   const inputRef = useRef<HTMLInputElement>(null);
-  const [tempImage, setTempImage] = useState(value || '');
+  const [tempImage, setTempImage] = useState(value || ''); // NOTE: 프리뷰 위한 state
 
   const handleImageChange = (e: ChangeEvent<HTMLInputElement>) => {
     const files = e.target.files;
 
     if (files === null || !files[0]) return;
-    onChange(files[0]);
-    setTempImage(URL.createObjectURL(files[0]));
+    onChange(files[0]); // NOTE: 실제 폼 반영
+    setTempImage(URL.createObjectURL(files[0])); // NOTE: 프리뷰 반영
   };
 
   const handleImageDelete: MouseEventHandler<HTMLButtonElement> = (e) => {
@@ -33,6 +36,7 @@ export default function ImageInput({ name, value, onChange, onDeleteClick }: Ima
   return (
     <div className='size-full'>
       {tempImage ? (
+        // 이미지가 있을 때, 이미지를 보여주고, 수정과 삭제가 가능
         <label htmlFor={name} className='align-center relative size-full cursor-pointer'>
           <Image
             src={tempImage}
@@ -41,21 +45,18 @@ export default function ImageInput({ name, value, onChange, onDeleteClick }: Ima
             style={{ objectFit: 'cover' }}
             className='rounded-md hover:brightness-75 active:brightness-50'
           />
+          <Image src='/icons/edit.svg' alt='이미지 수정' width={30} height={30} className='z-10' />
+          {/* 이미지 삭제 버튼 */}
           <button
             className='absolute right-1.5 top-1.5 size-6 cursor-pointer rounded-full opacity-40 hover:opacity-70'
             type='button'
             onClick={handleImageDelete}
           >
-            <Image
-              src='/icons/x.svg'
-              alt='이미지 삭제'
-              fill
-              className='rounded-full border border-gray-9f bg-white/40'
-            />
+            <Image src='/icons/x.svg' alt='이미지 삭제' fill className='gray-border rounded-full bg-white/70' />
           </button>
-          <Image src='/icons/edit.svg' alt='이미지 수정' width={30} height={30} className='z-10' />
         </label>
       ) : (
+        // 이미지가 없을 때 추가 버튼처럼 렌더링됨
         <label htmlFor={name} className='btn-gray size-full cursor-pointer dark:bg-dark-200 dark:hover:bg-dark-100/50'>
           <div className='relative size-5 md:size-[30px]'>
             <Image src='/icons/plus-violet.svg' alt='이미지 추가' fill className='dark:hidden' />
@@ -64,6 +65,7 @@ export default function ImageInput({ name, value, onChange, onDeleteClick }: Ima
         </label>
       )}
 
+      {/* 실제 인풋 받는 요소 */}
       <input
         className='hidden'
         id={name}

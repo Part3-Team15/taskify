@@ -10,13 +10,13 @@ interface InvitedMemberProps {
   onDeleteClick: () => void;
 }
 
+// NOTE: 각 구성원 프로필확인과 삭제가 가능한 멤버 컴포넌트
 export default function MemberItem({ member, onDeleteClick }: InvitedMemberProps) {
   const { user } = useSelector((state: RootState) => state.user);
 
   return (
     <div className='flex items-center justify-between'>
       <div className='flex items-center gap-2 md:gap-3'>
-        {/* TODO: ProfileIcon PR 반영해야함 */}
         <ProfileIcon
           user={member}
           userId={member.userId}

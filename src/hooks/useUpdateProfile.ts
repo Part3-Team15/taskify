@@ -9,6 +9,7 @@ import { RootState } from '@/store/store';
 import { UpdateProfileForm } from '@/types/post/UpdateProfileForm.interface';
 import { User } from '@/types/User.interface';
 
+// NOTE: 유저 프로필 업데이트를 위한 훅
 export const useUpdateProfile = () => {
   const dispatch = useDispatch();
   const { openNotificationModal } = useModal();
@@ -19,8 +20,8 @@ export const useUpdateProfile = () => {
     onMutate: () => {
       dispatch(isLoading(true));
       dispatch(setError(null));
-      // 이 부분에서 필요한 경우 이전 상태를 저장하거나 다른 작업을 수행할 수 있음
-      return null; // 반환 값은 나중에 revert 함수에서 사용할 수 있음
+      // NOTE: 이 부분에서 필요한 경우 이전 상태를 저장하거나 다른 작업을 수행할 수 있음
+      return null; // NOTE: 반환 값은 나중에 revert 함수에서 사용할 수 있음
     },
     onSuccess: (user) => {
       dispatch(setUser({ ...prevUser, user }));

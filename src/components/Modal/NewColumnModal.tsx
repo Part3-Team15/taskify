@@ -50,6 +50,8 @@ export default function NewColumnModal({ columns }: NewColumnModalProps) {
   return (
     <div className='modal w-[327px] md:w-[540px]'>
       <h2 className='section-title'>새 컬럼 생성</h2>
+
+      {/* 컬럼 이름 입력 */}
       <div className='my-6 md:mb-7 md:mt-8'>
         <label className='label'>이름</label>
         <input
@@ -62,6 +64,8 @@ export default function NewColumnModal({ columns }: NewColumnModalProps) {
         />
         {errorMessage && <p className='mt-2 text-sm text-red'>{errorMessage}</p>}
       </div>
+
+      {/* 버튼 */}
       <div className='flex justify-between md:justify-end md:gap-3'>
         <ModalCancelButton type='button' onClick={closeModal}>
           취소

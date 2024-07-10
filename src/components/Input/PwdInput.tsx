@@ -7,6 +7,7 @@ interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
   error?: string;
 }
 
+// NOTE: 비밀번호 입력을 관리한 수 있는 인풋 컴포넌트
 export default function PwdInput(props: InputProps) {
   const { id, placeholder, error, className = '', ...inputProps } = props;
   const [visible, setVisible] = useState(false);
@@ -16,13 +17,14 @@ export default function PwdInput(props: InputProps) {
     <div>
       <div className='relative'>
         <input
-          className={`input ${error && 'border-2 border-red'} dark:bg-dark-300`}
+          className={`input ${error && 'border-2 border-red'} dark:bg-dark-300 ${className}`}
           type={type}
           id={id}
           placeholder={placeholder}
           autoComplete='new-password'
           {...inputProps}
         />
+        {/* 비밀번호 보기 버튼 */}
         <button
           type='button'
           className='absolute right-4 top-[13px] size-4 md:top-[15px] md:size-5'

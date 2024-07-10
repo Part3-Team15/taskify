@@ -25,14 +25,19 @@ export default function DashboardEdit() {
   const router = useRouter();
   const { id } = router.query;
 
+  // NOTE: Redirection
   const { data: dashboard, error } = useFetchData<Dashboard>(['dashboard', id], () => getDashboard(id as string));
-  const [isPublic, setIsPublic] = useState(false);
 
-  const handleSuccess = () => {
-    queryClient.invalidateQueries({ queryKey: ['sideDashboards'] });
-    router.replace('/mydashboard');
-  };
-  const { mutate } = useDeleteData<DeleteDashboardInput>({ mutationFn: deleteDashboard, handleSuccess });
+  useEffect(() => {
+    if (dashboard) {
+      redirectIfNoPermission(dashboard.userId);
+    } else if (error) {
+      redirectIfNoPermission(-1);
+    }
+  }, [dashboard, error]);
+
+  // NOTE: 공유 대시보드 여부 확인
+  const [isPublic, setIsPublic] = useState(false);
 
   const handleIsPublicChange = (newIsPublic: boolean) => {
     setIsPublic(newIsPublic);
@@ -43,6 +48,24 @@ export default function DashboardEdit() {
       setIsPublic(false);
     }
   };
+
+  useEffect(() => {
+    const handleInitIsPublic = async () => {
+      try {
+        setIsPublic(await checkPublic(Number(id)));
+      } catch {
+        redirectIfNoPermission(-1);
+      }
+    };
+    if (id) handleInitIsPublic();
+  }, [id]);
+
+  // NOTE: 대시보드 삭제
+  const handleSuccess = () => {
+    queryClient.invalidateQueries({ queryKey: ['sideDashboards'] });
+    router.replace('/mydashboard');
+  };
+  const { mutate } = useDeleteData<DeleteDashboardInput>({ mutationFn: deleteDashboard, handleSuccess });
 
   const handleDeleteClick = () => {
     const handleDelete = async () => {
@@ -55,28 +78,6 @@ export default function DashboardEdit() {
       onActionClick: handleDelete,
     });
   };
-
-  useEffect(() => {
-    const handleInitIsPublic = async () => {
-      try {
-        setIsPublic(await checkPublic(Number(id)));
-      } catch {
-        redirectIfNoPermission(-1);
-      }
-    };
-
-    if (id) {
-      handleInitIsPublic();
-    }
-  }, [id]);
-
-  useEffect(() => {
-    if (dashboard) {
-      redirectIfNoPermission(dashboard.userId);
-    } else if (error) {
-      redirectIfNoPermission(-1);
-    }
-  }, [dashboard, error]);
 
   return (
     <div className='h-full px-3 py-4 text-black-33 md:p-5 dark:text-dark-10'>
