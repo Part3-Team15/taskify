@@ -48,14 +48,11 @@ export default function DashboardHeader() {
 
       <div className='flex gap-4 md:gap-5 lg:gap-10'>
         {createdByMe && <Buttons id={dashboardId} />}
-
         <div className='flex items-center gap-3 md:gap-5 lg:gap-8'>
           <MemberProfiles id={String(dashboardId)} />
-          <div className='h-[34px] w-0 border-l border-gray-d9 dark:border-dark-200' />
-          <div className='-m-2 md:-m-3 lg:-m-5'>
-            <ThemeChangeButton className='p-2' />
-          </div>
-          <div className='h-[34px] w-0 border-l border-gray-d9 dark:border-dark-200' />
+          <div className='header-divider' />
+          <ThemeChangeButton className='-m-2 p-2 md:-m-3 lg:-m-5' />
+          <div className='header-divider' />
           <UserMenuDropdown />
         </div>
       </div>
