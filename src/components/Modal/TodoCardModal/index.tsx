@@ -1,7 +1,7 @@
 import { useQueryClient } from '@tanstack/react-query';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
-import { FormEvent, useEffect, useState, useRef, useCallback } from 'react';
+import { FormEvent, useEffect, useState } from 'react';
 
 import Comment from './Comment';
 import EditDropdown from './EditDropdown';
@@ -9,6 +9,7 @@ import EditDropdown from './EditDropdown';
 import ProfileIcon from '@/components/ProfileIcon';
 import Tags from '@/components/Tags';
 import useFetchData from '@/hooks/useFetchData';
+import useInfiniteScroll from '@/hooks/useInfiniteScroll';
 import useModal from '@/hooks/useModal';
 import { getComments } from '@/services/getService';
 import { postComment } from '@/services/postService';

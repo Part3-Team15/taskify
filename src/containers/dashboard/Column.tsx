@@ -1,11 +1,12 @@
 import Image from 'next/image';
-import { useEffect, useRef, useCallback, useState } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 import { Draggable, Droppable } from 'react-beautiful-dnd';
 
 import Card from './Card';
 import ColumnSkeleton from './ColumnSkeleton';
 
 import useFetchData from '@/hooks/useFetchData';
+import useInfiniteScroll from '@/hooks/useInfiniteScroll';
 import useModal from '@/hooks/useModal';
 import { getCardsList } from '@/services/getService';
 import { Card as CardType, CardsListResponse } from '@/types/Card.interface';
@@ -60,19 +61,7 @@ function Column({ column, columns, isMember }: ColumnProps) {
     [column.id],
   );
 
-  const lastCardRef = useCallback(
-    (node: HTMLDivElement | null) => {
-      if (isFetching) return;
-      if (observer.current) observer.current.disconnect();
-      observer.current = new IntersectionObserver((entries) => {
-        if (entries[0].isIntersecting && cursorId !== 0) {
-          fetchCards(5, cursorId);
-        }
-      });
-      if (node) observer.current.observe(node);
-    },
-    [isFetching, cursorId, fetchCards],
-  );
+  const { observerRef } = useInfiniteScroll(fetchCards, cursorId, isFetching);
 
   if (isLoading) {
     return <ColumnSkeleton />;
