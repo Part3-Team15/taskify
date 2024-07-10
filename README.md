@@ -271,7 +271,7 @@ Github Flow에 백업용 브랜치를 추가한 형태로, main, develop, featur
 
 | 대시보드 | 대시보드 관리 |
 | :-: | :-: |
-| <img height="400" alt="image" src="https://github.com/Part3-Team15/taskify/assets/24778465/f22bad5e-6136-41cc-a226-59ea249495d5"> | <img height="400" alt="image" src="https://github.com/Part3-Team15/taskify/assets/24778465/f1c0f8e5-557e-4653-9c3b-e058585b80ca"> |
+| <img width="460" alt="image" src="https://github.com/Part3-Team15/taskify/assets/24778465/f22bad5e-6136-41cc-a226-59ea249495d5"> | <img width="350" alt="image" src="https://github.com/Part3-Team15/taskify/assets/24778465/f1c0f8e5-557e-4653-9c3b-e058585b80ca"> |
 
 ### 계정관리
 
@@ -410,7 +410,7 @@ https://github.com/Part3-Team15/taskify/assets/24778465/74e6a1b0-806a-4c7f-845c-
 
 | 김지윤 | 류혜원 | 이대양 | 정민재 |
 | :-: | :-: | :-: | :-: |
-| <img src="https://github.com/Part3-Team15/taskify/assets/24778465/807b24c9-7bad-4c5b-8351-2c8f450b8a1d" width="150" height="150"> | <img src="https://github.com/Part3-Team15/taskify/assets/24778465/8cc4ffc5-8bf8-484d-9988-3068481fa4ef" width="150" height="150"> | <img src="https://github.com/Part3-Team15/taskify/assets/24778465/6a64aa55-6253-4f88-8b6c-b7a6109df1a5" width="150" height="150"> | <img src="https://github.com/Part3-Team15/taskify/assets/24778465/58b1ec5f-3f08-4585-a9e4-211d06a3fad2" width="150" height="150"> |
+| <img src="https://github.com/Part3-Team15/taskify/assets/24778465/807b24c9-7bad-4c5b-8351-2c8f450b8a1d" width="150" > | <img src="https://github.com/Part3-Team15/taskify/assets/24778465/8cc4ffc5-8bf8-484d-9988-3068481fa4ef" width="150"> | <img src="https://github.com/Part3-Team15/taskify/assets/24778465/6a64aa55-6253-4f88-8b6c-b7a6109df1a5" width="150" > | <img src="https://github.com/Part3-Team15/taskify/assets/24778465/58b1ec5f-3f08-4585-a9e4-211d06a3fad2" width="150" > |
 | [@wayandway](https://github.com/wayandway) | [@un0211](https://github.com/un0211) | [@oceanlee-seoul](https://github.com/oceanlee-seoul) | [@wjsdncl](https://github.com/wjsdncl) |
 
 ### 김지윤
