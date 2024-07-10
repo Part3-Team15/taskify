@@ -18,12 +18,10 @@ import { CommentsResponse, CommentForm, Comment as CommentType } from '@/types/p
 import formatDate from '@/utils/formatDate';
 
 export default function TodoCardModal({ card, column, onClick }: TodoCardModalProps) {
-  const [comments, setComments] = useState<CommentType[]>([]);
-  const [cursorId, setCursorId] = useState<number | null>(null);
-  const [isFetching, setIsFetching] = useState(false);
-  const observerRef = useRef<HTMLDivElement | null>(null);
-  const [newComment, setNewComment] = useState('');
-  const [isCommentEmpty, setIsCommentEmpty] = useState(true);
+  const [comments, setComments] = useState<CommentType[]>([]); // 패칭된 댓글 목록 State
+  const [newComment, setNewComment] = useState(''); // 댓글 입력 폼 State
+  const [cursorId, setCursorId] = useState<number | null>(null); // 다음 댓글의 커서 ID
+  const [isFetching, setIsFetching] = useState(false); // 댓글을 불러오는 중인지 여부
   const { closeModal } = useModal();
   const router = useRouter();
   const { id: dashboardId } = router.query;
@@ -81,13 +79,12 @@ export default function TodoCardModal({ card, column, onClick }: TodoCardModalPr
       dashboardId: Number(dashboardId),
     };
 
+    // 댓글 추가 후, 댓글 목록 쿼리 무효화를 통한 최신화
     try {
       await postComment(commentData);
       queryClient.invalidateQueries({ queryKey: ['comments', card.id] });
       setNewComment('');
-      setIsCommentEmpty(true); // 성공 시 에러 메시지 초기화
     } catch (error) {
-      setIsCommentEmpty(true);
       console.error(error);
     }
   };
@@ -149,7 +146,7 @@ export default function TodoCardModal({ card, column, onClick }: TodoCardModalPr
                 <button
                   className='btn-violet-light dark:btn-white absolute right-1 h-[28px] w-[60px] rounded-[4px] text-[12px] text-violet md:h-[32px] md:w-[78px] lg:w-[84px] dark:rounded-[4px]'
                   type='submit'
-                  disabled={isCommentEmpty}
+                  disabled={newComment === ''}
                 >
                   입력
                 </button>
