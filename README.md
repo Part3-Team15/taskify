@@ -1,4 +1,3 @@
-
 # Taskify
 
 // TODO: 목업 이미지 추가
@@ -327,7 +326,7 @@ https://github.com/Part3-Team15/taskify/assets/24778465/8250bbb1-cdd4-4f77-b5d9-
   - 관리: 대시보드 관리로 이동합니다.
   - 초대하기: 서비스에 가입한 팀원의 이메일을 입력해 초대할 수 있습니다.
 
-#### 대시보드 관리 및 추가기능
+### 대시보드 관리 및 추가기능
 
 https://github.com/Part3-Team15/taskify/assets/24778465/74e6a1b0-806a-4c7f-845c-2ff633d04344
 
