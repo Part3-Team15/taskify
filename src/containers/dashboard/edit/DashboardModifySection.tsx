@@ -127,7 +127,7 @@ export default function DashboardModifySection({ initIsPublic, onPublicChange }:
       openNotificationModal({ text: '대시보드 정보가 수정되었습니다!' });
       queryClient.invalidateQueries({ queryKey: ['dashboard', id] });
       queryClient.invalidateQueries({ queryKey: ['sideDashboards'] });
-      queryClient.invalidateQueries({ queryKey: ['sideFavorites'] });
+      queryClient.invalidateQueries({ queryKey: ['favorites'] });
 
       setIsButtonDisabled(true);
     } catch {
