@@ -9,21 +9,25 @@ interface ButtonsProps {
   id: number;
 }
 
+// NOTE: 관리로 이동하는 링크, 초대하기 버튼을 가진 컴포넌트
 export default function Buttons({ id }: ButtonsProps) {
   const { openInviteMemberModal } = useModal();
 
   return (
     <div className='flex gap-1.5 text-[14px] text-gray-78 md:gap-3 lg:gap-4'>
+      {/* 관리 */}
       <Link href={`/dashboard/${id}/edit`} className='btn-white gap-1 px-3 py-1.5 md:py-2 lg:gap-2 lg:px-4 lg:py-2.5'>
-        <Image src={settingsIcon} alt='대시보드 관리 아이콘' />
+        <Image src={settingsIcon} alt='대시보드 관리 아이콘' priority />
         <span className='hidden md:inline'>관리</span>
       </Link>
+
+      {/* 초대하기 */}
       <button
         type='button'
         onClick={() => openInviteMemberModal()}
         className='btn-white gap-1 rounded-[8px] px-3 py-1.5 md:py-2 lg:gap-2 lg:px-4 lg:py-2.5'
       >
-        <Image src={plusIcon} alt='초대 아이콘' />
+        <Image src={plusIcon} alt='초대 아이콘' priority />
         <span className='hidden md:inline'>초대하기</span>
       </button>
     </div>
