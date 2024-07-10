@@ -13,6 +13,7 @@ import useFetchData from '@/hooks/useFetchData';
 import { getDashboard } from '@/services/getService';
 import { Dashboard } from '@/types/Dashboard.interface';
 
+// NOTE: 대시보드 | 대시보드 관리에서 보여줄 헤더 컴포넌트
 export default function DashboardHeader() {
   const router = useRouter();
   const { id } = router.query;
