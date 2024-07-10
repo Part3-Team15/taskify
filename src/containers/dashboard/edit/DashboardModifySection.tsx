@@ -75,7 +75,6 @@ export default function DashboardModifySection({ initIsPublic, onPublicChange }:
   const { data: favoriteList } = useFetchData<FavoriteDashboard[]>(
     ['favorites', favoriteUserId],
     () => getFavorites(favoriteUserId || ''),
-    false,
     !!favoriteUserId,
   );
 
