@@ -8,6 +8,7 @@ interface PaginationProps {
   onPrevClick: () => void;
 }
 
+// NOTE: 페이지네이션 컴포넌트
 export default function Pagination({ currentChunk, totalPage, hideText, onNextClick, onPrevClick }: PaginationProps) {
   return (
     <div className='flex items-center justify-end'>

@@ -10,6 +10,7 @@ interface ProfileIconProps {
   fontClassName: string;
 }
 
+// NOTE: 사용자 프로필 아이콘 컴포넌트
 export default function ProfileIcon({ user, userId, imgClassName, fontClassName }: ProfileIconProps) {
   const colorStyle = getProfileColorStyle(userId);
 
@@ -18,6 +19,7 @@ export default function ProfileIcon({ user, userId, imgClassName, fontClassName 
       className={`align-center relative rounded-full border-2 border-solid border-white dark:border-dark-200 ${imgClassName}`}
       style={colorStyle}
     >
+      {/* 프로필 이미지가 있으면 이미지를, 없으면 닉네임 첫글자를 보여줌 */}
       {user.profileImageUrl ? (
         <Image src={user.profileImageUrl} alt='프로필' fill style={{ objectFit: 'cover' }} className='rounded-full' />
       ) : (
