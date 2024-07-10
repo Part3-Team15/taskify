@@ -7,6 +7,7 @@ interface Props {
   onCancelClick: (id: number) => void;
 }
 
+// NOTE: 초대내역 컴포넌트 생성 (Invitation[] -> InvitedMemberItem[])
 export default function InvitedMemberList({ invitations, onCancelClick }: Props) {
   const lastItem = invitations.at(-1);
 
@@ -18,6 +19,7 @@ export default function InvitedMemberList({ invitations, onCancelClick }: Props)
           <div className='h-0 w-full border border-gray-ee dark:border-dark-200' />
         </li>
       ))}
+      {/* 마지막 초대는 구분선이 없음 */}
       {lastItem && (
         <li key={lastItem.id}>
           <InvitedMemberItem email={lastItem.invitee.email} onCancelClick={() => onCancelClick(lastItem.id)} />
