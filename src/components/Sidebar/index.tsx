@@ -33,7 +33,6 @@ export default function Sidebar() {
   const { data: favoriteList } = useFetchData<FavoriteDashboard[]>(
     ['favorites', favoriteUser._id],
     () => getFavorites(favoriteUser._id || ''),
-    false,
     !!favoriteUser._id,
   );
 

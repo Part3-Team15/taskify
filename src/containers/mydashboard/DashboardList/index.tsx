@@ -26,7 +26,6 @@ export default function DashboardList({ initialDashboard }: DashboardListProps) 
   } = useFetchData<DashboardsResponse>(
     ['dashboards', currentChunk],
     () => getDashboardsList('pagination', currentChunk, 5),
-    false,
     !initialDashboard || currentChunk != 1,
   );
 

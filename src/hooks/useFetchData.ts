@@ -3,8 +3,8 @@ import { useQuery, QueryKey, UseQueryResult } from '@tanstack/react-query';
 const useFetchData = <T>(
   queryKey: QueryKey,
   getService: () => Promise<{ data: T }>,
-  refetchInterval: false | number = false,
   enabled: boolean = true,
+  refetchInterval: false | number = false,
   handleSuccess?: () => void,
 ): UseQueryResult<T, Error> => {
   return useQuery<T, Error>({
@@ -19,8 +19,8 @@ const useFetchData = <T>(
       }
     },
     retry: 1,
-    refetchInterval: refetchInterval,
     enabled: enabled,
+    refetchInterval: refetchInterval,
   });
 };
 

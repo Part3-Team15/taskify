@@ -1,3 +1,4 @@
+import { useQueryClient } from '@tanstack/react-query';
 import { useEffect, useState } from 'react';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -12,9 +13,12 @@ export default function InvitationNotice() {
   const { data, isSuccess } = useFetchData<InvitationsResponse>(
     ['invitations', 'notice'],
     () => getInvitationsList(),
+    true,
     5000,
   );
   const [savedInvitations, setSavedInvitations] = useState<Invitation[] | null>(data?.invitations || null);
+
+  const queryClient = useQueryClient();
 
   useEffect(() => {
     if (data && data.invitations[0] && savedInvitations) {
@@ -25,6 +29,9 @@ export default function InvitationNotice() {
             TOAST_DEFAULT_SETTING,
           ),
         );
+
+        // 쿼리 무효화
+        queryClient.invalidateQueries({ queryKey: ['myInvitations'] });
       } else if (savedInvitations[0] && data.invitations[0].createdAt >= savedInvitations[0].createdAt) {
         for (let i = 0; i < data.invitations.length; i += 1) {
           const invitation = data.invitations[i];
@@ -34,6 +41,9 @@ export default function InvitationNotice() {
             TOAST_DEFAULT_SETTING,
           );
         }
+
+        // 쿼리 무효화
+        queryClient.invalidateQueries({ queryKey: ['myInvitations'] });
       }
     }
     if (isSuccess) {
