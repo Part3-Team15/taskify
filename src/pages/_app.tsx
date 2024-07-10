@@ -12,7 +12,14 @@ import Redirect from '@/components/Redirect';
 import MainLayout from '@/layouts/MainLayout';
 import { store, persistor } from '@/store/store';
 
-const queryClient = new QueryClient();
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      retry: 0,
+      refetchOnWindowFocus: false,
+    },
+  },
+});
 
 export default function App({ Component, pageProps }: AppProps) {
   return (

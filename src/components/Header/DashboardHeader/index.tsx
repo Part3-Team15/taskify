@@ -22,7 +22,7 @@ export default function DashboardHeader() {
     data: dashboard,
     isLoading,
     error,
-  } = useFetchData<Dashboard>(['dashboard', id], () => getDashboard(id as string));
+  } = useFetchData<Dashboard>(['dashboard', id], () => getDashboard(id as string), !!id);
 
   if (isLoading || !id) {
     return <DefaultHeader title='로딩중...' />;

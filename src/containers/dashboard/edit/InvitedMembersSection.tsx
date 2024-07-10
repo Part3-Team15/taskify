@@ -21,8 +21,10 @@ export default function InvitedMembersSection() {
   const { id } = router.query;
   const [currentChunk, setCurrentChunk] = useState(1);
 
-  const { data, isLoading, error } = useFetchData<DashboardInvitationsResponse>(['invitations', id, currentChunk], () =>
-    getDashboardInvitations(Number(id), currentChunk, 5),
+  const { data, isLoading, error } = useFetchData<DashboardInvitationsResponse>(
+    ['invitations', id, currentChunk],
+    () => getDashboardInvitations(Number(id), currentChunk, 5),
+    !!id,
   );
   const totalPage = data ? Math.max(1, Math.ceil(data.totalCount / 5)) : 1;
 

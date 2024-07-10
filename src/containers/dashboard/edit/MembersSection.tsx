@@ -24,8 +24,10 @@ export default function MembersSection({ onDeleteMember }: MemberSectionProps) {
   const { id } = router.query;
   const [currentChunk, setCurrentChunk] = useState(1);
 
-  const { data, isLoading, error } = useFetchData<MembersResponse>(['members', id, currentChunk], () =>
-    getMembersList(Number(id), currentChunk, 4),
+  const { data, isLoading, error } = useFetchData<MembersResponse>(
+    ['members', id, currentChunk],
+    () => getMembersList(Number(id), currentChunk, 4),
+    !!id,
   );
   const totalPage = data ? Math.max(1, Math.ceil(data.totalCount / 4)) : 1;
 

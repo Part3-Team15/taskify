@@ -9,32 +9,16 @@ import InvitedMembersSection from './InvitedMembersSection';
 import MembersSection from './MembersSection';
 
 import useDeleteData from '@/hooks/useDeleteData';
-import useFetchData from '@/hooks/useFetchData';
 import useModal from '@/hooks/useModal';
-import useRedirectIfNoPermission from '@/hooks/useRedirectIfNoPermission';
 import { deleteDashboard } from '@/services/deleteService';
-import { getDashboard } from '@/services/getService';
-import { Dashboard } from '@/types/Dashboard.interface';
 import { DeleteDashboardInput } from '@/types/delete/DeleteDashboardInput.interface';
 import { checkPublic } from '@/utils/shareAccount';
 
 export default function DashboardEdit() {
-  const redirectIfNoPermission = useRedirectIfNoPermission();
   const { openConfirmModal } = useModal();
   const queryClient = useQueryClient();
   const router = useRouter();
   const { id } = router.query;
-
-  // NOTE: Redirection
-  const { data: dashboard, error } = useFetchData<Dashboard>(['dashboard', id], () => getDashboard(id as string));
-
-  useEffect(() => {
-    if (dashboard) {
-      redirectIfNoPermission(dashboard.userId);
-    } else if (error) {
-      redirectIfNoPermission(-1);
-    }
-  }, [dashboard, error]);
 
   // NOTE: 공유 대시보드 여부 확인
   const [isPublic, setIsPublic] = useState(false);
@@ -51,12 +35,9 @@ export default function DashboardEdit() {
 
   useEffect(() => {
     const handleInitIsPublic = async () => {
-      try {
-        setIsPublic(await checkPublic(Number(id)));
-      } catch {
-        redirectIfNoPermission(-1);
-      }
+      setIsPublic(await checkPublic(Number(id)));
     };
+
     if (id) handleInitIsPublic();
   }, [id]);
 

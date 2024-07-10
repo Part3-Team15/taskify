@@ -14,13 +14,11 @@ const useFetchData = <T>(
         const response = await getService();
         return response.data;
       } catch (error) {
-        throw new Error('데이터를 불러오는 중 에러 발생: ' + error);
+        throw error;
       }
     },
-    retry: 1, // NOTE: 요청 실패시 1회까지만 재시도하도록 제한
-    refetchInterval: refetchInterval, // NOTE: 주기적인 초대내역 수신을 위해 설정
     enabled: enabled,
-    refetchInterval: refetchInterval,
+    refetchInterval: refetchInterval, // NOTE: 주기적인 초대내역 수신을 위해 설정
   });
 };
 

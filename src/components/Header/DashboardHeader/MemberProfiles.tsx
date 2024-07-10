@@ -26,8 +26,10 @@ const genMemberProfiles = (members: Member[], distance: number) =>
 
 // NOTE: 대시보드 헤더 구성원 프로필 목록 컴포넌트
 export default function MemberProfiles({ id }: MemberProfilesProps) {
-  const { data, isLoading, error } = useFetchData<MembersResponse>(['members', id, 1], () =>
-    getMembersList(Number(id)),
+  const { data, isLoading, error } = useFetchData<MembersResponse>(
+    ['members', id, 1],
+    () => getMembersList(Number(id)),
+    !!id,
   );
 
   if (isLoading) {
