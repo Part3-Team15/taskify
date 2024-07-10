@@ -27,7 +27,8 @@ export default function TodoCardModal({ card, column, onClick }: TodoCardModalPr
   const { id: dashboardId } = router.query;
   const queryClient = useQueryClient();
 
-  const { data, refetch } = useFetchData<CommentsResponse>(['comments', card.id], () => getComments(card.id, 10));
+  // 댓글 목록 데이터 패칭
+  const { data } = useFetchData<CommentsResponse>(['comments', card.id], () => getComments(card.id, 10));
 
   useEffect(() => {
     if (data) {
@@ -36,6 +37,7 @@ export default function TodoCardModal({ card, column, onClick }: TodoCardModalPr
     }
   }, [data]);
 
+  // 댓글 목록 패칭 함수
   const fetchComments = async (size: number, cursor?: number | null) => {
     setIsFetching(true);
     try {
@@ -43,9 +45,9 @@ export default function TodoCardModal({ card, column, onClick }: TodoCardModalPr
       const newComments = response.data.comments;
       setComments((prevComments) => [...prevComments, ...newComments]);
       if (newComments.length < size) {
-        setCursorId(null);
+        setCursorId(null); // 더 이상 불러올 댓글이 없음
       } else {
-        setCursorId(newComments[newComments.length - 1].id);
+        setCursorId(newComments[newComments.length - 1].id); // 다음 커서 ID 업데이트
       }
     } catch (error) {
       console.error('Error fetching comments:', error);
@@ -56,19 +58,17 @@ export default function TodoCardModal({ card, column, onClick }: TodoCardModalPr
 
   const { observerRef } = useInfiniteScroll(fetchComments, cursorId, isFetching); // 무한 스크롤 옵저버 참조
 
+  // 할일 카드 모달을 띄울 때, 댓글 목록 쿼리 무효화
   useEffect(() => {
     queryClient.invalidateQueries({ queryKey: ['comments', card.id] });
   }, [queryClient, card.id]);
-
-  useEffect(() => {
-    setIsCommentEmpty(newComment.trim().length === 0);
-  }, [newComment]);
 
   const handleModalClose = () => {
     if (onClick) onClick();
     closeModal();
   };
 
+  // 댓글 작성 처리 핸들러
   const handleSubmitComment = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
