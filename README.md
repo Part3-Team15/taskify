@@ -1,5 +1,5 @@
 # Taskify
-![Taskify](https://github.com/Part3-Team15/taskify/assets/64190056/58249228-8f33-4c9e-98b5-e07bb946b088)
+![taskify](https://github.com/Part3-Team15/taskify/assets/64190056/881c8967-1c42-4592-9032-e55709e9d066)
 
 
 
