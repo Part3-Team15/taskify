@@ -123,8 +123,8 @@ export default function Sidebar() {
 
         {favoriteList && favoriteList.length > 0 && (
           <>
-            <div className='flex flex-col items-center gap-2 md:items-stretch'>
-              <p className='flex items-center text-lg text-gray-78 md:px-3 dark:text-dark-10'>
+            <div className='flex flex-col items-stretch gap-2'>
+              <p className='align-center text-lg text-gray-78 md:px-3 dark:text-dark-10'>
                 ⭐
                 <span className='hidden px-2 text-[14px] font-extrabold text-gray-78 md:block dark:text-dark-10'>
                   즐겨찾기
