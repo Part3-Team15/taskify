@@ -44,8 +44,8 @@ export default function Sidebar() {
     }
   }, [user?.id, favoriteUser.userId]);
 
-  const handlePageChange = (direction: 'next' | 'prev') => {
-    setPage((prev) => (direction === 'next' ? prev + 1 : prev - 1));
+  const handlePageChange = (isNext: boolean) => {
+    setPage((prev) => (isNext ? prev + 1 : prev - 1));
   };
 
   return (
@@ -130,7 +130,7 @@ export default function Sidebar() {
               <li
                 key={i}
                 className='flex min-h-[32px] items-center justify-center rounded-md bg-gray-fa py-3 md:min-h-[52px] md:justify-start md:px-3 dark:bg-dark-300'
-              ></li>
+              />
             ))}
           </ul>
         ) : (
@@ -143,8 +143,8 @@ export default function Sidebar() {
 
             {totalPage > 1 && (
               <div className='flex flex-col items-center pt-3 md:flex-row'>
-                <NavButton direction='left' onClick={() => handlePageChange('prev')} isDisable={page === 1} />
-                <NavButton direction='right' onClick={() => handlePageChange('next')} isDisable={page === totalPage} />
+                <NavButton direction='left' onClick={() => handlePageChange(false)} isDisable={page === 1} />
+                <NavButton direction='right' onClick={() => handlePageChange(true)} isDisable={page === totalPage} />
               </div>
             )}
           </>

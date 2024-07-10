@@ -50,14 +50,7 @@ export default function DashboardList({ initialDashboard }: DashboardListProps) 
 
   // 페이지 이동 함수
   const handlePageChange = (isNext: boolean) => {
-    setCurrentChunk((prev) => {
-      if (isNext && prev < totalPage) {
-        return prev + 1;
-      } else if (!isNext && prev > 1) {
-        return prev - 1;
-      }
-      return prev;
-    });
+    setCurrentChunk((prev) => (isNext ? prev + 1 : prev - 1));
   };
 
   if (!dashboardData) return null;
