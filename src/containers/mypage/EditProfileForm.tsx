@@ -1,5 +1,4 @@
 import { AxiosError } from 'axios';
-import { useRouter } from 'next/router';
 import { ChangeEvent, FormEventHandler, useState } from 'react';
 import { useSelector } from 'react-redux';
 
@@ -11,8 +10,8 @@ import { postImage } from '@/services/postService';
 import { RootState } from '@/store/store';
 import { UpdateProfileForm } from '@/types/post/UpdateProfileForm.interface';
 
+// NOTE: 프로필 변경 폼 컴포넌트 (프로필 이미지, 닉네임 변경 가능)
 export default function EditProfileForm() {
-  const router = useRouter();
   const { openNotificationModal } = useModal();
   const { mutate, isPending, isError, error } = useUpdateProfile();
 
@@ -21,10 +20,6 @@ export default function EditProfileForm() {
   const [profileImageFile, setProfileImageFile] = useState<File | null>(null);
   const [isImageChanged, setIsImageChanged] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
-
-  if (!user) {
-    router.replace('/signin');
-  }
 
   if (isError) {
     const message = '알 수 없는 오류가 발생했습니다!';
