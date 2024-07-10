@@ -23,9 +23,8 @@ function Column({ column, columns, isMember }: ColumnProps) {
   const { openModifyColumnModal, openEditCardModal, openTodoCardModal } = useModal();
   const [cards, setCards] = useState<CardType[]>([]);
   const [totalCount, setTotalCount] = useState<number>(0);
-  const [cursorId, setCursorId] = useState<number | 0>(0);
+  const [cursorId, setCursorId] = useState<number | null>(null);
   const [isFetching, setIsFetching] = useState(false);
-  const observer = useRef<IntersectionObserver | null>(null);
 
   const {
     data: initialData,
@@ -37,20 +36,20 @@ function Column({ column, columns, isMember }: ColumnProps) {
     if (initialData) {
       setCards(initialData.cards);
       setTotalCount(initialData.totalCount);
-      setCursorId(initialData.cursorId || 0);
+      setCursorId(initialData.cursorId || null);
     }
   }, [initialData]);
 
   const fetchCards = useCallback(
-    async (size: number, cursorId?: number) => {
+    async (size: number, cursorId?: number | null) => {
       setIsFetching(true);
       try {
-        const response = await getCardsList(column.id, size, cursorId);
+        const response = await getCardsList(column.id, size, cursorId !== null ? cursorId : undefined);
         if (response.data.cards.length > 0) {
           setCards((prevCards) => [...prevCards, ...response.data.cards]);
-          setCursorId(response.data.cursorId || 0);
+          setCursorId(response.data.cursorId || null);
         } else {
-          setCursorId(0);
+          setCursorId(null);
         }
       } catch (error) {
         console.error('Error fetching cards:', error);
@@ -68,7 +67,7 @@ function Column({ column, columns, isMember }: ColumnProps) {
   }
 
   if (error) {
-    return <div>Error loading cards: {error.message}</div>;
+    return <>{error.message}</>;
   }
 
   return (
@@ -128,7 +127,7 @@ function Column({ column, columns, isMember }: ColumnProps) {
                       <div
                         ref={(cardRef) => {
                           provided.innerRef(cardRef);
-                          if (index === cards.length - 1) lastCardRef(cardRef);
+                          if (index === cards.length - 1) observerRef.current = cardRef;
                         }}
                         {...provided.draggableProps}
                         {...provided.dragHandleProps}
@@ -140,7 +139,7 @@ function Column({ column, columns, isMember }: ColumnProps) {
                   </Draggable>
                 ))}
                 {isFetching &&
-                  Array.from({ length: 1 }).map((card, index) => (
+                  Array.from({ length: 1 }).map((_, index) => (
                     <div key={index} className='align-center py-3 opacity-50 invert dark:invert-0'>
                       <Image src='/icons/spinner.svg' alt='스피너 아이콘' width={20} height={20} />
                     </div>
