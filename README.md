@@ -8,7 +8,7 @@
 
 #### 서비스 링크
 
-https://taskify-15-dev.vercel.app/
+https://taskify-15.vercel.app/
 
 #### 로컬 실행 커멘드
 
