@@ -1,4 +1,4 @@
-import { QueryCache, QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { useQueryClient } from '@tanstack/react-query';
 import { AxiosError } from 'axios';
 import { useRouter } from 'next/router';
 import { useEffect } from 'react';
@@ -10,12 +10,14 @@ import { RootState } from '@/store/store';
 // NOTE: 권한에 따라 페이지 이동
 export default function Redirect({ children }: { children: React.ReactNode }) {
   const redirect = useRedirect();
-  const router = useRouter();
   const { user } = useSelector((state: RootState) => state.user);
+  const router = useRouter();
   const currentPath = router.pathname;
 
   // NOTE: QueryCache로 글로벌 콜백 설정
-  const queryCache = new QueryCache({
+  const queryClient = useQueryClient();
+  const queryCache = queryClient.getQueryCache();
+  queryCache.config = {
     onError: (error) => {
       if (error instanceof AxiosError) {
         switch (error.response?.status) {
@@ -32,17 +34,7 @@ export default function Redirect({ children }: { children: React.ReactNode }) {
         }
       }
     },
-  });
-
-  const queryClient = new QueryClient({
-    queryCache,
-    defaultOptions: {
-      queries: {
-        retry: 0,
-        refetchOnWindowFocus: false,
-      },
-    },
-  });
+  };
 
   useEffect(() => {
     // NOTE: 로그인 한 경우 mydashboard를 default로
@@ -67,5 +59,5 @@ export default function Redirect({ children }: { children: React.ReactNode }) {
     }
   }, [currentPath, router.query.id]);
 
-  return <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>;
+  return children;
 }

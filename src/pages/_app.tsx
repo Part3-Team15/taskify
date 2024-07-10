@@ -1,4 +1,5 @@
 import '@/styles/globals.css';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import type { AppProps } from 'next/app';
 import Head from 'next/head';
@@ -10,6 +11,15 @@ import Modal from '@/components/Modal';
 import Redirect from '@/components/Redirect';
 import MainLayout from '@/layouts/MainLayout';
 import { store, persistor } from '@/store/store';
+
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      retry: 0,
+      refetchOnWindowFocus: false,
+    },
+  },
+});
 
 export default function App({ Component, pageProps }: AppProps) {
   return (
@@ -31,15 +41,17 @@ export default function App({ Component, pageProps }: AppProps) {
       </Head>
       <Provider store={store}>
         <PersistGate loading={null} persistor={persistor}>
-          <Redirect>
-            <ThemeProvider attribute='class' defaultTheme='system' enableSystem={true}>
-              <Modal />
-              <MainLayout>
-                <Component {...pageProps} />
-              </MainLayout>
-              <ReactQueryDevtools initialIsOpen={false} />
-            </ThemeProvider>
-          </Redirect>
+          <QueryClientProvider client={queryClient}>
+            <Redirect>
+              <ThemeProvider attribute='class' defaultTheme='system' enableSystem={true}>
+                <Modal />
+                <MainLayout>
+                  <Component {...pageProps} />
+                </MainLayout>
+                <ReactQueryDevtools initialIsOpen={false} />
+              </ThemeProvider>
+            </Redirect>
+          </QueryClientProvider>
         </PersistGate>
       </Provider>
     </>
