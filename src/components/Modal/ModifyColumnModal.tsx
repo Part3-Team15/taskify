@@ -66,6 +66,7 @@ export default function ModifyColumnModal({ columnId, columnTitle = '', columns 
     <div className='modal w-[327px] md:w-[540px]'>
       <h2 className='section-title'>컬럼 관리</h2>
 
+      {/* 컬럼 이름 입력 */}
       <div className='my-6 md:mb-7 md:mt-8'>
         <label className='label'>이름</label>
         <input
@@ -79,6 +80,7 @@ export default function ModifyColumnModal({ columnId, columnTitle = '', columns 
         {errorMessage && <p className='mt-2 text-sm text-red'>{errorMessage}</p>}
       </div>
 
+      {/* 버튼 */}
       <div className='flex flex-col gap-4 md:flex-row md:items-end md:justify-between'>
         <button
           className='text-left text-sm text-gray-9f underline hover:font-bold active:text-gray-78'
