@@ -1,40 +1,63 @@
+import { QueryCache, QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { AxiosError } from 'axios';
 import { useRouter } from 'next/router';
+import { useEffect } from 'react';
 import { useSelector } from 'react-redux';
 
-import useRedirectIfAuth from '@/hooks/useRedirectIfAuth';
-import useRedirectIfNotAuth from '@/hooks/useRedirectIfNotAuth';
+import useRedirect from '@/hooks/useRedirect';
 import { RootState } from '@/store/store';
 
 export default function Redirect({ children }: { children: React.ReactNode }) {
+  const redirect = useRedirect();
   const router = useRouter();
   const { user } = useSelector((state: RootState) => state.user);
   const currentPath = router.pathname;
 
-  const redirectIfAuth = useRedirectIfAuth();
-  const redirectIfNotAuth = useRedirectIfNotAuth();
+  // NOTE: QueryCache로 글로벌 콜백 설정
+  const queryCache = new QueryCache({
+    onError: (error) => {
+      if (error instanceof AxiosError) {
+        switch (error.response?.status) {
+          case 401:
+            redirect('/signin', '로그인이 필요합니다');
+            break;
+          case 403:
+          case 404:
+            if (user) redirect('/mydashboard', '접근 권한이 없습니다');
+            else redirect('/signin', '접근 권한이 없습니다');
+        }
+      }
+    },
+  });
 
-  if (currentPath === '/' && user) {
-    router.replace('/mydashboard');
-  }
+  const queryClient = new QueryClient({
+    queryCache,
+    defaultOptions: {
+      queries: {
+        retry: 0,
+        refetchOnWindowFocus: false,
+      },
+    },
+  });
 
-  if (currentPath === '/404') {
-    const nextPath = user ? '/mydashboard' : '/';
-    setTimeout(() => router.push(nextPath), 3000);
-  }
-
-  if (['/signup', '/signin'].includes(currentPath)) {
-    const isRedirecting = redirectIfAuth();
-    if (isRedirecting) {
-      return <></>;
+  useEffect(() => {
+    if (currentPath === '/' && user) {
+      router.replace('/mydashboard');
     }
-  }
 
-  if (['/mypage', '/mydashboard'].includes(currentPath)) {
-    const isRedirecting = redirectIfNotAuth();
-    if (isRedirecting) {
-      return <></>;
+    if (currentPath === '/404') {
+      const nextPath = user ? '/mydashboard' : '/';
+      setTimeout(() => router.push(nextPath), 3000);
     }
-  }
 
-  return children;
+    if (['/signup', '/signin'].includes(currentPath) && user) {
+      redirect('/mydashboard', '이미 로그인했습니다');
+    }
+
+    if (['/mypage', '/mydashboard'].includes(currentPath) && !user) {
+      redirect('/signin', '로그인이 필요합니다');
+    }
+  }, [currentPath, router.query.id]);
+
+  return <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>;
 }

@@ -15,10 +15,9 @@ const useFetchData = <T>(
         handleSuccess && handleSuccess();
         return response.data;
       } catch (error) {
-        throw new Error('데이터를 불러오는 중 에러 발생: ' + error);
+        throw error;
       }
     },
-    retry: 1,
     refetchInterval: refetchInterval,
     enabled: enabled,
   });

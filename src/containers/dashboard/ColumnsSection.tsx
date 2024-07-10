@@ -8,13 +8,11 @@ import Column from './Column';
 
 import useFetchData from '@/hooks/useFetchData';
 import useModal from '@/hooks/useModal';
-import useRedirectIfNotMember from '@/hooks/useRedirectIfNotMember';
 import instance from '@/services/axios';
-import { getColumnsList, getDashboard } from '@/services/getService';
+import { getColumnsList } from '@/services/getService';
 import { moveToOtherColumn } from '@/services/putService';
 import { RootState } from '@/store/store';
 import { ColumnsResponse } from '@/types/Column.interface';
-import { checkPublic } from '@/utils/shareAccount';
 
 interface ColumnsSectionProps {
   dashboardId: string;
@@ -23,10 +21,8 @@ interface ColumnsSectionProps {
 export default function ColumnsSection({ dashboardId }: ColumnsSectionProps) {
   const queryClient = useQueryClient();
   const { openNewColumnModal, openNotificationModal } = useModal();
-  const redirectIfNotMember = useRedirectIfNotMember();
   const { user } = useSelector((state: RootState) => state.user);
   const [isMember, setIsMember] = useState(true);
-  const [isPublic, setIsPublic] = useState(false);
 
   const {
     data: columns,
@@ -37,31 +33,17 @@ export default function ColumnsSection({ dashboardId }: ColumnsSectionProps) {
   const columnList = columns?.data || [];
 
   useEffect(() => {
-    const handleRedirect = async () => {
-      try {
-        const newIsPublic = await checkPublic(Number(dashboardId));
-        setIsPublic(newIsPublic);
-        if (!newIsPublic && dashboardId) {
-          await getDashboard(String(dashboardId));
-        }
-      } catch {
-        redirectIfNotMember();
-      }
-    };
-
     const handleCheckMember = async () => {
-      if (dashboardId) {
-        try {
-          await instance.get(`/dashboards/${dashboardId}`, {
-            headers: { memberTest: true },
-          });
-        } catch {
-          setIsMember(false);
-        }
+      if (!dashboardId) return;
+      try {
+        await instance.get(`/dashboards/${dashboardId}`, {
+          headers: { memberTest: true },
+        });
+      } catch {
+        setIsMember(false);
       }
     };
 
-    handleRedirect();
     handleCheckMember();
   }, [dashboardId, user]);
 
@@ -106,7 +88,7 @@ export default function ColumnsSection({ dashboardId }: ColumnsSectionProps) {
   ) : (
     <DragDropContext onDragEnd={onDragEnd}>
       <section
-        className={`block h-full overflow-x-auto lg:flex lg:h-[calc(100dvh-70px)] ${isPublic && !user ? 'lg:w-screen' : 'lg:w-[calc(100dvw-300px)]'}`}
+        className={`block h-full overflow-x-auto lg:flex lg:h-[calc(100dvh-70px)] ${!user ? 'lg:w-screen' : 'lg:w-[calc(100dvw-300px)]'}`}
       >
         <ul className='block lg:flex'>
           {columnList.map((column, index) => (
