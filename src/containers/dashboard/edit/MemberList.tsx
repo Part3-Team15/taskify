@@ -7,6 +7,7 @@ interface Props {
   onDeleteClick: (member: Member) => void;
 }
 
+// NOTE: 구성원 컴포넌트 생성 (Member[] -> MemberItem[])
 export default function MemberList({ members, onDeleteClick }: Props) {
   const lastItem = members.at(-1);
 
@@ -18,6 +19,7 @@ export default function MemberList({ members, onDeleteClick }: Props) {
           <div className='h-0 w-full border border-gray-ee dark:border-dark-200' />
         </li>
       ))}
+      {/* 마지막 구성원은 구분선이 없음 */}
       {lastItem && (
         <li key={lastItem.id}>
           <MemberItem member={lastItem} onDeleteClick={() => onDeleteClick(lastItem)} />

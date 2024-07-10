@@ -20,13 +20,8 @@ export default function DashboardEdit() {
   const router = useRouter();
   const { id } = router.query;
 
+  // NOTE: 공유 대시보드 여부 확인
   const [isPublic, setIsPublic] = useState(false);
-
-  const handleSuccess = () => {
-    queryClient.invalidateQueries({ queryKey: ['sideDashboards'] });
-    router.replace('/mydashboard');
-  };
-  const { mutate } = useDeleteData<DeleteDashboardInput>({ mutationFn: deleteDashboard, handleSuccess });
 
   const handleIsPublicChange = (newIsPublic: boolean) => {
     setIsPublic(newIsPublic);
@@ -37,6 +32,21 @@ export default function DashboardEdit() {
       setIsPublic(false);
     }
   };
+
+  useEffect(() => {
+    const handleInitIsPublic = async () => {
+      setIsPublic(await checkPublic(Number(id)));
+    };
+
+    if (id) handleInitIsPublic();
+  }, [id]);
+
+  // NOTE: 대시보드 삭제
+  const handleSuccess = () => {
+    queryClient.invalidateQueries({ queryKey: ['sideDashboards'] });
+    router.replace('/mydashboard');
+  };
+  const { mutate } = useDeleteData<DeleteDashboardInput>({ mutationFn: deleteDashboard, handleSuccess });
 
   const handleDeleteClick = () => {
     const handleDelete = async () => {
@@ -49,14 +59,6 @@ export default function DashboardEdit() {
       onActionClick: handleDelete,
     });
   };
-
-  useEffect(() => {
-    const handleInitIsPublic = async () => {
-      setIsPublic(await checkPublic(Number(id)));
-    };
-
-    if (id) handleInitIsPublic();
-  }, [id]);
 
   return (
     <div className='h-full px-3 py-4 text-black-33 md:p-5 dark:text-dark-10'>

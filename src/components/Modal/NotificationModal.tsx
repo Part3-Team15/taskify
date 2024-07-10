@@ -2,6 +2,7 @@ import ModalActionButton from '@/components/Button/ModalActionButton';
 import useModal from '@/hooks/useModal';
 import { NotificationModalProps } from '@/types/Modal.interface';
 
+// NOTE: 확인 버튼이 있는 알림용 모달
 export default function NotificationModal({ text, onClick }: NotificationModalProps) {
   const { closeModal } = useModal();
   const handleClick = () => {

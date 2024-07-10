@@ -7,6 +7,7 @@ import { useSelector } from 'react-redux';
 import useRedirect from '@/hooks/useRedirect';
 import { RootState } from '@/store/store';
 
+// NOTE: 권한에 따라 페이지 이동
 export default function Redirect({ children }: { children: React.ReactNode }) {
   const redirect = useRedirect();
   const router = useRouter();
@@ -41,19 +42,23 @@ export default function Redirect({ children }: { children: React.ReactNode }) {
   });
 
   useEffect(() => {
+    // NOTE: 로그인 한 경우 mydashboard를 default로
     if (currentPath === '/' && user) {
       router.replace('/mydashboard');
     }
 
+    // NOTE: 잘못된 주소 접근 시 3초 뒤 적절한 페이지로 이동
     if (currentPath === '/404') {
       const nextPath = user ? '/mydashboard' : '/';
       setTimeout(() => router.push(nextPath), 3000);
     }
 
+    // NOTE: 로그인/회원가입 - 로그인 O -> 내 대시보드
     if (['/signup', '/signin'].includes(currentPath) && user) {
       redirect('/mydashboard', '이미 로그인했습니다');
     }
 
+    // NOTE: 내 대시보드/계정관리 - 로그인 X -> 로그인
     if (['/mypage', '/mydashboard'].includes(currentPath) && !user) {
       redirect('/signin', '로그인이 필요합니다');
     }

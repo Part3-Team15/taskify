@@ -9,6 +9,7 @@ interface UseDeleteProps<T> {
   handleError?: () => void;
 }
 
+// NOTE: 삭제 요청을 돕는 훅
 const useDeleteData = <T>({ mutationFn, handleSuccess, handleError }: UseDeleteProps<T>) => {
   const { openNotificationModal } = useModal();
   return useMutation<unknown, unknown, T, unknown>({

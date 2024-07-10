@@ -13,6 +13,7 @@ import useFetchData from '@/hooks/useFetchData';
 import { getDashboard } from '@/services/getService';
 import { Dashboard } from '@/types/Dashboard.interface';
 
+// NOTE: 대시보드 | 대시보드 관리에서 보여줄 헤더 컴포넌트
 export default function DashboardHeader() {
   const router = useRouter();
   const { id } = router.query;
@@ -39,19 +40,20 @@ export default function DashboardHeader() {
       <Head>
         <title>Taskify | {title}</title>
       </Head>
+
+      {/* 대시보드 이름 */}
       <div className='hidden items-center gap-2 lg:flex'>
         <h1 className='text-xl font-bold'>{title}</h1>
         {createdByMe && <Image src='/icons/crown.svg' alt='왕관 아이콘' width={20} height={16} />}
       </div>
+
       <div className='flex gap-4 md:gap-5 lg:gap-10'>
         {createdByMe && <Buttons id={dashboardId} />}
         <div className='flex items-center gap-3 md:gap-5 lg:gap-8'>
           <MemberProfiles id={String(dashboardId)} />
-          <div className='h-[34px] w-0 border-l border-gray-d9 dark:border-dark-200' />
-          <div className='-m-2 md:-m-3 lg:-m-5'>
-            <ThemeChangeButton className='p-2' />
-          </div>
-          <div className='h-[34px] w-0 border-l border-gray-d9 dark:border-dark-200' />
+          <div className='header-divider' />
+          <ThemeChangeButton className='-m-2 p-2 md:-m-3 lg:-m-5' />
+          <div className='header-divider' />
           <UserMenuDropdown />
         </div>
       </div>

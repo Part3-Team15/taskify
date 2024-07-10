@@ -1,24 +1,23 @@
 import { useQuery, QueryKey, UseQueryResult } from '@tanstack/react-query';
 
+// TODO: 인자 개수가 많아져 객체 형식으로 받는 게 좋을 듯 하나, 많은 코드 수정이 요구됨
 const useFetchData = <T>(
   queryKey: QueryKey,
   getService: () => Promise<{ data: T }>,
   refetchInterval: false | number = false,
   enabled: boolean = true,
-  handleSuccess?: () => void,
 ): UseQueryResult<T, Error> => {
   return useQuery<T, Error>({
     queryKey: queryKey,
     queryFn: async () => {
       try {
         const response = await getService();
-        handleSuccess && handleSuccess();
         return response.data;
       } catch (error) {
         throw error;
       }
     },
-    refetchInterval: refetchInterval,
+    refetchInterval: refetchInterval, // NOTE: 주기적인 초대내역 수신을 위해 설정
     enabled: enabled,
   });
 };
