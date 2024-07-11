@@ -309,7 +309,7 @@ export default function EditCardModal({ column, isEdit = false, card }: EditCard
                       <p className='w-max'>{selectedColumns.title}</p>
                     </div>
                   ) : (
-                    <div className='flex h-[22px] items-center gap-[6px] rounded-[12px] bg-violet-f1 p-[8px] text-[12px] text-violet dark:bg-dark-purple-hover dark:text-dark-10'>
+                    <div className='flex h-[22px] animate-pulse items-center gap-[6px] rounded-[12px] bg-violet-f1 p-[8px] text-[12px] text-violet dark:bg-dark-purple-hover dark:text-dark-10'>
                       <p className='text-[10px]'>●</p>
                       <p className='w-max'>{'temp'}</p>
                     </div>
