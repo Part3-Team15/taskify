@@ -414,6 +414,6 @@ https://github.com/Part3-Team15/taskify/assets/24778465/74e6a1b0-806a-4c7f-845c-
 
 ### 류혜원
 
-### 이대양
+### 이대양 : 좋았다.
 
 ### 정민재
