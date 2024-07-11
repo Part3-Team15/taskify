@@ -1,7 +1,7 @@
 import { useQueryClient } from '@tanstack/react-query';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
-import { FormEvent, useEffect, useState, useRef, useCallback } from 'react';
+import { FormEvent, useEffect, useState } from 'react';
 
 import Comment from './Comment';
 import EditDropdown from './EditDropdown';
@@ -9,6 +9,7 @@ import EditDropdown from './EditDropdown';
 import ProfileIcon from '@/components/ProfileIcon';
 import Tags from '@/components/Tags';
 import useFetchData from '@/hooks/useFetchData';
+import useInfiniteScroll from '@/hooks/useInfiniteScroll';
 import useModal from '@/hooks/useModal';
 import { getComments } from '@/services/getService';
 import { postComment } from '@/services/postService';
@@ -17,18 +18,17 @@ import { CommentsResponse, CommentForm, Comment as CommentType } from '@/types/p
 import formatDate from '@/utils/formatDate';
 
 export default function TodoCardModal({ card, column, onClick }: TodoCardModalProps) {
-  const [comments, setComments] = useState<CommentType[]>([]);
-  const [cursorId, setCursorId] = useState<number | null>(null);
-  const [isFetching, setIsFetching] = useState(false);
-  const observerRef = useRef<HTMLDivElement | null>(null);
-  const [newComment, setNewComment] = useState('');
-  const [isCommentEmpty, setIsCommentEmpty] = useState(true);
+  const [comments, setComments] = useState<CommentType[]>([]); // 패칭된 댓글 목록 State
+  const [newComment, setNewComment] = useState(''); // 댓글 입력 폼 State
+  const [cursorId, setCursorId] = useState<number | null>(null); // 다음 댓글의 커서 ID
+  const [isFetching, setIsFetching] = useState(false); // 댓글을 불러오는 중인지 여부
   const { closeModal } = useModal();
   const router = useRouter();
   const { id: dashboardId } = router.query;
   const queryClient = useQueryClient();
 
-  const { data, refetch } = useFetchData<CommentsResponse>(['comments', card.id], () => getComments(card.id, 10));
+  // 댓글 목록 데이터 패칭
+  const { data } = useFetchData<CommentsResponse>(['comments', card.id], () => getComments(card.id, 10));
 
   useEffect(() => {
     if (data) {
@@ -37,6 +37,7 @@ export default function TodoCardModal({ card, column, onClick }: TodoCardModalPr
     }
   }, [data]);
 
+  // 댓글 목록 패칭 함수
   const fetchComments = async (size: number, cursor?: number | null) => {
     setIsFetching(true);
     try {
@@ -44,9 +45,9 @@ export default function TodoCardModal({ card, column, onClick }: TodoCardModalPr
       const newComments = response.data.comments;
       setComments((prevComments) => [...prevComments, ...newComments]);
       if (newComments.length < size) {
-        setCursorId(null);
+        setCursorId(null); // 더 이상 불러올 댓글이 없음
       } else {
-        setCursorId(newComments[newComments.length - 1].id);
+        setCursorId(newComments[newComments.length - 1].id); // 다음 커서 ID 업데이트
       }
     } catch (error) {
       console.error('Error fetching comments:', error);
@@ -55,40 +56,19 @@ export default function TodoCardModal({ card, column, onClick }: TodoCardModalPr
     }
   };
 
-  const handleObserver = useCallback(
-    (entries: IntersectionObserverEntry[]) => {
-      const target = entries[0];
-      if (target.isIntersecting && cursorId !== null && !isFetching) {
-        fetchComments(5, cursorId);
-      }
-    },
-    [cursorId, isFetching],
-  );
+  const { observerRef } = useInfiniteScroll(fetchComments, cursorId, isFetching); // 무한 스크롤 옵저버 참조
 
-  useEffect(() => {
-    const observer = new IntersectionObserver(handleObserver, {
-      threshold: 1.0,
-    });
-    if (observerRef.current) observer.observe(observerRef.current);
-
-    return () => {
-      if (observerRef.current) observer.unobserve(observerRef.current);
-    };
-  }, [handleObserver]);
-
+  // 할일 카드 모달을 띄울 때, 댓글 목록 쿼리 무효화
   useEffect(() => {
     queryClient.invalidateQueries({ queryKey: ['comments', card.id] });
   }, [queryClient, card.id]);
-
-  useEffect(() => {
-    setIsCommentEmpty(newComment.trim().length === 0);
-  }, [newComment]);
 
   const handleModalClose = () => {
     if (onClick) onClick();
     closeModal();
   };
 
+  // 댓글 작성 처리 핸들러
   const handleSubmitComment = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
@@ -99,13 +79,12 @@ export default function TodoCardModal({ card, column, onClick }: TodoCardModalPr
       dashboardId: Number(dashboardId),
     };
 
+    // 댓글 추가 후, 댓글 목록 쿼리 무효화를 통한 최신화
     try {
       await postComment(commentData);
       queryClient.invalidateQueries({ queryKey: ['comments', card.id] });
       setNewComment('');
-      setIsCommentEmpty(true); // 성공 시 에러 메시지 초기화
     } catch (error) {
-      setIsCommentEmpty(true);
       console.error(error);
     }
   };
@@ -167,7 +146,7 @@ export default function TodoCardModal({ card, column, onClick }: TodoCardModalPr
                 <button
                   className='btn-violet-light dark:btn-white absolute right-1 h-[28px] w-[60px] rounded-[4px] text-[12px] text-violet md:h-[32px] md:w-[78px] lg:w-[84px] dark:rounded-[4px]'
                   type='submit'
-                  disabled={isCommentEmpty}
+                  disabled={newComment === ''}
                 >
                   입력
                 </button>
