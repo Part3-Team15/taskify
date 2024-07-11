@@ -21,7 +21,7 @@ function Home() {
   }, [setTheme]);
 
   return (
-    <main className='scrollbar-black h-dvh max-h-[calc(100dvh-70px)] overflow-y-auto bg-dark-500 text-white'>
+    <main className='scrollbar-black h-dvh max-h-[calc(100dvh-60px)] overflow-y-auto bg-dark-500 text-white md:max-h-[calc(100dvh-70px)]'>
       <Head>
         <title>Taskify</title>
       </Head>
