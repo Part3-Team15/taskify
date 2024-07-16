@@ -13,6 +13,7 @@ import ModalActionButton from '@/components/Button/ModalActionButton';
 import ModalCancelButton from '@/components/Button/ModalCancelButton';
 import ImageInput from '@/components/Input/ImageInput';
 import Tags from '@/components/Tags';
+import useFetchData from '@/hooks/useFetchData';
 import useModal from '@/hooks/useModal';
 import { getColumnsList, getMembersList } from '@/services/getService';
 import { postImageForCard, postCard } from '@/services/postService';
@@ -39,13 +40,16 @@ export default function EditCardModal({ column, isEdit = false, card }: EditCard
   const { id } = router.query;
   const queryClient = useQueryClient();
 
+  const { data: fetchedColumns } = useFetchData(['columns', id], () => getColumnsList(Number(id)), !!id);
+  const { data: fetchedMembers } = useFetchData(['members', id], () => getMembersList(Number(id)));
+
+  const columnsData = fetchedColumns?.data || [];
+  const membersData = fetchedMembers?.members || [];
+
   const { closeModal, openTodoCardModal, openNotificationModal } = useModal();
 
   const [membersIsOpen, setMembersIsOpen] = useState(false);
   const [columnsIsOpen, setColumnsIsOpen] = useState(false);
-
-  const [members, setMembers] = useState<Member[]>([]);
-  const [columns, setColumns] = useState<Column[]>([]);
 
   const initializeFormValues = useCallback((): PostCardData => {
     if (card) {
@@ -83,34 +87,7 @@ export default function EditCardModal({ column, isEdit = false, card }: EditCard
   const columnsToggleRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    const getMembers = async () => {
-      try {
-        const response = await getMembersList(Number(id), 1, 10);
-        const filteredMembers = response.data.members.map((member: Member) => ({
-          userId: member.userId,
-          nickname: member.nickname,
-          profileImageUrl: member.profileImageUrl,
-        }));
-        setMembers(filteredMembers);
-      } catch (error) {
-        console.error('Error fetching members:', error);
-      }
-    };
-
-    const getColumns = async () => {
-      try {
-        const response = await getColumnsList(Number(id));
-        const filteredColumns = response.data.data.map((column: Column) => ({
-          id: column.id,
-          title: column.title,
-        }));
-        setColumns(filteredColumns);
-      } catch {}
-    };
-
     if (id) {
-      getMembers();
-      getColumns();
       setFormValues(initializeFormValues());
       setInitialFormValues(initializeFormValues());
     }
@@ -261,7 +238,7 @@ export default function EditCardModal({ column, isEdit = false, card }: EditCard
       }
 
       if (responseCard && isEdit) {
-        const columnToOpen = columns.find((col) => col.id === responseCard.columnId);
+        const columnToOpen = columnsData.find((col: Column) => col.id === responseCard.columnId);
         const cardToOpen = responseCard;
         // NOTE: 여기 접근했다는 것부터 수정 권한이 있다는 뜻 -> isMember = true
         openTodoCardModal({ card: cardToOpen, column: columnToOpen as Column, isMember: true });
@@ -280,8 +257,8 @@ export default function EditCardModal({ column, isEdit = false, card }: EditCard
     }
   };
 
-  const selectedMember = members.find((member) => member.userId === formValues.assigneeUserId);
-  const selectedColumns = columns.find((column) => column.id === formValues.columnId);
+  const selectedMember = membersData.find((member: Member) => member.userId === formValues.assigneeUserId);
+  const selectedColumns = columnsData.find((columnItem: Column) => columnItem.id === formValues.columnId);
 
   return (
     <div className='modal h-[90vh] w-[327px] md:h-[90vh] md:w-[506px]'>
@@ -322,7 +299,7 @@ export default function EditCardModal({ column, isEdit = false, card }: EditCard
                 </div>
                 {columnsIsOpen && (
                   <div ref={columnsDropdownRef}>
-                    <ColumnsDropDown columns={columns} onSelectColumn={handleSelectColumn} />
+                    <ColumnsDropDown columns={columnsData} onSelectColumn={handleSelectColumn} />
                   </div>
                 )}
               </div>
@@ -356,7 +333,7 @@ export default function EditCardModal({ column, isEdit = false, card }: EditCard
                 </div>
                 {membersIsOpen && (
                   <div ref={membersDropdownRef}>
-                    <MembersDropDown members={members} onSelectMember={handleSelectMember} />
+                    <MembersDropDown members={membersData} onSelectMember={handleSelectMember} />
                   </div>
                 )}
               </div>

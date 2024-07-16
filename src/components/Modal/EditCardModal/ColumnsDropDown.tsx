@@ -1,16 +1,15 @@
+import { Column } from '@/types/Column.interface';
+
 export default function ColumnsDropDown({
   columns,
   onSelectColumn,
 }: {
-  columns: {
-    id: number;
-    title: string;
-  }[];
+  columns: Column[] | undefined;
   onSelectColumn: (columnId: number) => void;
 }) {
   return (
     <ul className='absolute top-[110%] z-[9999] w-full rounded-[6px] border border-gray-d9 bg-white px-4 py-2 dark:border-dark-200 dark:bg-dark-300'>
-      {columns.map((column) => {
+      {columns?.map((column) => {
         return (
           <li
             className='flex cursor-pointer items-center rounded-[6px] px-[6px] py-[5px] text-[14px] transition-all hover:bg-violet-e8 md:text-[16px] dark:hover:bg-dark-200'
