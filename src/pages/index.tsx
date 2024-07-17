@@ -35,7 +35,9 @@ function Home() {
             새로운 일정 관리 <br className='md:hidden' />
             <span className='text-[42px] tracking-normal text-violet md:text-[70px] lg:text-[90px]'>Taskify</span>
           </p>
-          <p className='pb-16 text-sm tracking-[-1px] md:text-base'>서비스의 메인 설명 들어갑니다.</p>
+          <p className='pb-16 text-center text-sm tracking-[-1px] md:text-lg'>
+            개인 / 단체의 일정 관리를 위한 서비스 <br /> 대시보드를 생성하여 팀원들과 일정을 관리 해보세요!
+          </p>
           <Link href='/signin' className='btn-violet h-14 w-72'>
             로그인하기
           </Link>
